@@ -89,7 +89,7 @@ public class HttpManager {
 
 
 
-    private String getRaUrl(String action){
+    public String getRaUrl(String action){
         StringBuilder sb=new StringBuilder();
         if (action.equals(MConstant.request_type.ra)){
             if (MConstant.HB_HOST.equals("")){
