@@ -24,7 +24,10 @@ import com.mg.others.utils.LogUtils;
 import com.mg.others.utils.MiiLocalStrEncrypt;
 import com.mg.others.utils.SP;
 
+import java.util.Map;
+
 import static com.mg.others.manager.HttpManager.NI;
+import static com.mg.others.manager.HttpManager.RA;
 
 /**
  * Created by wuqiyan on 17/6/8.
@@ -34,6 +37,8 @@ public class MSplashController implements Handler {
     private ISender mSender = ISender.Factory.newMainThreadSender(this);
     private Activity mActivity;
     private Context mContext;
+    private SDKConfigModel sdkConfig;
+    private HttpManager httpManager=null;
 
     @Override
     public void handleMessage(Message msg) {
@@ -43,17 +48,50 @@ public class MSplashController implements Handler {
                 SDKConfigModel temp = (SDKConfigModel) messageObjects.obj0;
                 messageObjects.recycle();
                 sdkConfig = temp;
-                appList = null;
                 break;
         }
-        
+
     }
     public MSplashController(Activity mActivity){
         this.mActivity=mActivity;
         this.mContext=mActivity.getApplicationContext();
     }
+    private void requestRa(){
+
+        long currentTime = System.currentTimeMillis();
+        long lastRa = (long) SP.getParam(SP.CONFIG, mContext, SP.LAST_REQUEST_RA,0l);
+        long diffRa = (currentTime - lastRa)/1000;
+
+        if (lastRa !=0l && diffRa < 20){
+            return;
+        }
+        if (!CommonUtils.isNetworkAvailable(mContext)){
+            return;
+        }
+
+        HttpUtils httpUtils = new HttpUtils(mContext);
+        final  String url=getRaUrl(RA);
+        if (url==null || url.equals("")){
+            return;
+        }
+        Map<String,String> params=getParams2(RA,adType,ts);
+
+        httpUtils.post(url.trim(), new HttpListener() {
+            @Override
+            public void onSuccess(HttpResponse response) {
+                SP.setParam(SP.CONFIG, mContext, SP.LAST_REQUEST_RA, System.currentTimeMillis());
+                dealHbSuc(response);
+            }
+            @Override
+            public void onFail(Exception e) {
+                LogUtils.i(MConstant.TAG,new AdError(AdError.ERROR_CODE_INVALID_REQUEST) + e.toString());
+            }
+        },params);
+    }
     private void requestHb(){
-       HttpManager httpManager = HttpManager.getInstance(mActivity.getApplicationContext(), mSender);
+        if (httpManager==null){
+          HttpManager.getInstance(mActivity.getApplicationContext(), mSender);
+        }
 
         if (CommonUtils.isNetworkAvailable(mContext)){
 
@@ -95,7 +133,6 @@ public class MSplashController implements Handler {
         }
 
         CommonUtils.writeParcel(mContext,MConstant.CONFIG_FILE_NAME,sdk);
-
 
         if (mSender != null){
             MessageObjects messageObjects = MessageObjects.obtain();
