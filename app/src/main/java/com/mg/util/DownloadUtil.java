@@ -3,7 +3,13 @@ package com.mg.util;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Message;
+import android.util.Log;
+import android.widget.ImageView;
 
+import com.mg.demo.Constants;
 import com.mg.others.utils.imager.DownloadImgUtils;
 import com.mg.others.utils.imager.ImageSizeUtil;
 
@@ -17,25 +23,44 @@ import java.security.NoSuchAlgorithmException;
 
 public class DownloadUtil {
 
-    public static boolean downloadShowImage(Context context,String url){
 
-        File file = getDiskCacheDir(context, md5(url));
-        if (file.exists())// 如果在缓存文件中发现
-        {
-            //bm = loadImageFromLocal(file.getAbsolutePath(), 0,0);//暂时写的
-            return true;
-        }
-        else {
-            boolean downloadState = DownloadImgUtils.downloadImgByUrl(url, file);
-            if (downloadState)// 如果下载成功
-            {
 
-                return true;
-                //bm = loadImageFromLocal(file.getAbsolutePath(), 0,0);//暂时写的
-            }
+    public static void downloadShowImage(Context context, final String url, final ImageView imageView, final Handler mainHandler){
+        Log.i(Constants.TAG,"url="+url);
+        final File file = getDiskCacheDir(context, md5(url));
 
-        }
-        return false;
+//        if (file.exists())// 如果在缓存文件中发现
+//        {
+//            Log.i(Constants.TAG,"url=1");
+//            Bitmap bm = loadImageFromLocal(file.getAbsolutePath(), imageView.getWidth(),imageView.getHeight());//暂时写的
+//            Message msg = new Message();
+//            msg.obj = bm;
+//            msg.what=300;
+//            mainHandler.sendMessage(msg);
+//        }
+//        else {
+            Log.i(Constants.TAG,"url=2");
+            HandlerThread handlerThread=new HandlerThread("downHt"+System.currentTimeMillis());
+            handlerThread.start();
+            Handler handler=new Handler(handlerThread.getLooper());
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    boolean downloadState = DownloadImgUtils.downloadImgByUrl(url, file);
+                    if (downloadState)// 如果下载成功
+                    {
+                        Bitmap bm = loadImageFromLocal(file.getAbsolutePath(), imageView.getWidth(),imageView.getHeight());//暂时写的
+                        Message msg = new Message();
+                        msg.obj = bm;
+                        msg.what=300;
+                        mainHandler.sendMessage(msg);
+                    }
+                }
+            });
+
+
+//        }
+
     }
     public static File getDiskCacheDir(Context context, String uniqueName)
     {

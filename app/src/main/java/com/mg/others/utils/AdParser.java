@@ -1,11 +1,13 @@
 package com.mg.others.utils;
 
 
+import android.util.Log;
+
+import com.mg.demo.Constants;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
 import com.mg.others.ooa.AdError;
 import com.mg.others.ooa.MConstant;
-
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -134,7 +136,7 @@ public class AdParser {
 
 
     public static List<AdModel> parseAd(String response){
-//        LogUtils.i(MConstant.TAG,"广告请求返回="+response);
+        Log.i(Constants.TAG,"广告请求返回="+response);
 //        LogUtils.i(MConstant.TAG, LocalLogConstants.AD_RESPONSE+response);
         List<AdModel> adModels = null;
         try {

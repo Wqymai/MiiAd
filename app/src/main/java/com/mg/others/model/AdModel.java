@@ -233,25 +233,25 @@ public class AdModel implements Serializable {
         this.reportBean = reportBean;
     }
 
-//    @Override
-//    public String toString() {
-//        StringBuffer sb = new StringBuffer();
-//        sb.append("\n name="+name+"\n");
-//        sb.append("title="+title+"\n");
-//        sb.append("icon="+icon+"\n");
-//        sb.append("img="+image+"\n");
-//        sb.append("url="+url + "\n");
-//        sb.append("pt="+pt+"\n");
-//        sb.append("et="+et+"\n");
-//        sb.append("displayTime="+displayTime+"\n");
-//        sb.append("delayTime="+delayTime+"\n");
-//        sb.append("hasJumpButton="+hasJumpButton+"\n");
-//        sb.append("jumpFunction="+jumpFunction+"\n");
-//        sb.append("type="+type+"\n");
-//        sb.append("flag="+flag);
-//
-//        return sb.toString();
-//    }
+    @Override
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("\n name="+name+"\n");
+        sb.append("title="+title+"\n");
+        sb.append("icon="+icon+"\n");
+        sb.append("img="+image+"\n");
+        sb.append("url="+url + "\n");
+        sb.append("pt="+pt+"\n");
+        sb.append("et="+et+"\n");
+        sb.append("displayTime="+displayTime+"\n");
+        sb.append("delayTime="+delayTime+"\n");
+        sb.append("hasJumpButton="+hasJumpButton+"\n");
+        sb.append("jumpFunction="+jumpFunction+"\n");
+        sb.append("type="+type+"\n");
+        sb.append("flag="+flag);
+
+        return sb.toString();
+    }
 
 
 
