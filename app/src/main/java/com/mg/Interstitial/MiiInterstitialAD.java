@@ -92,7 +92,7 @@ public class MiiInterstitialAD {
 
     }
     //无遮罩效果
-    private void  show(Bitmap bitmap){
+    public void  show(Bitmap bitmap){
         // 生成对话框
          dlg = new AlertDialog.Builder(mActivity).setCancelable(false).create();
         //显示对框框
@@ -148,7 +148,7 @@ public class MiiInterstitialAD {
         relativeLayout.addView(cancel, lp);
     }
     //有遮罩效果
-    private void showShade(Bitmap bitmap){
+    public void showShade(Bitmap bitmap){
         // 生成对话框
         dlg = new AlertDialog.Builder(mActivity).setCancelable(false).create();
         //显示对框框
