@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.others.R;
 import com.mg.comm.ADClickHelper;
 import com.mg.comm.MiiADListener;
 import com.mg.demo.Constants;
@@ -60,7 +61,7 @@ public class MiiInterstitialAD {
                         if (bitmap == null){
                             return;
                         }
-                        show(bitmap);
+                        showShade(bitmap);
                     }
                     catch (Exception e){
                         e.printStackTrace();
@@ -85,7 +86,7 @@ public class MiiInterstitialAD {
 
     }
     //有遮罩效果
-    public void show(Bitmap bitmap){
+    private void showShade(Bitmap bitmap){
         // 生成对话框
         final AlertDialog dlg = new AlertDialog.Builder(mActivity).setCancelable(false).create();
         //显示对框框
@@ -103,7 +104,8 @@ public class MiiInterstitialAD {
         ImageView imageView=new ImageView(mActivity);
         RelativeLayout.LayoutParams ivParam=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         imageView.setLayoutParams(ivParam);
-        imageView.setImageBitmap(bitmap);
+//        imageView.setImageBitmap(bitmap);
+        imageView.setImageResource(R.mipmap.splash_holder);
         imageView.setScaleType(ImageView.ScaleType.FIT_XY);
         relativeLayout.addView(imageView);
 
@@ -120,6 +122,9 @@ public class MiiInterstitialAD {
         lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         lp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         relativeLayout.addView(cancel, lp);
+
+
+
 
 
         //广告成功展示
@@ -150,7 +155,7 @@ public class MiiInterstitialAD {
 
     }
 
-    public class CircleTextView extends TextView {
+    private class CircleTextView extends TextView {
 
         private Paint mBgPaint = new Paint();
 

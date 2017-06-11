@@ -11,5 +11,5 @@ public interface MiiADListener {
     void onMiiADDismissed();
     void onMiiADPresent();
     void onMiiADClicked();
-    void onMiiADTick(long millisUntilFinished);
+    void onMiiADTick(long millisUntilFinished);//插屏广告不回调
 }
