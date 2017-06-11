@@ -50,7 +50,7 @@ public class MainActivity extends Activity {
                 public void onMiiADTick(long millisUntilFinished) {
 
                 }
-            });
+            }).show(null);
             }
         });
     }

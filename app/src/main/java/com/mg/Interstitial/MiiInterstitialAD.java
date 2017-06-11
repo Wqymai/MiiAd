@@ -16,6 +16,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -39,6 +41,10 @@ public class MiiInterstitialAD {
     Activity mActivity;
     AdModel adModel;
     MiiADListener listener;
+    ImageView imageView;
+    CircleTextView cancel;
+    RelativeLayout relativeLayout;
+    AlertDialog dlg;
 
     Handler mainHandler=new Handler(){
         @Override
@@ -76,7 +82,7 @@ public class MiiInterstitialAD {
         this.mContext=mActivity.getApplicationContext();
         this.mActivity=mActivity;
         this.listener=listener;
-        if (false){
+        if (true){
 
         }else {
             Log.i(Constants.TAG,"加载麦广广告...");
@@ -85,10 +91,60 @@ public class MiiInterstitialAD {
         }
 
     }
+    //无遮罩效果
+    public void  show(Bitmap bitmap){
+        // 生成对话框
+         dlg = new AlertDialog.Builder(mActivity).setCancelable(false).create();
+        //显示对框框
+        dlg.show();
+        Window window = dlg.getWindow();
+        WindowManager.LayoutParams params1 = new WindowManager.LayoutParams();
+        params1.height = 900;
+        params1.width=600;
+        window.setAttributes(params1);
+
+
+        RelativeLayout.LayoutParams pParams=new RelativeLayout.LayoutParams(ViewGroup
+                .LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        RelativeLayout relativeLayout=new RelativeLayout(mActivity);
+        relativeLayout.setLayoutParams(pParams);
+        relativeLayout.setBackgroundColor(Color.BLUE);
+
+
+        //展示广告的imageview
+        ImageView imageView=new ImageView(mActivity);
+        RelativeLayout.LayoutParams ivParam=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        imageView.setLayoutParams(ivParam);
+        imageView.setImageBitmap(bitmap);
+        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+        relativeLayout.addView(imageView);
+
+        //关闭按钮
+        CircleTextView cancel=new CircleTextView(mActivity);
+        cancel.setGravity(Gravity.CENTER);
+        cancel.setText("X");
+        cancel.setWidth(50);
+        cancel.setHeight(50);
+        cancel.setBackgroundColor(Color.argb(50, 41, 36, 33));
+        cancel.setTextColor(Color.WHITE);
+        RelativeLayout.LayoutParams lp=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        lp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+        relativeLayout.addView(cancel, lp);
+
+
+
+        RelativeLayout.LayoutParams params=new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT);
+
+
+        //添加自定义的Layout以及布局方式，注意传入dlg对象本身方便关闭该提示框
+        window.addContentView(relativeLayout,params);
+    }
     //有遮罩效果
     private void showShade(Bitmap bitmap){
         // 生成对话框
-        final AlertDialog dlg = new AlertDialog.Builder(mActivity).setCancelable(false).create();
+        dlg = new AlertDialog.Builder(mActivity).setCancelable(false).create();
         //显示对框框
         dlg.show();
         Window window = dlg.getWindow();
@@ -104,8 +160,8 @@ public class MiiInterstitialAD {
         ImageView imageView=new ImageView(mActivity);
         RelativeLayout.LayoutParams ivParam=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         imageView.setLayoutParams(ivParam);
-//        imageView.setImageBitmap(bitmap);
-        imageView.setImageResource(R.mipmap.splash_holder);
+        imageView.setImageBitmap(bitmap);
+//        imageView.setImageResource(R.mipmap.splash_holder);
         imageView.setScaleType(ImageView.ScaleType.FIT_XY);
         relativeLayout.addView(imageView);
 
@@ -132,6 +188,7 @@ public class MiiInterstitialAD {
 
         //添加自定义的Layout以及布局方式，注意传入dlg对象本身方便关闭该提示框
         window.addContentView(relativeLayout,layoutParams);
+
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -207,4 +264,6 @@ public class MiiInterstitialAD {
             super.draw(canvas);
         }
     }
+
+
 }
