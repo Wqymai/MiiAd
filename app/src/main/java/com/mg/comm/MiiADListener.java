@@ -1,4 +1,4 @@
-package com.mg.splash;
+package com.mg.comm;
 
 
 
@@ -6,7 +6,7 @@ package com.mg.splash;
  * Created by wuqiyan on 17/6/9.
  */
 
-public interface MiiSplashADListener {
+public interface MiiADListener {
     void onMiiNoAD(int errCode);
     void onMiiADDismissed();
     void onMiiADPresent();

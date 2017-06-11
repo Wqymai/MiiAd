@@ -1,4 +1,4 @@
-package com.mg.util;
+package com.mg.comm;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -21,7 +21,7 @@ import java.security.NoSuchAlgorithmException;
  * Created by wuqiyan on 2017/6/8.
  */
 
-public class DownloadUtil {
+public class ImageDownloadHelper {
 
 
 
@@ -39,7 +39,7 @@ public class DownloadUtil {
 //            mainHandler.sendMessage(msg);
 //        }
 //        else {
-            Log.i(Constants.TAG,"url=2");
+
             HandlerThread handlerThread=new HandlerThread("downHt"+System.currentTimeMillis());
             handlerThread.start();
             Handler handler=new Handler(handlerThread.getLooper());

@@ -37,7 +37,7 @@
         </activity>
 
         <activity android:name="com.mg.demo.SplashActivity"></activity>
-        <service android:name="com.mg.util.LoadHelperService"></service>
+        <service android:name="com.mg.comm.LoadHelperService"></service>
 
 
 

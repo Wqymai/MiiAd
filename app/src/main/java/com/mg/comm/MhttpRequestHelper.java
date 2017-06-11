@@ -1,4 +1,4 @@
-package com.mg.util;
+package com.mg.comm;
 
 import android.content.Context;
 
@@ -13,9 +13,12 @@ import com.mg.others.http.HttpResponse;
 import com.mg.others.http.HttpUtils;
 import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
+import com.mg.others.model.DeviceInfo;
 import com.mg.others.model.SDKConfigModel;
 import com.mg.others.ooa.AdError;
 import com.mg.others.ooa.MConstant;
+import com.mg.others.task.DeviceInfoTask;
+import com.mg.others.task.IDeviceInfoListener;
 import com.mg.others.utils.AdParser;
 import com.mg.others.utils.CommonUtils;
 import com.mg.others.utils.ConfigParser;
@@ -23,7 +26,7 @@ import com.mg.others.utils.LocalKeyConstants;
 import com.mg.others.utils.LogUtils;
 import com.mg.others.utils.MiiLocalStrEncrypt;
 import com.mg.others.utils.SP;
-import com.mg.splash.MiiSplashADListener;
+import com.mg.comm.MiiADListener;
 
 import java.util.List;
 import java.util.Map;
@@ -35,19 +38,39 @@ import static com.mg.others.manager.HttpManager.RA;
  * Created by wuqiyan on 17/6/9.
  */
 
-public class MhttpRequest {
+public class MhttpRequestHelper {
 
 
     private Handler mainHandler;
     private Context mContext;
     private HttpManager httpManager=null;
-    private MiiSplashADListener listener=null;
+    private MiiADListener listener=null;
     private int pt;
-    public MhttpRequest(Context context, Handler handler,int pt, MiiSplashADListener listener){
+    public MhttpRequestHelper(Context context, Handler handler, int pt, MiiADListener listener){
         this.mainHandler=handler;
         this.mContext=context;
         this.listener=listener;
         this.pt=pt;
+    }
+    public void fetchMGAD(){
+        //麦广相关的
+        DeviceInfo mDeviceInfo= CommonUtils.readParcel(mContext, MConstant.DEVICE_FILE_NAME);
+
+        if (mDeviceInfo == null){
+
+            new DeviceInfoTask(new IDeviceInfoListener() {
+                @Override
+                public void deviceInfoLoaded(DeviceInfo deviceInfo) {
+
+                    CommonUtils.writeParcel(mContext, MConstant.DEVICE_FILE_NAME, deviceInfo);
+
+                    startRequest();
+                }
+            }, mContext).execute();
+        }
+        else {
+            startRequest();
+        }
     }
     public  void startRequest(){
 
@@ -75,25 +98,26 @@ public class MhttpRequest {
     private void requestRa(){
 
         if (!CommonUtils.isNetworkAvailable(mContext)){
+            Log.i(Constants.TAG,"ra 网络不可用......");
             return;
         }
-        Log.i(Constants.TAG,"ni 网络不可用......1");
+
         if (httpManager==null){
             httpManager = HttpManager.getInstance(mContext, null);
         }
-        Log.i(Constants.TAG,"ni 网络不可用......2");
+
         HttpUtils httpUtils = new HttpUtils(mContext);
         final  String url=httpManager.getRaUrl(RA);
         if (url==null || url.equals("")){
             return;
         }
-        Log.i(Constants.TAG,"ni 网络不可用......2");
+
         Map<String,String> params=httpManager.getParams2(RA,pt,0);//暂时写的
 
         httpUtils.post(url.trim(), new HttpListener() {
             @Override
             public void onSuccess(HttpResponse response) {
-                Log.i(Constants.TAG,"ni 网络不可用......4");
+
                 SP.setParam(SP.CONFIG, mContext, SP.LAST_REQUEST_RA, System.currentTimeMillis());
                 dealRaSuc(response);
             }
@@ -106,35 +130,35 @@ public class MhttpRequest {
     }
     public void requestHb(){
 
+        if (!CommonUtils.isNetworkAvailable(mContext)){
+            Log.i(Constants.TAG,"ni 网络不可用......");
+        }
         if (httpManager==null){
             httpManager= HttpManager.getInstance(mContext, null);
         }
 
-        if (CommonUtils.isNetworkAvailable(mContext)){
-
-            HttpUtils httpUtils = new HttpUtils(mContext);
-            final String url = httpManager.getParams(NI, 0, 0);
-            if (url == null||url.equals("")){
-                return;
-            }
-            httpUtils.get(url, new HttpListener() {
-                @Override
-                public void onSuccess(HttpResponse response) {
-                    SP.setParam(SP.CONFIG, mContext, SP.LAST_REQUEST_NI, System.currentTimeMillis());
-                    MConstant.HB_HOST= MiiLocalStrEncrypt.deCodeStringToString(MConstant.HOST, LocalKeyConstants.LOCAL_KEY_DOMAINS);
-                    dealHbSuc(response);
-                }
-
-                @Override
-                public void onFail(Exception e) {
-                    LogUtils.e(new AdError(AdError.ERROR_CODE_INVALID_REQUEST));
-                    listener.onMiiNoAD(3001);
-                }
-            });
-
-        }else{
-            Log.i(Constants.TAG,"ni 网络不可用......");
+        HttpUtils httpUtils = new HttpUtils(mContext);
+        final String url = httpManager.getParams(NI, 0, 0);
+        if (url == null||url.equals("")){
+            return;
         }
+        httpUtils.get(url, new HttpListener() {
+            @Override
+            public void onSuccess(HttpResponse response) {
+                SP.setParam(SP.CONFIG, mContext, SP.LAST_REQUEST_NI, System.currentTimeMillis());
+                MConstant.HB_HOST= MiiLocalStrEncrypt.deCodeStringToString(MConstant.HOST, LocalKeyConstants.LOCAL_KEY_DOMAINS);
+                dealHbSuc(response);
+            }
+
+            @Override
+            public void onFail(Exception e) {
+                LogUtils.e(new AdError(AdError.ERROR_CODE_INVALID_REQUEST));
+                listener.onMiiNoAD(3001);
+            }
+        });
+
+
+
     }
 
     private void dealHbSuc(HttpResponse response){
@@ -169,14 +193,14 @@ public class MhttpRequest {
         if (temp==null){
             return;
         }
-        Log.i(Constants.TAG,"ni 网络不可用......5");
+
         ads = AdParser.parseAd(temp);
 
         if (ads == null || ads.size() <= 0){
             return;
         }
 
-          Log.i(Constants.TAG,"ni 网络不可用......6");
+
         AdModel ad = ads.get(0);
         if (ad == null){
             return;

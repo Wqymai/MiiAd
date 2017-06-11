@@ -10,13 +10,13 @@ import android.widget.TextView;
 
 import com.android.others.R;
 import com.mg.splash.MiiSplashAD;
-import com.mg.splash.MiiSplashADListener;
+import com.mg.comm.MiiADListener;
 
 /**
  * Created by wuqiyan on 17/6/9.
  */
 
-public class SplashActivity extends Activity implements MiiSplashADListener {
+public class    SplashActivity extends Activity implements MiiADListener {
 
     private MiiSplashAD splashAD;
     private ViewGroup container;
@@ -31,11 +31,11 @@ public class SplashActivity extends Activity implements MiiSplashADListener {
         container = (ViewGroup) this.findViewById(R.id.splash_container);
         skipView = (TextView) findViewById(R.id.skip_view);
         splashHolder = (ImageView) findViewById(R.id.splash_holder);
-        fetchSplashAD(this, container, skipView, this);
+        fetchAD(this, container, skipView, this);
     }
 
-    private void fetchSplashAD(SplashActivity mainActivity, ViewGroup container, TextView skipView,
-                               MiiSplashADListener listener) {
+    private void fetchAD(SplashActivity mainActivity, ViewGroup container, TextView skipView,
+                               MiiADListener listener) {
         splashAD=new MiiSplashAD(mainActivity,container,skipView,listener);
     }
 

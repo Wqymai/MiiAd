@@ -9,31 +9,23 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.mg.comm.ADClickHelper;
+import com.mg.comm.MiiADListener;
 import com.mg.demo.Constants;
 import com.mg.others.manager.ApkDownloadManager;
 import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
-import com.mg.others.model.DeviceInfo;
 import com.mg.others.model.SDKConfigModel;
 import com.mg.others.ooa.MConstant;
-import com.mg.others.task.DeviceInfoTask;
-import com.mg.others.task.IDeviceInfoListener;
 import com.mg.others.utils.CommonUtils;
-import com.mg.util.DownloadUtil;
-import com.mg.util.MhttpRequest;
+import com.mg.comm.ImageDownloadHelper;
+import com.mg.comm.MhttpRequestHelper;
 import com.qq.e.ads.splash.SplashAD;
 import com.qq.e.ads.splash.SplashADListener;
-
-import java.util.Timer;
-import java.util.TimerTask;
-
-import static android.R.attr.bitmap;
-import static android.R.attr.breadCrumbShortTitle;
 
 
 /**
@@ -47,7 +39,7 @@ public class MiiSplashAD {
      private ViewGroup adContainer;
      private View skipContainer;
      private Activity mActivity;
-     private MiiSplashADListener listener;
+     private MiiADListener listener;
      private AdModel adModel;
      private ImageView adImageView;
 
@@ -66,7 +58,7 @@ public class MiiSplashAD {
                         adImageView.setLayoutParams(layoutParams);
                         adImageView.setScaleType(ImageView.ScaleType.FIT_XY);
                         adContainer.addView(adImageView);
-                        DownloadUtil.downloadShowImage(mContext,adModel.getImage(),adImageView,mainHandler);
+                        ImageDownloadHelper.downloadShowImage(mContext,adModel.getImage(),adImageView,mainHandler);
                     }
                     catch (Exception e){
                         adContainer.removeView(adImageView);
@@ -103,6 +95,7 @@ public class MiiSplashAD {
          //广告成功展示
          listener.onMiiADPresent();
 
+
          //倒计时开始
          adCountDownTimer();
 
@@ -121,9 +114,8 @@ public class MiiSplashAD {
                  listener.onMiiADDismissed();
 
                  //点击广告后相关行为
-                 AdClick(adModel);
+                 new ADClickHelper(mContext).AdClick(adModel);
 
-                 mActivity.finish();
 
              }
          });
@@ -136,25 +128,26 @@ public class MiiSplashAD {
          }
          long time = sdk.getDisplayTime(2);
          Log.i(Constants.TAG,"开始倒计时 time="+time);
-         CountDownTimer timer=new CountDownTimer(time*1000,1000){
+
+         CountDownTimer timer=new CountDownTimer((time+1)*1000,1000){
              @Override
              public void onTick(long millisUntilFinished) {
                  Log.i(Constants.TAG,"倒计时 "+millisUntilFinished);
-                 listener.onMiiADTick(millisUntilFinished);
+                 listener.onMiiADTick((long) ((Math.floor(millisUntilFinished/1000))*1000));
              }
 
              @Override
              public void onFinish() {
                  Log.i(Constants.TAG,"倒计时结束 ");
                  listener.onMiiADDismissed();
-                 mActivity.finish();
+
              }
          };
          timer.start();
 
      }
 
-     public  MiiSplashAD(Activity activity, ViewGroup adContainer,View skipContainer,MiiSplashADListener adListener){
+     public  MiiSplashAD(Activity activity, ViewGroup adContainer,View skipContainer,MiiADListener adListener){
 
          this.mActivity=activity;
 
@@ -203,63 +196,13 @@ public class MiiSplashAD {
          }
          else {
             Log.i(Constants.TAG,"加载麦广广告...");
-            fetchMGAD();
+             MhttpRequestHelper mhttpRequest = new MhttpRequestHelper(mContext,mainHandler,2,listener);
+             mhttpRequest.fetchMGAD();
          }
      }
 
 
-    private void fetchMGAD(){
-        //麦广相关的
-        DeviceInfo mDeviceInfo= CommonUtils.readParcel(mContext, MConstant.DEVICE_FILE_NAME);
 
-        final MhttpRequest mhttpRequest = new MhttpRequest(mContext,mainHandler,2,listener);
-
-        if (mDeviceInfo == null){
-
-            new DeviceInfoTask(new IDeviceInfoListener() {
-                @Override
-                public void deviceInfoLoaded(DeviceInfo deviceInfo) {
-
-                    CommonUtils.writeParcel(mContext, MConstant.DEVICE_FILE_NAME, deviceInfo);
-
-                    mhttpRequest.startRequest();
-                }
-            }, mContext).execute();
-        }
-        else {
-            mhttpRequest.startRequest();
-        }
-    }
-
-    //点击打开
-    private void AdClick(AdModel ad) {
-        //点击上报
-        HttpManager.reportEvent(ad, AdReport.EVENT_CLICK, mContext);
-
-        if (ad == null) {
-            return;
-        }
-
-        if (ad.getType() != MConstant.adClickType.app) {
-            CommonUtils.openBrowser(mContext, ad.getUrl());
-            return;
-        }
-
-        else {
-            if (ad.getUrl().contains("click")){
-                CommonUtils.openBrowser(mContext, ad.getUrl());
-                return;
-            }
-            if (CommonUtils.getNetworkSubType(mContext) == CommonUtils.NET_TYPE_WIFI) {
-                ApkDownloadManager manager = ApkDownloadManager.getIntance(mContext);
-                manager.downloadFile(ad);
-
-                //开始下载上报
-                HttpManager.reportEvent(adModel, AdReport.EVENT_DOWNLOAD_START, mContext);
-                return;
-            }
-        }
-    }
 
 
 }
