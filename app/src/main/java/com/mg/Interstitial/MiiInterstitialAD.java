@@ -92,7 +92,7 @@ public class MiiInterstitialAD {
 
     }
     //无遮罩效果
-    public void  show(Bitmap bitmap){
+    private void  show(Bitmap bitmap){
         // 生成对话框
          dlg = new AlertDialog.Builder(mActivity).setCancelable(false).create();
         //显示对框框
@@ -106,21 +106,36 @@ public class MiiInterstitialAD {
 
         RelativeLayout.LayoutParams pParams=new RelativeLayout.LayoutParams(ViewGroup
                 .LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        RelativeLayout relativeLayout=new RelativeLayout(mActivity);
+        relativeLayout=new RelativeLayout(mActivity);
         relativeLayout.setLayoutParams(pParams);
         relativeLayout.setBackgroundColor(Color.BLUE);
 
 
+        buildView(bitmap);
+
+
+
+        RelativeLayout.LayoutParams params=new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT);
+
+
+        //添加自定义的Layout以及布局方式，注意传入dlg对象本身方便关闭该提示框
+        window.addContentView(relativeLayout,params);
+    }
+
+    private void buildView(Bitmap bitmap){
+
         //展示广告的imageview
-        ImageView imageView=new ImageView(mActivity);
+         imageView=new ImageView(mActivity);
         RelativeLayout.LayoutParams ivParam=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         imageView.setLayoutParams(ivParam);
-        imageView.setImageBitmap(bitmap);
+//        imageView.setImageBitmap(bitmap);
+        imageView.setImageResource(R.mipmap.splash_holder);
         imageView.setScaleType(ImageView.ScaleType.FIT_XY);
         relativeLayout.addView(imageView);
 
         //关闭按钮
-        CircleTextView cancel=new CircleTextView(mActivity);
+         cancel=new CircleTextView(mActivity);
         cancel.setGravity(Gravity.CENTER);
         cancel.setText("X");
         cancel.setWidth(50);
@@ -131,15 +146,6 @@ public class MiiInterstitialAD {
         lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         lp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         relativeLayout.addView(cancel, lp);
-
-
-
-        RelativeLayout.LayoutParams params=new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
-                RelativeLayout.LayoutParams.MATCH_PARENT);
-
-
-        //添加自定义的Layout以及布局方式，注意传入dlg对象本身方便关闭该提示框
-        window.addContentView(relativeLayout,params);
     }
     //有遮罩效果
     private void showShade(Bitmap bitmap){
@@ -151,38 +157,13 @@ public class MiiInterstitialAD {
 
 
         RelativeLayout.LayoutParams layoutParams=new RelativeLayout.LayoutParams(600, 900);
-
-        RelativeLayout relativeLayout=new RelativeLayout(mActivity);
-
-        relativeLayout.setBackgroundColor(Color.parseColor("#EBEBEB"));
+        relativeLayout=new RelativeLayout(mActivity);
+        relativeLayout.setBackgroundColor(Color.BLUE);
 
 
-        ImageView imageView=new ImageView(mActivity);
-        RelativeLayout.LayoutParams ivParam=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        imageView.setLayoutParams(ivParam);
-        imageView.setImageBitmap(bitmap);
-//        imageView.setImageResource(R.mipmap.splash_holder);
-        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-        relativeLayout.addView(imageView);
+        buildView(bitmap);
 
-        CircleTextView cancel=new CircleTextView(mActivity);
-        cancel.setGravity(Gravity.CENTER);
-        cancel.setText("X");
-        cancel.setWidth(50);
-        cancel.setHeight(50);
-        cancel.setBackgroundColor(Color.argb(50, 41, 36, 33));
-        cancel.setTextColor(Color.WHITE);
-
-
-        RelativeLayout.LayoutParams lp=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        lp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-        relativeLayout.addView(cancel, lp);
-
-
-
-
-
+        
         //广告成功展示
         listener.onMiiADPresent();
 
