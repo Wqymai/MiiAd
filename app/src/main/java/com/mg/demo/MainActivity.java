@@ -16,41 +16,52 @@ import com.mg.comm.MiiADListener;
 
 public class MainActivity extends Activity {
     Button openSplash;
+    Button openInterstitial;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         openSplash= (Button) findViewById(R.id.open_splash_ad);
+
         openSplash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                startActivity(new Intent(MainActivity.this,SplashActivity.class));
-            new MiiInterstitialAD(MainActivity.this, new MiiADListener() {
-                @Override
-                public void onMiiNoAD(int errCode) {
+                startActivity(new Intent(MainActivity.this,SplashActivity.class));
 
-                }
+            }
+        });
 
-                @Override
-                public void onMiiADDismissed() {
+        openInterstitial= (Button) findViewById(R.id.open_interstitial_ad);
+        openInterstitial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-                }
+                new MiiInterstitialAD(MainActivity.this, new MiiADListener() {
+                    @Override
+                    public void onMiiNoAD(int errCode) {
 
-                @Override
-                public void onMiiADPresent() {
+                    }
 
-                }
+                    @Override
+                    public void onMiiADDismissed() {
 
-                @Override
-                public void onMiiADClicked() {
+                    }
 
-                }
+                    @Override
+                    public void onMiiADPresent() {
 
-                @Override
-                public void onMiiADTick(long millisUntilFinished) {
+                    }
 
-                }
-            }).showShade(null);
+                    @Override
+                    public void onMiiADClicked() {
+
+                    }
+
+                    @Override
+                    public void onMiiADTick(long millisUntilFinished) {
+
+                    }
+            });
             }
         });
     }

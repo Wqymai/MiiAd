@@ -136,8 +136,6 @@ public class AdParser {
 
 
     public static List<AdModel> parseAd(String response){
-        Log.i(Constants.TAG,"广告请求返回="+response);
-//        LogUtils.i(MConstant.TAG, LocalLogConstants.AD_RESPONSE+response);
         List<AdModel> adModels = null;
         try {
             JSONObject jsonObject = new JSONObject(response);

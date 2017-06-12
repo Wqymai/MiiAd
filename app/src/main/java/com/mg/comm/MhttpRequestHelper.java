@@ -1,7 +1,6 @@
 package com.mg.comm;
 
 import android.content.Context;
-
 import android.os.Handler;
 import android.os.Message;
 import android.util.Base64;
@@ -26,7 +25,6 @@ import com.mg.others.utils.LocalKeyConstants;
 import com.mg.others.utils.LogUtils;
 import com.mg.others.utils.MiiLocalStrEncrypt;
 import com.mg.others.utils.SP;
-import com.mg.comm.MiiADListener;
 
 import java.util.List;
 import java.util.Map;
@@ -80,11 +78,11 @@ public class MhttpRequestHelper {
             requestHb();
         }
         else {
-            long hbTime= (long) SP.getParam(SP.CONFIG,mContext,SP.LAST_REQUEST_NI,0l);
+            long hbTime = (long) SP.getParam(SP.CONFIG,mContext,SP.LAST_REQUEST_NI,0l);
 
-            long currTime=System.currentTimeMillis();
+            long currTime = System.currentTimeMillis();
 
-            int next=sdkConfigModel.getNext();
+            int next = sdkConfigModel.getNext();
 
             if (((currTime-hbTime)/1000) < next){
                 requestRa();
@@ -99,6 +97,7 @@ public class MhttpRequestHelper {
 
         if (!CommonUtils.isNetworkAvailable(mContext)){
             Log.i(Constants.TAG,"ra 网络不可用......");
+            listener.onMiiNoAD(3000);//未检测到网络
             return;
         }
 
@@ -108,7 +107,7 @@ public class MhttpRequestHelper {
 
         HttpUtils httpUtils = new HttpUtils(mContext);
         final  String url=httpManager.getRaUrl(RA);
-        if (url==null || url.equals("")){
+        if (url == null || url.equals("")){
             return;
         }
 
@@ -132,6 +131,8 @@ public class MhttpRequestHelper {
 
         if (!CommonUtils.isNetworkAvailable(mContext)){
             Log.i(Constants.TAG,"ni 网络不可用......");
+            listener.onMiiNoAD(3000);//未检测到网络
+            return;
         }
         if (httpManager==null){
             httpManager= HttpManager.getInstance(mContext, null);
@@ -168,19 +169,22 @@ public class MhttpRequestHelper {
             String data = new String(Base64.decode(response.entity(),Base64.NO_WRAP));
 
             if (data == null){
+                listener.onMiiNoAD(3002);//hb解析失败
                 return;
             }
             sdk = ConfigParser.parseConfig(data);
 
             if (sdk == null){
+                listener.onMiiNoAD(3002);//hb解析失败
                 return;
             }
+            Log.i(Constants.TAG,"HB请求结果："+sdk.toString());
             CommonUtils.writeParcel(mContext,MConstant.CONFIG_FILE_NAME,sdk);
 
             requestRa();
         }
         catch (Exception e){
-            listener.onMiiNoAD(3002);
+            listener.onMiiNoAD(3002);//hb解析失败
             e.printStackTrace();
         }
 
@@ -197,15 +201,17 @@ public class MhttpRequestHelper {
         ads = AdParser.parseAd(temp);
 
         if (ads == null || ads.size() <= 0){
+            listener.onMiiNoAD(3004);//ra 解析失败
             return;
         }
 
 
         AdModel ad = ads.get(0);
         if (ad == null){
+            listener.onMiiNoAD(3004);//ra 解析失败
             return;
         }
-        Log.i(Constants.TAG,"RA请求结果："+ad.toString());
+
         Message msg=new Message();
         msg.obj = ad;
         msg.what=200;//ra访问成功
@@ -213,7 +219,7 @@ public class MhttpRequestHelper {
 
       }
       catch (Exception e){
-          listener.onMiiNoAD(3004);
+          listener.onMiiNoAD(3004);//ra 解析失败
           e.printStackTrace();
       }
     }

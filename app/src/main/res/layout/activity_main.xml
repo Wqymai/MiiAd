@@ -13,8 +13,16 @@
     tools:context="com.mg.demo.SplashActivity">
 
     <Button
+
         android:text="打开splash广告"
         android:id="@+id/open_splash_ad"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
+    <Button
+        android:layout_below="@id/open_splash_ad"
+        android:id="@+id/open_interstitial_ad"
+        android:text="打开插屏广告"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
 </RelativeLayout>

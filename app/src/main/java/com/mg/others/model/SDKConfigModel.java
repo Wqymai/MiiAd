@@ -260,30 +260,30 @@ public class SDKConfigModel implements Serializable {
         this.sence = sence;
     }
 
-//    @Override
-//    public String toString() {
-//        StringBuffer sb = new StringBuffer();
-//        sb.append("\n"+"adShow = " +adShow + "\n");
-//        sb.append("show_percentage = " +show_percentage + "\n");
-//        sb.append("splash_time = " +splash_time + "\n");
-//        sb.append("interstitial_time = " +interstitial_time + "\n");
-//        sb.append("banner_time = " +banner_time + "\n");
-//        sb.append("interstitial_delay_time = " +interstitial_delay_time+ "\n");
-//        sb.append("jump = " +jump + "\n");
-//        sb.append("jump_function = " +jump_function+ "\n");
-//        sb.append("show_sum = " +show_sum+ "\n");
-//        sb.append("interval = " +interval+ "\n");
-//        sb.append("next = " +next+ "\n");
-//        sb.append("banner_p = " + getPercentage().getBanner_p() + "\n");
-//        sb.append("splash_p = " + getPercentage().getSplash_p() + "\n");
-//        sb.append("interstitial_p = " + getPercentage().getInterstitial_p() + "\n");
-//        sb.append("updateTime = " + updateTime + "\n");
-//        sb.append("white/black-List = " + list + "\n");
-//        sb.append("listType = " +listType+"\n");
-//        sb.append("ce= "+ce);
-//
-//        return sb.toString();
-//    }
+    @Override
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("\n"+"adShow = " +adShow + "\n");
+        sb.append("show_percentage = " +show_percentage + "\n");
+        sb.append("splash_time = " +splash_time + "\n");
+        sb.append("interstitial_time = " +interstitial_time + "\n");
+        sb.append("banner_time = " +banner_time + "\n");
+        sb.append("interstitial_delay_time = " +interstitial_delay_time+ "\n");
+        sb.append("jump = " +jump + "\n");
+        sb.append("jump_function = " +jump_function+ "\n");
+        sb.append("show_sum = " +show_sum+ "\n");
+        sb.append("interval = " +interval+ "\n");
+        sb.append("next = " +next+ "\n");
+        sb.append("banner_p = " + getPercentage().getBanner_p() + "\n");
+        sb.append("splash_p = " + getPercentage().getSplash_p() + "\n");
+        sb.append("interstitial_p = " + getPercentage().getInterstitial_p() + "\n");
+        sb.append("updateTime = " + updateTime + "\n");
+        sb.append("white/black-List = " + list + "\n");
+        sb.append("listType = " +listType+"\n");
+        sb.append("ce= "+ce);
+
+        return sb.toString();
+    }
 
     /**
      * 根据各类型广告权重选择广告

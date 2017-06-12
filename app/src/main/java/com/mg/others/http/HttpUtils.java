@@ -111,6 +111,10 @@ public class HttpUtils {
 		}
 	}
 
+	public void downloadAdImage(Runnable runnable){
+		httpExecutor.execute(runnable);
+	}
+
 	/**
 	 * update global http parameter
 	 *

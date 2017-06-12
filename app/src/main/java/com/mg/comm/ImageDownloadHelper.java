@@ -10,6 +10,8 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import com.mg.demo.Constants;
+import com.mg.others.http.HttpUtils;
+import com.mg.others.utils.CommonUtils;
 import com.mg.others.utils.imager.DownloadImgUtils;
 import com.mg.others.utils.imager.ImageSizeUtil;
 
@@ -24,42 +26,57 @@ import java.security.NoSuchAlgorithmException;
 public class ImageDownloadHelper {
 
 
+    int isPortrait;
+    public ImageDownloadHelper(int isPortrait){
 
-    public static void downloadShowImage(Context context, final String url, final ImageView imageView, final Handler mainHandler){
-        Log.i(Constants.TAG,"url="+url);
+        this.isPortrait = isPortrait;
+
+    }
+
+
+    public  void downloadShowImage(Context context, final String url, final ImageView imageView, final Handler mainHandler){
+        Log.i(Constants.TAG,"要下载图片的url="+url);
         final File file = getDiskCacheDir(context, md5(url));
+        if (file.exists())// 如果在缓存文件中发现
+        {
+            Log.i(Constants.TAG,"");
+            Bitmap bm = null;
+            if (imageView == null) {
+                bm = loadImageFromLocal(file.getAbsolutePath(), 0, 0);
+            } else {
+                bm = loadImageFromLocal(file.getAbsolutePath(), imageView.getWidth(), imageView.getHeight());
+            }
+            Message msg = new Message();
+            msg.obj = bm;
+            msg.what=300;
+            mainHandler.sendMessage(msg);
+        }
+        else {
+            final int screenH = CommonUtils.getScreenH(context);
+            final int screenW = CommonUtils.getScreenW(context);
+            Log.i(Constants.TAG, "H=" + screenH + " W=" + screenW);
 
-//        if (file.exists())// 如果在缓存文件中发现
-//        {
-//            Log.i(Constants.TAG,"url=1");
-//            Bitmap bm = loadImageFromLocal(file.getAbsolutePath(), imageView.getWidth(),imageView.getHeight());//暂时写的
-//            Message msg = new Message();
-//            msg.obj = bm;
-//            msg.what=300;
-//            mainHandler.sendMessage(msg);
-//        }
-//        else {
-
-            HandlerThread handlerThread=new HandlerThread("downHt"+System.currentTimeMillis());
-            handlerThread.start();
-            Handler handler=new Handler(handlerThread.getLooper());
-            handler.post(new Runnable() {
+            Runnable runnable = new Runnable() {
                 @Override
                 public void run() {
                     boolean downloadState = DownloadImgUtils.downloadImgByUrl(url, file);
                     if (downloadState)// 如果下载成功
                     {
-                        Bitmap bm = loadImageFromLocal(file.getAbsolutePath(), imageView.getWidth(),imageView.getHeight());//暂时写的
+                        Bitmap bm = null;
+                        if (imageView == null) {
+                            bm = loadImageFromLocal(file.getAbsolutePath(), 0, 0);
+                        } else {
+                            bm = loadImageFromLocal(file.getAbsolutePath(), imageView.getWidth(), imageView.getHeight());
+                        }
                         Message msg = new Message();
                         msg.obj = bm;
-                        msg.what=300;
+                        msg.what = 300;
                         mainHandler.sendMessage(msg);
                     }
                 }
-            });
-
-
-//        }
+            };
+            new HttpUtils(context).downloadAdImage(runnable);
+        }
 
     }
     public static File getDiskCacheDir(Context context, String uniqueName)
@@ -71,20 +88,17 @@ public class ImageDownloadHelper {
     public static   Bitmap loadImageFromLocal( String path,int width,int height)
     {
         Bitmap bm;
-        // 加载图片
-        // 图片的压缩
-        // 1、获得图片需要显示的大小
-//        ImageSizeUtil.ImageSize imageSize = ImageSizeUtil.getImageViewSize(imageView);
-        // 2、压缩图片
+
         bm = decodeSampledBitmapFromPath(path, width, height);
         return bm;
     }
     public static   Bitmap decodeSampledBitmapFromPath(String path, int width,
                                                  int height)
     {
-        // 获得图片的宽和高，并不把图片加载到内存中
+
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
+        //
         BitmapFactory.decodeFile(path, options);
 
         options.inSampleSize = ImageSizeUtil.caculateInSampleSize(options,
