@@ -142,7 +142,7 @@ public class MiiSplashAD {
 
 
     private void  checkADType(AdModel adModel){
-        //Log.i("Constants.TAG","是HTML5广告...");
+
         if (true){//h5广告
 
             Log.i(Constants.TAG,"是HTML5广告...");
@@ -170,7 +170,7 @@ public class MiiSplashAD {
                     return true;
                 }
             });
-            //Log.i("Constants.TAG","是HTML5广告...");
+
             webView.loadDataWithBaseURL("",html , "text/html", "utf-8", "");
             adContainer.addView(webView);
 
@@ -226,7 +226,7 @@ public class MiiSplashAD {
          return tv;
      }
 
-     private void showSplashAD(Bitmap bitmap){
+     private void showSplashAD(final Bitmap bitmap){
 
          adImageView.setImageBitmap(bitmap);
 
@@ -244,6 +244,9 @@ public class MiiSplashAD {
              @Override
              public void onClick(View v) {
                  listener.onMiiADDismissed();
+                 if (bitmap!=null){
+                     bitmap.recycle();
+                 }
                  mActivity.finish();
              }
          });

@@ -49,15 +49,15 @@ import static com.mg.others.ooa.MConstant.request_type.ni;
 
 public class MiiInterstitialAD {
 
-    Context mContext;
-    Activity mActivity;
-    AdModel adModel;
-    MiiADListener listener;
-    ImageView imageView;
-    CircleTextView cancel;
-    RelativeLayout relativeLayout;
-    AlertDialog dlg;
-    TextView tv;
+    private Context mContext;
+    private Activity mActivity;
+    private AdModel adModel;
+    private MiiADListener listener;
+    private ImageView imageView;
+    private CircleTextView cancel;
+    private RelativeLayout relativeLayout;
+    private AlertDialog dlg;
+    private TextView tv;
     boolean oren;
     final static double  H_P = 0.8;
     final  static double W_P = 0.8;
@@ -102,11 +102,11 @@ public class MiiInterstitialAD {
         this.mContext=mActivity.getApplicationContext();
         this.mActivity=mActivity;
         this.listener=listener;
-        if (false){
+        if (false){//广点通广告
+            Log.i(Constants.TAG,"加载广点通广告...插屏");
 
-
-        }else {
-            Log.i(Constants.TAG,"加载麦广广告...");
+        }else {//麦广广告
+            Log.i(Constants.TAG,"加载麦广广告...插屏");
             MhttpRequestHelper mhttpRequest = new MhttpRequestHelper(mContext,mainHandler,3,listener);
             mhttpRequest.fetchMGAD();
         }
@@ -146,7 +146,9 @@ public class MiiInterstitialAD {
         WindowManager.LayoutParams params1 = new WindowManager.LayoutParams();
         int screenH = CommonUtils.getScreenH(mContext);
         int screenW = CommonUtils.getScreenW(mContext);
-        double H_W_P = (bitmap != null ? bitmap.getWidth()/bitmap.getHeight():1.2);
+
+        boolean ishtml5 = bitmap!=null ? false:true;
+        double H_W_P = ishtml5 ? 1.2: bitmap.getWidth()/bitmap.getHeight();
 
 
         if (oren){//竖屏
@@ -166,8 +168,14 @@ public class MiiInterstitialAD {
         relativeLayout.setBackgroundColor(Color.TRANSPARENT);
 
 
+        if (ishtml5){
+            buildWebView(html);
+        }
+        else {
+            buildImageView(bitmap);
+        }
 
-        buildAllView(bitmap,html);
+        buildOthersView();
 
 
         //添加自定义的Layout以及布局方式，注意传入dlg对象本身方便关闭该提示框
@@ -178,7 +186,7 @@ public class MiiInterstitialAD {
         listener.onMiiADPresent();
 
 
-        setClick();
+        setClick(ishtml5);
     }
 
 
@@ -194,7 +202,9 @@ public class MiiInterstitialAD {
         int screenH = CommonUtils.getScreenH(mContext);
         int screenW = CommonUtils.getScreenW(mContext);
 
-        double H_W_P = (bitmap != null ? bitmap.getWidth()/bitmap.getHeight():1.2);
+        boolean ishtml5 = bitmap!=null ? false:true;
+
+        double H_W_P = ishtml5 ? 1.2: bitmap.getWidth()/bitmap.getHeight();
 
         RelativeLayout.LayoutParams layoutParams ;
         if (oren){//竖屏
@@ -206,8 +216,15 @@ public class MiiInterstitialAD {
         relativeLayout.setBackgroundColor(Color.TRANSPARENT);
 
 
+        if (ishtml5){
 
-        buildAllView(bitmap,html);
+            buildWebView(html);
+        }
+        else {
+            buildImageView(bitmap);
+        }
+
+        buildOthersView();
 
 
         window.addContentView(relativeLayout,layoutParams);
@@ -215,11 +232,11 @@ public class MiiInterstitialAD {
         //广告成功展示
         listener.onMiiADPresent();
 
-        setClick();
+        setClick(ishtml5);
 
     }
 
-    private void setClick(){
+    private void setClick(boolean ishtml5){
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -230,6 +247,9 @@ public class MiiInterstitialAD {
                 listener.onMiiADDismissed();
             }
         });
+        if (ishtml5){
+            return;
+        }
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -284,15 +304,7 @@ public class MiiInterstitialAD {
         webView.loadDataWithBaseURL("",html , "text/html", "utf-8", "");
     }
 
-    private void buildAllView(Bitmap bitmap,String html){
-
-        if (bitmap!=null && html==null){
-            buildImageView(bitmap);
-        }
-        else {
-            buildWebView(html);
-        }
-
+    private void buildOthersView(){
 
         //关闭按钮
         cancel=new CircleTextView(mActivity);
