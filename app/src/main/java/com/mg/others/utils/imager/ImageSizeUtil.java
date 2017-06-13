@@ -2,15 +2,10 @@ package com.mg.others.utils.imager;
 
 import android.graphics.BitmapFactory.Options;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 
-import com.mg.demo.Constants;
-
 import java.lang.reflect.Field;
-
-
 
 /**
  * http://blog.csdn.net/lmj623565791/article/details/41874561
@@ -33,36 +28,14 @@ public class ImageSizeUtil
 
 		int inSampleSize = 1;
 
-//		if (width > reqWidth || height > reqHeight)
-//		{
-//			int widthRadio = Math.round(width * 1.0f / reqWidth);
-//			int heightRadio = Math.round(height * 1.0f / reqHeight);
-//
-//			inSampleSize = Math.max(widthRadio, heightRadio);
-//		}
-		return inSampleSize;
+		if (width > reqWidth || height > reqHeight)
+		{
+			int widthRadio = Math.round(width * 1.0f / reqWidth);
+			int heightRadio = Math.round(height * 1.0f / reqHeight);
 
-//		int inSampleSize = 1;
-//		if(reqWidth == 0 || reqHeight == 0){
-//			return inSampleSize;
-//		}
-//		int bitmapWidth = options.outWidth;
-//		int bitmapHeight = options.outHeight;
-////		Log.i(Constants.TAG,"before1 w="+reqWidth+" h="+reqHeight);
-////		Log.i(Constants.TAG,"before2 w="+bitmapWidth+" h="+bitmapHeight);
-//
-//		//假如Bitmap的宽度或高度大于我们设定图片的View的宽高，则计算缩放比例
-//		if(bitmapWidth > reqWidth || bitmapHeight > reqHeight){
-//
-//
-//			int widthScale = Math.round((float) bitmapWidth / (float) reqWidth);
-//			int heightScale = Math.round((float) bitmapHeight / (float) reqWidth);
-//
-//			//为了保证图片不缩放变形，我们取宽高比例最小的那个
-//			inSampleSize = widthScale < heightScale ? widthScale : heightScale;
-////			Log.i(Constants.TAG,"缩放。。。。");
-//		}
-//		return inSampleSize;
+			inSampleSize = Math.max(widthRadio, heightRadio);
+		}
+		return inSampleSize;
 	}
 
 	/**

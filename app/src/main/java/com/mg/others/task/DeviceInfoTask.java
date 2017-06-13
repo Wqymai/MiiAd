@@ -14,8 +14,8 @@ import android.util.DisplayMetrics;
 import android.view.WindowManager;
 import android.webkit.WebView;
 
+import com.mg.comm.MConstant;
 import com.mg.others.model.DeviceInfo;
-import com.mg.others.ooa.MConstant;
 import com.mg.others.utils.LogUtils;
 import com.mg.others.utils.SystemProperties;
 

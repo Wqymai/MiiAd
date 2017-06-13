@@ -14,9 +14,8 @@ import android.telephony.TelephonyManager;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 
+import com.mg.comm.MConstant;
 import com.mg.others.model.AdModel;
-import com.mg.others.ooa.MConstant;
-
 
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;

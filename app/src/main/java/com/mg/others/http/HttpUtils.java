@@ -5,9 +5,8 @@ import android.net.Uri;
 import android.util.Base64;
 import android.util.Log;
 
+import com.mg.comm.MConstant;
 import com.mg.others.manager.HttpManager;
-import com.mg.others.ooa.MAdSDK;
-import com.mg.others.ooa.MConstant;
 import com.mg.others.utils.LogUtils;
 
 import java.io.BufferedReader;
@@ -110,11 +109,9 @@ public class HttpUtils {
 			this.mContext = ctx;
 		}
 	}
-
 	public void downloadAdImage(Runnable runnable){
 		httpExecutor.execute(runnable);
 	}
-
 	/**
 	 * update global http parameter
 	 *
@@ -631,7 +628,7 @@ public class HttpUtils {
 						LogUtils.i(MConstant.TAG,"run status="+status);
 						String realUrl=conn.getURL().toString();
 						if (status==301 || status==302 || status==303 ||status==307){
-						    LogUtils.i(MConstant.TAG,"status="+status+" realUrl="+realUrl);
+							LogUtils.i(MConstant.TAG,"status="+status+" realUrl="+realUrl);
 							httpExecutor.execute(new HttpDownloaderTask(realUrl, mListener, orginPath, mfileName, paramter, mContext,true));
 							return;
 						}
@@ -874,7 +871,7 @@ public class HttpUtils {
 			if (mContext == null){
 				parameter.userAgent = HttpParameter.DEFAULT_AGENT;
 			}else {
-				String userAgent = HttpManager.getInstance(MAdSDK.getInstance().getContext(),null).getUA();
+				String userAgent = HttpManager.getInstance(mContext.getApplicationContext()).getUA();
 				if (userAgent != null){
 					parameter.userAgent = userAgent;
 				}else{
@@ -891,44 +888,44 @@ public class HttpUtils {
 
 
 		switch (methodHint) {
-		case GET:
-			try {
-				urlConnection.setRequestMethod("GET");
-				urlConnection.setRequestProperty("Connection", "Keep-Alive");
-			} catch (ProtocolException e) {
-				e.printStackTrace();
-			}
-			urlConnection.setUseCaches(false);
-			break;
-		case POST:
-			urlConnection.setDoOutput(true);
-			urlConnection.setDoInput(true);
-			try {
-				urlConnection.setRequestMethod("POST");
-				urlConnection.setRequestProperty("Connection", "Keep-Alive");
-			} catch (ProtocolException e) {
-				e.printStackTrace();
-			}
-			urlConnection.setUseCaches(false);
-			break;
-		case UPLOAD_FILE:
-			urlConnection.setConnectTimeout(parameter.connectTimeOut);
-			urlConnection.setReadTimeout(parameter.soTimeOut);
+			case GET:
+				try {
+					urlConnection.setRequestMethod("GET");
+					urlConnection.setRequestProperty("Connection", "Keep-Alive");
+				} catch (ProtocolException e) {
+					e.printStackTrace();
+				}
+				urlConnection.setUseCaches(false);
+				break;
+			case POST:
+				urlConnection.setDoOutput(true);
+				urlConnection.setDoInput(true);
+				try {
+					urlConnection.setRequestMethod("POST");
+					urlConnection.setRequestProperty("Connection", "Keep-Alive");
+				} catch (ProtocolException e) {
+					e.printStackTrace();
+				}
+				urlConnection.setUseCaches(false);
+				break;
+			case UPLOAD_FILE:
+				urlConnection.setConnectTimeout(parameter.connectTimeOut);
+				urlConnection.setReadTimeout(parameter.soTimeOut);
 
-			try {
-				urlConnection.setRequestMethod("POST");
-			} catch (ProtocolException e) {
-			}
-			urlConnection.setDoOutput(true);
-			urlConnection.setDoInput(true);
-			urlConnection.setUseCaches(false);
-			urlConnection.setChunkedStreamingMode(1024);
+				try {
+					urlConnection.setRequestMethod("POST");
+				} catch (ProtocolException e) {
+				}
+				urlConnection.setDoOutput(true);
+				urlConnection.setDoInput(true);
+				urlConnection.setUseCaches(false);
+				urlConnection.setChunkedStreamingMode(1024);
 
-			urlConnection.setRequestProperty("Connection", "Keep-Alive");
-			urlConnection.setRequestProperty("Charset", CHARSET);
-			urlConnection.setRequestProperty("Content-Type", MUTIPART_FORMDATA + ";boundary=" + BOUNDARY);
-			break;
-		case DOWNLOAD_FILE:
+				urlConnection.setRequestProperty("Connection", "Keep-Alive");
+				urlConnection.setRequestProperty("Charset", CHARSET);
+				urlConnection.setRequestProperty("Content-Type", MUTIPART_FORMDATA + ";boundary=" + BOUNDARY);
+				break;
+			case DOWNLOAD_FILE:
 		}
 	}
 
@@ -936,12 +933,12 @@ public class HttpUtils {
 		String resultUrl = url;
 //		try {
 
-			int lastSlash = url.lastIndexOf("/");
-			String pureUrl = url.substring(0, lastSlash + 1);
-			String what = url.substring(lastSlash + 1);
+		int lastSlash = url.lastIndexOf("/");
+		String pureUrl = url.substring(0, lastSlash + 1);
+		String what = url.substring(lastSlash + 1);
 //			String fileName = URLEncoder.encode(url.substring(lastSlash + 1), "UTF-8");
-			String fileName = Uri.encode(url.substring(lastSlash + 1), "UTF-8");
-			resultUrl = pureUrl + fileName;
+		String fileName = Uri.encode(url.substring(lastSlash + 1), "UTF-8");
+		resultUrl = pureUrl + fileName;
 
 //		}
 //		catch (UnsupportedEncodingException e) {

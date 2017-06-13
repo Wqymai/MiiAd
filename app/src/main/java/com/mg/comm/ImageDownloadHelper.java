@@ -4,16 +4,14 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
-import android.os.HandlerThread;
 import android.os.Message;
 import android.util.Log;
 import android.widget.ImageView;
 
 import com.mg.demo.Constants;
 import com.mg.others.http.HttpUtils;
-import com.mg.others.utils.CommonUtils;
 import com.mg.others.utils.imager.DownloadImgUtils;
-import com.mg.others.utils.imager.ImageSizeUtil;
+
 
 import java.io.File;
 import java.security.MessageDigest;
@@ -25,26 +23,28 @@ import java.security.NoSuchAlgorithmException;
 
 public class ImageDownloadHelper {
 
-
     int isPortrait;
     public ImageDownloadHelper(int isPortrait){
-
         this.isPortrait = isPortrait;
-
     }
 
 
     public  void downloadShowImage(Context context, final String url, final ImageView imageView, final Handler mainHandler){
         Log.i(Constants.TAG,"要下载图片的url="+url);
+
         final File file = getDiskCacheDir(context, md5(url));
+
         if (file.exists())// 如果在缓存文件中发现
         {
-            Log.i(Constants.TAG,"");
+
             Bitmap bm = null;
             if (imageView == null) {
-                bm = loadImageFromLocal(file.getAbsolutePath(), 0, 0);
+
+                bm = loadImageFromLocal(file.getAbsolutePath());
+
             } else {
-                bm = loadImageFromLocal(file.getAbsolutePath(), imageView.getWidth(), imageView.getHeight());
+
+                bm = loadImageFromLocal(file.getAbsolutePath());
             }
             Message msg = new Message();
             msg.obj = bm;
@@ -52,9 +52,6 @@ public class ImageDownloadHelper {
             mainHandler.sendMessage(msg);
         }
         else {
-            final int screenH = CommonUtils.getScreenH(context);
-            final int screenW = CommonUtils.getScreenW(context);
-            Log.i(Constants.TAG, "H=" + screenH + " W=" + screenW);
 
             Runnable runnable = new Runnable() {
                 @Override
@@ -64,9 +61,9 @@ public class ImageDownloadHelper {
                     {
                         Bitmap bm = null;
                         if (imageView == null) {
-                            bm = loadImageFromLocal(file.getAbsolutePath(), 0, 0);
+                            bm = loadImageFromLocal(file.getAbsolutePath());
                         } else {
-                            bm = loadImageFromLocal(file.getAbsolutePath(), imageView.getWidth(), imageView.getHeight());
+                            bm = loadImageFromLocal(file.getAbsolutePath());
                         }
                         Message msg = new Message();
                         msg.obj = bm;
@@ -85,15 +82,14 @@ public class ImageDownloadHelper {
         cachePath = context.getCacheDir().getPath();
         return new File(cachePath + File.separator + uniqueName);
     }
-    public static   Bitmap loadImageFromLocal( String path,int width,int height)
+    public static   Bitmap loadImageFromLocal( String path)
     {
         Bitmap bm;
 
-        bm = decodeSampledBitmapFromPath(path, width, height);
+        bm = decodeSampledBitmapFromPath(path);
         return bm;
     }
-    public static   Bitmap decodeSampledBitmapFromPath(String path, int width,
-                                                 int height)
+    public static   Bitmap decodeSampledBitmapFromPath(String path)
     {
 
         BitmapFactory.Options options = new BitmapFactory.Options();
@@ -101,8 +97,7 @@ public class ImageDownloadHelper {
         //
         BitmapFactory.decodeFile(path, options);
 
-        options.inSampleSize = ImageSizeUtil.caculateInSampleSize(options,
-                width, height);
+        options.inSampleSize = 1;//ImageSizeUtil.caculateInSampleSize(options, width, height);
         // 使用获得到的InSampleSize再次解析图片
         options.inJustDecodeBounds = false;
         Bitmap bitmap = BitmapFactory.decodeFile(path, options);

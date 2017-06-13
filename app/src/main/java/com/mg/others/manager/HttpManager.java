@@ -4,19 +4,18 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.Log;
 
+import com.mg.comm.MConstant;
+import com.mg.demo.Constants;
 import com.mg.others.http.HttpListener;
 import com.mg.others.http.HttpResponse;
 import com.mg.others.http.HttpUtils;
-import com.mg.others.message.ISender;
-import com.mg.others.message.MessageObjects;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
 import com.mg.others.model.DeviceInfo;
 import com.mg.others.model.RequestModel;
 import com.mg.others.model.SDKConfigModel;
-import com.mg.others.ooa.AdError;
-import com.mg.others.ooa.MConstant;
 import com.mg.others.utils.AdParser;
 import com.mg.others.utils.CommonUtils;
 import com.mg.others.utils.ConfigParser;
@@ -49,17 +48,17 @@ public class HttpManager {
     private Context mContext;
     private JSONArray hosts;
     private int index;
-    private ISender mSender;
+
     private int adType;
     private int ts;
     private static boolean isUpdate;
 
-    public static HttpManager getInstance(Context mContext, ISender mSender) {
+    public static HttpManager getInstance(Context mContext) {
         if (instance == null){
             synchronized (HttpManager.class){
                 if (instance == null){
                     synchronized (HttpManager.class){
-                        instance = new HttpManager(mContext, mSender);
+                        instance = new HttpManager(mContext);
                     }
                 }
             }
@@ -67,25 +66,15 @@ public class HttpManager {
         return instance;
     }
 
-    public HttpManager(Context mContext,ISender mSender) {
+    public HttpManager(Context mContext) {
         if (mDeviceInfo == null){
             mDeviceInfo = CommonUtils.readParcel(mContext, MConstant.DEVICE_FILE_NAME);
         }
         this.mContext = mContext;
-        this.mSender = mSender;
+
     }
 
-    public  boolean updateNi(SDKConfigModel config){
 
-        long currenTime = System.currentTimeMillis();
-        long diff_Time = (currenTime- config.getUpdateTime()) / 1000;
-        LogUtils.i(MConstant.TAG,"updateNi......diff_Time:"+diff_Time+" config.getNext():"+config.getNext());
-        if (diff_Time > config.getNext()){
-            requestNi(true);
-            return true;
-        }
-        return false;
-    }
 
 
 
@@ -109,175 +98,21 @@ public class HttpManager {
     public Map<String, String> getParams2(@NonNull String Action, int type, int tiggleSence){
         if (mDeviceInfo == null){
             mDeviceInfo = CommonUtils.readParcel(mContext,MConstant.DEVICE_FILE_NAME);
-            return null;
         }
         return RequestModel.getRequestParams2(Action,mDeviceInfo, type, tiggleSence,mContext);
     }
 
-    /**
-     * 请求广告
-     * @param adType
-     * @param ts
-     */
-    public void requestRa(final int adType,final int ts){
-        this.adType = adType;
-        this.ts = ts;
-        long currentTime = System.currentTimeMillis();
-        long lastRa = (long) SP.getParam(SP.CONFIG, mContext, SP.LAST_REQUEST_RA,0l);
-        long diffRa = (currentTime - lastRa)/1000;
-
-        if (lastRa !=0l && diffRa < 20){
-            return;
-        }
-        if (!CommonUtils.isNetworkAvailable(mContext)){
-            return;
-        }
-
-        HttpUtils httpUtils = new HttpUtils(mContext);
-        final  String url=getRaUrl(RA);
-        if (url==null || url.equals("")){
-            return;
-        }
-        Map<String,String> params=getParams2(RA,adType,ts);
-
-        httpUtils.post(url.trim(), new HttpListener() {
-            @Override
-            public void onSuccess(HttpResponse response) {
-                SP.setParam(SP.CONFIG, mContext, SP.LAST_REQUEST_RA, System.currentTimeMillis());
-                dealHbSuc(response);
-            }
-            @Override
-            public void onFail(Exception e) {
-                LogUtils.i(MConstant.TAG,new AdError(AdError.ERROR_CODE_INVALID_REQUEST) + e.toString());
-            }
-        },params);
-
-    }
-
-    private void dealHbSuc(HttpResponse response){
-        LogUtils.i(MConstant.TAG,"type="+adType);
-        List<AdModel> ads;
-        String temp = new String(Base64.decode(response.entity(),Base64.NO_WRAP));
-        if (temp==null){
-            return;
-        }
-        ads = AdParser.parseAd(temp);
-
-        LogUtils.i(MConstant.TAG,"as="+ads);
-
-        if (ads == null || ads.size()>0){
-            return;
-        }
-
-        AdModel ad = ads.get(0);
-
-        SharedPreferences sp=mContext.getSharedPreferences(SP.CONFIG,Context.MODE_PRIVATE);
-        ad.setFlag(sp.getInt("ce",0));//默认触发广告
-
-        if (mSender==null){
-            return;
-        }
-        MessageObjects messageObjects = MessageObjects.obtain();
-        messageObjects.obj0 = ad;
-        messageObjects.arg0 = adType;
-        messageObjects.arg1 = ts;
-        mSender.sendMessage(mSender.obtainMessage(MConstant.what.ads_result, messageObjects));
-    }
-
-    /**
-     * 配置信息初始化
-     */
-    public void requestNi(boolean isUpdate){
-        LogUtils.i(MConstant.TAG,"requestNi");
-        this.isUpdate = isUpdate;
-        if (CommonUtils.isNetworkAvailable(mContext)){
-
-            final long currenTime = System.currentTimeMillis();
-
-            long lastNi = (long) SP.getParam(SP.CONFIG, mContext, SP.LAST_REQUEST_NI, 0l);
-
-            long diff_ni = (currenTime - lastNi)/1000;
-
-            LogUtils.i(MConstant.TAG,"lastNi:"+lastNi+" diff_ni:"+diff_ni);
-
-            if (lastNi != 0l && diff_ni < MConstant.DIFF_NI){
-                return;
-            }
-
-            HttpUtils httpUtils = new HttpUtils(mContext);
-            final String url = getParams(NI, 0, 0);
-            if (url == null||url.equals("")){
-                return;
-            }
 
 
-            httpUtils.get(url, new HttpListener() {
-                @Override
-                public void onSuccess(HttpResponse response) {
-                    SP.setParam(SP.CONFIG, mContext, SP.LAST_REQUEST_NI, System.currentTimeMillis());
-                    MConstant.HB_HOST=MiiLocalStrEncrypt.deCodeStringToString(MConstant.HOST,LocalKeyConstants.LOCAL_KEY_DOMAINS);
-                    dealNiSuc(response);
-                }
-
-                @Override
-                public void onFail(Exception e) {
-                    requestVGD();
-                    LogUtils.e(new AdError(AdError.ERROR_CODE_INVALID_REQUEST));
-                }
-            });
-
-        }else{
-            LogUtils.i(MConstant.TAG,"ni 网络不可用......");
-        }
-    }
-
-    private void dealNiSuc(HttpResponse response){
-        SDKConfigModel sdk = null;
-        String data = new String(Base64.decode(response.entity(),Base64.NO_WRAP));
-        if (data==null){
-            return;
-        }
-
-        sdk = ConfigParser.parseConfig(data);
-
-        if (sdk == null){
-            return;
-        }
-        sdk.setUpdateTime(System.currentTimeMillis());
-
-        CommonUtils.writeParcel(mContext,MConstant.CONFIG_FILE_NAME,sdk);
-
-        long writeTime = (long) SP.getParam(SP.CONFIG, mContext, SP.FOS, 0l);
 
 
-        SharedPreferences.Editor editor=mContext.getSharedPreferences(SP.CONFIG,Context.MODE_PRIVATE).edit();
-        editor.putLong("time0",sdk.getTime0()*1000);//应用外
-        editor.putLong("time1",sdk.getTime1()*1000);//解锁
-        editor.putLong("time2",sdk.getTime2()*1000);//安装
-        editor.putLong("time3",sdk.getTime3()*1000);//卸载
-        editor.putLong("time4",sdk.getTime4()*1000);//网络切换
-        editor.putLong("timeComm",sdk.getTimeComm()*1000);//公共冷却时间
-        editor.putInt("ce",sdk.getCe());
-        editor.commit();
 
-        long currentTime = System.currentTimeMillis();
-        if (DateCompare(writeTime) || writeTime == 0l){
-            SP.setParam(SP.CONFIG, mContext, SP.FOT, 0);
-            SP.setParam(SP.CONFIG, mContext, SP.FOS, currentTime);
-        }
 
-        if (mSender != null && isUpdate){
-            MessageObjects messageObjects = MessageObjects.obtain();
-            messageObjects.obj0 = sdk;
-            mSender.sendMessage(mSender.obtainMessage(MConstant.what.update_config, messageObjects));
-        }
-
-    }
 
 
 
     //是否过了今天
-    private boolean DateCompare(long when){
+    public boolean DateCompare(long when){
         try {
             Date date=new Date(System.currentTimeMillis());
             SimpleDateFormat yFormat = new SimpleDateFormat("y"); //打印年份
@@ -345,35 +180,7 @@ public class HttpManager {
 
     }
 
-    /**
-     * 请求新域名
-     */
-    public void requestVGD(){
 
-        if (!CommonUtils.isNetworkAvailable(mContext)){
-            return;
-        }
-        HttpUtils httpUtils = new HttpUtils(mContext);
-        httpUtils.get(MiiLocalStrEncrypt.deCodeStringToString(MConstant.VGD, LocalKeyConstants.LOCAL_VSGD), new HttpListener() {
-            @Override
-            public void onSuccess(HttpResponse response) {
-                String result;
-                result = MiiBase64.decode(response.entity());
-                try {
-                    JSONArray array = new JSONArray(result);
-                    VGD(array,0);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFail(Exception e) {
-                LogUtils.e(new AdError(AdError.ERROR_CODE_INVALID_REQUEST) + e.toString());
-            }
-        });
-
-    }
 
     public void VGD(final JSONArray hosts, int i){
         this.index = i;
@@ -406,7 +213,7 @@ public class HttpManager {
             return;
         }
         if (!CommonUtils.isNetworkAvailable(mContext)){
-            LogUtils.e(new AdError(AdError.ERROR_CODE_NETWORK_ERROR));
+
             return;
         }
         HttpUtils httpUtils = new HttpUtils(mContext);

@@ -7,15 +7,11 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.PaintFlagsDrawFilter;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Handler;
 import android.os.Message;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -26,21 +22,26 @@ import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mg.comm.ADClickHelper;
 import com.mg.comm.ImageDownloadHelper;
+import com.mg.comm.MConstant;
 import com.mg.comm.MhttpRequestHelper;
 import com.mg.comm.MiiADListener;
 import com.mg.demo.Constants;
+import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
+import com.mg.others.model.AdReport;
+import com.mg.others.model.SDKConfigModel;
 import com.mg.others.utils.CommonUtils;
+import com.mg.others.utils.SP;
+import com.qq.e.ads.interstitial.AbstractInterstitialADListener;
+import com.qq.e.ads.interstitial.InterstitialAD;
 
 import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-import static com.mg.others.ooa.MConstant.request_type.ni;
 
 
 /**
@@ -52,15 +53,19 @@ public class MiiInterstitialAD {
     private Context mContext;
     private Activity mActivity;
     private AdModel adModel;
+    private SDKConfigModel sdk;
     private MiiADListener listener;
-    private ImageView imageView;
-    private CircleTextView cancel;
+    private MiiImageView imageView;
+    private MiiCircleTextView cancel;
     private RelativeLayout relativeLayout;
     private AlertDialog dlg;
     private TextView tv;
     boolean oren;
     final static double  H_P = 0.8;
     final  static double W_P = 0.8;
+    private InterstitialAD iad;
+    private boolean isShade;
+
 
 
 
@@ -70,6 +75,9 @@ public class MiiInterstitialAD {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what){
+                case 100:
+                    checkOpenAD();
+                    break;
                 case 200:
                     Log.i(Constants.TAG,"收到RA请求成功的消息 插屏");
                     try {
@@ -87,9 +95,16 @@ public class MiiInterstitialAD {
                         if (bitmap == null){
                             return;
                         }
-                        showShade(bitmap,null);
+                        checkShade(bitmap,null);
                     }
                     catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    break;
+                case 400:
+                    try {
+                        openGDTAD(true);
+                    }catch (Exception e){
                         e.printStackTrace();
                     }
                     break;
@@ -98,26 +113,141 @@ public class MiiInterstitialAD {
         }
     };
 
-    public MiiInterstitialAD(Activity mActivity, MiiADListener listener){
+    public MiiInterstitialAD(Activity mActivity, final boolean isShade, final MiiADListener listener){
         this.mContext=mActivity.getApplicationContext();
         this.mActivity=mActivity;
         this.listener=listener;
-        if (false){//广点通广告
-            Log.i(Constants.TAG,"加载广点通广告...插屏");
+        this.isShade=isShade;
+        boolean isFirst= (boolean) SP.getParam(SP.CONFIG,mContext,SP.FIRSTHB,true);
+        if (isFirst){
+            SP.setParam(SP.CONFIG,mContext,SP.FIRSTHB,false);
+            new MhttpRequestHelper(mContext,mainHandler,3,listener).fetchMGAD(isFirst);
+            return;
+        }
+        checkOpenAD();
 
-        }else {//麦广广告
-            Log.i(Constants.TAG,"加载麦广广告...插屏");
-            MhttpRequestHelper mhttpRequest = new MhttpRequestHelper(mContext,mainHandler,3,listener);
-            mhttpRequest.fetchMGAD();
+    }
+    private void openGMAD(){
+        Log.i(Constants.TAG,"加载麦广广告...插屏");
+        if (sdk == null){
+            sdk = CommonUtils.readParcel(mContext, MConstant.CONFIG_FILE_NAME);
+        }
+        if (!sdk.isAdShow()){
+            Log.i(Constants.TAG,"openGMAD O=0");
+            listener.onMiiNoAD(2000);
+            return;
+        }
+        MhttpRequestHelper mhttpRequest = new MhttpRequestHelper(mContext,mainHandler,3,listener);
+        mhttpRequest.fetchMGAD(false);
+
+    }
+    private void openGDTAD(final boolean shouldReturn){
+        Log.i(Constants.TAG,"加载广点通广告...插屏");
+        iad = new InterstitialAD(mActivity, Constants.APPID, Constants.InterteristalPosID);
+        iad.setADListener(new AbstractInterstitialADListener() {
+            @Override
+            public void onADReceive() {
+                if (isShade){
+                    iad.show();
+
+                }else {
+                    iad.showAsPopupWindow();
+                }
+                listener.onMiiADPresent();
+            }
+
+            @Override
+            public void onNoAD(int i) {
+                if (!shouldReturn){
+
+                    if (sdk.isAdShow()){
+                        MhttpRequestHelper mhttpRequest = new MhttpRequestHelper(mContext,mainHandler,3,listener);
+                        mhttpRequest.fetchMGAD1(true);
+                    }
+                    else {
+                        Log.i(Constants.TAG,"openGDTAD...o=0");
+                        listener.onMiiNoAD(2000);
+                    }
+
+                    return;
+                }
+            }
+
+            @Override
+            public void onADClicked() {
+                listener.onMiiADClicked();
+            }
+
+            @Override
+            public void onADClosed() {
+
+                listener.onMiiADDismissed();
+            }
+        });
+        iad.loadAD();
+    }
+
+
+    private void checkOpenAD(){
+        if (sdk == null){
+            sdk = CommonUtils.readParcel(mContext, MConstant.CONFIG_FILE_NAME);
+        }
+        int sf_mg = sdk.getSf_mg();
+        int sf_gdt = sdk.getSf_gdt();
+        int sum = sf_gdt + sf_mg;
+        if (sum == 0){
+
+            Log.i(Constants.TAG,"sum==0");
+            return;
+
+        }
+        else if (sum == 100){
+            int show_percentage = (int) ((Math.random() * 100)+1);
+            if (show_percentage <= sf_mg){
+                Log.i(Constants.TAG,"sum==100 MG");
+                openGMAD();
+            }
+            else {
+                Log.i(Constants.TAG,"sum==100 GDT");
+                openGDTAD(true);
+
+            }
+        }
+        else if (sum > 100){
+            if (sf_mg > sf_gdt){
+                Log.i(Constants.TAG,"sum > 100 MG");
+                if (sdk.isAdShow()){
+                    MhttpRequestHelper mhttpRequest = new MhttpRequestHelper(mContext,mainHandler,3,listener);
+                    mhttpRequest.fetchMGAD1(false);
+                }
+                else {
+                    mainHandler.sendEmptyMessage(400);
+                }
+            }
+            else {
+                Log.i(Constants.TAG,"sum > 100 GDT");
+                openGDTAD(false);
+            }
         }
 
     }
 
 
+
+
+    private void checkShade(Bitmap bitmap,String html){
+        if (isShade){
+            showShade(bitmap,html);
+        }
+        else {
+            showNoShade(bitmap,html);
+        }
+    }
+
+
     private void checkADType(AdModel adModel){
         if (adModel.getType()==4){//h5广告
-
-            showShade(null,adModel.getPage());
+            checkShade(null,adModel.getPage());
         }
         else {
             new ImageDownloadHelper(mActivity.getResources().getConfiguration().orientation)
@@ -137,6 +267,8 @@ public class MiiInterstitialAD {
     //无遮罩效果
     private void  showNoShade(Bitmap bitmap,String html){
 
+
+        Log.i(Constants.TAG,"bitmap w="+bitmap.getWidth()+" h="+bitmap.getHeight());
         //检查横竖屏
         oren = checkOrientation();
 
@@ -185,6 +317,12 @@ public class MiiInterstitialAD {
         //广告成功展示
         listener.onMiiADPresent();
 
+        //展示上报
+        HttpManager.reportEvent(adModel, AdReport.EVENT_SHOW, mContext);
+
+        //记录展示次数
+        int show_num = (int) SP.getParam(SP.CONFIG, mContext, SP.FOT, 0);
+        SP.setParam(SP.CONFIG, mContext, SP.FOT, show_num + 1);
 
         setClick(ishtml5);
     }
@@ -232,43 +370,56 @@ public class MiiInterstitialAD {
         //广告成功展示
         listener.onMiiADPresent();
 
+        //展示上报
+        HttpManager.reportEvent(adModel, AdReport.EVENT_SHOW, mContext);
+
+        //记录展示次数
+        int show_num = (int) SP.getParam(SP.CONFIG, mContext, SP.FOT, 0);
+        SP.setParam(SP.CONFIG, mContext, SP.FOT, show_num + 1);
+
         setClick(ishtml5);
 
     }
 
     private void setClick(boolean ishtml5){
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dlg.dismiss();
+       Log.i(Constants.TAG,"setClick ishtml5="+ishtml5);
+       try {
+            cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dlg.dismiss();
 
-                mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-                //广告关闭
-                listener.onMiiADDismissed();
+                    mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+                    //广告关闭
+                    listener.onMiiADDismissed();
+                }
+            });
+            if (ishtml5){
+                return;
             }
-        });
-        if (ishtml5){
-            return;
-        }
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //点击广告后相关行为
-                new ADClickHelper(mContext).AdClick(adModel);
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.i(Constants.TAG,"点击广告图片了。。。"+adModel.toString());
+                    //点击广告后相关行为
+                    new ADClickHelper(mContext).AdClick(adModel);
 
-                //广告点击
-                listener.onMiiADClicked();
-                //广告关闭
-                listener.onMiiADDismissed();
-            }
-        });
+                    //广告点击
+                    listener.onMiiADClicked();
+                    //广告关闭
+                    listener.onMiiADDismissed();
+                }
+            });
+       }catch (Exception e){
+           e.printStackTrace();
+       }
     }
 
 
 
     private void buildImageView(Bitmap bitmap){
         //展示广告的imageview
-        imageView=new ImageView(mActivity);
+        imageView=new MiiImageView(mActivity);
         RelativeLayout.LayoutParams ivParam=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         imageView.setLayoutParams(ivParam);
         imageView.setImageBitmap(bitmap);
@@ -307,12 +458,12 @@ public class MiiInterstitialAD {
     private void buildOthersView(){
 
         //关闭按钮
-        cancel=new CircleTextView(mActivity);
+        cancel=new MiiCircleTextView(mActivity);
         cancel.setGravity(Gravity.CENTER);
         cancel.setText("X");
-        cancel.setWidth(50);
-        cancel.setHeight(50);
-        cancel.setBackgroundColor(Color.argb(50, 41, 36, 33));
+        cancel.setWidth(60);
+        cancel.setHeight(60);
+        cancel.setBackgroundColor(Color.argb(10, 41, 36, 33));
         cancel.setTextColor(Color.WHITE);
         RelativeLayout.LayoutParams lp=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
@@ -322,8 +473,8 @@ public class MiiInterstitialAD {
         //"广告"提示
         tv=new TextView(mActivity);
         tv.setText("广告");
-        tv.setTextSize(13);
-        tv.setPadding(10,5,10,5);
+        tv.setTextSize(8);
+        tv.setPadding(5,3,5,3);
         tv.setBackgroundColor(Color.argb(50, 41, 36, 33));
         tv.setGravity(Gravity.CENTER);
         tv.setTextColor(Color.parseColor("#FFF0F5"));
@@ -350,57 +501,57 @@ public class MiiInterstitialAD {
         return true;
     }
 
-    private class CircleTextView extends TextView {
-
-        private Paint mBgPaint = new Paint();
-
-
-        PaintFlagsDrawFilter pfd = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
-
-        public CircleTextView(Context context, AttributeSet attrs, int defStyle) {
-            super(context, attrs, defStyle);
-
-            init(context);
-        }
-
-        public CircleTextView(Context context, AttributeSet attrs) {
-            super(context, attrs);
-
-            init(context);
-        }
-
-        public CircleTextView(Context context) {
-            super(context);
-
-            init(context);
-        }
-
-        public void init(Context context) {
-            mContext = context;
-            mBgPaint.setAntiAlias(true);
-        }
-        @Override
-        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-
-            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-            int measuredWidth = getMeasuredWidth();
-            int measuredHeight = getMeasuredHeight();
-            int max = Math.max(measuredWidth, measuredHeight);
-            setMeasuredDimension(max, max);
-        }
-        @Override
-        public void setBackgroundColor(int color) {
-
-            mBgPaint.setColor(color);
-        }
-
-        @Override
-        public void draw(Canvas canvas) {
-            canvas.setDrawFilter(pfd);
-            canvas.drawCircle(getWidth() / 2, getHeight() / 2, Math.max(getWidth(), getHeight()) / 2, mBgPaint);
-            super.draw(canvas);
-        }
-    }
+//    private class CircleTextView extends TextView {
+//
+//        private Paint mBgPaint = new Paint();
+//
+//
+//        PaintFlagsDrawFilter pfd = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
+//
+//        public CircleTextView(Context context, AttributeSet attrs, int defStyle) {
+//            super(context, attrs, defStyle);
+//
+//            init(context);
+//        }
+//
+//        public CircleTextView(Context context, AttributeSet attrs) {
+//            super(context, attrs);
+//
+//            init(context);
+//        }
+//
+//        public CircleTextView(Context context) {
+//            super(context);
+//
+//            init(context);
+//        }
+//
+//        public void init(Context context) {
+////            mContext = context;
+//            mBgPaint.setAntiAlias(true);
+//        }
+//        @Override
+//        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+//
+//            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+//            int measuredWidth = getMeasuredWidth();
+//            int measuredHeight = getMeasuredHeight();
+//            int max = Math.max(measuredWidth, measuredHeight);
+//            setMeasuredDimension(max, max);
+//        }
+//        @Override
+//        public void setBackgroundColor(int color) {
+//
+//            mBgPaint.setColor(color);
+//        }
+//
+//        @Override
+//        public void draw(Canvas canvas) {
+//            canvas.setDrawFilter(pfd);
+//            canvas.drawCircle(getWidth() / 2, getHeight() / 2, Math.max(getWidth(), getHeight()) / 2, mBgPaint);
+//            super.draw(canvas);
+//        }
+//    }
 
 
 }

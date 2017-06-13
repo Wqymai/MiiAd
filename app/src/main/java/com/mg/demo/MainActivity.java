@@ -3,6 +3,7 @@ package com.mg.demo;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -16,7 +17,8 @@ import com.mg.comm.MiiADListener;
 
 public class MainActivity extends Activity {
     Button openSplash;
-    Button openInterstitial;
+    Button openInterstitial1;
+    Button openInterstitial2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,30 +33,30 @@ public class MainActivity extends Activity {
             }
         });
 
-        openInterstitial= (Button) findViewById(R.id.open_interstitial_ad);
-        openInterstitial.setOnClickListener(new View.OnClickListener() {
+        openInterstitial1= (Button) findViewById(R.id.open_interstitial_ad1);
+        openInterstitial1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                new MiiInterstitialAD(MainActivity.this, new MiiADListener() {
+                new MiiInterstitialAD(MainActivity.this,false, new MiiADListener() {
                     @Override
                     public void onMiiNoAD(int errCode) {
-
+                        Log.i(Constants.TAG,"onMiiNoAD "+errCode);
                     }
 
                     @Override
                     public void onMiiADDismissed() {
-
+                        Log.i(Constants.TAG,"onMiiADDismissed");
                     }
 
                     @Override
                     public void onMiiADPresent() {
-
+                        Log.i(Constants.TAG,"onMiiADPresent");
                     }
 
                     @Override
                     public void onMiiADClicked() {
-
+                        Log.i(Constants.TAG,"onMiiADClicked");
                     }
 
                     @Override
@@ -62,6 +64,40 @@ public class MainActivity extends Activity {
 
                     }
             });
+            }
+        });
+
+        openInterstitial2 = (Button) findViewById(R.id.open_interstitial_ad2);
+        openInterstitial2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                new MiiInterstitialAD(MainActivity.this,true, new MiiADListener() {
+                    @Override
+                    public void onMiiNoAD(int errCode) {
+                        Log.i(Constants.TAG,"onMiiNoAD 2"+errCode);
+                    }
+
+                    @Override
+                    public void onMiiADDismissed() {
+                        Log.i(Constants.TAG,"onMiiADDismissed 2");
+                    }
+
+                    @Override
+                    public void onMiiADPresent() {
+                        Log.i(Constants.TAG,"onMiiADPresent 2");
+                    }
+
+                    @Override
+                    public void onMiiADClicked() {
+                        Log.i(Constants.TAG,"onMiiADClicked 2");
+                    }
+
+                    @Override
+                    public void onMiiADTick(long millisUntilFinished) {
+
+                    }
+                });
             }
         });
     }

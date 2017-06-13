@@ -25,13 +25,32 @@ public class SDKConfigModel implements Serializable {
     private int auto_show_percentage;           //模拟点击概率
     private int listType;                       //1 黑名单   2 白名单
     private String list;                        //名单列表
-    private AdPercentage percentage;            //广告权重
+
     private int ce;
     private long time0;
     private long time1;
     private long time2;
     private long time3;
     private long timeComm;
+
+    public int getSf_mg() {
+        return sf_mg;
+    }
+
+    public void setSf_mg(int sf_mg) {
+        this.sf_mg = sf_mg;
+    }
+
+    public int getSf_gdt() {
+        return sf_gdt;
+    }
+
+    public void setSf_gdt(int sf_gdt) {
+        this.sf_gdt = sf_gdt;
+    }
+
+    private int  sf_mg;
+    private int sf_gdt;
 
     public String getBp() {
         return bp;
@@ -126,7 +145,7 @@ public class SDKConfigModel implements Serializable {
         this.cold_time = cold_time;
     }
 
-    private AdSence sence;                      //广告展示场景
+
     private long cold_time;                     //冷却时间
 
 
@@ -244,21 +263,13 @@ public class SDKConfigModel implements Serializable {
         this.list = list;
     }
 
-    public AdPercentage getPercentage() {
-        return percentage;
-    }
 
-    public void setPercentage(AdPercentage percentage) {
-        this.percentage = percentage;
-    }
 
-    public AdSence getSence() {
-        return sence;
-    }
 
-    public void setSence(AdSence sence) {
-        this.sence = sence;
-    }
+
+
+
+
 
     @Override
     public String toString() {
@@ -274,9 +285,7 @@ public class SDKConfigModel implements Serializable {
         sb.append("show_sum = " +show_sum+ "\n");
         sb.append("interval = " +interval+ "\n");
         sb.append("next = " +next+ "\n");
-        sb.append("banner_p = " + getPercentage().getBanner_p() + "\n");
-        sb.append("splash_p = " + getPercentage().getSplash_p() + "\n");
-        sb.append("interstitial_p = " + getPercentage().getInterstitial_p() + "\n");
+
         sb.append("updateTime = " + updateTime + "\n");
         sb.append("white/black-List = " + list + "\n");
         sb.append("listType = " +listType+"\n");
@@ -285,48 +294,9 @@ public class SDKConfigModel implements Serializable {
         return sb.toString();
     }
 
-    /**
-     * 根据各类型广告权重选择广告
-     * @return
-     */
-    public int choseAdType(){
-        AdPercentage percentage = getPercentage();
-        int r = (int) (Math.random() * 100);
-        int banner = percentage.getBanner_p();
-        int interstitial = percentage.getInterstitial_p();
-        int splash = percentage.getSplash_p();
-        Integer [] ads = new Integer[]{banner, splash, interstitial};
-        int temp = 0;
-        for (int i = 0; i < ads.length; i++) {
-            temp += ads[i];
-            if (temp > r){
-                percentage.setChoseAdType(i+1);
-                break;
-            }
-        }
-        return percentage.getChoseAdType();
-    }
 
-    /**
-     * 根据场景选择广告
-     * @param sence
-     * @return
-     */
-    public int choseAdTypeBySence(int sence){
-        int adType = 0;
-        switch(sence){
-            case AdSence.INSTALL:
-                adType = 3;
-                break;
-            case AdSence.UNINSTALL:
-                adType = 3;
-                break;
-            case AdSence.USER_PRESENT:
-                adType = 2;
-                break;
-        }
-        return adType;
-    }
+
+
 
     /**
      * 根据广告种类不同得到不同的广告消失时间
@@ -336,15 +306,15 @@ public class SDKConfigModel implements Serializable {
     public int getDisplayTime(int type) {
         int time = 0;
         switch (type) {
-            case AdPercentage.BANNER:
+            case 1:
                 time = getBanner_time();
                 break;
 
-            case AdPercentage.INTERSTITIAL:
+            case 3:
                 time = getInterstitial_time();
                 break;
 
-            case AdPercentage.SPLASH:
+            case 2:
                 time = getSplash_time();
                 break;
         }

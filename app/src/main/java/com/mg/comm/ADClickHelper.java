@@ -1,6 +1,6 @@
 package com.mg.comm;
 
-import android.app.Activity;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,8 +9,10 @@ import com.mg.others.manager.ApkDownloadManager;
 import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
-import com.mg.others.ooa.MConstant;
+
 import com.mg.others.utils.CommonUtils;
+
+
 
 /**
  * Created by wuqiyan on 2017/6/11.
@@ -31,7 +33,7 @@ public class ADClickHelper {
             return;
         }
 
-        if (ad.getType() != MConstant.adClickType.app) {
+        if (ad.getType() != 1) {
             CommonUtils.openBrowser(mContext, ad.getUrl());
             return;
         }
@@ -47,6 +49,7 @@ public class ADClickHelper {
                 Bundle bundle=new Bundle();
                 bundle.putSerializable("ad",ad);
                 intent.putExtras(bundle);
+                mContext.startService(intent);
                 //开始下载上报
                 HttpManager.reportEvent(ad, AdReport.EVENT_DOWNLOAD_START, mContext);
                 return;

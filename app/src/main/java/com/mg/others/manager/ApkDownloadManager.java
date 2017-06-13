@@ -5,11 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
+
+import com.mg.comm.MConstant;
+import com.mg.comm.MiiServiceHelper;
 import com.mg.others.http.HttpDownloadListener;
 import com.mg.others.http.HttpUtils;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
-import com.mg.others.ooa.MConstant;
 import com.mg.others.utils.CommonUtils;
 import com.mg.others.utils.LogUtils;
 
@@ -101,13 +103,13 @@ public class ApkDownloadManager implements HttpDownloadListener {
     private class ApkInstallReceiver extends BroadcastReceiver {
 
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(final Context context, Intent intent) {
 
             if (intent != null && intent.getAction().equals(Intent.ACTION_PACKAGE_ADDED)){
                 Uri data = intent.getData();
                 if (data != null){
                     String pkName = data.getSchemeSpecificPart();
-                    AdModel adModel = downloadedList.remove(pkName);
+                    final AdModel adModel = downloadedList.remove(pkName);
                     if (adModel != null){
                         //安装完成上报
                         HttpManager.reportEvent(adModel, AdReport.EVENT_INSTALL_COMLETE, mContext);
@@ -115,16 +117,9 @@ public class ApkDownloadManager implements HttpDownloadListener {
                         if (file.exists()){
                             file.delete();
                         }
+                        new MiiServiceHelper().checkActive(context,adModel);
 
-                        //激活上报暂时没写
-//                        Handler handler=new Handler();
-//                        handler.postDelayed(new Runnable() {
-//                            @Override
-//                            public void run() {
-//
-//                                //获取前台应用包名
-//                            }
-//                        },5000);
+
 
                     }
                 }

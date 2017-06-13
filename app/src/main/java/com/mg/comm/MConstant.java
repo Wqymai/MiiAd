@@ -1,6 +1,7 @@
-package com.mg.others.ooa;
+package com.mg.comm;
 
 import android.os.Environment;
+
 import com.mg.others.v4.IdRes;
 
 

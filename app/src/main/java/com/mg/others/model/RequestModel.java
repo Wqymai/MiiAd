@@ -4,7 +4,7 @@ package com.mg.others.model;
 import android.content.Context;
 import android.util.Base64;
 
-import com.mg.others.ooa.MConstant;
+import com.mg.comm.MConstant;
 import com.mg.others.utils.CommonUtils;
 import com.mg.others.utils.LocalKeyConstants;
 import com.mg.others.utils.LogUtils;
@@ -277,7 +277,7 @@ public class RequestModel {
     }
 
     private static RequestModel getRequestModel(String Action, DeviceInfo mDeviceInfo, int type, int tiggleSence, Context mContext){
-        String key=MConstant.APPID;
+        String key= MConstant.APPID;
         long currentTime = System.currentTimeMillis();
         if (mDeviceInfo == null){
             return null;
