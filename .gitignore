@@ -11,3 +11,9 @@ build.gradle
 build.gradle
 gradle/wrapper/gradle-wrapper.properties
 gradle/wrapper/gradle-wrapper.properties
+build.gradle
+build.gradle
+*.gradle
+.idea/misc.xml
+build.gradle
+gradle/wrapper/gradle-wrapper.properties

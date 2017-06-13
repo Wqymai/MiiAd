@@ -27,6 +27,7 @@ import com.mg.comm.ImageDownloadHelper;
 import com.mg.comm.MConstant;
 import com.mg.comm.MhttpRequestHelper;
 import com.mg.comm.MiiADListener;
+import com.mg.comm.MiiBaseAD;
 import com.mg.demo.Constants;
 import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
@@ -44,7 +45,7 @@ import com.qq.e.ads.splash.SplashADListener;
  * Created by wuqiyan on 17/6/9.
  */
 
-public class MiiSplashAD {
+public class MiiSplashAD extends MiiBaseAD {
 
      private Context mContext;
      private SDKConfigModel sdk;
@@ -56,53 +57,7 @@ public class MiiSplashAD {
      private ImageView adImageView;
      private WebView webView;
      CountDownTimer timer;
-     private String html="<!DOCTYPE html><html><head><meta " +
-             "charset=\"utf-8\"><title>订婚宴送婚车</title><meta name=\"keywords\" " +
-             "content=\"订婚宴送婚车\"><meta name=\"description\" content=\"订婚宴送婚车_daoxila.com\"><meta " +
-             "name=\"viewport\" content=\"width=device-width,initial-scale=1,maximum-scale=1," +
-             "minimum-scale=1,user-scalable=0,minimal-ui\"><meta " +
-             "name=\"apple-mobile-web-app-capable\" content=\"yes\"><meta " +
-             "name=\"apple-touch-fullscreen\" content=\"yes\"><meta name=\"full-screen\" " +
-             "content=\"yes\"><meta name=\"apple-mobile-web-app-status-bar-style\" " +
-             "content=\"black\"><meta name=\"format-detection\" content=\"telephone=no\"><link " +
-             "rel=\"apple-touch-icon\" href=\"//s4.dxlfile.com/public/img/logo/wap.png\"><link " +
-             "href=\"//s4.dxlfile.com/??public/css/m.css,m-www/css/m-www.css?v=14254570119\" " +
-             "rel=\"stylesheet\" type=\"text/css\"><script src=\"//s4.dxlfile" +
-             ".com/??public/js/jquery-2.1.0.min.js,public/js/dxl2.js,public/js/m" +
-             ".js?v=14254570119\"></script><link rel=\"stylesheet\" href=\"//s4.dxlfile" +
-             ".com/m-www/css/CuXiao/1607.css?v=14254570119\"><script type=\"text/javascript\" " +
-             "src=\"//s4.dxlfile.com/m-www/js/CuXiao/1607" +
-             ".js?v=14254570119\"></script></head><script>var opts={ID:\"1039\",city:\"sh\"," +
-             "time:\"2017/01/18 23:59:59\",promotion_sign:\"新用户专享定婚宴送婚车\",coupon_id:\"0\"," +
-             "order_pro:\"3\",pro_smsflag:\"1\"};</script><body><header><div " +
-             "class=\"secTitMain\"><a class=\"prev\"></a> 订婚宴送婚车 " +
-             "<a href=\"/\" class=\"home\"></a></div></header><div id=\"cityMain\"><img " +
-             "src=\"https://iq.dxlfile.com/promotion/large/2016-12/20161221114355345.jpg\"> " +
-             "</div><div id=\"return\"><div class=\"timeMain\"><p>距离活动结束： <span " +
-             "class=\"timeBox\"><i class=\"day\"></i>天<i class=\"hour\"></i>时<i " +
-             "class=\"min\"></i>分</span></p></div><div " +
-             "class=\"rules\"><h3>活动简介：</h3><p>订婚宴，送豪华婚车！ 订婚宴>=8万元；即送一辆 保时捷Panamera 婚车头车 " +
-             "订婚宴>=5万元；即送一辆 特斯拉 婚车头车 本活动仅限上海地区</p><div " +
-             "class=\"getReturn\">我要报名</div></div></div><div class=\"activeRule\" " +
-             "style=\"background:#fff\"><p></p><p><img src=\"https://iq.dxlfile" +
-             ".com/promotion/large/2016-11/20161107173543724.jpg\" _src=\"https://iq.dxlfile" +
-             ".com/promotion/large/2016-11/20161107173543724.jpg\"></p></div><div id=\"hunYan\" " +
-             "class=\"items\"><h3 class=\"tit\"><span>婚宴酒店</span></h3><ul class=\"clearfix\"><li " +
-             "dxlAppTouchAction=\"$.dxlAppHotelDeatil(5499)\"><a " +
-             "href=\"//m.daoxila.com/sh/HunYan/HuaJiaLiShe-ShiBo-Info#cid=CuXiao_1039\" " +
-             "dxlAppRemoveHref=\"true\"><img _src=\"https://iq.dxlfile" +
-             ".com/hotel/small/2015-09/20150901140389510.jpg\"><div " +
-             "class=\"names\">花嫁丽舍私人婚礼会所（世博店）</div><div class=\"infos\">婚礼会所 浦东新区 " +
-             "可容纳55桌</div><div class=\"discounts\"></div><p " +
-             "class=\"details\">查看优惠详情</p></a></li><li dxlAppTouchAction=\"$.dxlAppHotelDeatil" +
-             "(83)\"><a " +
-             "href=\"//m.daoxila.com/sh/HunYan/jintingzhuangyuan-Info#cid=CuXiao_1039\" " +
-             "dxlAppRemoveHref=\"true\"><img _src=\"https://iq.dxlfile" +
-             ".com/hotel/small/2017-02/20170204175983536.jpg\"><div " +
-             "class=\"names\">金庭庄园酒店</div><div class=\"infos\">婚礼会所 长宁区 可容纳50桌</div><div " +
-             "class=\"discounts\"></div><p class=\"details\">查看优惠详情</p></a></li><li " +
-             "dxlAppTouchAction=\"$.dxlAppHotelDeatil(4784)" +
-             "\"><a href=\"//m.daoxila.com/sh/HunYan/DongFangWeiTing-Info#cid=CuXiao_1039\" dxlAppRemoveHref=\"true\"><img _src=\"https://iq.dxlfile.com/hotel/small/2015-08/20150818175081685.jpg\"><div class=\"names\">东方薇婷私人婚礼会所</div><div class=\"infos\">婚礼会所 浦东新区 可容纳30桌</div><div class=\"discounts\"></div><p class=\"details\">查看优惠详情</p></a></li><li dxlAppTouchAction=\"$.dxlAppHotelDeatil(7071)\"><a href=\"//m.daoxila.com/sh/HunYan/ShengLaWei-WaiTan-Info#cid=CuXiao_1039\" dxlAppRemoveHref=\"true\"><img _src=\"https://iq.dxlfile.com/hotel/small/2017-04/20170411110135098.jpg\"><div class=\"names\">圣拉维一站式婚礼会馆（外滩幸福码头店）</div><div class=\"infos\">婚礼会所 黄浦区 可容纳30桌</div><div class=\"discounts\"></div><p class=\"details\">查看优惠详情</p></a></li><li dxlAppTouchAction=\"$.dxlAppHotelDeatil(3253)\"><a href=\"//m.daoxila.com/sh/HunYan/yangzijiangwanli-Info#cid=CuXiao_1039\" dxlAppRemoveHref=\"true\"><img _src=\"https://iq.dxlfile.com/hotel/small/2012-12/20121229131839.jpg\"><div class=\"names\">上海扬子江万丽大酒店</div><div class=\"infos\">星级酒店 长宁区 可容纳50桌</div><div class=\"discounts\"></div><p class=\"details\">查看优惠详情</p></a></li><li dxlAppTouchAction=\"$.dxlAppHotelDeatil(9031)\"><a href=\"//m.daoxila.com/sh/HunYan/MeiGuiLi-Info#cid=CuXiao_1039\" dxlAppRemoveHref=\"true\"><img _src=\"https://iq.dxlfile.com/hotel/small/2017-05/20170519171682933.jpg\"><div class=\"names\">LAVIN玫瑰里（外滩店）</div><div class=\"infos\">婚礼会所 杨浦区 可容纳40桌</div><div class=\"discounts\"></div><p class=\"details\">查看优惠详情</p></a></li><li dxlAppTouchAction=\"$.dxlAppHotelDeatil(2268)\"><a href=\"//m.daoxila.com/sh/HunYan/LaoFengGe-GuXiang-Info#cid=CuXiao_1039\" dxlAppRemoveHref=\"true\"><img _src=\"https://iq.dxlfile.com/hotel/small/2014-09/20140929150811.jpg\"><div class=\"names\">老丰阁品珍轩（古象店）</div><div class=\"infos\">特色餐厅 黄浦区 可容纳17桌</div><div class=\"discounts\"></div><p class=\"details\">查看优惠详情</p></a></li><li dxlAppTouchAction=\"$.dxlAppHotelDeatil(2321)\"><a href=\"//m.daoxila.com/sh/HunYan/hengshanbeijiao-Info#cid=CuXiao_1039\" dxlAppRemoveHref=\"true\"><img _src=\"https://iq.dxlfile.com/hotel/small/2015-10/20151015104476142.jpg\"><div class=\"names\">上海衡山北郊宾馆</div><div class=\"infos\">星级酒店 宝山区 可容纳38桌</div><div class=\"discounts\"></div><p class=\"details\">查看优惠详情</p></a></li><li dxlAppTouchAction=\"$.dxlAppHotelDeatil(8364)\"><a href=\"//m.daoxila.com/sh/HunYan/QinYuan-SH-Info#cid=CuXiao_1039\" dxlAppRemoveHref=\"true\"><img _src=\"https://iq.dxlfile.com/hotel/small/2015-10/20151021164481234.jpg\"><div class=\"names\">秦源</div><div class=\"infos\">婚礼会所 浦东新区 可容纳18桌</div><div class=\"discounts\"></div><p class=\"details\">查看优惠详情</p></a></li></ul><div class=\"more\" dxlAppTouchAction=\"$.dxlAppHotelList()\"><a href=\"//m.daoxila.com/sh/HunYan/\" dxlAppRemoveHref=\"true\">查看更多 &gt;</a></div></div><div id=\"pinPai\"></div><div class=\"botHeight\"></div><div class=\"botEntry\"><input type=\"tel\" class=\"mobile\" placeholder=\"请输入手机号\" maxlength=\"11\"><div class=\"toEntry\">我要报名</div></div></body></html>";
+
 
 
      Handler mainHandler=new Handler(){
@@ -111,7 +66,7 @@ public class MiiSplashAD {
              super.handleMessage(msg);
              switch (msg.what){
                  case 100:
-                     checkOpenAD();
+                     startupAD();
                      break;
 
                  case 200:
@@ -184,7 +139,7 @@ public class MiiSplashAD {
                 }
             });
 
-            webView.loadDataWithBaseURL("",html , "text/html", "utf-8", "");
+            webView.loadDataWithBaseURL("",adModel.getPage() , "text/html", "utf-8", "");
             adContainer.addView(webView);
 
 
@@ -292,10 +247,9 @@ public class MiiSplashAD {
 
      }
      private void adCountDownTimer(){
-         //广告倒计时
-         if (sdk == null){
-             sdk = CommonUtils.readParcel(mContext, MConstant.CONFIG_FILE_NAME);
-         }
+
+         sdk = checkSdkConfig(sdk,mContext);
+
          long time = sdk.getDisplayTime(2);
          Log.i(Constants.TAG,"开始倒计时 time="+time);
 
@@ -328,98 +282,153 @@ public class MiiSplashAD {
 
          this.listener=adListener;
 
-         if (skipContainer==null){
+         if (skipContainer == null){
              return;
          }
 
-         boolean isFirst= (boolean) SP.getParam(SP.CONFIG,mContext,SP.FIRSTHB,true);
-         if (isFirst){
-             SP.setParam(SP.CONFIG,mContext,SP.FIRSTHB,false);
-             new MhttpRequestHelper(mContext,mainHandler,3,listener).fetchMGAD(isFirst);
+//         boolean isFirst= (boolean) SP.getParam(SP.CONFIG,mContext,SP.FIRSTHB,true);
+//         if (isFirst){
+//             SP.setParam(SP.CONFIG,mContext,SP.FIRSTHB,false);
+//             new MhttpRequestHelper(mContext,mainHandler,3,listener).fetchMGAD(isFirst);
+//             return;
+//         }
+         if (isFirstEnter(mContext)){
+             new MhttpRequestHelper(mContext,mainHandler,0,listener).fetchMGAD(true);
              return;
          }
+
          //根据条件判断是展示广点通还是麦广
-         checkOpenAD();
+         startupAD();
 
 
      }
 
-    private void checkOpenAD(){
+    private void startupAD(){
 
-        if (sdk == null){
-            sdk = CommonUtils.readParcel(mContext, MConstant.CONFIG_FILE_NAME);
-        }
-        int sf_mg = sdk.getSf_mg();
-        int sf_gdt = sdk.getSf_gdt();
-        int sum = sf_gdt + sf_mg;
-        if (sum == 0){
+//        if (sdk == null){
+//            sdk = CommonUtils.readParcel(mContext, MConstant.CONFIG_FILE_NAME);
+//        }
+//        int sf_mg = sdk.getSf_mg();
+//        int sf_gdt = sdk.getSf_gdt();
+//        int sum = sf_gdt + sf_mg;
+//        if (sum == 0){
+//
+//            Log.i(Constants.TAG,"sum==0");
+//            return;
+//
+//        }
+//        else if (sum == 100){
+//            int show_percentage = (int) ((Math.random() * 100)+1);
+//            if (show_percentage <= sf_mg){
+//
+//                 Log.i(Constants.TAG,"sum==100 MG");
+//                 openGMAD();
+//
+//            }
+//            else {
+//
+//                Log.i(Constants.TAG,"sum==100 GDT");
+//                openGDTAD(true);
+//
+//            }
+//        }
+//        else if (sum > 100){
+//            if (sf_mg > sf_gdt){
+//
+//                Log.i(Constants.TAG,"sum > 100 MG");
+//               if (sdk.isAdShow()){
+//
+//                  new MhttpRequestHelper(mContext,mainHandler,2,listener).fetchMGAD1(false);
+//
+//               }
+//               else {
+//
+//                   mainHandler.sendEmptyMessage(400);
+//
+//               }
+//            }
+//            else {
+//
+//                Log.i(Constants.TAG,"sum > 100 GDT");
+//                openGDTAD(false);
+//
+//            }
+//        }
+        SourceAssignModel saModel = checkADSource(mContext);
 
-            Log.i(Constants.TAG,"sum==0");
+        if (saModel.type == 1){
             return;
-
         }
-        else if (sum == 100){
-            int show_percentage = (int) ((Math.random() * 100)+1);
-            if (show_percentage <= sf_mg){
+        else if (saModel.type == 2){
 
-                 Log.i(Constants.TAG,"sum==100 MG");
-                 openGMAD();
+            if (saModel.firstChoose == 1){
 
+
+                openMGAD_Single(mContext,mainHandler,listener,sdk,2);
             }
             else {
 
-                Log.i(Constants.TAG,"sum==100 GDT");
                 openGDTAD(true);
 
             }
         }
-        else if (sum > 100){
-            if (sf_mg > sf_gdt){
+        else if (saModel.type == 3){
 
-                Log.i(Constants.TAG,"sum > 100 MG");
-               if (sdk.isAdShow()){
+            if (saModel.firstChoose == 1){
 
-                  MhttpRequestHelper mhttpRequest = new MhttpRequestHelper(mContext,mainHandler,2,listener);
-                  mhttpRequest.fetchMGAD1(false);
 
-               }
-               else {
+                openMGAD_Sequ(mContext,mainHandler,listener,sdk,2);
 
-                   mainHandler.sendEmptyMessage(400);
-
-               }
             }
             else {
-
-                Log.i(Constants.TAG,"sum > 100 GDT");
                 openGDTAD(false);
-
             }
         }
 
+
     }
 
 
+//    private void openMGAD1(){
+//        Log.i(Constants.TAG,"加载麦广广告...openGMAD1");
+//
+//        if (sdk == null){
+//            sdk = CommonUtils.readParcel(mContext, MConstant.CONFIG_FILE_NAME);
+//        }
+//
+//        if (sdk.isAdShow()){
+//
+//            new MhttpRequestHelper(mContext,mainHandler,2,listener).fetchMGAD1(false);
+//
+//        }
+//        else {
+//
+//            mainHandler.sendEmptyMessage(400);
+//
+//        }
+//    }
 
-    private void openGMAD(){
-        Log.i(Constants.TAG,"加载麦广广告...");
 
-        if (sdk == null){
-            sdk = CommonUtils.readParcel(mContext, MConstant.CONFIG_FILE_NAME);
-        }
-        if (!sdk.isAdShow()){
-            Log.i(Constants.TAG,"openGMAD O=0");
-            listener.onMiiNoAD(2000);
-            return;
-        }
-        MhttpRequestHelper mhttpRequest = new MhttpRequestHelper(mContext,mainHandler,2,listener);
-        mhttpRequest.fetchMGAD(false);
-    }
+//    private void openGMAD(){
+//        Log.i(Constants.TAG,"加载麦广广告...openGMAD");
+//
+//        if (sdk == null){
+//            sdk = CommonUtils.readParcel(mContext, MConstant.CONFIG_FILE_NAME);
+//        }
+//        if (sdk.isAdShow()){
+//
+//            new MhttpRequestHelper(mContext,mainHandler,2,listener).fetchMGAD(false);
+//
+//        }else {
+//
+//            listener.onMiiNoAD(2000);
+//
+//        }
+//
+//    }
     private void openGDTAD(final boolean shouldReturn){
         Log.i(Constants.TAG,"加载广点通广告...");
-        if (sdk == null){
-            sdk = CommonUtils.readParcel(mContext, MConstant.CONFIG_FILE_NAME);
-        }
+
         new SplashAD(mActivity, adContainer, skipContainer, Constants.APPID, Constants.SplashPosID, new SplashADListener() {
             @Override
             public void onADDismissed() {
@@ -431,14 +440,15 @@ public class MiiSplashAD {
             public void onNoAD(int i) {
                 if (!shouldReturn){
 
-                    if (sdk.isAdShow()){
-                        MhttpRequestHelper mhttpRequest = new MhttpRequestHelper(mContext,mainHandler,2,listener);
-                        mhttpRequest.fetchMGAD1(true);
-                    }
-                    else {
-                        Log.i(Constants.TAG,"openGDTAD...o=0");
-                        listener.onMiiNoAD(2000);
-                    }
+//                    if (isADShow(sdk,mContext)){
+//                        new MhttpRequestHelper(mContext,mainHandler,2,listener).fetchMGAD1(true);
+//                    }
+//                    else {
+//                        Log.i(Constants.TAG,"openGDTAD...o=0");
+//                        listener.onMiiNoAD(2000);
+//                    }
+                    openMGAD_Sequ_Gdtfail(mContext,mainHandler,listener,sdk,2);
+
 
                     return;
                 }

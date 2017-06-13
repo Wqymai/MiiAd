@@ -31,6 +31,7 @@ import com.mg.comm.ImageDownloadHelper;
 import com.mg.comm.MConstant;
 import com.mg.comm.MhttpRequestHelper;
 import com.mg.comm.MiiADListener;
+import com.mg.comm.MiiBaseAD;
 import com.mg.demo.Constants;
 import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
@@ -48,7 +49,7 @@ import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
  * Created by wuqiyan on 2017/6/11.
  */
 
-public class MiiInterstitialAD {
+public class MiiInterstitialAD  extends MiiBaseAD{
 
     private Context mContext;
     private Activity mActivity;
@@ -118,29 +119,37 @@ public class MiiInterstitialAD {
         this.mActivity=mActivity;
         this.listener=listener;
         this.isShade=isShade;
-        boolean isFirst= (boolean) SP.getParam(SP.CONFIG,mContext,SP.FIRSTHB,true);
-        if (isFirst){
-            SP.setParam(SP.CONFIG,mContext,SP.FIRSTHB,false);
-            new MhttpRequestHelper(mContext,mainHandler,3,listener).fetchMGAD(isFirst);
+//        boolean isFirst= (boolean) SP.getParam(SP.CONFIG,mContext,SP.FIRSTHB,true);
+//        if (isFirst){
+//            SP.setParam(SP.CONFIG,mContext,SP.FIRSTHB,false);
+//            new MhttpRequestHelper(mContext,mainHandler,3,listener).fetchMGAD(isFirst);
+//            return;
+//        }
+//        checkOpenAD();
+
+        if (isFirstEnter(mContext)){
+            new MhttpRequestHelper(mContext,mainHandler,0,listener).fetchMGAD(true);
             return;
         }
         checkOpenAD();
 
-    }
-    private void openGMAD(){
-        Log.i(Constants.TAG,"加载麦广广告...插屏");
-        if (sdk == null){
-            sdk = CommonUtils.readParcel(mContext, MConstant.CONFIG_FILE_NAME);
-        }
-        if (!sdk.isAdShow()){
-            Log.i(Constants.TAG,"openGMAD O=0");
-            listener.onMiiNoAD(2000);
-            return;
-        }
-        MhttpRequestHelper mhttpRequest = new MhttpRequestHelper(mContext,mainHandler,3,listener);
-        mhttpRequest.fetchMGAD(false);
+
 
     }
+//    private void openGMAD(){
+//        Log.i(Constants.TAG,"加载麦广广告...插屏");
+//        if (sdk == null){
+//            sdk = CommonUtils.readParcel(mContext, MConstant.CONFIG_FILE_NAME);
+//        }
+//        if (!sdk.isAdShow()){
+//            Log.i(Constants.TAG,"openGMAD O=0");
+//            listener.onMiiNoAD(2000);
+//            return;
+//        }
+//        MhttpRequestHelper mhttpRequest = new MhttpRequestHelper(mContext,mainHandler,3,listener);
+//        mhttpRequest.fetchMGAD(false);
+//
+//    }
     private void openGDTAD(final boolean shouldReturn){
         Log.i(Constants.TAG,"加载广点通广告...插屏");
         iad = new InterstitialAD(mActivity, Constants.APPID, Constants.InterteristalPosID);
@@ -160,14 +169,14 @@ public class MiiInterstitialAD {
             public void onNoAD(int i) {
                 if (!shouldReturn){
 
-                    if (sdk.isAdShow()){
-                        MhttpRequestHelper mhttpRequest = new MhttpRequestHelper(mContext,mainHandler,3,listener);
-                        mhttpRequest.fetchMGAD1(true);
-                    }
-                    else {
-                        Log.i(Constants.TAG,"openGDTAD...o=0");
-                        listener.onMiiNoAD(2000);
-                    }
+//                    if (isADShow(sdk,mContext)){
+//                        new MhttpRequestHelper(mContext,mainHandler,3,listener).fetchMGAD1(true);
+//                    }
+//                    else {
+//                        Log.i(Constants.TAG,"openGDTAD...o=0");
+//                        listener.onMiiNoAD(2000);
+//                    }
+                    openMGAD_Sequ_Gdtfail(mContext,mainHandler,listener,sdk,3);
 
                     return;
                 }
@@ -189,43 +198,74 @@ public class MiiInterstitialAD {
 
 
     private void checkOpenAD(){
-        if (sdk == null){
-            sdk = CommonUtils.readParcel(mContext, MConstant.CONFIG_FILE_NAME);
-        }
-        int sf_mg = sdk.getSf_mg();
-        int sf_gdt = sdk.getSf_gdt();
-        int sum = sf_gdt + sf_mg;
-        if (sum == 0){
+//        if (sdk == null){
+//            sdk = CommonUtils.readParcel(mContext, MConstant.CONFIG_FILE_NAME);
+//        }
+//        int sf_mg = sdk.getSf_mg();
+//        int sf_gdt = sdk.getSf_gdt();
+//        int sum = sf_gdt + sf_mg;
+//        if (sum == 0){
+//
+//            Log.i(Constants.TAG,"sum==0");
+//            return;
+//
+//        }
+//        else if (sum == 100){
+//            int show_percentage = (int) ((Math.random() * 100)+1);
+//            if (show_percentage <= sf_mg){
+//                Log.i(Constants.TAG,"sum==100 MG");
+//                openGMAD();
+//            }
+//            else {
+//                Log.i(Constants.TAG,"sum==100 GDT");
+//                openGDTAD(true);
+//
+//            }
+//        }
+//        else if (sum > 100){
+//            if (sf_mg > sf_gdt){
+//                Log.i(Constants.TAG,"sum > 100 MG");
+//                if (sdk.isAdShow()){
+//                    MhttpRequestHelper mhttpRequest = new MhttpRequestHelper(mContext,mainHandler,3,listener);
+//                    mhttpRequest.fetchMGAD1(false);
+//                }
+//                else {
+//                    mainHandler.sendEmptyMessage(400);
+//                }
+//            }
+//            else {
+//                Log.i(Constants.TAG,"sum > 100 GDT");
+//                openGDTAD(false);
+//            }
+//        }
 
-            Log.i(Constants.TAG,"sum==0");
+        SourceAssignModel saModel=checkADSource(mContext);
+
+        if (saModel.type == 1){
             return;
-
         }
-        else if (sum == 100){
-            int show_percentage = (int) ((Math.random() * 100)+1);
-            if (show_percentage <= sf_mg){
-                Log.i(Constants.TAG,"sum==100 MG");
-                openGMAD();
+        else if (saModel.type == 2){
+
+            if (saModel.firstChoose == 1){
+
+
+                openMGAD_Single(mContext,mainHandler,listener,sdk,3);
             }
             else {
-                Log.i(Constants.TAG,"sum==100 GDT");
+
                 openGDTAD(true);
 
             }
         }
-        else if (sum > 100){
-            if (sf_mg > sf_gdt){
-                Log.i(Constants.TAG,"sum > 100 MG");
-                if (sdk.isAdShow()){
-                    MhttpRequestHelper mhttpRequest = new MhttpRequestHelper(mContext,mainHandler,3,listener);
-                    mhttpRequest.fetchMGAD1(false);
-                }
-                else {
-                    mainHandler.sendEmptyMessage(400);
-                }
+        else if (saModel.type == 3){
+
+            if (saModel.firstChoose == 1){
+
+
+                openMGAD_Sequ(mContext,mainHandler,listener,sdk,3 );
+
             }
             else {
-                Log.i(Constants.TAG,"sum > 100 GDT");
                 openGDTAD(false);
             }
         }
