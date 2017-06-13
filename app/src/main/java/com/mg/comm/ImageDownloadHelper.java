@@ -94,8 +94,9 @@ public class ImageDownloadHelper {
 
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
-        //
-        BitmapFactory.decodeFile(path, options);
+
+        Bitmap tempbm=BitmapFactory.decodeFile(path, options);
+        Log.i(Constants.TAG,"tempbm w="+tempbm.getWidth()+" h="+tempbm.getHeight());
 
         options.inSampleSize = 1;//ImageSizeUtil.caculateInSampleSize(options, width, height);
         // 使用获得到的InSampleSize再次解析图片
