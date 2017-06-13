@@ -257,18 +257,14 @@ public class MiiInterstitialAD {
     }
 
     private void buildDialog(){
-        // 生成对话框
         dlg = new AlertDialog.Builder(mActivity).create();
         dlg.setCanceledOnTouchOutside(false);
-        //显示对框框
         dlg.show();
     }
 
     //无遮罩效果
     private void  showNoShade(Bitmap bitmap,String html){
 
-
-        Log.i(Constants.TAG,"bitmap w="+bitmap.getWidth()+" h="+bitmap.getHeight());
         //检查横竖屏
         oren = checkOrientation();
 
@@ -310,7 +306,6 @@ public class MiiInterstitialAD {
         buildOthersView();
 
 
-        //添加自定义的Layout以及布局方式，注意传入dlg对象本身方便关闭该提示框
         window.addContentView(relativeLayout,pParams);
 
 
@@ -418,7 +413,6 @@ public class MiiInterstitialAD {
 
 
     private void buildImageView(Bitmap bitmap){
-        //展示广告的imageview
         imageView=new MiiImageView(mActivity);
         RelativeLayout.LayoutParams ivParam=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         imageView.setLayoutParams(ivParam);
@@ -501,57 +495,7 @@ public class MiiInterstitialAD {
         return true;
     }
 
-//    private class CircleTextView extends TextView {
-//
-//        private Paint mBgPaint = new Paint();
-//
-//
-//        PaintFlagsDrawFilter pfd = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
-//
-//        public CircleTextView(Context context, AttributeSet attrs, int defStyle) {
-//            super(context, attrs, defStyle);
-//
-//            init(context);
-//        }
-//
-//        public CircleTextView(Context context, AttributeSet attrs) {
-//            super(context, attrs);
-//
-//            init(context);
-//        }
-//
-//        public CircleTextView(Context context) {
-//            super(context);
-//
-//            init(context);
-//        }
-//
-//        public void init(Context context) {
-////            mContext = context;
-//            mBgPaint.setAntiAlias(true);
-//        }
-//        @Override
-//        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-//
-//            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-//            int measuredWidth = getMeasuredWidth();
-//            int measuredHeight = getMeasuredHeight();
-//            int max = Math.max(measuredWidth, measuredHeight);
-//            setMeasuredDimension(max, max);
-//        }
-//        @Override
-//        public void setBackgroundColor(int color) {
-//
-//            mBgPaint.setColor(color);
-//        }
-//
-//        @Override
-//        public void draw(Canvas canvas) {
-//            canvas.setDrawFilter(pfd);
-//            canvas.drawCircle(getWidth() / 2, getHeight() / 2, Math.max(getWidth(), getHeight()) / 2, mBgPaint);
-//            super.draw(canvas);
-//        }
-//    }
+
 
 
 }

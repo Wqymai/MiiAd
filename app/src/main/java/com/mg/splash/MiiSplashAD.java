@@ -328,6 +328,10 @@ public class MiiSplashAD {
 
          this.listener=adListener;
 
+         if (skipContainer==null){
+             return;
+         }
+
          boolean isFirst= (boolean) SP.getParam(SP.CONFIG,mContext,SP.FIRSTHB,true);
          if (isFirst){
              SP.setParam(SP.CONFIG,mContext,SP.FIRSTHB,false);
@@ -357,10 +361,13 @@ public class MiiSplashAD {
         else if (sum == 100){
             int show_percentage = (int) ((Math.random() * 100)+1);
             if (show_percentage <= sf_mg){
-                Log.i(Constants.TAG,"sum==100 MG");
+
+                 Log.i(Constants.TAG,"sum==100 MG");
                  openGMAD();
+
             }
             else {
+
                 Log.i(Constants.TAG,"sum==100 GDT");
                 openGDTAD(true);
 
@@ -368,18 +375,25 @@ public class MiiSplashAD {
         }
         else if (sum > 100){
             if (sf_mg > sf_gdt){
+
                 Log.i(Constants.TAG,"sum > 100 MG");
                if (sdk.isAdShow()){
+
                   MhttpRequestHelper mhttpRequest = new MhttpRequestHelper(mContext,mainHandler,2,listener);
                   mhttpRequest.fetchMGAD1(false);
+
                }
                else {
+
                    mainHandler.sendEmptyMessage(400);
+
                }
             }
             else {
+
                 Log.i(Constants.TAG,"sum > 100 GDT");
                 openGDTAD(false);
+
             }
         }
 
