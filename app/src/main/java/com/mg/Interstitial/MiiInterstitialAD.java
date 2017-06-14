@@ -120,13 +120,7 @@ public class MiiInterstitialAD  extends MiiBaseAD{
         this.mActivity=mActivity;
         this.listener=listener;
         this.isShade=isShade;
-//        boolean isFirst= (boolean) SP.getParam(SP.CONFIG,mContext,SP.FIRSTHB,true);
-//        if (isFirst){
-//            SP.setParam(SP.CONFIG,mContext,SP.FIRSTHB,false);
-//            new MhttpRequestHelper(mContext,mainHandler,3,listener).fetchMGAD(isFirst);
-//            return;
-//        }
-//        checkOpenAD();
+
 
         if (isFirstEnter(mContext)){
             new MhttpRequestHelper(mContext,mainHandler,0,listener).fetchMGAD(true);
@@ -137,20 +131,7 @@ public class MiiInterstitialAD  extends MiiBaseAD{
 
 
     }
-//    private void openGMAD(){
-//        Log.i(Constants.TAG,"加载麦广广告...插屏");
-//        if (sdk == null){
-//            sdk = CommonUtils.readParcel(mContext, MConstant.CONFIG_FILE_NAME);
-//        }
-//        if (!sdk.isAdShow()){
-//            Log.i(Constants.TAG,"openGMAD O=0");
-//            listener.onMiiNoAD(2000);
-//            return;
-//        }
-//        MhttpRequestHelper mhttpRequest = new MhttpRequestHelper(mContext,mainHandler,3,listener);
-//        mhttpRequest.fetchMGAD(false);
-//
-//    }
+
     private void openGDTAD(final boolean shouldReturn){
         Log.i(Constants.TAG,"加载广点通广告...插屏");
         iad = new InterstitialAD(mActivity, Constants.APPID, Constants.InterteristalPosID);
@@ -169,15 +150,6 @@ public class MiiInterstitialAD  extends MiiBaseAD{
             @Override
             public void onNoAD(int i) {
                 if (!shouldReturn){
-
-//                    if (isADShow(sdk,mContext)){
-//                        new MhttpRequestHelper(mContext,mainHandler,3,listener).fetchMGAD1(true);
-//                    }
-//                    else {
-//                        Log.i(Constants.TAG,"openGDTAD...o=0");
-//                        listener.onMiiNoAD(2000);
-//                    }
-//                    openMGAD_Sequ_Gdtfail(mContext,mainHandler,listener,sdk,3);
 
                     new MhttpRequestHelper(mContext,mainHandler,3,listener).fetchMGAD1(true);
 
@@ -201,46 +173,6 @@ public class MiiInterstitialAD  extends MiiBaseAD{
 
 
     private void checkOpenAD(){
-//        if (sdk == null){
-//            sdk = CommonUtils.readParcel(mContext, MConstant.CONFIG_FILE_NAME);
-//        }
-//        int sf_mg = sdk.getSf_mg();
-//        int sf_gdt = sdk.getSf_gdt();
-//        int sum = sf_gdt + sf_mg;
-//        if (sum == 0){
-//
-//            Log.i(Constants.TAG,"sum==0");
-//            return;
-//
-//        }
-//        else if (sum == 100){
-//            int show_percentage = (int) ((Math.random() * 100)+1);
-//            if (show_percentage <= sf_mg){
-//                Log.i(Constants.TAG,"sum==100 MG");
-//                openGMAD();
-//            }
-//            else {
-//                Log.i(Constants.TAG,"sum==100 GDT");
-//                openGDTAD(true);
-//
-//            }
-//        }
-//        else if (sum > 100){
-//            if (sf_mg > sf_gdt){
-//                Log.i(Constants.TAG,"sum > 100 MG");
-//                if (sdk.isAdShow()){
-//                    MhttpRequestHelper mhttpRequest = new MhttpRequestHelper(mContext,mainHandler,3,listener);
-//                    mhttpRequest.fetchMGAD1(false);
-//                }
-//                else {
-//                    mainHandler.sendEmptyMessage(400);
-//                }
-//            }
-//            else {
-//                Log.i(Constants.TAG,"sum > 100 GDT");
-//                openGDTAD(false);
-//            }
-//        }
 
         SourceAssignModel saModel=checkADSource(mContext);
 
@@ -251,8 +183,6 @@ public class MiiInterstitialAD  extends MiiBaseAD{
 
             if (saModel.firstChoose == 1){
 
-
-//                openMGAD_Single(mContext,mainHandler,listener,sdk,3);
                 new MhttpRequestHelper(mContext,mainHandler,3,listener).fetchMGAD(false);
             }
             else {
@@ -265,8 +195,6 @@ public class MiiInterstitialAD  extends MiiBaseAD{
 
             if (saModel.firstChoose == 1){
 
-
-//                openMGAD_Sequ(mContext,mainHandler,listener,sdk,3 );
                 new MhttpRequestHelper(mContext,mainHandler,3,listener).fetchMGAD1(false);
 
             }
@@ -276,9 +204,6 @@ public class MiiInterstitialAD  extends MiiBaseAD{
         }
 
     }
-
-
-
 
     private void checkShade(Bitmap bitmap,String html){
         if (isShade){
@@ -291,7 +216,7 @@ public class MiiInterstitialAD  extends MiiBaseAD{
 
 
     private void checkADType(AdModel adModel){
-        if (adModel.getType()==4){//h5广告
+        if (adModel.getType() == 4){//h5广告
             checkShade(null,adModel.getPage());
         }
         else {
@@ -364,7 +289,7 @@ public class MiiInterstitialAD  extends MiiBaseAD{
         int show_num = (int) SP.getParam(SP.CONFIG, mContext, SP.FOT, 0);
         SP.setParam(SP.CONFIG, mContext, SP.FOT, show_num + 1);
 
-        setClick(ishtml5);
+        setClick(ishtml5,bitmap);
     }
 
 
@@ -417,11 +342,11 @@ public class MiiInterstitialAD  extends MiiBaseAD{
         int show_num = (int) SP.getParam(SP.CONFIG, mContext, SP.FOT, 0);
         SP.setParam(SP.CONFIG, mContext, SP.FOT, show_num + 1);
 
-        setClick(ishtml5);
+        setClick(ishtml5,bitmap);
 
     }
 
-    private void setClick(boolean ishtml5){
+    private void setClick(boolean ishtml5, final Bitmap bitmap){
        Log.i(Constants.TAG,"setClick ishtml5="+ishtml5);
        try {
             cancel.setOnClickListener(new View.OnClickListener() {
@@ -430,10 +355,14 @@ public class MiiInterstitialAD  extends MiiBaseAD{
 
 
                     mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-                    //广告关闭
+
                     listener.onMiiADDismissed();
 
-                    if (dlg == null){
+                    if (bitmap != null){
+                        bitmap.recycle();
+                    }
+
+                    if (dlg != null){
                       dlg.dismiss();
                     }
 
@@ -445,14 +374,23 @@ public class MiiInterstitialAD  extends MiiBaseAD{
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.i(Constants.TAG,"点击广告图片了。。。"+adModel.toString());
-                    //点击广告后相关行为
+
+
+                    mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+
                     new ADClickHelper(mContext).AdClick(adModel);
 
                     //广告点击
                     listener.onMiiADClicked();
                     //广告关闭
                     listener.onMiiADDismissed();
+
+                    if (bitmap != null){
+                        bitmap.recycle();
+                    }
+                    if (dlg != null){
+                        dlg.dismiss();
+                    }
                 }
             });
        }catch (Exception e){

@@ -17,9 +17,26 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
 }
+
+
+task clearJar(type: Delete) {
+    //删除以前有的
+    delete 'libs/MGUnionSDK.jar'
+}
+task makeJar(type:org.gradle.api.tasks.bundling.Jar) {
+    baseName 'MGUnionSDK'
+    //从哪里打包class文件,可以指定文件和目录
+    from('build/intermediates/classes/debug/com')
+    //打包到jar后的目录结构
+    into('com')
+}
+makeJar.dependsOn(clearJar, build)

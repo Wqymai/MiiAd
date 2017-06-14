@@ -1,6 +1,7 @@
 package com.mg.demo;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -47,6 +48,8 @@ public class    SplashActivity extends Activity implements MiiADListener {
     @Override
     public void onMiiADDismissed() {
         Log.i(Constants.TAG, "SplashADDismissed");
+        startActivity(new Intent(SplashActivity.this,MainActivity.class));
+        finish();
     }
 
     @Override

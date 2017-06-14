@@ -14,6 +14,8 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -24,7 +26,6 @@ import android.widget.TextView;
 
 import com.mg.comm.ADClickHelper;
 import com.mg.comm.ImageDownloadHelper;
-
 import com.mg.comm.MhttpRequestHelper;
 import com.mg.comm.MiiADListener;
 import com.mg.comm.MiiBaseAD;
@@ -33,7 +34,6 @@ import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
 import com.mg.others.model.SDKConfigModel;
-
 import com.mg.others.utils.SP;
 import com.qq.e.ads.splash.SplashAD;
 import com.qq.e.ads.splash.SplashADListener;
@@ -119,6 +119,7 @@ public class MiiSplashAD extends MiiBaseAD {
 
         this.listener=adListener;
 
+
         if (skipContainer == null){
             listener.onMiiNoAD(2000);
             return;
@@ -135,6 +136,7 @@ public class MiiSplashAD extends MiiBaseAD {
     }
 
     private void  checkADType(AdModel adModel){
+
 
         if (adModel.getType() == 4){//h5广告
 
@@ -258,9 +260,9 @@ public class MiiSplashAD extends MiiBaseAD {
                      bitmap.recycle();
                  }
                  if(timer != null){
-                  timer.cancel();
+                   timer.cancel();
                  }
-                 mActivity.finish();
+
              }
          });
          adImageView.setOnClickListener(new View.OnClickListener() {
@@ -268,8 +270,9 @@ public class MiiSplashAD extends MiiBaseAD {
              public void onClick(View v) {
 
                  listener.onMiiADClicked();
+                 listener.onMiiADDismissed();
 
-                 //点击广告后相关行为
+
                  new ADClickHelper(mContext).AdClick(adModel);
 
                  if (timer != null){
@@ -279,7 +282,7 @@ public class MiiSplashAD extends MiiBaseAD {
                  if (bitmap != null){
                      bitmap.recycle();
                  }
-                 mActivity.finish();
+
 
              }
          });
@@ -292,18 +295,18 @@ public class MiiSplashAD extends MiiBaseAD {
          sdk = checkSdkConfig(sdk,mContext);
 
          long time = sdk.getDisplayTime(2);
-         Log.i(Constants.TAG,"开始倒计时 time="+time);
+
 
          timer = new CountDownTimer((time+1)*1000,1000){
              @Override
              public void onTick(long millisUntilFinished) {
-                 Log.i(Constants.TAG,"倒计时 "+millisUntilFinished);
+
                  listener.onMiiADTick((long) ((Math.floor(millisUntilFinished/1000))*1000));
              }
 
              @Override
              public void onFinish() {
-                 Log.i(Constants.TAG,"倒计时结束 ");
+
                  listener.onMiiADDismissed();
              }
          };
@@ -359,7 +362,7 @@ public class MiiSplashAD extends MiiBaseAD {
 
 
                 listener.onMiiADDismissed();
-                mActivity.finish();
+
             }
 
             @Override
@@ -383,7 +386,7 @@ public class MiiSplashAD extends MiiBaseAD {
             public void onADClicked() {
 
                 listener.onMiiADClicked();
-                mActivity.finish();
+
             }
 
             @Override
