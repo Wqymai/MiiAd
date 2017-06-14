@@ -22,6 +22,7 @@ import com.mg.others.utils.CommonUtils;
 import com.mg.others.utils.ConfigParser;
 import com.mg.others.utils.LocalKeyConstants;
 
+import com.mg.others.utils.LogUtils;
 import com.mg.others.utils.MiiLocalStrEncrypt;
 import com.mg.others.utils.SP;
 
@@ -51,8 +52,9 @@ public class MhttpRequestHelper {
         this.listener=listener;
         this.pt=pt;
     }
-    public void fetchMGAD(final boolean isFirst){
-        Log.i(Constants.TAG,"isFirst="+isFirst);
+
+    //=====================简单心跳=====================
+    public void fetchMGAD3(){
         //麦广相关的
         DeviceInfo mDeviceInfo= CommonUtils.readParcel(mContext, MConstant.DEVICE_FILE_NAME);
         if (mDeviceInfo == null){
@@ -61,6 +63,121 @@ public class MhttpRequestHelper {
                 @Override
                 public void deviceInfoLoaded(DeviceInfo deviceInfo) {
                     Log.i(Constants.TAG,"获取到的设备信息。。"+deviceInfo.toString());
+
+                    CommonUtils.writeParcel(mContext, MConstant.DEVICE_FILE_NAME, deviceInfo);
+
+                    startRequest3();
+                }
+            }, mContext).execute();
+        }
+        else {
+            startRequest3();
+        }
+    }
+
+
+    public  void startRequest3(){
+
+        SDKConfigModel sdkConfigModel = CommonUtils.readParcel(mContext,MConstant.CONFIG_FILE_NAME);
+
+        if (sdkConfigModel == null){
+            requestHb3();
+        }
+        else {
+
+            long hbTime = (long) SP.getParam(SP.CONFIG,mContext,SP.LAST_REQUEST_NI,0l);
+
+            long currTime = System.currentTimeMillis();
+
+            int next = sdkConfigModel.getNext();
+
+            if (((currTime - hbTime)/1000) < next){
+                LogUtils.i(MConstant.TAG,"not need hb");
+                return;
+            }
+            else {
+                LogUtils.i(MConstant.TAG,"need hb");
+                requestHb3();
+            }
+        }
+
+    }
+
+
+    public void requestHb3(){
+
+        if (!CommonUtils.isNetworkAvailable(mContext)){
+            LogUtils.i(MConstant.TAG,"network error");
+            return;
+        }
+        if (httpManager == null){
+            httpManager= HttpManager.getInstance(mContext);
+        }
+
+        HttpUtils httpUtils = new HttpUtils(mContext);
+        final String url = httpManager.getParams(NI, 0, 0);
+        if (url == null||url.equals("")){
+            LogUtils.i(MConstant.TAG,"url="+url);
+            return;
+        }
+        httpUtils.get(url, new HttpListener() {
+            @Override
+            public void onSuccess(HttpResponse response) {
+                SP.setParam(SP.CONFIG, mContext, SP.LAST_REQUEST_NI, System.currentTimeMillis());
+                MConstant.HB_HOST= MiiLocalStrEncrypt.deCodeStringToString(MConstant.HOST, LocalKeyConstants.LOCAL_KEY_DOMAINS);
+                dealHbSuc3(response);
+            }
+
+            @Override
+            public void onFail(Exception e) {
+            }
+        });
+
+    }
+    private void dealHbSuc3(HttpResponse response){
+        try {
+            SDKConfigModel sdk = null;
+
+            String data = new String(Base64.decode(response.entity(),Base64.NO_WRAP));
+
+            if (data == null){
+                return;
+            }
+            sdk = ConfigParser.parseConfig(data);
+
+            if (sdk == null){
+                return;
+            }
+            LogUtils.i(MConstant.TAG,"hb res："+sdk.toString());
+
+            CommonUtils.writeParcel(mContext,MConstant.CONFIG_FILE_NAME,sdk);
+
+            long writeTime = (long) SP.getParam(SP.CONFIG, mContext, SP.FOS, 0l);
+            long currentTime = System.currentTimeMillis();
+
+            if (httpManager.DateCompare(writeTime) || writeTime == 0l){
+                SP.setParam(SP.CONFIG, mContext, SP.FOT, 0);
+                SP.setParam(SP.CONFIG, mContext, SP.FOS, currentTime);
+            }
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    //===============================分割线===========================
+    public void fetchMGAD(final boolean isFirst){
+
+        //麦广相关的
+        DeviceInfo mDeviceInfo= CommonUtils.readParcel(mContext, MConstant.DEVICE_FILE_NAME);
+        if (mDeviceInfo == null){
+
+            new DeviceInfoTask(new IDeviceInfoListener() {
+                @Override
+                public void deviceInfoLoaded(DeviceInfo deviceInfo) {
+
 
                     CommonUtils.writeParcel(mContext, MConstant.DEVICE_FILE_NAME, deviceInfo);
 
@@ -75,7 +192,6 @@ public class MhttpRequestHelper {
 
 
 
-
     public  void startRequest(final boolean isFirst){
 
         SDKConfigModel sdkConfigModel = CommonUtils.readParcel(mContext,MConstant.CONFIG_FILE_NAME);
@@ -87,6 +203,7 @@ public class MhttpRequestHelper {
             if (isFirst){
                 return;
             }
+
             long hbTime = (long) SP.getParam(SP.CONFIG,mContext,SP.LAST_REQUEST_NI,0l);
 
             long currTime = System.currentTimeMillis();
@@ -94,15 +211,15 @@ public class MhttpRequestHelper {
             int next = sdkConfigModel.getNext();
 
             if (((currTime - hbTime)/1000) < next){
-                Log.i(Constants.TAG,"不需要心跳");
+                LogUtils.i(MConstant.TAG,"not need hb");
 
                 int real_num = (int) SP.getParam(SP.CONFIG, mContext, SP.FOT, 0);//广告已展示的次数
                 int sdk_num = sdkConfigModel.getShow_sum();
 
-                Log.i(Constants.TAG,"real="+real_num+" sdknum="+sdk_num);
+                LogUtils.i(MConstant.TAG,"real="+real_num+" sdknum="+sdk_num);
                 if (real_num >= sdk_num){
 
-                    Log.i(Constants.TAG,"startRequest real_num > sdk_num");
+                    LogUtils.i(MConstant.TAG,"startRequest real_num > sdk_num");
                     listener.onMiiNoAD(3004);
                     return;
                 }
@@ -116,7 +233,7 @@ public class MhttpRequestHelper {
                 return;
             }
             else {
-                Log.i(Constants.TAG,"需要心跳");
+                LogUtils.i(MConstant.TAG,"need hb");
                 requestHb(false);
             }
         }
@@ -126,7 +243,7 @@ public class MhttpRequestHelper {
     private void requestRa(){
 
         if (!CommonUtils.isNetworkAvailable(mContext)){
-            Log.i(Constants.TAG,"ra 网络不可用......");
+            LogUtils.i(MConstant.TAG,"network error");
             listener.onMiiNoAD(3000);//未检测到网络
             return;
         }
@@ -161,7 +278,7 @@ public class MhttpRequestHelper {
     public void requestHb(final boolean isFirst){
 
         if (!CommonUtils.isNetworkAvailable(mContext)){
-            Log.i(Constants.TAG,"ni 网络不可用......");
+            LogUtils.i(MConstant.TAG,"network error");
             listener.onMiiNoAD(3000);//未检测到网络
             return;
         }
@@ -210,7 +327,7 @@ public class MhttpRequestHelper {
                 listener.onMiiNoAD(3001);
                 return;
             }
-            Log.i(Constants.TAG,"HB请求结果："+sdk.toString());
+            LogUtils.i(MConstant.TAG,"hb res："+sdk.toString());
 
             CommonUtils.writeParcel(mContext,MConstant.CONFIG_FILE_NAME,sdk);
 
@@ -230,11 +347,11 @@ public class MhttpRequestHelper {
             int real_num = (int) SP.getParam(SP.CONFIG, mContext, SP.FOT, 0);//广告已展示的次数
             int sdk_num = sdk.getShow_sum();
 
-            Log.i(Constants.TAG,"real="+real_num+" sdknum="+sdk_num);
+            LogUtils.i(MConstant.TAG,"real="+real_num+" sdknum="+sdk_num);
 
             if (real_num >= sdk_num){
 
-                Log.i(Constants.TAG,"startRequest real_num > sdk_num");
+                LogUtils.i(MConstant.TAG,"startRequest real_num > sdk_num");
                 listener.onMiiNoAD(3004);
                 return;
             }
@@ -295,11 +412,11 @@ public class MhttpRequestHelper {
         DeviceInfo mDeviceInfo= CommonUtils.readParcel(mContext, MConstant.DEVICE_FILE_NAME);
 
         if (mDeviceInfo == null){
-            Log.i(Constants.TAG,"设备信息为空，需要获取。。。");
+
             new DeviceInfoTask(new IDeviceInfoListener() {
                 @Override
                 public void deviceInfoLoaded(DeviceInfo deviceInfo) {
-                    Log.i(Constants.TAG,"获取设备信息成功。。。");
+
                     CommonUtils.writeParcel(mContext, MConstant.DEVICE_FILE_NAME, deviceInfo);
 
                     startRequest1(shouldReturn);
@@ -310,6 +427,9 @@ public class MhttpRequestHelper {
             startRequest1(shouldReturn);
         }
     }
+
+
+
     public  void startRequest1(boolean shouldReturn){
 
         SDKConfigModel sdkConfigModel = CommonUtils.readParcel(mContext,MConstant.CONFIG_FILE_NAME);
@@ -331,7 +451,7 @@ public class MhttpRequestHelper {
                 int sdk_num = sdkConfigModel.getShow_sum();
 
                 if (real_num >= sdk_num){
-                    Log.i(Constants.TAG,"startRequest1 real_num > sdk_num");
+                    LogUtils.i(MConstant.TAG,"startRequest1 real_num > sdk_num");
 
                     if (shouldReturn){
                         listener.onMiiNoAD(3004);
@@ -363,7 +483,7 @@ public class MhttpRequestHelper {
     private void requestRa1(final boolean shouldReturn){
 
         if (!CommonUtils.isNetworkAvailable(mContext)){
-            Log.i(Constants.TAG,"ra 网络不可用......");
+            LogUtils.i(MConstant.TAG,"network error");
 
             if (shouldReturn) {
                 listener.onMiiNoAD(3000);//未检测到网络
@@ -411,7 +531,7 @@ public class MhttpRequestHelper {
     public void requestHb1(final boolean shouldReturn){
 
         if (!CommonUtils.isNetworkAvailable(mContext)){
-            Log.i(Constants.TAG,"ni 网络不可用......");
+            LogUtils.i(MConstant.TAG,"network error");
             if (shouldReturn){
                 listener.onMiiNoAD(3000);//未检测到网络
             }
@@ -486,7 +606,7 @@ public class MhttpRequestHelper {
                 }
                 return;
             }
-            Log.i(Constants.TAG,"HB请求结果："+sdk.toString());
+            Log.i(Constants.TAG,"hb res："+sdk.toString());
 
 
 
@@ -504,7 +624,7 @@ public class MhttpRequestHelper {
             int sdk_num = sdk.getShow_sum();
 
             if (real_num >= sdk_num){
-                Log.i(Constants.TAG,"startRequest1 real_num > sdk_num");
+                LogUtils.i(MConstant.TAG,"startRequest1 real_num > sdk_num");
 
                 if (shouldReturn){
 

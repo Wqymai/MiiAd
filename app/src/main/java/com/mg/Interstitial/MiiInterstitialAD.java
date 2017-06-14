@@ -33,12 +33,13 @@ import com.mg.comm.MConstant;
 import com.mg.comm.MhttpRequestHelper;
 import com.mg.comm.MiiADListener;
 import com.mg.comm.MiiBaseAD;
-import com.mg.demo.Constants;
+
 import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
 import com.mg.others.model.SDKConfigModel;
 import com.mg.others.utils.CommonUtils;
+import com.mg.others.utils.LogUtils;
 import com.mg.others.utils.SP;
 import com.qq.e.ads.interstitial.AbstractInterstitialADListener;
 import com.qq.e.ads.interstitial.InterstitialAD;
@@ -84,7 +85,7 @@ public class MiiInterstitialAD  extends MiiBaseAD{
                     checkOpenAD();
                     break;
                 case 200:
-                    Log.i(Constants.TAG,"收到RA请求成功的消息 插屏");
+
                     try {
                         adModel= (AdModel) msg.obj;
                         checkADType(adModel);
@@ -94,7 +95,7 @@ public class MiiInterstitialAD  extends MiiBaseAD{
                     }
                     break;
                 case 300:
-                    Log.i(Constants.TAG,"收到下载图片bitmap 插屏");
+
                     try {
                         Bitmap bitmap= (Bitmap) msg.obj;
                         if (bitmap == null){
@@ -151,7 +152,9 @@ public class MiiInterstitialAD  extends MiiBaseAD{
 
 
     private void openGDTAD(final boolean shouldReturn){
-        Log.i(Constants.TAG,"加载广点通广告...插屏");
+        LogUtils.i(MConstant.TAG,"load gdt");
+
+        new MhttpRequestHelper(mContext,mainHandler,0,listener).fetchMGAD3();
         iad = new InterstitialAD(mActivity, appid, interid);
         iad.setADListener(new AbstractInterstitialADListener() {
             @Override
@@ -365,7 +368,7 @@ public class MiiInterstitialAD  extends MiiBaseAD{
     }
 
     private void setClick(boolean ishtml5, final Bitmap bitmap){
-       Log.i(Constants.TAG,"setClick ishtml5="+ishtml5);
+
        try {
             cancel.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -490,11 +493,11 @@ public class MiiInterstitialAD  extends MiiBaseAD{
         Configuration mConfiguration = mActivity.getResources().getConfiguration(); //获取设置的配置信息
         int ori = mConfiguration.orientation ; //获取屏幕方向
         if (ori == mConfiguration.ORIENTATION_PORTRAIT) {
-            Log.i(Constants.TAG,"竖屏...");
+
             mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             return true;
         } else if (ori == mConfiguration.ORIENTATION_LANDSCAPE){
-            Log.i(Constants.TAG,"横屏...");
+
             mActivity.setRequestedOrientation(SCREEN_ORIENTATION_LANDSCAPE);
             return false;
         }

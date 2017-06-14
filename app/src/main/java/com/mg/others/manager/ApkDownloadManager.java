@@ -85,7 +85,7 @@ public class ApkDownloadManager implements HttpDownloadListener {
             //下载完成上报
             HttpManager.reportEvent(adModel1, AdReport.EVENT_DOWNLOAD_COMPLETE,mContext);
             String filePath = adModel1.getApkFilePath();
-            LogUtils.i(MConstant.TAG,"location="+filePath);
+
             CommonUtils.installNormal(mContext,filePath);
 
             downloadedList.put(adModel1.getPkName(),adModel1);

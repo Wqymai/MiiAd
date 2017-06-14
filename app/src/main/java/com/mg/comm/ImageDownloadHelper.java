@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import com.mg.demo.Constants;
 import com.mg.others.http.HttpUtils;
 import com.mg.others.utils.CommonUtils;
+import com.mg.others.utils.LogUtils;
 import com.mg.others.utils.imager.DownloadImgUtils;
 import com.mg.others.utils.imager.ImageSizeUtil;
 
@@ -34,7 +35,7 @@ public class ImageDownloadHelper {
 
 
     public  void downloadShowImage(Context context, final String url, final ImageView imageView, final Handler mainHandler){
-        Log.i(Constants.TAG,"要下载图片的url="+url);
+        LogUtils.i(Constants.TAG,"url="+url);
 
         final File file = getDiskCacheDir(context, md5(url));
 

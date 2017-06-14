@@ -30,10 +30,10 @@ dependencies {
 
 task clearJar(type: Delete) {
     //删除以前有的
-    delete 'libs/adsdk.jar'
+    delete 'libs/MGUnionSDK.jar'
 }
 task makeJar(type:org.gradle.api.tasks.bundling.Jar) {
-    baseName 'adsdk'
+    baseName 'MGUnionSDK'
     //从哪里打包class文件,可以指定文件和目录
     from('build/intermediates/classes/release/com')
     //打包到jar后的目录结构

@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.mg.others.model.AdModel;
+import com.mg.others.utils.LogUtils;
 
 /**
  * Created by wuqiyan on 17/6/9.
@@ -22,13 +23,13 @@ public class LoadHelperService extends Service {
 
     @Override
     public void onCreate() {
-        Log.i("AD_DEMO","service onCreate...");
+        LogUtils.i(MConstant.TAG,"service onCreate...");
         super.onCreate();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.i("AD_DEMO","service onStartCommand...");
+        LogUtils.i(MConstant.TAG,"service onStartCommand...");
         AdModel adModel= (AdModel) intent.getSerializableExtra("ad");
         new ADClickHelper(this).apkDownload(adModel);
         return super.onStartCommand(intent, flags, startId);

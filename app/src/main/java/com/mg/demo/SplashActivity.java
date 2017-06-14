@@ -38,7 +38,7 @@ public class    SplashActivity extends Activity implements MiiADListener {
 
     private void fetchAD(SplashActivity mainActivity, ViewGroup container, TextView skipView,
                                MiiADListener listener) {
-        splashAD=new MiiSplashAD(mainActivity,container,skipView,listener, Constants.APPID,Constants.SplashPosID);
+        splashAD=new MiiSplashAD(mainActivity,container,skipView,Constants.APPID,Constants.SplashPosID,listener);
     }
 
     @Override

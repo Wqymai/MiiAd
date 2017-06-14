@@ -12,6 +12,7 @@ import com.mg.mv4.ActivityCompat;
 import com.mg.mv4.ContextCompat;
 import com.mg.others.model.SDKConfigModel;
 import com.mg.others.utils.CommonUtils;
+import com.mg.others.utils.LogUtils;
 import com.mg.others.utils.SP;
 
 import static android.Manifest.permission.READ_PHONE_STATE;
@@ -49,7 +50,7 @@ public class MiiBaseAD {
         int sf_gdt = sdk.getSf_gdt();
         int sum = sf_gdt + sf_mg;
         if (sum == 0){
-            Log.i(Constants.TAG,"sum==0");
+            LogUtils.i(MConstant.TAG,"sum==0");
             saModel.type = 1;
         }
         else if (sum == 100){
@@ -57,23 +58,24 @@ public class MiiBaseAD {
             int show_percentage = (int) ((Math.random() * 100)+1);
             if (show_percentage <= sf_mg){
 
-                Log.i(Constants.TAG,"sum==100 MG");
+                LogUtils.i(MConstant.TAG,"sum==100 MG");
                 saModel.firstChoose = 1;
 
             }
             else {
                 saModel.firstChoose = 2;
-                Log.i(Constants.TAG,"sum==100 GDT");
+                LogUtils.i(MConstant.TAG,"sum==100 GDT");
             }
         }
         else if (sum > 100){
             saModel.type = 3;
             if (sf_mg > sf_gdt){
+                LogUtils.i(MConstant.TAG,"sum > 100 MG");
                 saModel.firstChoose = 1;
             }
             else {
 
-                Log.i(Constants.TAG,"sum > 100 GDT");
+                LogUtils.i(MConstant.TAG,"sum > 100 GDT");
                 saModel.firstChoose = 2;
 
             }

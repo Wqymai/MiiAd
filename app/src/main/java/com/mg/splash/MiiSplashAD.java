@@ -27,6 +27,7 @@ import android.widget.TextView;
 
 import com.mg.comm.ADClickHelper;
 import com.mg.comm.ImageDownloadHelper;
+import com.mg.comm.MConstant;
 import com.mg.comm.MhttpRequestHelper;
 import com.mg.comm.MiiADListener;
 import com.mg.comm.MiiBaseAD;
@@ -35,6 +36,7 @@ import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
 import com.mg.others.model.SDKConfigModel;
+import com.mg.others.utils.LogUtils;
 import com.mg.others.utils.SP;
 import com.qq.e.ads.splash.SplashAD;
 import com.qq.e.ads.splash.SplashADListener;
@@ -73,7 +75,7 @@ public class MiiSplashAD extends MiiBaseAD {
                      break;
 
                  case 200:
-                    Log.i(Constants.TAG,"收到RA请求成功的消息");
+                    LogUtils.i(Constants.TAG,"receive ra...");
                     try {
                         adModel= (AdModel) msg.obj;
                         checkADType(adModel);
@@ -121,7 +123,7 @@ public class MiiSplashAD extends MiiBaseAD {
      };
 
 
-    public  MiiSplashAD(Activity activity, ViewGroup adContainer,View skipContainer,MiiADListener adListener,String appid,String splashid){
+    public  MiiSplashAD(Activity activity, ViewGroup adContainer,View skipContainer,String appid,String splashid,MiiADListener adListener){
 
         this.mActivity=activity;
 
@@ -163,7 +165,7 @@ public class MiiSplashAD extends MiiBaseAD {
     private void  checkADType(AdModel adModel){
 
         if (adModel.getType() == 4){//h5广告
-            Log.i(Constants.TAG,"是HTML5广告...");
+
             webView = new WebView(mActivity);
             FrameLayout.LayoutParams params_webview = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
             webView.setLayoutParams(params_webview);
@@ -225,7 +227,6 @@ public class MiiSplashAD extends MiiBaseAD {
             });
 
         }else {
-            Log.i("Constants.TAG","不是HTML5广告...");
             FrameLayout.LayoutParams layoutParams=new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
             adImageView=new ImageView(mActivity);
             adImageView.setLayoutParams(layoutParams);
@@ -377,7 +378,9 @@ public class MiiSplashAD extends MiiBaseAD {
     }
 
     private void openGDTAD(final boolean shouldReturn){
-        Log.i(Constants.TAG,"加载广点通广告...");
+        LogUtils.i(MConstant.TAG,"load gdt...");
+
+        new MhttpRequestHelper(mContext,mainHandler,0,listener).fetchMGAD3();
 
         new SplashAD(mActivity, adContainer, skipContainer, appid,splashid, new SplashADListener() {
             @Override
