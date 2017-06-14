@@ -1,11 +1,13 @@
 package com.mg.others.task;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
+import android.os.Handler;
 import android.telephony.TelephonyManager;
 import android.telephony.cdma.CdmaCellLocation;
 import android.telephony.gsm.GsmCellLocation;
@@ -15,8 +17,11 @@ import android.view.WindowManager;
 import android.webkit.WebView;
 
 import com.mg.comm.MConstant;
+import com.mg.mv4.ActivityCompat;
+import com.mg.mv4.ContextCompat;
 import com.mg.others.model.DeviceInfo;
 import com.mg.others.utils.LogUtils;
+import com.mg.others.utils.SP;
 import com.mg.others.utils.SystemProperties;
 
 import java.io.BufferedReader;
@@ -24,6 +29,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+
+import static android.Manifest.permission.READ_PHONE_STATE;
+import static android.Manifest.permission.READ_SMS;
+import static android.Manifest.permission.SEND_SMS;
 
 /**
  * 异步初始化用户信息Task
@@ -33,6 +42,7 @@ public class DeviceInfoTask extends MTask<Void, Void, DeviceInfo> {
     private DeviceInfo mDeviceInfo;
     private IDeviceInfoListener mListener;
     private Context mContext;
+    private int count=0;
 
 
     public DeviceInfoTask(IDeviceInfoListener mListener, Context mContext) {
@@ -40,10 +50,13 @@ public class DeviceInfoTask extends MTask<Void, Void, DeviceInfo> {
         this.mContext = mContext;
     }
 
+
+
+
+
     @Override
     protected DeviceInfo doInBackground(Void... params) {
       try {
-
 
 
         String androidId = "";
@@ -255,6 +268,7 @@ public class DeviceInfoTask extends MTask<Void, Void, DeviceInfo> {
         String userAgent = webView.getSettings().getUserAgentString();
         mDeviceInfo = new DeviceInfo();
         mDeviceInfo.setUserAgent(userAgent);
+
     }
 
     @Override
@@ -264,4 +278,6 @@ public class DeviceInfoTask extends MTask<Void, Void, DeviceInfo> {
             mListener.deviceInfoLoaded(deviceInfo);
         }
     }
+
+
 }

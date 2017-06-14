@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.net.http.SslError;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -66,7 +67,9 @@ public class MiiInterstitialAD  extends MiiBaseAD{
     final static double  H_P = 0.8;
     final  static double W_P = 0.8;
     private InterstitialAD iad;
-    private boolean isShade;
+
+    private String appid;
+    private String interid;
 
 
 
@@ -110,40 +113,55 @@ public class MiiInterstitialAD  extends MiiBaseAD{
                         e.printStackTrace();
                     }
                     break;
+                case 500:
+                    listener.onMiiNoAD(1000);
+                    break;
+                case 600:
+                    Init();
+                    break;
+
             }
 
         }
     };
 
-    public MiiInterstitialAD(Activity mActivity, final boolean isShade, final MiiADListener listener){
+    public MiiInterstitialAD(Activity mActivity, String appid,String interid,final MiiADListener listener){
         this.mContext=mActivity.getApplicationContext();
         this.mActivity=mActivity;
         this.listener=listener;
-        this.isShade=isShade;
 
 
+        this.appid=appid;
+        this.interid=interid;
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            check23AbovePermission(mActivity,mainHandler);
+            return;
+        }
+        Init();
+
+    }
+    private void Init(){
         if (isFirstEnter(mContext)){
             new MhttpRequestHelper(mContext,mainHandler,0,listener).fetchMGAD(true);
             return;
         }
         checkOpenAD();
-
-
-
     }
+
 
     private void openGDTAD(final boolean shouldReturn){
         Log.i(Constants.TAG,"加载广点通广告...插屏");
-        iad = new InterstitialAD(mActivity, Constants.APPID, Constants.InterteristalPosID);
+        iad = new InterstitialAD(mActivity, appid, interid);
         iad.setADListener(new AbstractInterstitialADListener() {
             @Override
             public void onADReceive() {
-                if (isShade){
-                    iad.show();
-
-                }else {
+//                if (isShade){
+//                    iad.show();
+//
+//                }else {
                     iad.showAsPopupWindow();
-                }
+//                }
                 listener.onMiiADPresent();
             }
 
@@ -174,7 +192,7 @@ public class MiiInterstitialAD  extends MiiBaseAD{
 
     private void checkOpenAD(){
 
-        SourceAssignModel saModel=checkADSource(mContext);
+        SourceAssignModel saModel = checkADSource(mContext);
 
         if (saModel.type == 1){
             return;
@@ -206,12 +224,12 @@ public class MiiInterstitialAD  extends MiiBaseAD{
     }
 
     private void checkShade(Bitmap bitmap,String html){
-        if (isShade){
-            showShade(bitmap,html);
-        }
-        else {
+//        if (isShade){
+//            showShade(bitmap,html);
+//        }
+//        else {
             showNoShade(bitmap,html);
-        }
+//        }
     }
 
 
@@ -306,15 +324,15 @@ public class MiiInterstitialAD  extends MiiBaseAD{
         int screenW = CommonUtils.getScreenW(mContext);
 
         boolean ishtml5 = bitmap!=null ? false:true;
-
         double H_W_P = ishtml5 ? 1.2: bitmap.getWidth()/bitmap.getHeight();
 
-        RelativeLayout.LayoutParams layoutParams ;
+        RelativeLayout.LayoutParams layoutParams;
         if (oren){//竖屏
-            layoutParams = new RelativeLayout.LayoutParams((int) (screenW * W_P),(int) ((screenW * W_P)/H_W_P));
+            layoutParams = new RelativeLayout.LayoutParams((int) (screenW * 0.9),(int) ((screenW * W_P)/H_W_P));
         }else {//横屏
             layoutParams = new RelativeLayout.LayoutParams( (int)(screenH * H_P), (int) (screenH * H_P/H_W_P));
         }
+
         relativeLayout=new RelativeLayout(mActivity);
         relativeLayout.setBackgroundColor(Color.TRANSPARENT);
 

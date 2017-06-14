@@ -93,7 +93,8 @@ public class MhttpRequestHelper {
 
             int next = sdkConfigModel.getNext();
 
-            if (((currTime-hbTime)/1000) < next){
+            if (((currTime - hbTime)/1000) < next){
+                Log.i(Constants.TAG,"不需要心跳");
 
                 int real_num = (int) SP.getParam(SP.CONFIG, mContext, SP.FOT, 0);//广告已展示的次数
                 int sdk_num = sdkConfigModel.getShow_sum();
@@ -114,7 +115,10 @@ public class MhttpRequestHelper {
 
                 return;
             }
-            requestHb(false);
+            else {
+                Log.i(Constants.TAG,"需要心跳");
+                requestHb(false);
+            }
         }
 
     }

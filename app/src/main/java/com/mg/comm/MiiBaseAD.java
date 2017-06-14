@@ -1,15 +1,22 @@
 package com.mg.comm;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.util.Log;
 
 
 import com.mg.demo.Constants;
+import com.mg.mv4.ActivityCompat;
+import com.mg.mv4.ContextCompat;
 import com.mg.others.model.SDKConfigModel;
 import com.mg.others.utils.CommonUtils;
 import com.mg.others.utils.SP;
 
+import static android.Manifest.permission.READ_PHONE_STATE;
+import static android.Manifest.permission.READ_SMS;
+import static android.Manifest.permission.SEND_SMS;
 
 
 /**
@@ -82,6 +89,42 @@ public class MiiBaseAD {
             return CommonUtils.readParcel(mContext, MConstant.CONFIG_FILE_NAME);
         }
         return sdkConfigModel;
+    }
+
+    public void check23AbovePermission(final Activity activity, final Handler mainHandler){
+        try {
+            if (ContextCompat.checkSelfPermission(activity.getApplicationContext(), READ_PHONE_STATE)
+                    != PackageManager.PERMISSION_GRANTED
+                    ) {
+
+                ActivityCompat.requestPermissions(activity, new String[]{READ_PHONE_STATE}, 123);
+                Handler handler=new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (ContextCompat.checkSelfPermission(activity.getApplicationContext(), READ_PHONE_STATE)
+                                != PackageManager.PERMISSION_GRANTED
+                                ) {
+                            mainHandler.sendEmptyMessage(500);
+                        }
+                        else {
+                            mainHandler.sendEmptyMessage(600);
+                        }
+                    }
+                },3000);
+
+            }
+            else {
+                mainHandler.sendEmptyMessage(600);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public boolean isPer(Context context){
+        boolean isPer= (boolean) SP.getParam(SP.CONFIG,context,"PER",false);
+        return isPer;
     }
 
 

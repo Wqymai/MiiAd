@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.net.http.SslError;
+import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
@@ -57,6 +58,8 @@ public class MiiSplashAD extends MiiBaseAD {
      private ImageView adImageView;
      private WebView webView;
      CountDownTimer timer;
+    private String appid;
+    private String splashid;
 
 
 
@@ -101,13 +104,24 @@ public class MiiSplashAD extends MiiBaseAD {
                          e.printStackTrace();
                      }
                      break;
+                 case 500:
+
+                     listener.onMiiNoAD(1000);
+
+                     break;
+                 case 600:
+
+                     Init();
+
+                     break;
+
              }
 
          }
      };
 
 
-    public  MiiSplashAD(Activity activity, ViewGroup adContainer,View skipContainer,MiiADListener adListener){
+    public  MiiSplashAD(Activity activity, ViewGroup adContainer,View skipContainer,MiiADListener adListener,String appid,String splashid){
 
         this.mActivity=activity;
 
@@ -118,6 +132,9 @@ public class MiiSplashAD extends MiiBaseAD {
         this.skipContainer=skipContainer;
 
         this.listener=adListener;
+        this.appid=appid;
+        this.splashid=splashid;
+
 
 
         if (skipContainer == null){
@@ -125,21 +142,27 @@ public class MiiSplashAD extends MiiBaseAD {
             return;
         }
 
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            check23AbovePermission(mActivity,mainHandler);
+            return;
+        }
+
+        Init();
+
+    }
+
+    private void Init(){
+
         if (isFirstEnter(mContext)){
             new MhttpRequestHelper(mContext,mainHandler,0,listener).fetchMGAD(true);
             return;
         }
-
         startupAD();
-
-
     }
 
     private void  checkADType(AdModel adModel){
 
-
         if (adModel.getType() == 4){//h5广告
-
             Log.i(Constants.TAG,"是HTML5广告...");
             webView = new WebView(mActivity);
             FrameLayout.LayoutParams params_webview = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
@@ -356,7 +379,7 @@ public class MiiSplashAD extends MiiBaseAD {
     private void openGDTAD(final boolean shouldReturn){
         Log.i(Constants.TAG,"加载广点通广告...");
 
-        new SplashAD(mActivity, adContainer, skipContainer, Constants.APPID, Constants.SplashPosID, new SplashADListener() {
+        new SplashAD(mActivity, adContainer, skipContainer, appid,splashid, new SplashADListener() {
             @Override
             public void onADDismissed() {
 

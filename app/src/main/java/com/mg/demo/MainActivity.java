@@ -38,7 +38,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
 
-                new MiiInterstitialAD(MainActivity.this,false, new MiiADListener() {
+                new MiiInterstitialAD(MainActivity.this,Constants.APPID,Constants.InterteristalPosID, new MiiADListener() {
                     @Override
                     public void onMiiNoAD(int errCode) {
                         Log.i(Constants.TAG,"onMiiNoAD "+errCode);
@@ -67,38 +67,38 @@ public class MainActivity extends Activity {
             }
         });
 
-        openInterstitial2 = (Button) findViewById(R.id.open_interstitial_ad2);
-        openInterstitial2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                new MiiInterstitialAD(MainActivity.this,true, new MiiADListener() {
-                    @Override
-                    public void onMiiNoAD(int errCode) {
-                        Log.i(Constants.TAG,"onMiiNoAD 2"+errCode);
-                    }
-
-                    @Override
-                    public void onMiiADDismissed() {
-                        Log.i(Constants.TAG,"onMiiADDismissed 2");
-                    }
-
-                    @Override
-                    public void onMiiADPresent() {
-                        Log.i(Constants.TAG,"onMiiADPresent 2");
-                    }
-
-                    @Override
-                    public void onMiiADClicked() {
-                        Log.i(Constants.TAG,"onMiiADClicked 2");
-                    }
-
-                    @Override
-                    public void onMiiADTick(long millisUntilFinished) {
-
-                    }
-                });
-            }
-        });
+//        openInterstitial2 = (Button) findViewById(R.id.open_interstitial_ad2);
+//        openInterstitial2.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                new MiiInterstitialAD(MainActivity.this,true, new MiiADListener() {
+//                    @Override
+//                    public void onMiiNoAD(int errCode) {
+//                        Log.i(Constants.TAG,"onMiiNoAD 2"+errCode);
+//                    }
+//
+//                    @Override
+//                    public void onMiiADDismissed() {
+//                        Log.i(Constants.TAG,"onMiiADDismissed 2");
+//                    }
+//
+//                    @Override
+//                    public void onMiiADPresent() {
+//                        Log.i(Constants.TAG,"onMiiADPresent 2");
+//                    }
+//
+//                    @Override
+//                    public void onMiiADClicked() {
+//                        Log.i(Constants.TAG,"onMiiADClicked 2");
+//                    }
+//
+//                    @Override
+//                    public void onMiiADTick(long millisUntilFinished) {
+//
+//                    }
+//                });
+//            }
+//        });
     }
 }

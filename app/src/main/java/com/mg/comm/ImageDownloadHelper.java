@@ -46,23 +46,13 @@ public class ImageDownloadHelper {
 
             Bitmap bm = null;
 
-            Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-            oriW = bitmap.getWidth();
-            oriH = bitmap.getHeight();
-            Log.i(Constants.TAG,"oriW="+oriW+" oriH="+oriH);
-            bitmap.recycle();
-
-
-            int screenH = CommonUtils.getScreenH(context);
-            int screenW = CommonUtils.getScreenW(context);
-
             if (imageView == null) {//插屏
 
-                bm = loadImageFromLocal(file.getAbsolutePath(),0,0);
+                bm = loadImageFromLocal(file.getAbsolutePath());
 
             } else {
 
-                bm = loadImageFromLocal(file.getAbsolutePath(),0,0);
+                bm = loadImageFromLocal(file.getAbsolutePath());
             }
             Message msg = new Message();
             msg.obj = bm;
@@ -79,9 +69,9 @@ public class ImageDownloadHelper {
                     {
                         Bitmap bm = null;
                         if (imageView == null) {//插屏
-                            bm = loadImageFromLocal(file.getAbsolutePath(),0,0);
+                            bm = loadImageFromLocal(file.getAbsolutePath());
                         } else {
-                            bm = loadImageFromLocal(file.getAbsolutePath(),0,0);
+                            bm = loadImageFromLocal(file.getAbsolutePath());
                         }
                         Message msg = new Message();
                         msg.obj = bm;
@@ -100,14 +90,14 @@ public class ImageDownloadHelper {
         cachePath = context.getCacheDir().getPath();
         return new File(cachePath + File.separator + uniqueName);
     }
-    public static   Bitmap loadImageFromLocal( String path,int w,int h)
+    public static   Bitmap loadImageFromLocal( String path)
     {
         Bitmap bm;
 
-        bm = decodeSampledBitmapFromPath(path,w,h);
+        bm = decodeSampledBitmapFromPath(path);
         return bm;
     }
-    public static   Bitmap decodeSampledBitmapFromPath(String path,int width,int height)
+    public static   Bitmap decodeSampledBitmapFromPath(String path)
     {
 
         BitmapFactory.Options options = new BitmapFactory.Options();
@@ -115,12 +105,12 @@ public class ImageDownloadHelper {
 
         BitmapFactory.decodeFile(path, options);
 
-        if (width==0 && height==0){
+//        if (width==0 && height==0){
             options.inSampleSize=1;
-        }
-        else {
-           options.inSampleSize = ImageSizeUtil.caculateInSampleSize(options, width, height);
-        }
+//        }
+//        else {
+//           options.inSampleSize = ImageSizeUtil.caculateInSampleSize(options, width, height);
+//        }
         // 使用获得到的InSampleSize再次解析图片
         options.inJustDecodeBounds = false;
         Bitmap bitmap = BitmapFactory.decodeFile(path, options);
