@@ -23,6 +23,9 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+
         openSplash= (Button) findViewById(R.id.open_splash_ad);
 
         openSplash.setOnClickListener(new View.OnClickListener() {
