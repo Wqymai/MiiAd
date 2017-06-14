@@ -25,8 +25,7 @@ import com.mg.others.utils.LocalKeyConstants;
 import com.mg.others.utils.MiiLocalStrEncrypt;
 import com.mg.others.utils.SP;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
 import java.util.List;
 import java.util.Map;
 
@@ -61,7 +60,7 @@ public class MhttpRequestHelper {
             new DeviceInfoTask(new IDeviceInfoListener() {
                 @Override
                 public void deviceInfoLoaded(DeviceInfo deviceInfo) {
-
+                    Log.i(Constants.TAG,"获取到的设备信息。。"+deviceInfo.toString());
 
                     CommonUtils.writeParcel(mContext, MConstant.DEVICE_FILE_NAME, deviceInfo);
 
@@ -98,8 +97,17 @@ public class MhttpRequestHelper {
 
                 int real_num = (int) SP.getParam(SP.CONFIG, mContext, SP.FOT, 0);//广告已展示的次数
                 int sdk_num = sdkConfigModel.getShow_sum();
+
+                Log.i(Constants.TAG,"real="+real_num+" sdknum="+sdk_num);
                 if (real_num >= sdk_num){
+
                     Log.i(Constants.TAG,"startRequest real_num > sdk_num");
+                    listener.onMiiNoAD(3004);
+                    return;
+                }
+                if (!sdkConfigModel.isAdShow()){
+
+                    listener.onMiiNoAD(3003);
                     return;
                 }
                 requestRa();
@@ -126,7 +134,7 @@ public class MhttpRequestHelper {
         HttpUtils httpUtils = new HttpUtils(mContext);
         final  String url=httpManager.getRaUrl(RA);
         if (url == null || url.equals("")){
-            listener.onMiiNoAD(3003);
+            listener.onMiiNoAD(3002);
             return;
         }
 
@@ -142,7 +150,7 @@ public class MhttpRequestHelper {
             @Override
             public void onFail(Exception e) {
 
-                listener.onMiiNoAD(3003);
+                listener.onMiiNoAD(3002);
             }
         },params);
     }
@@ -179,8 +187,6 @@ public class MhttpRequestHelper {
             }
         });
 
-
-
     }
 
 
@@ -191,13 +197,13 @@ public class MhttpRequestHelper {
             String data = new String(Base64.decode(response.entity(),Base64.NO_WRAP));
 
             if (data == null){
-                listener.onMiiNoAD(3002);//hb解析失败
+                listener.onMiiNoAD(3001);
                 return;
             }
             sdk = ConfigParser.parseConfig(data);
 
             if (sdk == null){
-                listener.onMiiNoAD(3002);//hb解析失败
+                listener.onMiiNoAD(3001);
                 return;
             }
             Log.i(Constants.TAG,"HB请求结果："+sdk.toString());
@@ -206,20 +212,38 @@ public class MhttpRequestHelper {
 
             long writeTime = (long) SP.getParam(SP.CONFIG, mContext, SP.FOS, 0l);
             long currentTime = System.currentTimeMillis();
+
             if (httpManager.DateCompare(writeTime) || writeTime == 0l){
                 SP.setParam(SP.CONFIG, mContext, SP.FOT, 0);
                 SP.setParam(SP.CONFIG, mContext, SP.FOS, currentTime);
             }
 
-
             if (isFirst){
                 mainHandler.sendEmptyMessage(100);
                 return;
             }
+
+            int real_num = (int) SP.getParam(SP.CONFIG, mContext, SP.FOT, 0);//广告已展示的次数
+            int sdk_num = sdk.getShow_sum();
+
+            Log.i(Constants.TAG,"real="+real_num+" sdknum="+sdk_num);
+
+            if (real_num >= sdk_num){
+
+                Log.i(Constants.TAG,"startRequest real_num > sdk_num");
+                listener.onMiiNoAD(3004);
+                return;
+            }
+            if (!sdk.isAdShow()){
+
+                listener.onMiiNoAD(3003);
+                return;
+            }
+
             requestRa();
         }
         catch (Exception e){
-            listener.onMiiNoAD(3002);//hb解析失败
+            listener.onMiiNoAD(3001);//hb解析失败
             e.printStackTrace();
         }
 
@@ -236,14 +260,14 @@ public class MhttpRequestHelper {
         ads = AdParser.parseAd(temp);
 
         if (ads == null || ads.size() <= 0){
-            listener.onMiiNoAD(3004);//ra 解析失败
+            listener.onMiiNoAD(3002);//ra 解析失败
             return;
         }
 
 
         AdModel ad = ads.get(0);
         if (ad == null){
-            listener.onMiiNoAD(3004);//ra 解析失败
+            listener.onMiiNoAD(3002);//ra 解析失败
             return;
         }
 
@@ -254,7 +278,7 @@ public class MhttpRequestHelper {
 
       }
       catch (Exception e){
-          listener.onMiiNoAD(3004);//ra 解析失败
+          listener.onMiiNoAD(3002);//ra 解析失败
           e.printStackTrace();
       }
     }
@@ -304,7 +328,25 @@ public class MhttpRequestHelper {
 
                 if (real_num >= sdk_num){
                     Log.i(Constants.TAG,"startRequest1 real_num > sdk_num");
+
+                    if (shouldReturn){
+                        listener.onMiiNoAD(3004);
+                    }
+                    else {
+                        mainHandler.sendEmptyMessage(400);
+                    }
                     return;
+                }
+                if (!sdkConfigModel.isAdShow()){
+
+                    if (shouldReturn){
+                        listener.onMiiNoAD(3003);
+                    }
+                    else {
+                        mainHandler.sendEmptyMessage(400);
+                    }
+                    return;
+
                 }
                 requestRa1(shouldReturn);
                 return;
@@ -341,7 +383,7 @@ public class MhttpRequestHelper {
             return;
         }
 
-        Map<String,String> params=httpManager.getParams2(RA,pt,0);//暂时写的
+        Map<String,String> params=httpManager.getParams2(RA,pt,0);
 
         httpUtils.post(url.trim(), new HttpListener() {
             @Override
@@ -354,7 +396,8 @@ public class MhttpRequestHelper {
             public void onFail(Exception e) {
 
                 if (shouldReturn){
-                    listener.onMiiNoAD(3003);
+
+                    listener.onMiiNoAD(3002);
                 }else {
                     mainHandler.sendEmptyMessage(400);
                 }
@@ -400,6 +443,7 @@ public class MhttpRequestHelper {
             public void onFail(Exception e) {
 
                 if (shouldReturn){
+
                      listener.onMiiNoAD(3001);
                 }
                 else {
@@ -420,7 +464,7 @@ public class MhttpRequestHelper {
 
             if (data == null){
                 if (shouldReturn){
-                   listener.onMiiNoAD(3002);//hb解析失败
+                   listener.onMiiNoAD(3001);//hb解析失败
                 }
                 else {
                     mainHandler.sendEmptyMessage(400);
@@ -431,7 +475,7 @@ public class MhttpRequestHelper {
 
             if (sdk == null){
                 if (shouldReturn) {
-                    listener.onMiiNoAD(3002);//hb解析失败
+                    listener.onMiiNoAD(3001);//hb解析失败
                 }
                 else {
                     mainHandler.sendEmptyMessage(400);
@@ -439,13 +483,51 @@ public class MhttpRequestHelper {
                 return;
             }
             Log.i(Constants.TAG,"HB请求结果："+sdk.toString());
+
+
+
             CommonUtils.writeParcel(mContext,MConstant.CONFIG_FILE_NAME,sdk);
+
+            long writeTime = (long) SP.getParam(SP.CONFIG, mContext, SP.FOS, 0l);
+            long currentTime = System.currentTimeMillis();
+
+            if (httpManager.DateCompare(writeTime) || writeTime == 0l){
+                SP.setParam(SP.CONFIG, mContext, SP.FOT, 0);
+                SP.setParam(SP.CONFIG, mContext, SP.FOS, currentTime);
+            }
+
+            int real_num = (Integer) SP.getParam(SP.CONFIG, mContext, SP.FOT, 0);
+            int sdk_num = sdk.getShow_sum();
+
+            if (real_num >= sdk_num){
+                Log.i(Constants.TAG,"startRequest1 real_num > sdk_num");
+
+                if (shouldReturn){
+
+                    listener.onMiiNoAD(3004);
+                }
+                else {
+                    mainHandler.sendEmptyMessage(400);
+                }
+                return;
+            }
+            if (!sdk.isAdShow()){
+
+                if (shouldReturn){
+                    listener.onMiiNoAD(3003);
+                }
+                else {
+                    mainHandler.sendEmptyMessage(400);
+                }
+                return;
+
+            }
 
             requestRa1(shouldReturn);
         }
         catch (Exception e){
            if (shouldReturn) {
-               listener.onMiiNoAD(3002);//hb解析失败
+               listener.onMiiNoAD(3001);//hb解析失败
            }
            else {
                mainHandler.sendEmptyMessage(400);
@@ -461,7 +543,7 @@ public class MhttpRequestHelper {
             String temp = new String(Base64.decode(response.entity(),Base64.NO_WRAP));
             if (temp == null){
                if (shouldReturn) {
-                   listener.onMiiNoAD(3004);//ra 解析失败
+                   listener.onMiiNoAD(3002);//ra 解析失败
                }
                else {
                    mainHandler.sendEmptyMessage(400);
@@ -473,7 +555,7 @@ public class MhttpRequestHelper {
 
             if (ads == null || ads.size() <= 0){
                if (shouldReturn) {
-                   listener.onMiiNoAD(3004);//ra 解析失败
+                   listener.onMiiNoAD(3002);//ra 解析失败
                }
                else {
                    mainHandler.sendEmptyMessage(400);
@@ -485,7 +567,7 @@ public class MhttpRequestHelper {
             AdModel ad = ads.get(0);
             if (ad == null){
                 if (shouldReturn) {
-                    listener.onMiiNoAD(3004);//ra 解析失败
+                    listener.onMiiNoAD(3002);//ra 解析失败
                 }
                 else {
                     mainHandler.sendEmptyMessage(400);
@@ -501,7 +583,7 @@ public class MhttpRequestHelper {
         }
         catch (Exception e){
             if (shouldReturn) {
-                listener.onMiiNoAD(3004);//ra 解析失败
+                listener.onMiiNoAD(3002);//ra 解析失败
             }
             else {
                 mainHandler.sendEmptyMessage(400);

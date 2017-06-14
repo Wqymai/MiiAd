@@ -10,12 +10,16 @@ import android.widget.ImageView;
 
 import com.mg.demo.Constants;
 import com.mg.others.http.HttpUtils;
+import com.mg.others.utils.CommonUtils;
 import com.mg.others.utils.imager.DownloadImgUtils;
-
+import com.mg.others.utils.imager.ImageSizeUtil;
 
 import java.io.File;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import static android.R.attr.height;
+import static android.R.attr.width;
 
 /**
  * Created by wuqiyan on 2017/6/8.
@@ -34,17 +38,31 @@ public class ImageDownloadHelper {
 
         final File file = getDiskCacheDir(context, md5(url));
 
+        int oriW;
+        int oriH;
+
         if (file.exists())// 如果在缓存文件中发现
         {
 
             Bitmap bm = null;
-            if (imageView == null) {
 
-                bm = loadImageFromLocal(file.getAbsolutePath());
+            Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+            oriW = bitmap.getWidth();
+            oriH = bitmap.getHeight();
+            Log.i(Constants.TAG,"oriW="+oriW+" oriH="+oriH);
+            bitmap.recycle();
+
+
+            int screenH = CommonUtils.getScreenH(context);
+            int screenW = CommonUtils.getScreenW(context);
+
+            if (imageView == null) {//插屏
+
+                bm = loadImageFromLocal(file.getAbsolutePath(),0,0);
 
             } else {
 
-                bm = loadImageFromLocal(file.getAbsolutePath());
+                bm = loadImageFromLocal(file.getAbsolutePath(),0,0);
             }
             Message msg = new Message();
             msg.obj = bm;
@@ -60,10 +78,10 @@ public class ImageDownloadHelper {
                     if (downloadState)// 如果下载成功
                     {
                         Bitmap bm = null;
-                        if (imageView == null) {
-                            bm = loadImageFromLocal(file.getAbsolutePath());
+                        if (imageView == null) {//插屏
+                            bm = loadImageFromLocal(file.getAbsolutePath(),0,0);
                         } else {
-                            bm = loadImageFromLocal(file.getAbsolutePath());
+                            bm = loadImageFromLocal(file.getAbsolutePath(),0,0);
                         }
                         Message msg = new Message();
                         msg.obj = bm;
@@ -82,23 +100,27 @@ public class ImageDownloadHelper {
         cachePath = context.getCacheDir().getPath();
         return new File(cachePath + File.separator + uniqueName);
     }
-    public static   Bitmap loadImageFromLocal( String path)
+    public static   Bitmap loadImageFromLocal( String path,int w,int h)
     {
         Bitmap bm;
 
-        bm = decodeSampledBitmapFromPath(path);
+        bm = decodeSampledBitmapFromPath(path,w,h);
         return bm;
     }
-    public static   Bitmap decodeSampledBitmapFromPath(String path)
+    public static   Bitmap decodeSampledBitmapFromPath(String path,int width,int height)
     {
 
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
 
-        Bitmap tempbm=BitmapFactory.decodeFile(path, options);
-        Log.i(Constants.TAG,"tempbm w="+tempbm.getWidth()+" h="+tempbm.getHeight());
+        BitmapFactory.decodeFile(path, options);
 
-        options.inSampleSize = 1;//ImageSizeUtil.caculateInSampleSize(options, width, height);
+        if (width==0 && height==0){
+            options.inSampleSize=1;
+        }
+        else {
+           options.inSampleSize = ImageSizeUtil.caculateInSampleSize(options, width, height);
+        }
         // 使用获得到的InSampleSize再次解析图片
         options.inJustDecodeBounds = false;
         Bitmap bitmap = BitmapFactory.decodeFile(path, options);

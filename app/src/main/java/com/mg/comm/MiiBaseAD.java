@@ -34,6 +34,9 @@ public class MiiBaseAD {
     protected SourceAssignModel checkADSource(Context mContext){
 
         SDKConfigModel sdk = CommonUtils.readParcel(mContext, MConstant.CONFIG_FILE_NAME);
+        if (sdk == null){
+            return null;
+        }
         SourceAssignModel saModel=new SourceAssignModel();
         int sf_mg = sdk.getSf_mg();
         int sf_gdt = sdk.getSf_gdt();
@@ -71,51 +74,7 @@ public class MiiBaseAD {
         return saModel;
     }
 
-    protected void openMGAD_Sequ_Gdtfail(Context mContext, Handler mainHandler, MiiADListener listener,SDKConfigModel sdk, int pt){
 
-        if (isADShow(sdk,mContext)){
-
-            new MhttpRequestHelper(mContext,mainHandler,2,listener).fetchMGAD1(true);
-
-        }
-        else {
-
-            listener.onMiiNoAD(2000);
-        }
-    }
-
-    protected  void openMGAD_Sequ(Context mContext, Handler mainHandler, MiiADListener listener,SDKConfigModel sdk, int pt){
-
-        Log.i(Constants.TAG,"加载麦广广告...openMGAD_Sequ");
-
-        SDKConfigModel sdkConfigModel = checkSdkConfig(sdk,mContext);
-
-        if (sdkConfigModel.isAdShow()){
-
-            new MhttpRequestHelper(mContext,mainHandler,pt,listener).fetchMGAD1(false);
-
-        }
-        else {
-
-            mainHandler.sendEmptyMessage(400);
-
-        }
-    }
-
-    protected void openMGAD_Single(Context mContext, Handler mainHandler, MiiADListener listener,SDKConfigModel sdk, int pt){
-
-        Log.i(Constants.TAG,"加载麦广广告...openMGAD_Single");
-
-        if (isADShow(sdk,mContext)){
-
-            new MhttpRequestHelper(mContext,mainHandler,pt,listener).fetchMGAD(false);
-
-        }else {
-
-            listener.onMiiNoAD(2000);
-
-        }
-    }
 
     protected SDKConfigModel checkSdkConfig(SDKConfigModel sdkConfigModel,Context mContext){
         if (sdkConfigModel == null){
@@ -125,15 +84,5 @@ public class MiiBaseAD {
         return sdkConfigModel;
     }
 
-    protected boolean isADShow(SDKConfigModel sdkConfigModel,Context mContext){
 
-        SDKConfigModel sdk = checkSdkConfig(sdkConfigModel,mContext);
-
-        if (sdk.isAdShow()){
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
 }

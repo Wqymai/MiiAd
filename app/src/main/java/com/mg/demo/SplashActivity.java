@@ -41,7 +41,7 @@ public class    SplashActivity extends Activity implements MiiADListener {
 
     @Override
     public void onMiiNoAD(int errCode) {
-        Log.i(Constants.TAG, "SplashNoAD"+errCode);
+        Log.i(Constants.TAG, "SplashNoAD "+errCode);
     }
 
     @Override

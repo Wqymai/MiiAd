@@ -24,7 +24,7 @@ import android.widget.TextView;
 
 import com.mg.comm.ADClickHelper;
 import com.mg.comm.ImageDownloadHelper;
-import com.mg.comm.MConstant;
+
 import com.mg.comm.MhttpRequestHelper;
 import com.mg.comm.MiiADListener;
 import com.mg.comm.MiiBaseAD;
@@ -33,7 +33,7 @@ import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
 import com.mg.others.model.SDKConfigModel;
-import com.mg.others.utils.CommonUtils;
+
 import com.mg.others.utils.SP;
 import com.qq.e.ads.splash.SplashAD;
 import com.qq.e.ads.splash.SplashADListener;
@@ -96,9 +96,7 @@ public class MiiSplashAD extends MiiBaseAD {
                      break;
                  case 400:
                      try {
-
                         openGDTAD(true);
-
                      }catch (Exception e){
                          e.printStackTrace();
                      }
@@ -108,6 +106,33 @@ public class MiiSplashAD extends MiiBaseAD {
          }
      };
 
+
+    public  MiiSplashAD(Activity activity, ViewGroup adContainer,View skipContainer,MiiADListener adListener){
+
+        this.mActivity=activity;
+
+        this.mContext = activity.getApplicationContext();
+
+        this.adContainer=adContainer;
+
+        this.skipContainer=skipContainer;
+
+        this.listener=adListener;
+
+        if (skipContainer == null){
+            listener.onMiiNoAD(2000);
+            return;
+        }
+
+        if (isFirstEnter(mContext)){
+            new MhttpRequestHelper(mContext,mainHandler,0,listener).fetchMGAD(true);
+            return;
+        }
+
+        startupAD();
+
+
+    }
 
     private void  checkADType(AdModel adModel){
 
@@ -134,6 +159,10 @@ public class MiiSplashAD extends MiiBaseAD {
 
                     //广告点击回调
                     listener.onMiiADClicked();
+
+                    if (timer != null){
+                        timer.cancel();
+                    }
 
                     return true;
                 }
@@ -163,6 +192,9 @@ public class MiiSplashAD extends MiiBaseAD {
                 public void onClick(View v) {
                     //广告关闭回调
                     listener.onMiiADDismissed();
+                    if (timer != null){
+                        timer.cancel();
+                    }
                     mActivity.finish();
                 }
             });
@@ -200,6 +232,7 @@ public class MiiSplashAD extends MiiBaseAD {
      }
 
      private void showSplashAD(final Bitmap bitmap){
+       try {
 
          adImageView.setImageBitmap(bitmap);
 
@@ -221,11 +254,12 @@ public class MiiSplashAD extends MiiBaseAD {
              @Override
              public void onClick(View v) {
                  listener.onMiiADDismissed();
-                 if (bitmap!=null){
+                 if (bitmap != null){
                      bitmap.recycle();
                  }
-
-                 timer.cancel();
+                 if(timer != null){
+                  timer.cancel();
+                 }
                  mActivity.finish();
              }
          });
@@ -238,13 +272,20 @@ public class MiiSplashAD extends MiiBaseAD {
                  //点击广告后相关行为
                  new ADClickHelper(mContext).AdClick(adModel);
 
-                 timer.cancel();
+                 if (timer != null){
+                   timer.cancel();
+                 }
 
+                 if (bitmap != null){
+                     bitmap.recycle();
+                 }
                  mActivity.finish();
 
              }
          });
-
+       }catch (Exception e){
+           e.printStackTrace();
+       }
      }
      private void adCountDownTimer(){
 
@@ -270,91 +311,15 @@ public class MiiSplashAD extends MiiBaseAD {
 
      }
 
-     public  MiiSplashAD(Activity activity, ViewGroup adContainer,View skipContainer,MiiADListener adListener){
 
-         this.mActivity=activity;
-
-         this.mContext = activity.getApplicationContext();
-
-         this.adContainer=adContainer;
-
-         this.skipContainer=skipContainer;
-
-         this.listener=adListener;
-
-         if (skipContainer == null){
-             return;
-         }
-
-//         boolean isFirst= (boolean) SP.getParam(SP.CONFIG,mContext,SP.FIRSTHB,true);
-//         if (isFirst){
-//             SP.setParam(SP.CONFIG,mContext,SP.FIRSTHB,false);
-//             new MhttpRequestHelper(mContext,mainHandler,3,listener).fetchMGAD(isFirst);
-//             return;
-//         }
-         if (isFirstEnter(mContext)){
-             new MhttpRequestHelper(mContext,mainHandler,0,listener).fetchMGAD(true);
-             return;
-         }
-
-         //根据条件判断是展示广点通还是麦广
-         startupAD();
-
-
-     }
 
     private void startupAD(){
 
-//        if (sdk == null){
-//            sdk = CommonUtils.readParcel(mContext, MConstant.CONFIG_FILE_NAME);
-//        }
-//        int sf_mg = sdk.getSf_mg();
-//        int sf_gdt = sdk.getSf_gdt();
-//        int sum = sf_gdt + sf_mg;
-//        if (sum == 0){
-//
-//            Log.i(Constants.TAG,"sum==0");
-//            return;
-//
-//        }
-//        else if (sum == 100){
-//            int show_percentage = (int) ((Math.random() * 100)+1);
-//            if (show_percentage <= sf_mg){
-//
-//                 Log.i(Constants.TAG,"sum==100 MG");
-//                 openGMAD();
-//
-//            }
-//            else {
-//
-//                Log.i(Constants.TAG,"sum==100 GDT");
-//                openGDTAD(true);
-//
-//            }
-//        }
-//        else if (sum > 100){
-//            if (sf_mg > sf_gdt){
-//
-//                Log.i(Constants.TAG,"sum > 100 MG");
-//               if (sdk.isAdShow()){
-//
-//                  new MhttpRequestHelper(mContext,mainHandler,2,listener).fetchMGAD1(false);
-//
-//               }
-//               else {
-//
-//                   mainHandler.sendEmptyMessage(400);
-//
-//               }
-//            }
-//            else {
-//
-//                Log.i(Constants.TAG,"sum > 100 GDT");
-//                openGDTAD(false);
-//
-//            }
-//        }
         SourceAssignModel saModel = checkADSource(mContext);
+        if (saModel == null){
+            listener.onMiiNoAD(3001);
+            return;
+        }
 
         if (saModel.type == 1){
             return;
@@ -363,8 +328,7 @@ public class MiiSplashAD extends MiiBaseAD {
 
             if (saModel.firstChoose == 1){
 
-
-                openMGAD_Single(mContext,mainHandler,listener,sdk,2);
+                new MhttpRequestHelper(mContext,mainHandler,2,listener).fetchMGAD(false);
             }
             else {
 
@@ -376,8 +340,7 @@ public class MiiSplashAD extends MiiBaseAD {
 
             if (saModel.firstChoose == 1){
 
-
-                openMGAD_Sequ(mContext,mainHandler,listener,sdk,2);
+                new MhttpRequestHelper(mContext,mainHandler,2,listener).fetchMGAD1(false);
 
             }
             else {
@@ -385,47 +348,8 @@ public class MiiSplashAD extends MiiBaseAD {
             }
         }
 
-
     }
 
-
-//    private void openMGAD1(){
-//        Log.i(Constants.TAG,"加载麦广广告...openGMAD1");
-//
-//        if (sdk == null){
-//            sdk = CommonUtils.readParcel(mContext, MConstant.CONFIG_FILE_NAME);
-//        }
-//
-//        if (sdk.isAdShow()){
-//
-//            new MhttpRequestHelper(mContext,mainHandler,2,listener).fetchMGAD1(false);
-//
-//        }
-//        else {
-//
-//            mainHandler.sendEmptyMessage(400);
-//
-//        }
-//    }
-
-
-//    private void openGMAD(){
-//        Log.i(Constants.TAG,"加载麦广广告...openGMAD");
-//
-//        if (sdk == null){
-//            sdk = CommonUtils.readParcel(mContext, MConstant.CONFIG_FILE_NAME);
-//        }
-//        if (sdk.isAdShow()){
-//
-//            new MhttpRequestHelper(mContext,mainHandler,2,listener).fetchMGAD(false);
-//
-//        }else {
-//
-//            listener.onMiiNoAD(2000);
-//
-//        }
-//
-//    }
     private void openGDTAD(final boolean shouldReturn){
         Log.i(Constants.TAG,"加载广点通广告...");
 
@@ -433,22 +357,16 @@ public class MiiSplashAD extends MiiBaseAD {
             @Override
             public void onADDismissed() {
 
+
                 listener.onMiiADDismissed();
+                mActivity.finish();
             }
 
             @Override
             public void onNoAD(int i) {
                 if (!shouldReturn){
 
-//                    if (isADShow(sdk,mContext)){
-//                        new MhttpRequestHelper(mContext,mainHandler,2,listener).fetchMGAD1(true);
-//                    }
-//                    else {
-//                        Log.i(Constants.TAG,"openGDTAD...o=0");
-//                        listener.onMiiNoAD(2000);
-//                    }
-                    openMGAD_Sequ_Gdtfail(mContext,mainHandler,listener,sdk,2);
-
+                    new MhttpRequestHelper(mContext,mainHandler,2,listener).fetchMGAD1(true);
 
                     return;
                 }
@@ -465,6 +383,7 @@ public class MiiSplashAD extends MiiBaseAD {
             public void onADClicked() {
 
                 listener.onMiiADClicked();
+                mActivity.finish();
             }
 
             @Override

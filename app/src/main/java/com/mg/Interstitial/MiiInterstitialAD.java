@@ -45,6 +45,7 @@ import com.qq.e.ads.interstitial.InterstitialAD;
 import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
 
 
+
 /**
  * Created by wuqiyan on 2017/6/11.
  */
@@ -176,7 +177,9 @@ public class MiiInterstitialAD  extends MiiBaseAD{
 //                        Log.i(Constants.TAG,"openGDTAD...o=0");
 //                        listener.onMiiNoAD(2000);
 //                    }
-                    openMGAD_Sequ_Gdtfail(mContext,mainHandler,listener,sdk,3);
+//                    openMGAD_Sequ_Gdtfail(mContext,mainHandler,listener,sdk,3);
+
+                    new MhttpRequestHelper(mContext,mainHandler,3,listener).fetchMGAD1(true);
 
                     return;
                 }
@@ -249,7 +252,8 @@ public class MiiInterstitialAD  extends MiiBaseAD{
             if (saModel.firstChoose == 1){
 
 
-                openMGAD_Single(mContext,mainHandler,listener,sdk,3);
+//                openMGAD_Single(mContext,mainHandler,listener,sdk,3);
+                new MhttpRequestHelper(mContext,mainHandler,3,listener).fetchMGAD(false);
             }
             else {
 
@@ -262,7 +266,8 @@ public class MiiInterstitialAD  extends MiiBaseAD{
             if (saModel.firstChoose == 1){
 
 
-                openMGAD_Sequ(mContext,mainHandler,listener,sdk,3 );
+//                openMGAD_Sequ(mContext,mainHandler,listener,sdk,3 );
+                new MhttpRequestHelper(mContext,mainHandler,3,listener).fetchMGAD1(false);
 
             }
             else {
@@ -422,11 +427,16 @@ public class MiiInterstitialAD  extends MiiBaseAD{
             cancel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    dlg.dismiss();
+
 
                     mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
                     //广告关闭
                     listener.onMiiADDismissed();
+
+                    if (dlg == null){
+                      dlg.dismiss();
+                    }
+
                 }
             });
             if (ishtml5){
