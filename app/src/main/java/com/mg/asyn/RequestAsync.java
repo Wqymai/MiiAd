@@ -19,18 +19,25 @@ import com.mg.others.utils.SP;
  */
 
 public class RequestAsync {
+
     protected Handler mainHandler;
     protected Context mContext;
     protected HttpManager httpManager;
     protected MiiADListener listener;
     protected SDKConfigModel sdkConfigModel;
-    protected int pt;
-    public RequestAsync(Context context, Handler handler, int pt, MiiADListener listener){
-        this.mainHandler=handler;
-        this.mContext=context;
-        this.listener=listener;
-        this.pt=pt;
+    protected int pt;//请求广告的类型  2-开屏 3-插屏
+
+    public RequestAsync(ReqAsyncModel model){
+
+        if (model == null){
+            return;
+        }
+        this.mainHandler = model.handler;
+        this.mContext = model.context;
+        this.listener = model.listener;
+        this.pt = model.pt;
     }
+
 
     public void fetchMGAD(){
 
@@ -53,7 +60,11 @@ public class RequestAsync {
 
     }
 
+    /**
+     * 检查本地缓存中是否已有sdk的配置 true:存在 false:不存在
+     * */
     protected boolean checkSDKConfigModel(){
+
         sdkConfigModel = CommonUtils.readParcel(mContext,MConstant.CONFIG_FILE_NAME);
 
         if (sdkConfigModel == null){
@@ -61,6 +72,9 @@ public class RequestAsync {
         }
         return true;
     }
+    /**
+    检查是否到了心跳时间 true:没到 false:到了
+    */
     protected boolean checkHbTime(){
         long hbTime = (long) SP.getParam(SP.CONFIG,mContext,SP.LAST_REQUEST_NI,0l);
 
@@ -76,6 +90,9 @@ public class RequestAsync {
         }
     }
 
+    /**
+    检查广告展示次数是否超过sdk设置次数 true:超过了 false:没超过
+    */
     protected boolean checkNumber(){
         int real_num = (int) SP.getParam(SP.CONFIG, mContext, SP.FOT, 0);//广告已展示的次数
         int sdk_num = sdkConfigModel.getShow_sum();
@@ -86,12 +103,19 @@ public class RequestAsync {
         return false;
 
     }
+    /**
+    检查sdk设置是否开了广告 true:没开 false:开了
+    */
     protected boolean checkADShow(){
         if (!sdkConfigModel.isAdShow()){
             return true;
         }
         return false;
     }
+
+    /**
+    检查是否要要更新广告展示的次数
+    */
     protected void checkReShowCount(){
         long writeTime = (long) SP.getParam(SP.CONFIG, mContext, SP.FOS, 0l);
         long currentTime = System.currentTimeMillis();

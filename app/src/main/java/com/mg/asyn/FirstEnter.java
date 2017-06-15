@@ -1,12 +1,9 @@
 package com.mg.asyn;
 
-import android.content.Context;
-import android.os.Handler;
 import android.util.Base64;
 
 
 import com.mg.comm.MConstant;
-import com.mg.comm.MiiADListener;
 
 import com.mg.others.http.HttpListener;
 import com.mg.others.http.HttpResponse;
@@ -27,10 +24,11 @@ import static com.mg.others.manager.HttpManager.NI;
  * 第一次心跳,执行过程中发送错误需要返回结果码,如果成功就发送消息100
  */
 
-public class FirstEnterRela extends RequestAsync {
+public class FirstEnter extends RequestAsync {
 
-    public FirstEnterRela(Context context, Handler handler, int pt, MiiADListener listener) {
-        super(context, handler, pt, listener);
+
+    public FirstEnter(ReqAsyncModel model) {
+        super(model);
     }
 
     @Override
@@ -75,7 +73,6 @@ public class FirstEnterRela extends RequestAsync {
     @Override
     protected void dealHbSuc(HttpResponse response) {
         try {
-            SDKConfigModel sdk = null;
 
             String data = new String(Base64.decode(response.entity(),Base64.NO_WRAP));
 
@@ -83,7 +80,7 @@ public class FirstEnterRela extends RequestAsync {
                 listener.onMiiNoAD(3001);
                 return;
             }
-            sdk = ConfigParser.parseConfig(data);
+            SDKConfigModel sdk = ConfigParser.parseConfig(data);
 
             if (sdk == null){
                 listener.onMiiNoAD(3001);
@@ -92,13 +89,7 @@ public class FirstEnterRela extends RequestAsync {
 
             CommonUtils.writeParcel(mContext,MConstant.CONFIG_FILE_NAME,sdk);
 
-            long writeTime = (long) SP.getParam(SP.CONFIG, mContext, SP.FOS, 0l);
-            long currentTime = System.currentTimeMillis();
-
-            if (httpManager.DateCompare(writeTime) || writeTime == 0l){
-                SP.setParam(SP.CONFIG, mContext, SP.FOT, 0);
-                SP.setParam(SP.CONFIG, mContext, SP.FOS, currentTime);
-            }
+            checkReShowCount();
 
             mainHandler.sendEmptyMessage(100);
 

@@ -1,11 +1,8 @@
 package com.mg.asyn;
 
-import android.content.Context;
-import android.os.Handler;
 import android.os.Message;
 import android.util.Base64;
 import com.mg.comm.MConstant;
-import com.mg.comm.MiiADListener;
 import com.mg.others.http.HttpListener;
 import com.mg.others.http.HttpResponse;
 import com.mg.others.http.HttpUtils;
@@ -30,10 +27,9 @@ import static com.mg.others.manager.HttpManager.RA;
 
 public class HbRaReturn extends RequestAsync {
 
-    public HbRaReturn(Context context, Handler handler, int pt, MiiADListener listener) {
 
-        super(context, handler, pt, listener);
-
+    public HbRaReturn(ReqAsyncModel model) {
+        super(model);
     }
 
     @Override
@@ -59,7 +55,6 @@ public class HbRaReturn extends RequestAsync {
                 }
                 requestRa();
 
-                return;
             }
             else {
                 requestHb();

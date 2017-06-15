@@ -48,7 +48,7 @@ public class OtherActivity extends Activity {
             }
         });
 
-        new MiiInterstitialAD(OtherActivity.this,"","", new MiiADListener() {
+        new MiiInterstitialAD(OtherActivity.this,"","",false, new MiiADListener() {
                     @Override
                     public void onMiiNoAD(int errCode) {
 

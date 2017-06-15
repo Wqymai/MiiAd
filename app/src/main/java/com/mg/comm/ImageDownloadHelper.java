@@ -15,6 +15,8 @@ import java.io.File;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+
+
 /**
  * Created by wuqiyan on 2017/6/8.
  */
@@ -32,13 +34,12 @@ public class ImageDownloadHelper {
 
         final File file = getDiskCacheDir(context, md5(url));
 
-        int oriW;
-        int oriH;
 
         if (file.exists())// 如果在缓存文件中发现
         {
 
-            Bitmap bm = null;
+            LogUtils.i(MConstant.TAG,"加载缓存...");
+            Bitmap bm;
 
             if (imageView == null) {//插屏
 
@@ -54,11 +55,12 @@ public class ImageDownloadHelper {
             mainHandler.sendMessage(msg);
         }
         else {
-
+            LogUtils.i(MConstant.TAG,"需要下载图片...");
             Runnable runnable = new Runnable() {
                 @Override
                 public void run() {
                     boolean downloadState = DownloadImgUtils.downloadImgByUrl(url, file);
+                   LogUtils.i(MConstant.TAG,"下载是否成功="+downloadState);
                     if (downloadState)// 如果下载成功
                     {
                         Bitmap bm = null;

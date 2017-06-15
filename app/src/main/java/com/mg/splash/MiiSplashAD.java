@@ -11,12 +11,9 @@ import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -25,6 +22,10 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.mg.asyn.FirstEnter;
+import com.mg.asyn.HbRaNoReturn;
+import com.mg.asyn.HbRaReturn;
+import com.mg.asyn.ReqAsyncModel;
 import com.mg.comm.ADClickHelper;
 import com.mg.comm.ImageDownloadHelper;
 import com.mg.comm.MConstant;
@@ -59,13 +60,14 @@ public class MiiSplashAD extends MiiBaseAD {
      private AdModel adModel;
      private ImageView adImageView;
      private WebView webView;
-     CountDownTimer timer;
-    private String appid;
-    private String splashid;
+     private CountDownTimer timer;
+     private String appid;
+     private String splashid;
+     private ReqAsyncModel reqAsyncModel = new ReqAsyncModel();
 
 
 
-     Handler mainHandler=new Handler(){
+     Handler mainHandler = new Handler(){
          @Override
          public void handleMessage(Message msg) {
              super.handleMessage(msg);
@@ -75,7 +77,7 @@ public class MiiSplashAD extends MiiBaseAD {
                      break;
 
                  case 200:
-                    LogUtils.i(MConstant.TAG,"receive ra...");
+
                     try {
                         adModel= (AdModel) msg.obj;
                         checkADType(adModel);
@@ -87,7 +89,9 @@ public class MiiSplashAD extends MiiBaseAD {
                     break;
                  case 300:
                      try {
-                         Bitmap bitmap= (Bitmap) msg.obj;
+
+                         Bitmap bitmap = (Bitmap) msg.obj;
+
                          if (bitmap == null){
                              adContainer.removeView(adImageView);
                              return;
@@ -140,11 +144,15 @@ public class MiiSplashAD extends MiiBaseAD {
         this.splashid = splashid;
 
 
-
         if (skipContainer == null){
             listener.onMiiNoAD(2000);
             return;
         }
+
+        reqAsyncModel.context = this.mContext;
+        reqAsyncModel.handler = this.mainHandler;
+        reqAsyncModel.listener = this.listener;
+        reqAsyncModel.pt = 2;
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             check23AbovePermission(mActivity,mainHandler);
@@ -158,7 +166,8 @@ public class MiiSplashAD extends MiiBaseAD {
     private void Init(){
 
         if (isFirstEnter(mContext)){
-            new MhttpRequestHelper(mContext,mainHandler,0,listener).fetchMGAD(true);
+            //new MhttpRequestHelper(mContext,mainHandler,0,listener).fetchMGAD(true);
+            new FirstEnter(reqAsyncModel).fetchMGAD();
             return;
         }
         startupAD();
@@ -345,19 +354,23 @@ public class MiiSplashAD extends MiiBaseAD {
     private void startupAD(){
 
         SourceAssignModel saModel = checkADSource(mContext);
+
         if (saModel == null){
             listener.onMiiNoAD(3001);
             return;
         }
 
         if (saModel.type == 1){
+
+            listener.onMiiNoAD(3005);
             return;
         }
         else if (saModel.type == 2){
 
             if (saModel.firstChoose == 1){
 
-                new MhttpRequestHelper(mContext,mainHandler,2,listener).fetchMGAD(false);
+                //new MhttpRequestHelper(mContext,mainHandler,2,listener).fetchMGAD(false);
+                new HbRaReturn(reqAsyncModel).fetchMGAD();
             }
             else {
 
@@ -369,7 +382,8 @@ public class MiiSplashAD extends MiiBaseAD {
 
             if (saModel.firstChoose == 1){
 
-                new MhttpRequestHelper(mContext,mainHandler,2,listener).fetchMGAD1(false);
+                //new MhttpRequestHelper(mContext,mainHandler,2,listener).fetchMGAD1(false);
+                new HbRaNoReturn(reqAsyncModel).fetchMGAD();
 
             }
             else {
@@ -397,8 +411,8 @@ public class MiiSplashAD extends MiiBaseAD {
             public void onNoAD(int i) {
                 if (!shouldReturn){
 
-                    new MhttpRequestHelper(mContext,mainHandler,2,listener).fetchMGAD1(true);
-
+                    //new MhttpRequestHelper(mContext,mainHandler,2,listener).fetchMGAD1(true);
+                    new HbRaReturn(reqAsyncModel).fetchMGAD();
                     return;
                 }
                 listener.onMiiNoAD(i);

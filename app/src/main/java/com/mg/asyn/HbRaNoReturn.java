@@ -33,8 +33,9 @@ import static com.mg.others.manager.HttpManager.RA;
 
 public class HbRaNoReturn extends RequestAsync {
 
-    public HbRaNoReturn(Context context, Handler handler, int pt, MiiADListener listener) {
-        super(context, handler, pt, listener);
+
+    public HbRaNoReturn(ReqAsyncModel model) {
+        super(model);
     }
 
     @Override

@@ -26,12 +26,10 @@ import static com.mg.others.manager.HttpManager.NI;
 
 public class JustHbRelative extends RequestAsync {
 
-    public JustHbRelative(Context context, Handler handler, int pt, MiiADListener listener) {
 
-        super(context, handler, pt, listener);
-
+    public JustHbRelative(ReqAsyncModel model) {
+        super(model);
     }
-
 
     @Override
     protected void startRequest() {
@@ -104,8 +102,5 @@ public class JustHbRelative extends RequestAsync {
             e.printStackTrace();
         }
     }
-
-
-
 
 }
