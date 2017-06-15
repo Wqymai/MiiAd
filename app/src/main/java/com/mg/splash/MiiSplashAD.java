@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.mg.asyn.FirstEnter;
 import com.mg.asyn.HbRaNoReturn;
 import com.mg.asyn.HbRaReturn;
+import com.mg.asyn.JustHbRelative;
 import com.mg.asyn.ReqAsyncModel;
 import com.mg.comm.ADClickHelper;
 import com.mg.comm.ImageDownloadHelper;
@@ -396,7 +397,9 @@ public class MiiSplashAD extends MiiBaseAD {
     private void openGDTAD(final boolean shouldReturn){
         LogUtils.i(MConstant.TAG,"load gdt...");
 
-        new MhttpRequestHelper(mContext,mainHandler,0,listener).fetchMGAD3();
+        //new MhttpRequestHelper(mContext,mainHandler,0,listener).fetchMGAD3();
+        new JustHbRelative(reqAsyncModel).fetchMGAD();
+
 
         new SplashAD(mActivity, adContainer, skipContainer, appid,splashid, new SplashADListener() {
             @Override
