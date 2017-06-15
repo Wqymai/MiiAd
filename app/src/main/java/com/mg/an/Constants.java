@@ -1,4 +1,4 @@
-package com.mg.demo;
+package com.mg.an;
 
 public class Constants {
   public static final String TAG="AD_DEMO";

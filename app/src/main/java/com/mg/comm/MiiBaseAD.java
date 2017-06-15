@@ -4,10 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Handler;
-import android.util.Log;
 
-
-import com.mg.demo.Constants;
 import com.mg.mv4.ActivityCompat;
 import com.mg.mv4.ContextCompat;
 import com.mg.others.model.SDKConfigModel;
@@ -16,8 +13,6 @@ import com.mg.others.utils.LogUtils;
 import com.mg.others.utils.SP;
 
 import static android.Manifest.permission.READ_PHONE_STATE;
-import static android.Manifest.permission.READ_SMS;
-import static android.Manifest.permission.SEND_SMS;
 
 
 /**

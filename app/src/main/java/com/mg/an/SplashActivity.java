@@ -1,4 +1,4 @@
-package com.mg.demo;
+package com.mg.an;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -38,35 +38,31 @@ public class    SplashActivity extends Activity implements MiiADListener {
 
     private void fetchAD(SplashActivity mainActivity, ViewGroup container, TextView skipView,
                                MiiADListener listener) {
-        splashAD=new MiiSplashAD(mainActivity,container,skipView,Constants.APPID,Constants.SplashPosID,listener);
+        splashAD=new MiiSplashAD(mainActivity,container,skipView,"","",listener);
     }
 
     @Override
     public void onMiiNoAD(int errCode) {
-        Log.i(Constants.TAG, "SplashNoAD "+errCode);
+
     }
 
     @Override
     public void onMiiADDismissed() {
-        Log.i(Constants.TAG, "SplashADDismissed");
-        startActivity(new Intent(SplashActivity.this,MainActivity.class));
-        finish();
+
     }
 
     @Override
     public void onMiiADPresent() {
-        Log.i(Constants.TAG, "SplashADPresent");
-        splashHolder.setVisibility(View.INVISIBLE); // 广告展示后一定要把预设的开屏图片隐藏起来
+
     }
 
     @Override
     public void onMiiADClicked() {
-        Log.i(Constants.TAG, "SplashADClicked");
+
     }
 
     @Override
     public void onMiiADTick(long millisUntilFinished) {
-        Log.i(Constants.TAG, "SplashADTick " + millisUntilFinished + "ms");
-        skipView.setText(String.format(SKIP_TEXT, (Math.round(millisUntilFinished / 1000f))));
+
     }
 }

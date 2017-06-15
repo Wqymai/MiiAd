@@ -5,22 +5,15 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.widget.ImageView;
 
-import com.mg.demo.Constants;
 import com.mg.others.http.HttpUtils;
-import com.mg.others.utils.CommonUtils;
 import com.mg.others.utils.LogUtils;
 import com.mg.others.utils.imager.DownloadImgUtils;
-import com.mg.others.utils.imager.ImageSizeUtil;
 
 import java.io.File;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
-import static android.R.attr.height;
-import static android.R.attr.width;
 
 /**
  * Created by wuqiyan on 2017/6/8.
@@ -35,7 +28,7 @@ public class ImageDownloadHelper {
 
 
     public  void downloadShowImage(Context context, final String url, final ImageView imageView, final Handler mainHandler){
-        LogUtils.i(Constants.TAG,"url="+url);
+        LogUtils.i(MConstant.TAG,"url="+url);
 
         final File file = getDiskCacheDir(context, md5(url));
 

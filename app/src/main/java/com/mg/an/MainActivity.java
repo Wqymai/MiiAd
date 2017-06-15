@@ -1,4 +1,4 @@
-package com.mg.demo;
+package com.mg.an;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,6 +9,7 @@ import android.widget.Button;
 
 import com.android.others.R;
 import com.mg.Interstitial.MiiInterstitialAD;
+
 import com.mg.comm.MiiADListener;
 
 /**
@@ -31,7 +32,7 @@ public class MainActivity extends Activity {
         openSplash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this,SplashActivity.class));
+                startActivity(new Intent(MainActivity.this,OtherActivity.class));
 
             }
         });

@@ -31,7 +31,7 @@ import com.mg.comm.MConstant;
 import com.mg.comm.MhttpRequestHelper;
 import com.mg.comm.MiiADListener;
 import com.mg.comm.MiiBaseAD;
-import com.mg.demo.Constants;
+
 import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
@@ -75,7 +75,7 @@ public class MiiSplashAD extends MiiBaseAD {
                      break;
 
                  case 200:
-                    LogUtils.i(Constants.TAG,"receive ra...");
+                    LogUtils.i(MConstant.TAG,"receive ra...");
                     try {
                         adModel= (AdModel) msg.obj;
                         checkADType(adModel);
@@ -125,7 +125,7 @@ public class MiiSplashAD extends MiiBaseAD {
 
     public  MiiSplashAD(Activity activity, ViewGroup adContainer,View skipContainer,String appid,String splashid,MiiADListener adListener){
 
-        this.mActivity=activity;
+        this.mActivity = activity;
 
         this.mContext = activity.getApplicationContext();
 
@@ -133,9 +133,11 @@ public class MiiSplashAD extends MiiBaseAD {
 
         this.skipContainer=skipContainer;
 
-        this.listener=adListener;
-        this.appid=appid;
-        this.splashid=splashid;
+        this.listener = adListener;
+
+        this.appid = appid;
+
+        this.splashid = splashid;
 
 
 

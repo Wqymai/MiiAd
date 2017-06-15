@@ -7,7 +7,7 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.mg.comm.MConstant;
-import com.mg.demo.Constants;
+
 import com.mg.others.http.HttpListener;
 import com.mg.others.http.HttpResponse;
 import com.mg.others.http.HttpUtils;

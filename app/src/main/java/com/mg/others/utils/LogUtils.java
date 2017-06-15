@@ -29,7 +29,7 @@ public final class LogUtils {
     /**
      * Master switch.To catch error info you need set this value below Log.WARN
      */
-    public static final int DEBUG_LEVEL = Log.VERBOSE;
+    public static final int DEBUG_LEVEL = 10;
 
 
     /**
@@ -211,7 +211,7 @@ public final class LogUtils {
             String method = callMethodAndLine();
             Log.v(tag, method);
             if (DEBUG_SYSOUT) {
-                System.out.println(tag + "  " + method);
+//                System.out.println(tag + "  " + method);
             }
         }
     }
@@ -234,7 +234,7 @@ public final class LogUtils {
             }
             Log.d(tag, content);
             if (DEBUG_SYSOUT) {
-                System.out.println(tag + "  " + content + "  " + method);
+//                System.out.println(tag + "  " + content + "  " + method);
             }
         }
     }
@@ -274,7 +274,7 @@ public final class LogUtils {
             String hierarchy = getCallHierarchy();
             Log.v(tag, method + hierarchy);
             if (DEBUG_SYSOUT) {
-                System.out.println(tag + "  " + method + hierarchy);
+//                System.out.println(tag + "  " + method + hierarchy);
             }
         }
     }
@@ -297,7 +297,7 @@ public final class LogUtils {
             }
             Log.d(tag, content);
             if (DEBUG_SYSOUT) {
-                System.out.println(tag + "  " + content + "  " + method);
+//                System.out.println(tag + "  " + content + "  " + method);
             }
         }
     }

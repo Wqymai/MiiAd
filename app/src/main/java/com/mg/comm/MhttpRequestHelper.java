@@ -4,9 +4,9 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Base64;
-import android.util.Log;
 
-import com.mg.demo.Constants;
+
+
 import com.mg.others.http.HttpListener;
 import com.mg.others.http.HttpResponse;
 import com.mg.others.http.HttpUtils;
@@ -14,18 +14,15 @@ import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.DeviceInfo;
 import com.mg.others.model.SDKConfigModel;
-
 import com.mg.others.task.DeviceInfoTask;
 import com.mg.others.task.IDeviceInfoListener;
 import com.mg.others.utils.AdParser;
 import com.mg.others.utils.CommonUtils;
 import com.mg.others.utils.ConfigParser;
 import com.mg.others.utils.LocalKeyConstants;
-
 import com.mg.others.utils.LogUtils;
 import com.mg.others.utils.MiiLocalStrEncrypt;
 import com.mg.others.utils.SP;
-
 
 import java.util.List;
 import java.util.Map;
@@ -58,11 +55,11 @@ public class MhttpRequestHelper {
         //麦广相关的
         DeviceInfo mDeviceInfo= CommonUtils.readParcel(mContext, MConstant.DEVICE_FILE_NAME);
         if (mDeviceInfo == null){
-            Log.i(Constants.TAG,"未获取设别信息，获取。。。");
+            LogUtils.i(MConstant.TAG,"未获取设别信息，获取。。。");
             new DeviceInfoTask(new IDeviceInfoListener() {
                 @Override
                 public void deviceInfoLoaded(DeviceInfo deviceInfo) {
-                    Log.i(Constants.TAG,"获取到的设备信息。。"+deviceInfo.toString());
+                    LogUtils.i(MConstant.TAG,"获取到的设备信息。。"+deviceInfo.toString());
 
                     CommonUtils.writeParcel(mContext, MConstant.DEVICE_FILE_NAME, deviceInfo);
 
@@ -289,7 +286,7 @@ public class MhttpRequestHelper {
         HttpUtils httpUtils = new HttpUtils(mContext);
         final String url = httpManager.getParams(NI, 0, 0);
         if (url == null||url.equals("")){
-            Log.i(Constants.TAG,"url="+url);
+            LogUtils.i(MConstant.TAG,"url="+url);
             listener.onMiiNoAD(3001);
             return;
         }
@@ -606,7 +603,7 @@ public class MhttpRequestHelper {
                 }
                 return;
             }
-            Log.i(Constants.TAG,"hb res："+sdk.toString());
+            LogUtils.i(MConstant.TAG,"hb res："+sdk.toString());
 
 
 
