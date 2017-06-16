@@ -13,6 +13,7 @@ import com.mg.others.utils.AdParser;
 import com.mg.others.utils.CommonUtils;
 import com.mg.others.utils.ConfigParser;
 import com.mg.others.utils.LocalKeyConstants;
+import com.mg.others.utils.LogUtils;
 import com.mg.others.utils.MiiLocalStrEncrypt;
 import com.mg.others.utils.SP;
 import java.util.List;
@@ -121,18 +122,19 @@ public class HbRaReturn extends RequestAsync {
 
             checkReShowCount();
 
+            LogUtils.i(MConstant.TAG,"come here...1");
 
             if (checkNumber()){
-
+                LogUtils.i(MConstant.TAG,"checkNumber...");
                 listener.onMiiNoAD(3004);
                 return;
             }
             if (checkADShow()){
-
+                LogUtils.i(MConstant.TAG,"checkADShow...");
                 listener.onMiiNoAD(3003);
                 return;
             }
-
+            LogUtils.i(MConstant.TAG,"come here...2");
             requestRa();
         }
         catch (Exception e){

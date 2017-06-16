@@ -1,7 +1,6 @@
 package com.mg.an;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -106,22 +105,15 @@ public class MainActivity extends Activity {
             }
         });
 
-        openPopu= (Button) findViewById(R.id.open_popu);
-//        openPopu.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//              AlertDialog  dlg = new AlertDialog.Builder(MainActivity.this).setTitle("hello").create();
-//                dlg.setCanceledOnTouchOutside(false);
-//                dlg.show();
-//
-//                dlg.getWindow().setLayout(300, 200);
-//
-//
-//
-//
-//            }
-//        });
+        openPopu= (Button) findViewById(R.id.open_banner);
+        openPopu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                startActivity(new Intent(MainActivity.this,BannerAcitvity.class));
+
+            }
+        });
     }
 
 

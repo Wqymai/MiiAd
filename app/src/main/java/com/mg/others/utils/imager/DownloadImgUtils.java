@@ -78,63 +78,63 @@ public class DownloadImgUtils
 
 	}
 
-	/**
-	 * 根据url下载图片在指定的文件
-	 *
-	 * @param urlStr
-	 * @return
-	 */
-	public static Bitmap downloadImgByUrl(String urlStr, ImageView imageview)
-	{
-		FileOutputStream fos = null;
-		InputStream is = null;
-		try
-		{
-			URL url = new URL(urlStr);
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			is = new BufferedInputStream(conn.getInputStream());
-			is.mark(is.available());
-
-			Options opts = new Options();
-			opts.inJustDecodeBounds = true;
-			Bitmap bitmap = BitmapFactory.decodeStream(is, null, opts);
-
-			//获取imageview想要显示的宽和高
-			ImageSizeUtil.ImageSize imageViewSize = ImageSizeUtil.getImageViewSize(imageview);
-			opts.inSampleSize = ImageSizeUtil.caculateInSampleSize(opts,
-					imageViewSize.width, imageViewSize.height);
-
-			opts.inJustDecodeBounds = false;
-			is.reset();
-			bitmap = BitmapFactory.decodeStream(is, null, opts);
-
-			conn.disconnect();
-			return bitmap;
-
-		} catch (Exception e)
-		{
-			e.printStackTrace();
-		} finally
-		{
-			try
-			{
-				if (is != null)
-					is.close();
-			} catch (IOException e)
-			{
-			}
-
-			try
-			{
-				if (fos != null)
-					fos.close();
-			} catch (IOException e)
-			{
-			}
-		}
-
-		return null;
-
-	}
+//	/**
+//	 * 根据url下载图片在指定的文件
+//	 *
+//	 * @param urlStr
+//	 * @return
+//	 */
+//	public static Bitmap downloadImgByUrl(String urlStr, ImageView imageview)
+//	{
+//		FileOutputStream fos = null;
+//		InputStream is = null;
+//		try
+//		{
+//			URL url = new URL(urlStr);
+//			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+//			is = new BufferedInputStream(conn.getInputStream());
+//			is.mark(is.available());
+//
+//			Options opts = new Options();
+//			opts.inJustDecodeBounds = true;
+//			Bitmap bitmap = BitmapFactory.decodeStream(is, null, opts);
+//
+//			//获取imageview想要显示的宽和高
+//			ImageSizeUtil.ImageSize imageViewSize = ImageSizeUtil.getImageViewSize(imageview);
+//			opts.inSampleSize = ImageSizeUtil.caculateInSampleSize(opts,
+//					imageViewSize.width, imageViewSize.height);
+//
+//			opts.inJustDecodeBounds = false;
+//			is.reset();
+//			bitmap = BitmapFactory.decodeStream(is, null, opts);
+//
+//			conn.disconnect();
+//			return bitmap;
+//
+//		} catch (Exception e)
+//		{
+//			e.printStackTrace();
+//		} finally
+//		{
+//			try
+//			{
+//				if (is != null)
+//					is.close();
+//			} catch (IOException e)
+//			{
+//			}
+//
+//			try
+//			{
+//				if (fos != null)
+//					fos.close();
+//			} catch (IOException e)
+//			{
+//			}
+//		}
+//
+//		return null;
+//
+//	}
 
 }

@@ -30,7 +30,6 @@ import com.mg.asyn.ReqAsyncModel;
 import com.mg.comm.ADClickHelper;
 import com.mg.comm.ImageDownloadHelper;
 import com.mg.comm.MConstant;
-import com.mg.comm.MhttpRequestHelper;
 import com.mg.comm.MiiADListener;
 import com.mg.comm.MiiBaseAD;
 
@@ -119,14 +118,10 @@ public class MiiSplashAD extends MiiBaseAD {
                  case 600:
 
                      Init();
-
                      break;
-
              }
-
          }
      };
-
 
     public  MiiSplashAD(Activity activity, ViewGroup adContainer,View skipContainer,String appid,String splashid,MiiADListener adListener){
 
@@ -145,7 +140,7 @@ public class MiiSplashAD extends MiiBaseAD {
         this.splashid = splashid;
 
 
-        if (skipContainer == null){
+        if ( activity == null || adContainer == null || skipContainer == null){
             listener.onMiiNoAD(2000);
             return;
         }
@@ -211,8 +206,8 @@ public class MiiSplashAD extends MiiBaseAD {
             adContainer.addView(webView);
 
 
-            TextView tv=tvADCreate();
-            adContainer.addView(tv);
+//            TextView tv=tvADCreate();
+//            adContainer.addView(tv);
 
             //展示上报
             HttpManager.reportEvent(adModel, AdReport.EVENT_SHOW, mContext);
@@ -234,22 +229,22 @@ public class MiiSplashAD extends MiiBaseAD {
                     if (timer != null){
                         timer.cancel();
                     }
-                    mActivity.finish();
+
                 }
             });
 
         }else {
-            FrameLayout.LayoutParams layoutParams=new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
-            adImageView=new ImageView(mActivity);
-            adImageView.setLayoutParams(layoutParams);
-            adImageView.setScaleType(ImageView.ScaleType.FIT_XY);
-            adContainer.addView(adImageView);
+//            FrameLayout.LayoutParams layoutParams=new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
+//            adImageView=new ImageView(mActivity);
+//            adImageView.setLayoutParams(layoutParams);
+//            adImageView.setScaleType(ImageView.ScaleType.FIT_XY);
+//            adContainer.addView(adImageView);
+//
+//            TextView tv=tvADCreate();
+//            adContainer.addView(tv);
 
-            TextView tv=tvADCreate();
-            adContainer.addView(tv);
 
-
-            new ImageDownloadHelper(0).downloadShowImage(mContext,adModel.getImage(),adImageView,mainHandler);
+            new ImageDownloadHelper(0).downloadShowImage(mContext,adModel.getImage(),2,mainHandler);
         }
 
     }
@@ -270,58 +265,66 @@ public class MiiSplashAD extends MiiBaseAD {
      }
 
      private void showSplashAD(final Bitmap bitmap){
+
        try {
 
-         adImageView.setImageBitmap(bitmap);
+             FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
+             adImageView=new ImageView(mActivity);
+             adImageView.setLayoutParams(layoutParams);
+             adImageView.setScaleType(ImageView.ScaleType.FIT_XY);
+             adContainer.addView(adImageView);
 
-         //展示上报
-         HttpManager.reportEvent(adModel, AdReport.EVENT_SHOW, mContext);
+             TextView tv=tvADCreate();
+             adContainer.addView(tv);
 
-         //广告成功展示
-         listener.onMiiADPresent();
+             adImageView.setImageBitmap(bitmap);
+
+             //展示上报
+             HttpManager.reportEvent(adModel, AdReport.EVENT_SHOW, mContext);
+
+             //广告成功展示
+             listener.onMiiADPresent();
 
 
-         //倒计时开始
-         adCountDownTimer();
+             //倒计时开始
+             adCountDownTimer();
 
-         //记录展示次数
-         int show_num = (int) SP.getParam(SP.CONFIG, mContext, SP.FOT, 0);
-         SP.setParam(SP.CONFIG, mContext, SP.FOT, show_num + 1);
+             //记录展示次数
+             int show_num = (int) SP.getParam(SP.CONFIG, mContext, SP.FOT, 0);
+             SP.setParam(SP.CONFIG, mContext, SP.FOT, show_num + 1);
 
-         skipContainer.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View v) {
-                 listener.onMiiADDismissed();
-                 if (bitmap != null){
-                     bitmap.recycle();
+             skipContainer.setOnClickListener(new View.OnClickListener() {
+                 @Override
+                 public void onClick(View v) {
+                     listener.onMiiADDismissed();
+                     if (bitmap != null){
+                         bitmap.recycle();
+                     }
+                     if(timer != null){
+                       timer.cancel();
+                     }
+
                  }
-                 if(timer != null){
-                   timer.cancel();
+             });
+             adImageView.setOnClickListener(new View.OnClickListener() {
+                 @Override
+                 public void onClick(View v) {
+
+                     listener.onMiiADClicked();
+                     listener.onMiiADDismissed();
+
+
+                     new ADClickHelper(mContext).AdClick(adModel);
+
+                     if (timer != null){
+                       timer.cancel();
+                     }
+
+                     if (bitmap != null){
+                         bitmap.recycle();
+                     }
                  }
-
-             }
-         });
-         adImageView.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View v) {
-
-                 listener.onMiiADClicked();
-                 listener.onMiiADDismissed();
-
-
-                 new ADClickHelper(mContext).AdClick(adModel);
-
-                 if (timer != null){
-                   timer.cancel();
-                 }
-
-                 if (bitmap != null){
-                     bitmap.recycle();
-                 }
-
-
-             }
-         });
+             });
        }catch (Exception e){
            e.printStackTrace();
        }
@@ -357,7 +360,7 @@ public class MiiSplashAD extends MiiBaseAD {
         SourceAssignModel saModel = checkADSource(mContext);
 
         if (saModel == null){
-            listener.onMiiNoAD(3001);
+            new FirstEnter(reqAsyncModel).fetchMGAD();
             return;
         }
 

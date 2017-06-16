@@ -1,9 +1,14 @@
 package com.mg.others.utils.imager;
 
+import android.content.Context;
 import android.graphics.BitmapFactory.Options;
 import android.util.DisplayMetrics;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
+
+import com.mg.comm.MConstant;
+import com.mg.others.utils.CommonUtils;
+import com.mg.others.utils.LogUtils;
 
 import java.lang.reflect.Field;
 
@@ -20,13 +25,18 @@ public class ImageSizeUtil
 	 * @param options
 	 * @return
 	 */
-	public static int caculateInSampleSize(Options options, int reqWidth,
-										   int reqHeight)
+	public static int caculateInSampleSize(Options options, Context context)
 	{
 		int width = options.outWidth;
 		int height = options.outHeight;
 
 		int inSampleSize = 1;
+		LogUtils.i(MConstant.TAG,"width="+width+" height="+height);
+
+		int reqWidth= CommonUtils.getScreenW(context);
+		int reqHeight=CommonUtils.getScreenH(context);
+
+		LogUtils.i(MConstant.TAG,"reqWidth="+reqWidth+" reqHeight="+reqHeight);
 
 		if (width > reqWidth || height > reqHeight)
 		{
@@ -35,6 +45,7 @@ public class ImageSizeUtil
 
 			inSampleSize = Math.max(widthRadio, heightRadio);
 		}
+		LogUtils.i(MConstant.TAG,"inSampleSize="+inSampleSize);
 		return inSampleSize;
 	}
 

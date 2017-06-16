@@ -202,6 +202,11 @@ public class MiiInterstitialAD  extends MiiBaseAD{
 
         SourceAssignModel saModel = checkADSource(mContext);
 
+        if (saModel == null){
+            new FirstEnter(reqAsyncModel).fetchMGAD();
+            return;
+        }
+
         if (saModel.type == 1){
             return;
         }
@@ -250,7 +255,7 @@ public class MiiInterstitialAD  extends MiiBaseAD{
         }
         else {
             new ImageDownloadHelper(mActivity.getResources().getConfiguration().orientation)
-                    .downloadShowImage(mContext,adModel.getImage(),null,mainHandler);
+                    .downloadShowImage(mContext,adModel.getImage(),3,mainHandler);
         }
 
     }

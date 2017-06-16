@@ -34,8 +34,8 @@
 
     <Button
         android:layout_below="@id/open_interstitial_ad2"
-        android:id="@+id/open_popu"
-        android:text="打开popuwindow"
+        android:id="@+id/open_banner"
+        android:text="打开banner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 

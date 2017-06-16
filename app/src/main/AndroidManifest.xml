@@ -43,6 +43,7 @@
             ></activity>
         <service android:name="com.mg.comm.LoadHelperService"></service>
         <activity android:name="com.mg.an.OtherActivity"></activity>
+        <activity android:name="com.mg.an.BannerAcitvity"></activity>
 
 
 
