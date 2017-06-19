@@ -23,6 +23,7 @@ public class BannerAcitvity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_banner);
         bannerContainer = (ViewGroup) this.findViewById(R.id.bannerContainer);
+//        bannerContainer.setVisibility(View.GONE);
         new MiiBannerAD(this, bannerContainer, Constants.APPID, Constants.BannerPosID, new MiiADListener() {
 
 
@@ -39,6 +40,7 @@ public class BannerAcitvity extends Activity {
             @Override
             public void onMiiADPresent() {
                 LogUtils.i(MConstant.TAG,"onMiiADPresent");
+//                bannerContainer.setVisibility(View.VISIBLE);
             }
 
             @Override
