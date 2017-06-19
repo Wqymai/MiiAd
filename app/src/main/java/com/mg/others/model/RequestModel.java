@@ -409,40 +409,45 @@ public class RequestModel {
 
     public static Map<String,String> getRequestParams2(String Action, DeviceInfo deviceInfo, int type, int tiggleSence, Context mContext){
         Map<String,String> params=new HashMap<>();
-        RequestModel requestModel = getRequestModel(Action, deviceInfo, type, tiggleSence, mContext);
-        params.put("action",requestModel.getAction());
-        params.put("appid", requestModel.getAppid());
-        params.put("ver", requestModel.getVer());
-        params.put("tp", requestModel.getTp());
-        params.put("is",requestModel.getIs());
-        params.put("dt",requestModel.getDt());
-        params.put("dtv",requestModel.getDtv());
-        params.put("ic",requestModel.getIc());
-        params.put("w",requestModel.getW());
-        params.put("h",requestModel.getH());
-        params.put("brand",requestModel.getBrand().trim().replace(" ",""));
-        params.put("mod",requestModel.getMod().trim().replace(" ",""));
-        params.put("os","android");
-        params.put("ov",requestModel.getOv());
-        params.put("sdkVersion",requestModel.getSdkVersion());
-        params.put("mcc", requestModel.getMcc());
-        params.put("mnc", requestModel.getMnc());
-        params.put("lac",requestModel.getLac());
-        params.put("cid",requestModel.getCid());
-        params.put("nt", String.valueOf(requestModel.getNt()));
-        params.put("mac", requestModel.getMac());
-        params.put("pt", String.valueOf(requestModel.getPt()));
-        params.put("st", String.valueOf(tiggleSence));
-        params.put("pl",requestModel.getPl());
-        params.put("adrid",requestModel.getAdrid());
-        params.put("adnum", String.valueOf(requestModel.getAdnum()));
         try {
-            params.put("ua", URLEncoder.encode(requestModel.getUa(),"UTF-8"));
-        } catch (UnsupportedEncodingException e) {
+            RequestModel requestModel = getRequestModel(Action, deviceInfo, type, tiggleSence, mContext);
+            params.put("action",requestModel.getAction());
+            params.put("appid", requestModel.getAppid());
+            params.put("ver", requestModel.getVer());
+            params.put("tp", requestModel.getTp());
+            params.put("is",requestModel.getIs());
+            params.put("dt",requestModel.getDt());
+            params.put("dtv",requestModel.getDtv());
+            params.put("ic",requestModel.getIc());
+            params.put("w",requestModel.getW());
+            params.put("h",requestModel.getH());
+            params.put("brand",requestModel.getBrand());
+            params.put("mod",requestModel.getMod());
+            params.put("os","android");
+            params.put("ov",requestModel.getOv());
+            params.put("sdkVersion",requestModel.getSdkVersion());
+            params.put("mcc", requestModel.getMcc());
+            params.put("mnc", requestModel.getMnc());
+            params.put("lac",requestModel.getLac());
+            params.put("cid",requestModel.getCid());
+            params.put("nt", String.valueOf(requestModel.getNt()));
+            params.put("mac", requestModel.getMac());
+            params.put("pt", String.valueOf(requestModel.getPt()));
+            params.put("st", String.valueOf(tiggleSence));
+            params.put("pl",requestModel.getPl());
+            params.put("adrid",requestModel.getAdrid());
+            params.put("adnum", String.valueOf(requestModel.getAdnum()));
+            try {
+                params.put("ua", URLEncoder.encode(requestModel.getUa(),"UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            params.put("dip",requestModel.getDip());
+            params.put("sign",requestModel.getSign());
+        }
+        catch (Exception e){
             e.printStackTrace();
         }
-        params.put("dip",requestModel.getDip());
-        params.put("sign",requestModel.getSign());
         return params;
 
     }

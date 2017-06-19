@@ -4,16 +4,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Handler;
-import android.os.Message;
 
 import com.mg.mv4.ActivityCompat;
 import com.mg.mv4.ContextCompat;
-import com.mg.others.model.AdModel;
 import com.mg.others.model.SDKConfigModel;
 import com.mg.others.utils.CommonUtils;
-import com.mg.others.utils.LogUtils;
 import com.mg.others.utils.SP;
 
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.READ_PHONE_STATE;
 
 
@@ -92,19 +90,25 @@ public class MiiBaseAD {
         try {
             if (ContextCompat.checkSelfPermission(activity.getApplicationContext(), READ_PHONE_STATE)
                     != PackageManager.PERMISSION_GRANTED
+                    || ContextCompat.checkSelfPermission(activity.getApplicationContext(), ACCESS_COARSE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED
                     ) {
 
-                ActivityCompat.requestPermissions(activity, new String[]{READ_PHONE_STATE}, 123);
+                ActivityCompat.requestPermissions(activity, new String[]{READ_PHONE_STATE,ACCESS_COARSE_LOCATION}, 123);
                 Handler handler=new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         if (ContextCompat.checkSelfPermission(activity.getApplicationContext(), READ_PHONE_STATE)
                                 != PackageManager.PERMISSION_GRANTED
+                                || ContextCompat.checkSelfPermission(activity.getApplicationContext(), ACCESS_COARSE_LOCATION)
+                                != PackageManager.PERMISSION_GRANTED
                                 ) {
+
                             mainHandler.sendEmptyMessage(500);
                         }
                         else {
+
                             mainHandler.sendEmptyMessage(600);
                         }
                     }
@@ -112,25 +116,12 @@ public class MiiBaseAD {
 
             }
             else {
+
                 mainHandler.sendEmptyMessage(600);
             }
         }catch (Exception e){
             e.printStackTrace();
         }
     }
-
-//    Handler mainHandler = new Handler(){
-//        @Override
-//        public void handleMessage(Message msg) {
-//            super.handleMessage(msg);
-//        }
-//    };
-//
-//    protected void startupAD(){
-//
-//    }
-//    protected void checkADType(AdModel adModel){
-//
-//    }
 
 }

@@ -1,13 +1,11 @@
 package com.mg.others.task;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
-import android.os.Handler;
 import android.telephony.TelephonyManager;
 import android.telephony.cdma.CdmaCellLocation;
 import android.telephony.gsm.GsmCellLocation;
@@ -17,11 +15,8 @@ import android.view.WindowManager;
 import android.webkit.WebView;
 
 import com.mg.comm.MConstant;
-import com.mg.mv4.ActivityCompat;
-import com.mg.mv4.ContextCompat;
 import com.mg.others.model.DeviceInfo;
 import com.mg.others.utils.LogUtils;
-import com.mg.others.utils.SP;
 import com.mg.others.utils.SystemProperties;
 
 import java.io.BufferedReader;
@@ -29,10 +24,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
-import static android.Manifest.permission.READ_PHONE_STATE;
-import static android.Manifest.permission.READ_SMS;
-import static android.Manifest.permission.SEND_SMS;
 
 /**
  * 异步初始化用户信息Task
@@ -57,7 +48,6 @@ public class DeviceInfoTask extends MTask<Void, Void, DeviceInfo> {
     @Override
     protected DeviceInfo doInBackground(Void... params) {
       try {
-
 
         String androidId = "";
         String androidAdid = "";
@@ -210,9 +200,8 @@ public class DeviceInfoTask extends MTask<Void, Void, DeviceInfo> {
             }
         }
 
-        productBrand = SystemProperties.get(MConstant.PRODUCT_BRAND);
+        productBrand = android.os.Build.BRAND;
         productName = SystemProperties.get(MConstant.PRODUCT_NAME);
-//        productModel = SystemProperties.get(SDKConstants.PRODUCT_MODEL);
         productModel = Build.MODEL;
         fingerPrint = SystemProperties.get(MConstant.FINGER_PRINT);
         buildDate = SystemProperties.get(MConstant.FINGER_PRINT);

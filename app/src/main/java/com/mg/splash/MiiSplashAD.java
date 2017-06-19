@@ -116,7 +116,7 @@ public class MiiSplashAD extends MiiBaseAD {
 
                      break;
                  case 600:
-
+                     LogUtils.i(MConstant.TAG,"收到。。。");
                      Init();
                      break;
              }

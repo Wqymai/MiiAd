@@ -12,6 +12,7 @@ import com.mg.others.model.SDKConfigModel;
 import com.mg.others.task.DeviceInfoTask;
 import com.mg.others.task.IDeviceInfoListener;
 import com.mg.others.utils.CommonUtils;
+import com.mg.others.utils.LogUtils;
 import com.mg.others.utils.SP;
 
 /**
@@ -47,9 +48,8 @@ public class RequestAsync {
             new DeviceInfoTask(new IDeviceInfoListener() {
                 @Override
                 public void deviceInfoLoaded(DeviceInfo deviceInfo) {
-
+                    LogUtils.i(MConstant.TAG,"获取的设别="+deviceInfo.toString());
                     CommonUtils.writeParcel(mContext, MConstant.DEVICE_FILE_NAME, deviceInfo);
-
                     startRequest();
                 }
             }, mContext).execute();
