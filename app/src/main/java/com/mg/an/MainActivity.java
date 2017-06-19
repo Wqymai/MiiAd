@@ -20,6 +20,8 @@ public class MainActivity extends Activity {
     Button openInterstitial1;
     Button openInterstitial2;
     Button openPopu;
+    Button openNativeInterstitial;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,6 +116,18 @@ public class MainActivity extends Activity {
 
             }
         });
+
+        openNativeInterstitial= (Button) findViewById(R.id.open_nativeinterstitial);
+        openNativeInterstitial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               startActivity(new Intent(MainActivity.this,NativeActivity.class));
+            }
+        });
+
+
+
+
     }
 
 

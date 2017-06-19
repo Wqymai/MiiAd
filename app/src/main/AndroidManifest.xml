@@ -44,6 +44,7 @@
         <service android:name="com.mg.comm.LoadHelperService"></service>
         <activity android:name="com.mg.an.OtherActivity"></activity>
         <activity android:name="com.mg.an.BannerAcitvity"></activity>
+        <activity android:name="com.mg.an.NativeActivity"></activity>
 
 
 
@@ -55,6 +56,7 @@
         <activity
             android:name="com.qq.e.ads.ADActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"/>
+
 
 
     </application>
