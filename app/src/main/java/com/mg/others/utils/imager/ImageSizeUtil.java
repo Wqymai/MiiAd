@@ -40,10 +40,18 @@ public class ImageSizeUtil
 
 		if (width > reqWidth || height > reqHeight)
 		{
-			int widthRadio = Math.round(width * 1.0f / reqWidth);
-			int heightRadio = Math.round(height * 1.0f / reqHeight);
+//			int widthRadio = Math.round(width * 1.0f / reqWidth);
+//			int heightRadio = Math.round(height * 1.0f / reqHeight);
+//
+//			inSampleSize = Math.max(widthRadio, heightRadio);
 
-			inSampleSize = Math.max(widthRadio, heightRadio);
+			final int halfHeight = height / 2;
+			final int halfWidth = width / 2;
+			while ((halfHeight / inSampleSize) > reqHeight && (halfWidth / inSampleSize) > reqWidth)
+			{
+				inSampleSize *= 2;
+			}
+
 		}
 		LogUtils.i(MConstant.TAG,"inSampleSize="+inSampleSize);
 		return inSampleSize;

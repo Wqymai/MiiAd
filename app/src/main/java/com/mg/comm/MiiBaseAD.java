@@ -35,7 +35,7 @@ public class MiiBaseAD {
 
     }
     /**
-    判断广告来源方式 1：广告源都关闭了 2：展示其中一家 3：先哪家再哪家
+    判断广告来源方式 1：广告源都关闭了 2：按比例展示其中一家 3：先哪家再哪家
     */
     protected SourceAssignModel checkADSource(Context mContext){
 

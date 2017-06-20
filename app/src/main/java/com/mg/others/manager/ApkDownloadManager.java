@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 
-import com.mg.comm.MConstant;
-import com.mg.comm.MiiServiceHelper;
 import com.mg.others.http.HttpDownloadListener;
 import com.mg.others.http.HttpUtils;
 import com.mg.others.model.AdModel;
@@ -85,9 +83,7 @@ public class ApkDownloadManager implements HttpDownloadListener {
             //下载完成上报
             HttpManager.reportEvent(adModel1, AdReport.EVENT_DOWNLOAD_COMPLETE,mContext);
             String filePath = adModel1.getApkFilePath();
-
             CommonUtils.installNormal(mContext,filePath);
-
             downloadedList.put(adModel1.getPkName(),adModel1);
 
         }
@@ -104,7 +100,7 @@ public class ApkDownloadManager implements HttpDownloadListener {
 
         @Override
         public void onReceive(final Context context, Intent intent) {
-
+           try {
             if (intent != null && intent.getAction().equals(Intent.ACTION_PACKAGE_ADDED)){
                 Uri data = intent.getData();
                 if (data != null){
@@ -117,13 +113,13 @@ public class ApkDownloadManager implements HttpDownloadListener {
                         if (file.exists()){
                             file.delete();
                         }
-                        new MiiServiceHelper().checkActive(context,adModel);
-
-
-
+//                        new MiiServiceHelper().checkActive(context,adModel);
                     }
                 }
             }
+           }catch (Exception e){
+               e.printStackTrace();
+           }
 
         }
     }
