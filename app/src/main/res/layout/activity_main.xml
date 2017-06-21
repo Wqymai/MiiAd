@@ -45,6 +45,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
+    <Button
+        android:text="打开DialogActivity"
+        android:layout_below="@id/open_nativeinterstitial"
+        android:id="@+id/open_dialogAct"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
     <!--<com.mg.Interstitial.MiiImageView-->
         <!--android:src="@mipmap/splash_holder"-->
         <!--android:layout_below="@id/open_interstitial_ad"-->

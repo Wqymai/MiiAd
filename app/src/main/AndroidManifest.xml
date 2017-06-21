@@ -45,6 +45,9 @@
         <activity android:name="com.mg.an.OtherActivity"></activity>
         <activity android:name="com.mg.an.BannerAcitvity"></activity>
         <activity android:name="com.mg.an.NativeActivity"></activity>
+        <activity android:name="com.mg.an.DialogActivity"
+            android:theme="@style/dialogstyle"
+            ></activity>
 
 
 

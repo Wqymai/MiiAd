@@ -1,13 +1,13 @@
 package com.mg.comm;
 
 
+import com.mg.nativ.MiiAbsADListener;
 
 /**
  * Created by wuqiyan on 17/6/9.
  */
 
-public interface MiiADListener {
-    void onMiiNoAD(int errCode);
+public interface MiiADListener extends MiiAbsADListener {
     void onMiiADDismissed();
     void onMiiADPresent();
     void onMiiADClicked();
