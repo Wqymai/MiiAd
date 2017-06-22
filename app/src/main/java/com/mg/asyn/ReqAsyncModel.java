@@ -3,7 +3,7 @@ package com.mg.asyn;
 import android.content.Context;
 import android.os.Handler;
 
-import com.mg.nativ.MiiAbsADListener;
+import com.mg.interf.MiiAbsADListener;
 
 /**
  * Created by wuqiyan on 17/6/15.

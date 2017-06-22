@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import com.android.others.R;
 import com.mg.banner.MiiBannerAD;
 import com.mg.comm.MConstant;
-import com.mg.comm.MiiADListener;
+import com.mg.interf.MiiADListener;
 import com.mg.others.utils.LogUtils;
 
 

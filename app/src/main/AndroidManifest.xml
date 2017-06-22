@@ -48,6 +48,9 @@
         <activity android:name="com.mg.an.DialogActivity"
             android:theme="@style/dialogstyle"
             ></activity>
+        <activity android:name="com.mg.an.DialogActivity2"
+            android:theme="@style/dialogstyle"
+            ></activity>
 
 
 

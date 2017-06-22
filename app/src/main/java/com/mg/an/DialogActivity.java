@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import com.android.others.R;
 import com.mg.Interstitial.MiiNativeInterstitialAD;
-import com.mg.comm.MiiADListener;
+import com.mg.interf.MiiADListener;
 
 /**
  * Created by wuqiyan on 17/6/21.
@@ -28,7 +28,6 @@ public class DialogActivity extends Activity {
         setContentView(R.layout.dialog);
         viewGroup = (ViewGroup) findViewById(R.id.adContainer);
         adHolder = (ImageView) findViewById(R.id.ad_holder);
-
         miiNativeInterstitialAD=  new MiiNativeInterstitialAD(DialogActivity.this, viewGroup, new MiiADListener() {
             @Override
             public void onMiiNoAD(int errCode) {

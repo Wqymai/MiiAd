@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import com.android.others.R;
 import com.mg.Interstitial.MiiNativeInterstitialAD;
-import com.mg.comm.MiiADListener;
+import com.mg.interf.MiiADListener;
 
 /**
  * Created by wuqiyan on 17/6/19.

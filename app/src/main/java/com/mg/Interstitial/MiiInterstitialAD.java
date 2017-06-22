@@ -34,7 +34,7 @@ import com.mg.comm.ADClickHelper;
 import com.mg.comm.ImageDownloadHelper;
 import com.mg.comm.MConstant;
 import com.mg.comm.MhttpRequestHelper;
-import com.mg.comm.MiiADListener;
+import com.mg.interf.MiiADListener;
 import com.mg.comm.MiiBaseAD;
 import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;

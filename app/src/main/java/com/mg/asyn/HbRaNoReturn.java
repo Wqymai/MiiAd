@@ -1,11 +1,8 @@
 package com.mg.asyn;
 
-import android.content.Context;
-import android.os.Handler;
 import android.os.Message;
 import android.util.Base64;
 import com.mg.comm.MConstant;
-import com.mg.comm.MiiADListener;
 import com.mg.others.http.HttpListener;
 import com.mg.others.http.HttpResponse;
 import com.mg.others.http.HttpUtils;

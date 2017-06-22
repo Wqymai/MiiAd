@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 
 import com.mg.comm.MConstant;
-import com.mg.comm.MiiADListener;
+import com.mg.interf.MiiAbsADListener;
 import com.mg.others.http.HttpResponse;
 import com.mg.others.manager.HttpManager;
 import com.mg.others.model.DeviceInfo;
@@ -24,7 +24,7 @@ public class RequestAsync {
     protected Handler mainHandler;
     protected Context mContext;
     protected HttpManager httpManager;
-    protected MiiADListener listener;
+    protected MiiAbsADListener listener;
     protected SDKConfigModel sdkConfigModel;
     protected int pt;//请求广告的类型  2-开屏 3-插屏
 

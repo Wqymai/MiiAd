@@ -10,6 +10,7 @@ import com.mg.asyn.FirstEnter;
 import com.mg.asyn.HbRaReturn;
 import com.mg.asyn.ReqAsyncModel;
 import com.mg.comm.MiiBaseAD;
+import com.mg.interf.MiiNativeListener;
 import com.mg.others.model.AdModel;
 
 /**
@@ -18,7 +19,7 @@ import com.mg.others.model.AdModel;
 
 public class MiiNativeAD extends MiiBaseAD {
 
-    private NativeModel ref;
+    private NativeImpl ref = null;
     private Context mContext;
     private Activity mActivity;
     private MiiNativeListener mListener;
@@ -32,12 +33,9 @@ public class MiiNativeAD extends MiiBaseAD {
             super.handleMessage(msg);
             switch (msg.what){
                 case 100:
-
                     startupAD();
                     break;
-
                 case 200:
-
                     try {
                         adModel = (AdModel) msg.obj;
                         setAdModel();
@@ -46,7 +44,6 @@ public class MiiNativeAD extends MiiBaseAD {
                         e.printStackTrace();
                     }
                     break;
-
 
                 case 500:
                     mListener.onMiiNoAD(1000);
@@ -105,9 +102,28 @@ public class MiiNativeAD extends MiiBaseAD {
         if (adModel == null){
             mListener.onMiiNoAD(3006);
         }
-        ref = new NativeModel(mContext);
+        ref = new NativeImpl();
         ref.setAdModel(adModel);
-        ref.setAdType(adModel.getType());//设置是不是h5广告
-        ref.setImgUrl(adModel.getImage());//设置广告图片链接
+
+        if (adModel.getType() == 4){
+            String html5="<!DOCTYPE html><html><head><meta name='viewport' " +
+                    "content='width=device-width,initial-scale=1,maximum-scale=1," +
+                    "user-scalable=no'><meta charset='utf-8'><title>Insert title " +
+                    "here</title><style type='text/css'>*{margin:0;padding:0}html," +
+                    "body{width:100%;height:100%;background-color:#FFF;" +
+                    "overflow:hidden}img{border:0}</style></head><body style=\"height: 100%;" +
+                    "width: 100%;\"><a href=\"http://www.baidu.com\"><img " +
+                    "src=\"http://192.168.199.191:8080/TestDemo/image/xfzg.jpg\" height=\"100%\" " +
+                    "width=\"100%\" /></a></body></body></html>";
+            ref.setAdType(1);
+            ref.setImgContent(adModel.getPage());//是h5广告的话 设置是h5代码
+
+        }
+        else {
+            ref.setAdType(0);
+            ref.setImgContent(adModel.getImage());//如果不是h5广告的话 设置广告图片链接
+        }
+        //回调
+        mListener.onADLoaded(ref);
     }
 }

@@ -113,6 +113,7 @@ public class ApkDownloadManager implements HttpDownloadListener {
                         if (file.exists()){
                             file.delete();
                         }
+//                        CommonUtils.writeADToSP();
 //                        new MiiServiceHelper().checkActive(context,adModel);
                     }
                 }

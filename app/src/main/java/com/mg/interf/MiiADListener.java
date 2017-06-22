@@ -1,7 +1,5 @@
-package com.mg.comm;
+package com.mg.interf;
 
-
-import com.mg.nativ.MiiAbsADListener;
 
 /**
  * Created by wuqiyan on 17/6/9.

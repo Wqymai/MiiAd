@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.ViewGroup;
 
 import com.mg.Interstitial.MiiInterstitialAD;
-import com.mg.comm.MiiADListener;
+import com.mg.interf.MiiADListener;
 import com.mg.splash.MiiSplashAD;
 
 

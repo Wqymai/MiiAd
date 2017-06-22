@@ -112,7 +112,7 @@ public class MiiBaseAD {
                             mainHandler.sendEmptyMessage(600);
                         }
                     }
-                },3000);
+                },5000);
 
             }
             else {
