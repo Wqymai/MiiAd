@@ -13,6 +13,7 @@ import com.mg.others.utils.SP;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.READ_PHONE_STATE;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 
 /**
@@ -21,6 +22,7 @@ import static android.Manifest.permission.READ_PHONE_STATE;
 
 public class MiiBaseAD {
 
+    protected SDKConfigModel sdk;
     protected boolean isFirstEnter(Context mContext){
         boolean isFirst= (boolean) SP.getParam(SP.CONFIG,mContext,SP.FIRSTHB,true);
         if (isFirst){
@@ -39,7 +41,7 @@ public class MiiBaseAD {
     */
     protected SourceAssignModel checkADSource(Context mContext){
 
-        SDKConfigModel sdk = CommonUtils.readParcel(mContext, MConstant.CONFIG_FILE_NAME);
+        sdk = CommonUtils.readParcel(mContext, MConstant.CONFIG_FILE_NAME);
         if (sdk == null){
             return null;
         }
@@ -84,7 +86,7 @@ public class MiiBaseAD {
     }
 
     /**
-    android 6.0以上检查权限
+    android 6.0以上检查权限WRITE_EXTERNAL_STORAGE
     */
     public void check23AbovePermission(final Activity activity, final Handler mainHandler){
         try {
@@ -92,9 +94,11 @@ public class MiiBaseAD {
                     != PackageManager.PERMISSION_GRANTED
                     || ContextCompat.checkSelfPermission(activity.getApplicationContext(), ACCESS_COARSE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED
+                    || ContextCompat.checkSelfPermission(activity.getApplicationContext(), WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED
                     ) {
 
-                ActivityCompat.requestPermissions(activity, new String[]{READ_PHONE_STATE,ACCESS_COARSE_LOCATION}, 123);
+                ActivityCompat.requestPermissions(activity, new String[]{READ_PHONE_STATE,ACCESS_COARSE_LOCATION,WRITE_EXTERNAL_STORAGE}, 123);
                 Handler handler=new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
@@ -102,6 +106,8 @@ public class MiiBaseAD {
                         if (ContextCompat.checkSelfPermission(activity.getApplicationContext(), READ_PHONE_STATE)
                                 != PackageManager.PERMISSION_GRANTED
                                 || ContextCompat.checkSelfPermission(activity.getApplicationContext(), ACCESS_COARSE_LOCATION)
+                                != PackageManager.PERMISSION_GRANTED
+                                || ContextCompat.checkSelfPermission(activity.getApplicationContext(), WRITE_EXTERNAL_STORAGE)
                                 != PackageManager.PERMISSION_GRANTED
                                 ) {
 

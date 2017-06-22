@@ -30,19 +30,19 @@ import com.mg.asyn.ReqAsyncModel;
 import com.mg.comm.ADClickHelper;
 import com.mg.comm.ImageDownloadHelper;
 import com.mg.comm.MConstant;
-import com.mg.interf.MiiADListener;
 import com.mg.comm.MiiBaseAD;
-
+import com.mg.interf.MiiADListener;
 import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
-import com.mg.others.model.SDKConfigModel;
+import com.mg.others.utils.LocalKeyConstants;
 import com.mg.others.utils.LogUtils;
+import com.mg.others.utils.MiiLocalStrEncrypt;
 import com.mg.others.utils.SP;
 import com.qq.e.ads.splash.SplashAD;
 import com.qq.e.ads.splash.SplashADListener;
 
-
+import org.json.JSONObject;
 
 
 /**
@@ -52,7 +52,7 @@ import com.qq.e.ads.splash.SplashADListener;
 public class MiiSplashAD extends MiiBaseAD {
 
      private Context mContext;
-     private SDKConfigModel sdk;
+//     private SDKConfigModel sdk;
      private ViewGroup adContainer;
      private View skipContainer;
      private Activity mActivity;
@@ -63,6 +63,7 @@ public class MiiSplashAD extends MiiBaseAD {
      private CountDownTimer timer;
      private String appid;
      private String splashid;
+     private boolean gdtReturn;
      private ReqAsyncModel reqAsyncModel = new ReqAsyncModel();
 
 
@@ -116,8 +117,12 @@ public class MiiSplashAD extends MiiBaseAD {
 
                      break;
                  case 600:
-                     LogUtils.i(MConstant.TAG,"收到。。。");
+                     LogUtils.i(MConstant.TAG,"600 收到。。。");
                      Init();
+                     break;
+                 case 700://心跳通知
+                     LogUtils.i(MConstant.TAG,"700 收到。。。");
+                     openGDTAD(gdtReturn);
                      break;
              }
          }
@@ -378,6 +383,8 @@ public class MiiSplashAD extends MiiBaseAD {
             }
             else {
 
+                new JustHbRelative(reqAsyncModel).fetchMGAD();
+                gdtReturn = true;
                 openGDTAD(true);
 
             }
@@ -391,6 +398,8 @@ public class MiiSplashAD extends MiiBaseAD {
 
             }
             else {
+                new JustHbRelative(reqAsyncModel).fetchMGAD();
+                gdtReturn = false;
                 openGDTAD(false);
             }
         }
@@ -401,13 +410,24 @@ public class MiiSplashAD extends MiiBaseAD {
         LogUtils.i(MConstant.TAG,"load gdt...");
 
         //new MhttpRequestHelper(mContext,mainHandler,0,listener).fetchMGAD3();
-        new JustHbRelative(reqAsyncModel).fetchMGAD();
 
+        String AID = null;
+        String SPID = null;
+        try {
+            String gdtIds = sdk.getList();
+            String gdtIds_json = MiiLocalStrEncrypt.deCodeStringToString(gdtIds, LocalKeyConstants.LOCAL_GDT);
+            JSONObject object=new JSONObject(gdtIds_json);
+            AID = object.optString("AID");
+            SPID = object.optString("SPID");
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
 
-        new SplashAD(mActivity, adContainer, skipContainer, appid,splashid, new SplashADListener() {
+        LogUtils.i(MConstant.TAG,"AID="+AID+" SPID="+SPID);
+        new SplashAD(mActivity, adContainer, skipContainer, AID,SPID, new SplashADListener() {
             @Override
             public void onADDismissed() {
-
 
                 listener.onMiiADDismissed();
 

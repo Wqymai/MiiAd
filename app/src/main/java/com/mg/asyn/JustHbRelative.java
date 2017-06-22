@@ -94,6 +94,8 @@ public class JustHbRelative extends RequestAsync {
 
             checkReShowCount();
 
+            mainHandler.sendEmptyMessage(700);
+
         }
         catch (Exception e){
             e.printStackTrace();

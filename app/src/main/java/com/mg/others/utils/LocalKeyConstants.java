@@ -31,5 +31,5 @@ public class LocalKeyConstants {
 
     //广告相关
     public static final String LOCAL_FIRE           = "fire";
-    public static final String LOCAL_VSGD          = "aurl";
+    public static final String LOCAL_GDT          = "miids";
 }

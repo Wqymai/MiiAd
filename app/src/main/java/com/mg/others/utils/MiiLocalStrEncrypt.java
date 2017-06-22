@@ -21,4 +21,21 @@ public class MiiLocalStrEncrypt {
             return string;
         }
     }
+    public static String enCodeStringToString(String string, String key) {
+        if(!"".equals(string)&&!"".equals(key)) {
+            String enStr = "";
+
+            try {
+                enStr = EncrypAES.encrypt(string, key);
+                enStr = Base64.encodeStringToString(enStr);
+            } catch (Exception var4) {
+                var4.printStackTrace();
+            }
+
+            return enStr;
+        } else {
+            return string;
+        }
+    }
+
 }
