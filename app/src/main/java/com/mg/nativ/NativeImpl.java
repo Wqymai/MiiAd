@@ -68,6 +68,7 @@ public class NativeImpl implements MiiNativeADDataRef {
     @Override
     public void setNormalClick(final Context context, final View view) {
 
+        LogUtils.i(MConstant.TAG,"设置点击事件");
         if (adModel.getType() != 4){
             //点击调用
             view.setOnClickListener(new View.OnClickListener() {

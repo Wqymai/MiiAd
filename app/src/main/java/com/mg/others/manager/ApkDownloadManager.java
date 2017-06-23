@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 
+import com.mg.comm.MConstant;
 import com.mg.others.http.HttpDownloadListener;
 import com.mg.others.http.HttpUtils;
 import com.mg.others.model.AdModel;
@@ -55,9 +56,10 @@ public class ApkDownloadManager implements HttpDownloadListener {
     public void downloadFile(AdModel adModel){
 
         downloadingList.put(adModel.getUrl(), adModel);
-        String fileName = adModel.getName() + ".apk";
+        String fileName = adModel.getName().replace("，","") + ".apk";
         String path =mContext.getFilesDir().getPath()+"/"; //CommonUtils.getFileDownloadLocation(mContext);
         File file = new File(path, fileName);
+        LogUtils.i(MConstant.TAG,"apk存储位置："+file.getPath());
         adModel.setApkFilePath(file.getPath());
         if (file.exists()){
             file.delete();
@@ -100,13 +102,18 @@ public class ApkDownloadManager implements HttpDownloadListener {
 
         @Override
         public void onReceive(final Context context, Intent intent) {
+
            try {
             if (intent != null && intent.getAction().equals(Intent.ACTION_PACKAGE_ADDED)){
+
+
                 Uri data = intent.getData();
                 if (data != null){
                     String pkName = data.getSchemeSpecificPart();
+
                     final AdModel adModel = downloadedList.remove(pkName);
                     if (adModel != null){
+
                         //安装完成上报
                         HttpManager.reportEvent(adModel, AdReport.EVENT_INSTALL_COMLETE, mContext);
                         File file = new File(adModel.getApkFilePath());

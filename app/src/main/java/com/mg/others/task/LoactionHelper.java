@@ -41,7 +41,7 @@ public class LoactionHelper {
             model.lon = location.getLongitude();
 
         }
-        LogUtils.i(MConstant.TAG,"lat="+location.getLatitude()+" lon="+location.getLongitude());
+
        }catch (Exception e){
            e.printStackTrace();
        }

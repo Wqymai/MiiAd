@@ -13,11 +13,14 @@ import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
 import com.mg.others.utils.CommonUtils;
+import com.mg.others.utils.LogUtils;
 
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -68,14 +71,23 @@ public class ADClickHelper {
             httpUtils.get(adUrl, new HttpListener() {
                 @Override
                 public void onSuccess(HttpResponse response) {
-                    Map<String,String> map = parseType5Res(response.entity());
+                  try {
 
+                    Map<String,String> map = parseType5Res(response.entity());
                     //点击上报
                     ad.setClickid(map.get("clickid"));
                     HttpManager.reportEvent(ad, AdReport.EVENT_CLICK, mContext);
 
                     //下载
-                    ad.setUrl(map.get("dstlink"));
+                    String dstlink = map.get("dstlink");
+                    ad.setUrl(dstlink);
+
+                    Pattern p = Pattern.compile("fsname=(?<name>.*?)_");
+                    Matcher m = p.matcher(dstlink);
+                    if (m.find()){
+                        LogUtils.i(MConstant.TAG,m.group(1));
+                        ad.setPkName(m.group(1));
+                    }
                     if (CommonUtils.getNetworkSubType(mContext) == CommonUtils.NET_TYPE_WIFI) {
 
                         Intent intent=new Intent(mContext,LoadHelperService.class);
@@ -87,7 +99,9 @@ public class ADClickHelper {
                         HttpManager.reportEvent(ad, AdReport.EVENT_DOWNLOAD_START, mContext);
                         return;
                     }
-
+                  }catch (Exception e){
+                      e.printStackTrace();
+                  }
                 }
 
                 @Override

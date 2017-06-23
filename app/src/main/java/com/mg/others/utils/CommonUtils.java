@@ -9,11 +9,14 @@ import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
+import android.support.v4.content.FileProvider;
 import android.telephony.TelephonyManager;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 
+import com.android.others.BuildConfig;
 import com.mg.comm.MConstant;
 import com.mg.others.model.AdModel;
 
@@ -376,9 +379,17 @@ public class CommonUtils {
         LogUtils.i(MConstant.TAG,"last loc="+filePath);
         String cmd = "chmod 777 " + filePath;
         try {
-            Runtime.getRuntime().exec(cmd);
-            i.setDataAndType(Uri.parse("file://" + filePath), "application/vnd.android.package-archive");
-            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                i.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                Uri contentUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID+ ".fileProvider", file);
+                i.setDataAndType(contentUri, "application/vnd.android.package-archive");
+            }
+            else {
+                Runtime.getRuntime().exec(cmd);
+                i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                i.setDataAndType(Uri.parse("file://" + filePath), "application/vnd.android.package-archive");
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            }
             context.startActivity(i);
         } catch (Exception e) {
             e.printStackTrace();
