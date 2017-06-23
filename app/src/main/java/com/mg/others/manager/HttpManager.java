@@ -1,13 +1,9 @@
 package com.mg.others.manager;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.text.TextUtils;
-import android.util.Base64;
-import android.util.Log;
 
 import com.mg.comm.MConstant;
-
 import com.mg.others.http.HttpListener;
 import com.mg.others.http.HttpResponse;
 import com.mg.others.http.HttpUtils;
@@ -15,25 +11,17 @@ import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
 import com.mg.others.model.DeviceInfo;
 import com.mg.others.model.RequestModel;
-import com.mg.others.model.SDKConfigModel;
-import com.mg.others.utils.AdParser;
+import com.mg.others.task.LoactionHelper;
 import com.mg.others.utils.CommonUtils;
-import com.mg.others.utils.ConfigParser;
 import com.mg.others.utils.LocalKeyConstants;
-import com.mg.others.utils.LogUtils;
-import com.mg.others.utils.MiiBase64;
 import com.mg.others.utils.MiiLocalStrEncrypt;
-import com.mg.others.utils.SP;
 import com.mg.others.v4.NonNull;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
-
 
 
 /**
@@ -218,35 +206,36 @@ public class HttpManager {
         }
         HttpUtils httpUtils = new HttpUtils(mContext);
         String urls[] = null;
-        String type  =  null;
+
+
         switch(eventType){
             case AdReport.EVENT_CLICK:
-                type = "EVENTT_CLICK";
+
                 urls = adModel.getReportBean().getUrlClick();
                 break;
 
             case AdReport.EVENT_DOWNLOAD_COMPLETE:
-                type = "EVENTT_DOWNLOAD_COMPLETE";
+
                 urls = adModel.getReportBean().getUrlDownloadComplete();
                 break;
 
             case AdReport.EVENT_DOWNLOAD_START:
-                type = "EVENTT_DOWNLOAD_START";
+
                 urls = adModel.getReportBean().getUrlDownloadStart();
                 break;
 
             case AdReport.EVENT_INSTALL_COMLETE:
-                type = "EVENTT_INSTALL_COMPLETE";
+
                 urls = adModel.getReportBean().getUrlInstallComplete();
                 break;
 
             case AdReport.EVENT_OPEN:
-                type = "EVENTT_OPEN";
+
                 urls = adModel.getReportBean().getUrlOpen();
                 break;
 
             case AdReport.EVENT_SHOW:
-                type = "EVENTT_SHOW";
+
                 urls = adModel.getReportBean().getUrlShow();
                 break;
         }
@@ -256,9 +245,42 @@ public class HttpManager {
 
         for (String str : urls){
             if (!TextUtils.isEmpty(str)){
-                httpUtils.get(str,null);
+
+                httpUtils.get(replaceReportEventUrl(adModel,str,mContext),null);
+
             }
         }
 
     }
+
+
+    //替换点击上报
+    private static String replaceReportEventUrl(AdModel adModel,String originUrl,Context context){
+
+        LoactionHelper.LocModel locModel=LoactionHelper.GetUserLocation(context);
+        if (originUrl.contains("%%LON%%")){
+            originUrl = originUrl.replace("%%LON%%",String.valueOf(locModel.lon));
+        }
+        if (originUrl.contains("%%LAT%%")){
+            originUrl = originUrl.replace("%%LAT%%",String.valueOf(locModel.lat));
+        }
+        if (originUrl.contains("%%DOWNX%%")){
+            originUrl = originUrl.replace("%%DOWNX%%",adModel.getDownx());
+        }
+        if (originUrl.contains("%%DOWNY%%")){
+            originUrl = originUrl.replace("%%DOWNY%%",adModel.getDowny());
+        }
+        if (originUrl.contains("%%UPX%%")){
+            originUrl = originUrl.replace("%%UPX%%",adModel.getUpx());
+        }
+        if (originUrl.contains("%%UPY%%")){
+            originUrl = originUrl.replace("%%UPY%%",adModel.getUpy());
+        }
+        if (originUrl.contains("%%CLICKID%%")){
+            originUrl = originUrl.replace("%%CLICKID%%",adModel.getClickid());
+        }
+        return originUrl;
+    }
+
+
 }

@@ -32,13 +32,6 @@ public class AdModel implements Serializable {
 
     private String apkFilePath;
 
-    public String getPage() {
-        return page;
-    }
-
-    public void setPage(String page) {
-        this.page = page;
-    }
 
     private int pt;                     //1: banner，2: 全屏， 3: 半屏， 4: 信息流，5：广告墙 ，6：push
 
@@ -64,6 +57,20 @@ public class AdModel implements Serializable {
 
     private int flag;       //点击广告是跳转还是关闭
     private String bp;//banner广告的位置
+
+    private String downx;
+    private String downy;
+    private String upx;
+    private String upy;
+    private String clickid;
+
+    public String getClickid() {
+        return clickid;
+    }
+
+    public void setClickid(String clickid) {
+        this.clickid = clickid;
+    }
 
     public String getBp() {
         return bp;
@@ -231,6 +238,45 @@ public class AdModel implements Serializable {
 
     public void setReportBean(AdReport reportBean) {
         this.reportBean = reportBean;
+    }
+    public String getPage() {
+        return page;
+    }
+
+    public void setPage(String page) {
+        this.page = page;
+    }
+
+    public String getDownx() {
+        return downx;
+    }
+
+    public void setDownx(String downx) {
+        this.downx = downx;
+    }
+
+    public String getDowny() {
+        return downy;
+    }
+
+    public void setDowny(String downy) {
+        this.downy = downy;
+    }
+
+    public String getUpx() {
+        return upx;
+    }
+
+    public void setUpx(String upx) {
+        this.upx = upx;
+    }
+
+    public String getUpy() {
+        return upy;
+    }
+
+    public void setUpy(String upy) {
+        this.upy = upy;
     }
 
     @Override

@@ -50,6 +50,42 @@ public class RequestModel {
     private String appid;
     private String ver;
     private String tp;
+    private String aaid;
+    private String lon;
+    private String lat;
+    private String density;
+
+    public String getAaid() {
+        return aaid;
+    }
+
+    public void setAaid(String aaid) {
+        this.aaid = aaid;
+    }
+
+    public String getLon() {
+        return lon;
+    }
+
+    public void setLon(String lon) {
+        this.lon = lon;
+    }
+
+    public String getLat() {
+        return lat;
+    }
+
+    public void setLat(String lat) {
+        this.lat = lat;
+    }
+
+    public String getDensity() {
+        return density;
+    }
+
+    public void setDensity(String density) {
+        this.density = density;
+    }
 
     public int getSt() {
         return st;
@@ -313,6 +349,10 @@ public class RequestModel {
                 requestModel.setAdnum(1);
                 requestModel.setUa(mDeviceInfo.getUserAgent());
                 requestModel.setDip(String.valueOf(mDeviceInfo.getDip()));
+                requestModel.setAaid(mDeviceInfo.getAdvertisingId());
+                requestModel.setLon(mDeviceInfo.getLon());
+                requestModel.setLat(mDeviceInfo.getLat());
+                requestModel.setDensity(mDeviceInfo.getDensity());
                 requestModel.setSign(CommonUtils.hashSign(Action+key+ MConstant.MSDK_VERSION
                         + currentTime+"1"+mDeviceInfo.getImei() + mDeviceInfo.getScreenWidth() + mDeviceInfo.getScreenHeight()));
                 break;
@@ -443,14 +483,16 @@ public class RequestModel {
                 e.printStackTrace();
             }
             params.put("dip",requestModel.getDip());
+            params.put("aaid",requestModel.getAaid());
+            params.put("lon",requestModel.getLon());
+            params.put("lat",requestModel.getLat());
+            params.put("density",requestModel.getDensity());
             params.put("sign",requestModel.getSign());
         }
         catch (Exception e){
             e.printStackTrace();
         }
         return params;
-
     }
-
 
 }

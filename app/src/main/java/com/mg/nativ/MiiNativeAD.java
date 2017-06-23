@@ -65,12 +65,13 @@ public class MiiNativeAD extends MiiBaseAD {
         reqAsyncModel.context = this.mContext;
         reqAsyncModel.handler = this.mainHandler;
         reqAsyncModel.listener = this.mListener;
-        reqAsyncModel.pt = 3;
+        reqAsyncModel.pt = 4;//信息流
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             check23AbovePermission(mActivity,mainHandler);
             return;
         }
+        Init();
 
     }
     private void Init(){
@@ -105,24 +106,24 @@ public class MiiNativeAD extends MiiBaseAD {
         ref = new NativeImpl();
         ref.setAdModel(adModel);
 
-        if (adModel.getType() == 4){
-            String html5="<!DOCTYPE html><html><head><meta name='viewport' " +
-                    "content='width=device-width,initial-scale=1,maximum-scale=1," +
-                    "user-scalable=no'><meta charset='utf-8'><title>Insert title " +
-                    "here</title><style type='text/css'>*{margin:0;padding:0}html," +
-                    "body{width:100%;height:100%;background-color:#FFF;" +
-                    "overflow:hidden}img{border:0}</style></head><body style=\"height: 100%;" +
-                    "width: 100%;\"><a href=\"http://www.baidu.com\"><img " +
-                    "src=\"http://192.168.199.191:8080/TestDemo/image/xfzg.jpg\" height=\"100%\" " +
-                    "width=\"100%\" /></a></body></body></html>";
-            ref.setAdType(1);
-            ref.setImgContent(adModel.getPage());//是h5广告的话 设置是h5代码
-
-        }
-        else {
-            ref.setAdType(0);
-            ref.setImgContent(adModel.getImage());//如果不是h5广告的话 设置广告图片链接
-        }
+//        if (adModel.getType() == 4){
+//            String html5="<!DOCTYPE html><html><head><meta name='viewport' " +
+//                    "content='width=device-width,initial-scale=1,maximum-scale=1," +
+//                    "user-scalable=no'><meta charset='utf-8'><title>Insert title " +
+//                    "here</title><style type='text/css'>*{margin:0;padding:0}html," +
+//                    "body{width:100%;height:100%;background-color:#FFF;" +
+//                    "overflow:hidden}img{border:0}</style></head><body style=\"height: 100%;" +
+//                    "width: 100%;\"><a href=\"http://www.baidu.com\"><img " +
+//                    "src=\"http://192.168.199.191:8080/TestDemo/image/xfzg.jpg\" height=\"100%\" " +
+//                    "width=\"100%\" /></a></body></body></html>";
+//            ref.setAdType(1);
+//            ref.setImgContent(adModel.getPage());//是h5广告的话 设置是h5代码
+//
+//        }
+//        else {
+//            ref.setAdType(0);
+//            ref.setImgContent(adModel.getImage());//如果不是h5广告的话 设置广告图片链接
+//        }
         //回调
         mListener.onADLoaded(ref);
     }

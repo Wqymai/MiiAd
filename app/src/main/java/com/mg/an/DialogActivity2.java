@@ -35,14 +35,14 @@ public class DialogActivity2 extends Activity {
         final MiiNativeADDataRef ref = (MiiNativeADDataRef) getIntent().getSerializableExtra("AdData");
 
 
-        LogUtils.i(MConstant.TAG, "imgurl="+ref.getImgContent()+" type="+ref.getADType());
+        LogUtils.i(MConstant.TAG, "imgurl="+ref.getImg()+" type="+ref.getType());
 
-        imgurl = ref.getImgContent();
+        imgurl = ref.getImg();
         imageView = (ImageView) findViewById(R.id.img);
 
         webView= (WebView) findViewById(R.id.webview);
 
-        if (ref.getADType() == 0){
+        if (ref.getType() == 0){
 
             LogUtils.i(MConstant.TAG,"不是h5广告");
             webView.setVisibility(View.GONE);
@@ -75,13 +75,8 @@ public class DialogActivity2 extends Activity {
                     }
                 }
             }).start();
+            ref.setNormalClick(DialogActivity2.this,imageView);
 
-            imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ref.onClick(DialogActivity2.this,v);
-                }
-            });
         }
         else {
             LogUtils.i(MConstant.TAG,"h5广告");

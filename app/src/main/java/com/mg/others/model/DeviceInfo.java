@@ -35,7 +35,45 @@ public class DeviceInfo implements Serializable {
     private String buildDate; // 制作者及时间
     private String androidAdid;
     private String uuid;
-    private String dip;
+    private String dip;//手机分辨率
+
+    private String advertisingId;//Android Advertising ID
+    private String density;//屏幕密度
+
+    private String lon;//经度
+    private String lat;//纬度
+
+    public String getLon() {
+        return lon;
+    }
+
+    public void setLon(String lon) {
+        this.lon = lon;
+    }
+
+    public String getLat() {
+        return lat;
+    }
+
+    public void setLat(String lat) {
+        this.lat = lat;
+    }
+
+    public String getDensity() {
+        return density;
+    }
+
+    public void setDensity(String density) {
+        this.density = density;
+    }
+
+    public String getAdvertisingId() {
+        return advertisingId;
+    }
+
+    public void setAdvertisingId(String advertisingId) {
+        this.advertisingId = advertisingId;
+    }
 
     @Override
     public String toString() {

@@ -13,9 +13,13 @@ import java.io.Serializable;
 public interface MiiNativeADDataRef extends Serializable {
     static final long serialVersionUID = -7060210544600464481L;
 
-    String getImgContent();
-    int getADType();//1.html5的 0.非html5的
-    void onClick(Context context,View view);//针对可设置setOnclickListener的
+    String getImg();//图片地址
+    int getType();//1.html5的 0.非html5的
+    String getName();//广告名称
+    String getTitle();//广告语
+    String getDesc();//广告描述
+    String getPage();//h5代码
+    void setNormalClick(Context context,View view);//针对可设置setOnclickListener的
     void onExposured(Context context);
     void setWVClick(Context context,WebView webView);//设置webview的点击事件
 

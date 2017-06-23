@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.net.http.SslError;
+import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
@@ -11,10 +12,12 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.mg.comm.ADClickHelper;
+import com.mg.comm.MConstant;
 import com.mg.interf.MiiNativeADDataRef;
 import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
+import com.mg.others.utils.LogUtils;
 import com.mg.others.utils.SP;
 
 /**
@@ -24,8 +27,6 @@ import com.mg.others.utils.SP;
 public class NativeImpl implements MiiNativeADDataRef {
 
 
-    private String imageContent;
-    private int adType;
     private AdModel adModel;
 
 
@@ -33,30 +34,41 @@ public class NativeImpl implements MiiNativeADDataRef {
         this.adModel = model;
     }
 
-    public void setAdType(int adType){
-        this.adType = adType;
-    }
-
-    public void setImgContent(String imageContent) {
-        this.imageContent = imageContent;
-    }
-
     @Override
-    public String getImgContent() {
-        return imageContent;
+    public String getImg() {
+        return adModel.getImage();
     }
-
 
 
     @Override
-    public int getADType() {
-        return adType;
+    public int getType() {
+        return adModel.getType() == 4? 1 : 0;
     }
 
     @Override
-    public void onClick(final Context context, final View view) {
+    public String getName() {
+        return adModel.getName();
+    }
 
-        if (adType == 0){
+    @Override
+    public String getTitle() {
+        return adModel.getTitle();
+    }
+
+    @Override
+    public String getDesc() {
+        return adModel.getDesc();
+    }
+
+    @Override
+    public String getPage() {
+        return adModel.getPage();
+    }
+
+    @Override
+    public void setNormalClick(final Context context, final View view) {
+
+        if (adModel.getType() != 4){
             //点击调用
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -64,11 +76,30 @@ public class NativeImpl implements MiiNativeADDataRef {
                     new ADClickHelper(context).AdClick(adModel);
                 }
             });
+
+            view.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            LogUtils.i(MConstant.TAG,"ACTION_DOWN " + event.getX()+" "+event.getY());
+                            adModel.setDownx(String.valueOf(event.getX()));
+                            adModel.setDowny(String.valueOf(event.getY()));
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            LogUtils.i(MConstant.TAG,"ACTION_UP "+event.getX()+" "+event.getY());
+                            adModel.setUpx(String.valueOf(event.getX()));
+                            adModel.setUpy(String.valueOf(event.getY()));
+                            break;
+                        default:
+                            break;
+                    }
+                    return false;
+                }
+            });
         }
 
     }
-
-
 
 
     @Override
@@ -83,7 +114,8 @@ public class NativeImpl implements MiiNativeADDataRef {
 
     @Override
     public void setWVClick(final Context context,final WebView webView) {
-        if (adType == 1){
+        if (adModel.getType() == 4){
+
                 WebSettings settings = webView.getSettings();
                 settings.setDefaultTextEncodingName("utf-8") ;
                 settings.setJavaScriptEnabled(true);

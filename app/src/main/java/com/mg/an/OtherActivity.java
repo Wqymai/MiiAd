@@ -21,7 +21,7 @@ public class OtherActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        new MiiSplashAD(this,null, null, "", "", new MiiADListener() {
+        new MiiSplashAD(this,null, null, new MiiADListener() {
             @Override
             public void onMiiNoAD(int errCode) {
 

@@ -12,6 +12,7 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.SslErrorHandler;
@@ -49,7 +50,7 @@ import org.json.JSONObject;
  * Created by wuqiyan on 17/6/9.
  */
 
-public class MiiSplashAD extends MiiBaseAD {
+public class MiiSplashAD extends MiiBaseAD{
 
      private Context mContext;
 //     private SDKConfigModel sdk;
@@ -61,8 +62,7 @@ public class MiiSplashAD extends MiiBaseAD {
      private ImageView adImageView;
      private WebView webView;
      private CountDownTimer timer;
-     private String appid;
-     private String splashid;
+
      private boolean gdtReturn;
      private ReqAsyncModel reqAsyncModel = new ReqAsyncModel();
 
@@ -117,18 +117,18 @@ public class MiiSplashAD extends MiiBaseAD {
 
                      break;
                  case 600:
-                     LogUtils.i(MConstant.TAG,"600 收到。。。");
+
                      Init();
                      break;
                  case 700://心跳通知
-                     LogUtils.i(MConstant.TAG,"700 收到。。。");
+
                      openGDTAD(gdtReturn);
                      break;
              }
          }
      };
 
-    public  MiiSplashAD(Activity activity, ViewGroup adContainer,View skipContainer,String appid,String splashid,MiiADListener adListener){
+    public  MiiSplashAD(Activity activity, ViewGroup adContainer,View skipContainer ,MiiADListener adListener){
 
         this.mActivity = activity;
 
@@ -140,9 +140,6 @@ public class MiiSplashAD extends MiiBaseAD {
 
         this.listener = adListener;
 
-        this.appid = appid;
-
-        this.splashid = splashid;
 
 
         if ( activity == null || adContainer == null || skipContainer == null){
@@ -161,6 +158,7 @@ public class MiiSplashAD extends MiiBaseAD {
         }
 
         Init();
+
 
     }
 
@@ -330,6 +328,28 @@ public class MiiSplashAD extends MiiBaseAD {
                      }
                  }
              });
+            adImageView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            LogUtils.i(MConstant.TAG,"ACTION_DOWN " + event.getX()+" "+event.getY());
+                            adModel.setDownx(String.valueOf(event.getX()));
+                            adModel.setDowny(String.valueOf(event.getY()));
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            LogUtils.i(MConstant.TAG,"ACTION_UP "+event.getX()+" "+event.getY());
+                            adModel.setUpx(String.valueOf(event.getX()));
+                            adModel.setUpy(String.valueOf(event.getY()));
+                            break;
+                        default:
+                            break;
+                    }
+                    return false;
+                }
+            });
+
        }catch (Exception e){
            e.printStackTrace();
        }
