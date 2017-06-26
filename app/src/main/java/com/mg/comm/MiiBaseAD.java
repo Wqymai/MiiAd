@@ -9,7 +9,14 @@ import com.mg.mv4.ActivityCompat;
 import com.mg.mv4.ContextCompat;
 import com.mg.others.model.SDKConfigModel;
 import com.mg.others.utils.CommonUtils;
+import com.mg.others.utils.LocalKeyConstants;
+import com.mg.others.utils.MiiLocalStrEncrypt;
 import com.mg.others.utils.SP;
+
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.READ_PHONE_STATE;
@@ -84,6 +91,28 @@ public class MiiBaseAD {
         }
         return sdkConfigModel;
     }
+
+
+    protected Map<String,String> getGdtIds(Context context){
+        Map<String,String> maps=new HashMap<>();
+        SDKConfigModel sdkConfig=checkSdkConfig(sdk,context);
+        try {
+            String gdtIds = sdkConfig.getList();
+            String gdtIds_json = MiiLocalStrEncrypt.deCodeStringToString(gdtIds, LocalKeyConstants.LOCAL_GDT);
+            JSONObject object=new JSONObject(gdtIds_json);
+            maps.put("AID",object.optString("AID"));
+            maps.put("SPID",object.optString("SPID"));
+            maps.put("BPID",object.optString("SPID"));
+            maps.put("IPID",object.optString("IPID"));
+            maps.put("NPID",object.optString("NPID"));
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return maps;
+    }
+
+
 
     /**
     android 6.0以上检查权限WRITE_EXTERNAL_STORAGE

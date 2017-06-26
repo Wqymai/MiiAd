@@ -53,7 +53,7 @@
         android:layout_height="wrap_content"/>
 
     <Button
-        android:text="打开DialogActivity2"
+        android:text="打开原生广告"
         android:layout_below="@id/open_dialogAct"
         android:id="@+id/open_dialogAct2"
         android:layout_width="wrap_content"

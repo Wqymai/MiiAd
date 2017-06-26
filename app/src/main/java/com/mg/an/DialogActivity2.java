@@ -37,6 +37,7 @@ public class DialogActivity2 extends Activity {
 
         LogUtils.i(MConstant.TAG, "imgurl="+ref.getImg()+" type="+ref.getType());
 
+
         imgurl = ref.getImg();
         imageView = (ImageView) findViewById(R.id.img);
 

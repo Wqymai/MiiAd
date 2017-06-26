@@ -36,14 +36,12 @@ import com.mg.interf.MiiADListener;
 import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
-import com.mg.others.utils.LocalKeyConstants;
 import com.mg.others.utils.LogUtils;
-import com.mg.others.utils.MiiLocalStrEncrypt;
 import com.mg.others.utils.SP;
 import com.qq.e.ads.splash.SplashAD;
 import com.qq.e.ads.splash.SplashADListener;
 
-import org.json.JSONObject;
+import java.util.Map;
 
 
 /**
@@ -431,18 +429,16 @@ public class MiiSplashAD extends MiiBaseAD{
 
         //new MhttpRequestHelper(mContext,mainHandler,0,listener).fetchMGAD3();
 
-        String AID = null;
-        String SPID = null;
-        try {
-            String gdtIds = sdk.getList();
-            String gdtIds_json = MiiLocalStrEncrypt.deCodeStringToString(gdtIds, LocalKeyConstants.LOCAL_GDT);
-            JSONObject object=new JSONObject(gdtIds_json);
-            AID = object.optString("AID");
-            SPID = object.optString("SPID");
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
+        String AID = "";
+        String SPID = "";
+       try {
+           Map<String,String> gdtMaps = getGdtIds(mContext);
+           AID = gdtMaps.get("AID");
+           SPID = gdtMaps.get("SPID");
+       }catch (Exception e){
+           e.printStackTrace();
+       }
+
 
         LogUtils.i(MConstant.TAG,"AID="+AID+" SPID="+SPID);
         new SplashAD(mActivity, adContainer, skipContainer, AID,SPID, new SplashADListener() {

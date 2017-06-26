@@ -246,11 +246,17 @@ public class HttpManager {
         for (String str : urls){
             if (!TextUtils.isEmpty(str)){
 
+              if (adModel.getType()==4){
+
+                httpUtils.get(str,null);
+
+              } else {
+
                 httpUtils.get(replaceReportEventUrl(adModel,str,mContext),null);
 
+              }
             }
         }
-
     }
 
 
