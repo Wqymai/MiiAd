@@ -1,7 +1,6 @@
 package com.mg.an;
 
 import android.app.Activity;
-import android.app.NativeActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -51,8 +50,8 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
 
-//        Log.i("TAG",MiiLocalStrEncrypt.enCodeStringToString("{\"AID\":\"1101152570\"," +
-//                "\"SPID\":\"8863364436303842593\",\"BPID\":\"9079537218417626401\"," +
+//        Log.i("TAG", MiiLocalStrEncrypt.enCodeStringToString("{\"AID\":\"1101152570abc\"," +
+//                "\"SPID\":\"8863364436303842593abc\",\"BPID\":\"9079537218417626401\"," +
 //                "\"IPID\":\"8575134060152130849\"}", LocalKeyConstants.LOCAL_GDT));
 
 
@@ -198,11 +197,6 @@ public class MainActivity extends Activity {
                 startActivity(intent);
             }
         });
-
-
-
-
-
 
     }
 

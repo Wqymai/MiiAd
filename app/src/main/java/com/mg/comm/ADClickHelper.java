@@ -54,7 +54,7 @@ public class ADClickHelper {
                     CommonUtils.openBrowser(mContext, adUrl);
                     return;
                 }
-                openOrDownload(ad,ad.getPkName());
+                startDownload(ad);
             }
         }
         else {
@@ -76,10 +76,8 @@ public class ADClickHelper {
                     if (pn!=null && !pn.equals("")){
                         ad.setPkName(pn);
                     }
-                    else {
-                        pn = ad.getPkName();
-                    }
-                    openOrDownload(ad,pn);
+                    startDownload(ad);
+
                   }catch (Exception e){
                       e.printStackTrace();
                   }
@@ -94,30 +92,20 @@ public class ADClickHelper {
     }
 
 
-    private void openOrDownload(AdModel ad,String pn){
-        //获取已安装应用列表
-        String installedList = CommonUtils.getInstalledSafeWare(mContext);
-        if (installedList.contains(pn)){ //如果存在已安装应用，直接打开不用下载了
-            PackageManager packageManager = mContext.getPackageManager();
-            Intent it= packageManager.getLaunchIntentForPackage(pn);
-            mContext.startActivity(it);
+    private void startDownload(AdModel ad){
+        if (CommonUtils.getNetworkSubType(mContext) == CommonUtils.NET_TYPE_WIFI) {
+            Intent intent=new Intent(mContext,LoadHelperService.class);
+            Bundle bundle=new Bundle();
+            bundle.putSerializable("ad",ad);
+            intent.putExtras(bundle);
+            mContext.startService(intent);
         }
-        else {
-            if (CommonUtils.getNetworkSubType(mContext) == CommonUtils.NET_TYPE_WIFI) {
-                Intent intent=new Intent(mContext,LoadHelperService.class);
-                Bundle bundle=new Bundle();
-                bundle.putSerializable("ad",ad);
-                intent.putExtras(bundle);
-                mContext.startService(intent);
-                //开始下载上报
-                HttpManager.reportEvent(ad, AdReport.EVENT_DOWNLOAD_START, mContext);
-            }
-        }
+
     }
 
     private String getPName(String dstlink){
         String pn = null;
-        Pattern p = Pattern.compile("fsname=(?<name>.*?)_");
+        Pattern p = Pattern.compile("fsname=(.*?)_");
         Matcher m = p.matcher(dstlink);
         if (m.find()){
             LogUtils.i(MConstant.TAG,m.group(1));
@@ -127,8 +115,21 @@ public class ADClickHelper {
     }
 
     public void apkDownload(AdModel ad){
-        ApkDownloadManager manager = ApkDownloadManager.getIntance(mContext);
-        manager.downloadFile(ad);
+        String installedList = CommonUtils.getInstalledSafeWare(mContext);
+        if (installedList.contains(ad.getPkName())){ //如果存在已安装应用，直接打开不用下载了
+            LogUtils.i(MConstant.TAG,"已安装，不要下载");
+            PackageManager packageManager = mContext.getPackageManager();
+            Intent it= packageManager.getLaunchIntentForPackage(ad.getPkName());
+            it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            mContext.startActivity(it);
+        }
+        else {
+            LogUtils.i(MConstant.TAG,"需要下载");
+            //开始下载上报
+            HttpManager.reportEvent(ad, AdReport.EVENT_DOWNLOAD_START, mContext);
+            ApkDownloadManager manager = ApkDownloadManager.getIntance(mContext);
+            manager.downloadFile(ad);
+        }
     }
 
     private String replaceAdUrl(AdModel adModel){

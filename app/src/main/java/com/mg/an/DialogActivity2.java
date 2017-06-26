@@ -100,4 +100,40 @@ public class DialogActivity2 extends Activity {
 
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LogUtils.i(MConstant.TAG,"onPause");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LogUtils.i(MConstant.TAG,"onResume");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        LogUtils.i(MConstant.TAG,"onRestart");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LogUtils.i(MConstant.TAG,"onDestroy");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        LogUtils.i(MConstant.TAG,"onStart");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        LogUtils.i(MConstant.TAG,"onStop");
+    }
+
 }

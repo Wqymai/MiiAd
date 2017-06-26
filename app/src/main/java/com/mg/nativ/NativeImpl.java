@@ -78,6 +78,7 @@ public class NativeImpl implements MiiNativeADDataRef {
                 }
             });
 
+
             view.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -91,8 +92,6 @@ public class NativeImpl implements MiiNativeADDataRef {
                             LogUtils.i(MConstant.TAG,"ACTION_UP "+event.getX()+" "+event.getY());
                             adModel.setUpx(String.valueOf(event.getX()));
                             adModel.setUpy(String.valueOf(event.getY()));
-                            break;
-                        default:
                             break;
                     }
                     return false;

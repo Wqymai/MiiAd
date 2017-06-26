@@ -102,9 +102,9 @@ public class MiiBaseAD {
             JSONObject object=new JSONObject(gdtIds_json);
             maps.put("AID",object.optString("AID"));
             maps.put("SPID",object.optString("SPID"));
-            maps.put("BPID",object.optString("SPID"));
+            maps.put("BPID",object.optString("BPID"));
             maps.put("IPID",object.optString("IPID"));
-            maps.put("NPID",object.optString("NPID"));
+//            maps.put("NPID",object.optString("NPID"));
         }
         catch (Exception e){
             e.printStackTrace();

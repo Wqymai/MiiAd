@@ -431,13 +431,14 @@ public class MiiSplashAD extends MiiBaseAD{
 
         String AID = "";
         String SPID = "";
-       try {
+        try {
            Map<String,String> gdtMaps = getGdtIds(mContext);
            AID = gdtMaps.get("AID");
            SPID = gdtMaps.get("SPID");
-       }catch (Exception e){
+           LogUtils.i(MConstant.TAG,gdtMaps.toString());
+        }catch (Exception e){
            e.printStackTrace();
-       }
+        }
 
 
         LogUtils.i(MConstant.TAG,"AID="+AID+" SPID="+SPID);

@@ -55,6 +55,10 @@ public class ApkDownloadManager implements HttpDownloadListener {
 
     public void downloadFile(AdModel adModel){
 
+        if (downloadingList.containsKey(adModel.getUrl())){
+            LogUtils.i(MConstant.TAG,"已经存在相同的正在下载...");
+            return;
+        }
         downloadingList.put(adModel.getUrl(), adModel);
         String fileName = adModel.getName().replace("，","") + ".apk";
         String path =mContext.getFilesDir().getPath()+"/"; //CommonUtils.getFileDownloadLocation(mContext);
