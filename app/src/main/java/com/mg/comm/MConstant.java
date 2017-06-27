@@ -18,13 +18,13 @@ public final   class MConstant {
     public static final String VGD = "NEFCMTMxQThBMUM3RUUxNjA1NDcxNEQ0RDBCMzY3OENBOTQwMjU5QTM2NDg4RjQ3QTc1NDY3REFEMDc3QTg4NkM1MTY4NUI3MTE0RTBENENGOUY4QUEwRTMyODgxOUM0";
     //测试初始化最低间隔时间
     public static final long DIFF_NI = 60;
-    public static final String APPID = "0B737AC7-DCE5-7058-FB3D-1CB82A588ABC";
+//    public static final String APPID = "0B737AC7-DCE5-7058-FB3D-1CB82A588ABC";
 
-//    public static final String APPID = "496823C4-E315-AC93-BCE0-77F1D3EDE751";
+    public static final String APPID = "496823C4-E315-AC93-BCE0-77F1D3EDE751";
 
     public static String HOST;
     static {
-        if(true){
+        if(false){
             //测试服务器地址
             //http://vs.maimob.net";
             HOST = "MzUwQkY1QzUwMkQ0QTZEQUZCMTU3REQ0MUY1OTBFOUYxNEQxNjNBMjU4NTQzQTkwODdEREUxM0VFQUJGQTlGNw==";

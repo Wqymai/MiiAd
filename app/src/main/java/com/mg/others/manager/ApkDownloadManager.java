@@ -17,6 +17,8 @@ import com.mg.others.utils.LogUtils;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by nemo on 2016/7/2.
@@ -54,23 +56,39 @@ public class ApkDownloadManager implements HttpDownloadListener {
     }
 
     public void downloadFile(AdModel adModel){
+      try {
 
-        if (downloadingList.containsKey(adModel.getUrl())){
+        String urlKey = checkUrl(adModel.getUrl());
+
+        if (downloadingList.containsKey(urlKey)){
             LogUtils.i(MConstant.TAG,"已经存在相同的正在下载...");
             return;
         }
-        downloadingList.put(adModel.getUrl(), adModel);
+        downloadingList.put(urlKey, adModel);
         String fileName = adModel.getName().replace("，","") + ".apk";
-        String path =mContext.getFilesDir().getPath()+"/"; //CommonUtils.getFileDownloadLocation(mContext);
+        String path = mContext.getFilesDir().getPath()+"/"; //CommonUtils.getFileDownloadLocation(mContext);
         File file = new File(path, fileName);
-        LogUtils.i(MConstant.TAG,"apk存储位置："+file.getPath());
         adModel.setApkFilePath(file.getPath());
         if (file.exists()){
             file.delete();
         }
         httpUtils.download(adModel.getUrl(),this, path,fileName,false);
+      }
+      catch (Exception e){
+          e.printStackTrace();
+      }
 
+    }
 
+    private String checkUrl(String url){
+        String part = null;
+        Pattern p = Pattern.compile("(.*?).apk&");
+        Matcher m = p.matcher(url);
+        if (m.find()){
+            LogUtils.i(MConstant.TAG,m.group(1));
+            part=m.group(1);
+        }
+        return part;
     }
 
     @Override
@@ -83,7 +101,9 @@ public class ApkDownloadManager implements HttpDownloadListener {
 
     @Override
     public void onDownloadSuccess(String key) {
-        AdModel adModel1 = downloadingList.remove(key);
+
+        String urlKey = checkUrl(key);
+        AdModel adModel1 = downloadingList.remove(urlKey);
         if (adModel1 != null){
 
             //下载完成上报

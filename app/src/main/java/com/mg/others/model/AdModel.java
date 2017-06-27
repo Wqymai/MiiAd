@@ -3,7 +3,7 @@ package com.mg.others.model;
 import java.io.Serializable;
 
 
-public class AdModel implements Serializable {
+public class AdModel implements Serializable,Cloneable {
 
     private String id;
 
@@ -297,6 +297,17 @@ public class AdModel implements Serializable {
         sb.append("flag="+flag);
 
         return sb.toString();
+    }
+
+    @Override
+    public Object clone() {
+        AdModel adModel = null;
+        try{
+            adModel = (AdModel)super.clone();
+        }catch(CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return adModel;
     }
 
 

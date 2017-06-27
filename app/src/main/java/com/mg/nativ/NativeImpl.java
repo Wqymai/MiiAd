@@ -74,7 +74,13 @@ public class NativeImpl implements MiiNativeADDataRef {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new ADClickHelper(context).AdClick(adModel);
+                  try {
+                    AdModel ad= (AdModel) adModel.clone();
+                    new ADClickHelper(context).AdClick(ad);
+                  }
+                  catch (Exception e){
+                      e.printStackTrace();
+                  }
                 }
             });
 

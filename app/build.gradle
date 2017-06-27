@@ -32,7 +32,7 @@ task clearJar(type: Delete) {
     delete 'libs/MGUnionSDK.jar'
 }
 task makeJar(type:org.gradle.api.tasks.bundling.Jar) {
-    baseName 'MGUnionSDK_REAL'
+    baseName 'MGUnionSDK06271317'
     //从哪里打包class文件,可以指定文件和目录
     from('build/intermediates/classes/release/com')
     //打包到jar后的目录结构

@@ -131,6 +131,7 @@ public class HttpUtils {
 	 * @see #get(String, HttpListener, HttpParameter)
 	 */
 	public void get(String url, HttpListener l) {
+
 		httpExecutor.execute(new HttpGet(url, l, globleParameters,mContext));
 	}
 
@@ -389,6 +390,7 @@ public class HttpUtils {
 
 		@Override
 		public void run() {
+
 			HttpResponse response = null;
 			StringBuilder sb = new StringBuilder();
 			HttpURLConnection urlConnection = null;

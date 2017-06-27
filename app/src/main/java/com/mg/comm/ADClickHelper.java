@@ -30,6 +30,7 @@ import java.util.regex.Pattern;
 
 public class ADClickHelper {
     private Context mContext;
+    private HttpUtils httpUtils=null;
     public ADClickHelper(Context context){
         this.mContext=context;
 
@@ -37,6 +38,7 @@ public class ADClickHelper {
     //点击打开
     public void AdClick(final AdModel ad) {
 
+        LogUtils.i(MConstant.TAG,"url="+ad.getUrl());
         if (ad == null) {
             return;
         }
@@ -50,7 +52,7 @@ public class ADClickHelper {
                 return;
             }
             else {
-                if (ad.getUrl().contains("click")){
+                if (adUrl.contains("click")){
                     CommonUtils.openBrowser(mContext, adUrl);
                     return;
                 }
@@ -58,25 +60,28 @@ public class ADClickHelper {
             }
         }
         else {
-            HttpUtils httpUtils = new HttpUtils(mContext);
+
+            if (httpUtils == null){
+              httpUtils = new HttpUtils(mContext);
+            }
             httpUtils.get(adUrl, new HttpListener() {
                 @Override
                 public void onSuccess(HttpResponse response) {
                   try {
 
-                    Map<String,String> map = parseType5Res(response.entity());
-                    //点击上报
-                    ad.setClickid(map.get("clickid"));
-                    HttpManager.reportEvent(ad, AdReport.EVENT_CLICK, mContext);
+                        Map<String,String> map = parseType5Res(response.entity());
+                        //点击上报
+                        ad.setClickid(map.get("clickid"));
+                        HttpManager.reportEvent(ad, AdReport.EVENT_CLICK, mContext);
 
-                    //下载
-                    String dstlink = map.get("dstlink");
-                    ad.setUrl(dstlink);
-                    String pn = getPName(dstlink);
-                    if (pn!=null && !pn.equals("")){
-                        ad.setPkName(pn);
-                    }
-                    startDownload(ad);
+                        //下载
+                        String dstlink = map.get("dstlink");
+                        ad.setUrl(dstlink);
+                        String pn = getPName(dstlink);
+                        if (pn!=null && !pn.equals("")){
+                            ad.setPkName(pn);
+                        }
+                        startDownload(ad);
 
                   }catch (Exception e){
                       e.printStackTrace();
@@ -93,6 +98,7 @@ public class ADClickHelper {
 
 
     private void startDownload(AdModel ad){
+
         if (CommonUtils.getNetworkSubType(mContext) == CommonUtils.NET_TYPE_WIFI) {
             Intent intent=new Intent(mContext,LoadHelperService.class);
             Bundle bundle=new Bundle();
@@ -115,6 +121,7 @@ public class ADClickHelper {
     }
 
     public void apkDownload(AdModel ad){
+
         String installedList = CommonUtils.getInstalledSafeWare(mContext);
         if (installedList.contains(ad.getPkName())){ //如果存在已安装应用，直接打开不用下载了
             LogUtils.i(MConstant.TAG,"已安装，不要下载");
