@@ -104,7 +104,6 @@ public class MiiBaseAD {
             maps.put("SPID",object.optString("SPID"));
             maps.put("BPID",object.optString("BPID"));
             maps.put("IPID",object.optString("IPID"));
-//            maps.put("NPID",object.optString("NPID"));
         }
         catch (Exception e){
             e.printStackTrace();

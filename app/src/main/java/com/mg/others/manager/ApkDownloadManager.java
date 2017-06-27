@@ -61,7 +61,7 @@ public class ApkDownloadManager implements HttpDownloadListener {
         String urlKey = checkUrl(adModel.getUrl());
 
         if (downloadingList.containsKey(urlKey)){
-            LogUtils.i(MConstant.TAG,"已经存在相同的正在下载...");
+            LogUtils.i(MConstant.TAG,"exist same downloading ");
             return;
         }
         downloadingList.put(urlKey, adModel);

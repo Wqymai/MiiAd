@@ -12,12 +12,10 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.mg.comm.ADClickHelper;
-import com.mg.comm.MConstant;
 import com.mg.interf.MiiNativeADDataRef;
 import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
-import com.mg.others.utils.LogUtils;
 import com.mg.others.utils.SP;
 
 /**
@@ -68,7 +66,6 @@ public class NativeImpl implements MiiNativeADDataRef {
     @Override
     public void setNormalClick(final Context context, final View view) {
 
-        LogUtils.i(MConstant.TAG,"设置点击事件");
         if (adModel.getType() != 4){
             //点击调用
             view.setOnClickListener(new View.OnClickListener() {
@@ -90,12 +87,12 @@ public class NativeImpl implements MiiNativeADDataRef {
                 public boolean onTouch(View v, MotionEvent event) {
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
-                            LogUtils.i(MConstant.TAG,"ACTION_DOWN " + event.getX()+" "+event.getY());
+
                             adModel.setDownx(String.valueOf(event.getX()));
                             adModel.setDowny(String.valueOf(event.getY()));
                             break;
                         case MotionEvent.ACTION_UP:
-                            LogUtils.i(MConstant.TAG,"ACTION_UP "+event.getX()+" "+event.getY());
+
                             adModel.setUpx(String.valueOf(event.getX()));
                             adModel.setUpy(String.valueOf(event.getY()));
                             break;

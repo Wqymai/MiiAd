@@ -332,12 +332,12 @@ public class MiiSplashAD extends MiiBaseAD{
 
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
-                            LogUtils.i(MConstant.TAG,"ACTION_DOWN " + event.getX()+" "+event.getY());
+
                             adModel.setDownx(String.valueOf(event.getX()));
                             adModel.setDowny(String.valueOf(event.getY()));
                             break;
                         case MotionEvent.ACTION_UP:
-                            LogUtils.i(MConstant.TAG,"ACTION_UP "+event.getX()+" "+event.getY());
+
                             adModel.setUpx(String.valueOf(event.getX()));
                             adModel.setUpy(String.valueOf(event.getY()));
                             break;
@@ -435,13 +435,11 @@ public class MiiSplashAD extends MiiBaseAD{
            Map<String,String> gdtMaps = getGdtIds(mContext);
            AID = gdtMaps.get("AID");
            SPID = gdtMaps.get("SPID");
-           LogUtils.i(MConstant.TAG,gdtMaps.toString());
+
         }catch (Exception e){
            e.printStackTrace();
         }
 
-
-        LogUtils.i(MConstant.TAG,"AID="+AID+" SPID="+SPID);
         new SplashAD(mActivity, adContainer, skipContainer, AID,SPID, new SplashADListener() {
             @Override
             public void onADDismissed() {
