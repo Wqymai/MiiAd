@@ -16,15 +16,19 @@ public final   class MConstant {
     public static  boolean isBlack=false;
     //http://117.135.144.63:8081/index.php/GD/VSGD";
     public static final String VGD = "NEFCMTMxQThBMUM3RUUxNjA1NDcxNEQ0RDBCMzY3OENBOTQwMjU5QTM2NDg4RjQ3QTc1NDY3REFEMDc3QTg4NkM1MTY4NUI3MTE0RTBENENGOUY4QUEwRTMyODgxOUM0";
+
+    public final static String AID = "NEY4NTUwNDA2MUJFREZFMUExQzAxQTU5NjRFQ0NEMzQ=";
+    public final static String SPID = "QkE0OTA1NEZGRkNGQ0Q4OUJGMkZCM0FGQTJGNEVGMkUyRjIwMkNDMTVFM0JENEI5QkFBQjdFQ0E5MTMzRjkyNA==";
     //测试初始化最低间隔时间
     public static final long DIFF_NI = 60;
-//    public static final String APPID = "0B737AC7-DCE5-7058-FB3D-1CB82A588ABC";
+//    public static final String APPID = "0B737AC7-DCE5-7058-FB3D-1CB82A588ABC";//笨笨抢红包
+    public static final String APPID="A39AFB45-A5AE-5CF5-77DF-A861DE4770FF";
 
-    public static final String APPID = "496823C4-E315-AC93-BCE0-77F1D3EDE751";
+//    public static final String APPID = "496823C4-E315-AC93-BCE0-77F1D3EDE751";
 
     public static String HOST;
     static {
-        if(false){
+        if(true){
             //测试服务器地址
             //http://vs.maimob.net";
             HOST = "MzUwQkY1QzUwMkQ0QTZEQUZCMTU3REQ0MUY1OTBFOUYxNEQxNjNBMjU4NTQzQTkwODdEREUxM0VFQUJGQTlGNw==";
@@ -116,6 +120,7 @@ public final   class MConstant {
         public static final String ni = "NI";
         public static final String p = "P";
         public static final String vgd = "VGD";
+        public static final String gdt = "SDKEP";
     }
 
     public static final class jump{

@@ -19,6 +19,7 @@ public interface MiiNativeADDataRef extends Serializable {
     String getTitle();//广告语
     String getDesc();//广告描述
     String getPage();//h5代码，当getType=1,有值
+    String getIcon();//图标
     void setNormalClick(Context context,View view);//针对可设置setOnclickListener的
     void onExposured(Context context);
     void setWVClick(Context context,WebView webView);//设置webview的点击事件

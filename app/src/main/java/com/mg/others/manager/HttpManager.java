@@ -15,6 +15,7 @@ import com.mg.others.task.LoactionHelper;
 import com.mg.others.utils.CommonUtils;
 import com.mg.others.utils.LocalKeyConstants;
 import com.mg.others.utils.MiiLocalStrEncrypt;
+import com.mg.others.utils.SP;
 import com.mg.others.v4.NonNull;
 
 import org.json.JSONArray;
@@ -82,12 +83,35 @@ public class HttpManager {
         return sb.toString();
     }
 
+    public  String getSdkEpUrl(){
+        StringBuilder sb=new StringBuilder();
+        if (MConstant.HB_HOST.equals("")){
+            sb.append(MiiLocalStrEncrypt.deCodeStringToString(MConstant.HOST, LocalKeyConstants.LOCAL_KEY_DOMAINS));
+        }
+        else {
+            sb.append(MConstant.HB_HOST);
+        }
+
+        sb.append(MiiLocalStrEncrypt.deCodeStringToString(MConstant.SUFFIX,LocalKeyConstants.LOCAL_KEY_ACTIONS));
+        sb.append("/");
+        sb.append("SDKEP");
+        return sb.toString();
+    }
+
 
     public Map<String, String> getParams2(@NonNull String Action, int type, int tiggleSence){
         if (mDeviceInfo == null){
             mDeviceInfo = CommonUtils.readParcel(mContext,MConstant.DEVICE_FILE_NAME);
         }
         return RequestModel.getRequestParams2(Action,mDeviceInfo, type, tiggleSence,mContext);
+    }
+
+
+    public Map<String, String> getSDKEpParams(int type, String errorcode,long dt){
+        if (mDeviceInfo == null){
+            mDeviceInfo = CommonUtils.readParcel(mContext,MConstant.DEVICE_FILE_NAME);
+        }
+        return RequestModel.getRequestSdkEpParams(mDeviceInfo.getImei(), type, errorcode,dt);
     }
 
 
@@ -191,6 +215,28 @@ public class HttpManager {
         void pingSuc(String url);
     }
 
+    /**
+     * 广点通数据上报
+     */
+    public static void reportGdtEvent(int type,String errorCode,Context mContext){
+        long curr = System.currentTimeMillis();
+        long st = (long) SP.getParam(SP.CONFIG, mContext, SP.GDT_ST, System.currentTimeMillis());
+        long diff = curr - st;
+
+        String url = getInstance(mContext).getSdkEpUrl();
+        HttpUtils httpUtils = new HttpUtils(mContext);
+        httpUtils.post(url, new HttpListener() {
+            @Override
+            public void onSuccess(HttpResponse response) {
+
+            }
+
+            @Override
+            public void onFail(Exception e) {
+
+            }
+        }, getInstance(mContext).getSDKEpParams(type, errorCode, diff));
+    }
     /**
      * 数据上报
      * @param adModel

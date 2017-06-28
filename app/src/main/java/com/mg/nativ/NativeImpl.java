@@ -64,6 +64,11 @@ public class NativeImpl implements MiiNativeADDataRef {
     }
 
     @Override
+    public String getIcon() {
+        return  adModel.getIcon();
+    }
+
+    @Override
     public void setNormalClick(final Context context, final View view) {
 
         if (adModel.getType() != 4){
@@ -132,11 +137,11 @@ public class NativeImpl implements MiiNativeADDataRef {
                     }
                     @Override
                     public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                        //点击上报
-                        HttpManager.reportEvent(adModel, AdReport.EVENT_CLICK, context);
-
                         view.stopLoading();
                         view.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+
+                        //点击上报
+                        HttpManager.reportEvent(adModel, AdReport.EVENT_CLICK, context);
                         return true;
                     }
                 });

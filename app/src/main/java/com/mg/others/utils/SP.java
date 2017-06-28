@@ -51,6 +51,8 @@ public class SP {
 
 	public static final String PUBLIC_COLD_FIRST_TIME="public_cold_firstime";
 
+	public static final String GDT_ST="gdtst";
+
 
 //	/**
 //	 *

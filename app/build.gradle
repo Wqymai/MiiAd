@@ -24,6 +24,7 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile files('libs/GDTUnionSDK.4.9.544.min.jar')
 }
 
 

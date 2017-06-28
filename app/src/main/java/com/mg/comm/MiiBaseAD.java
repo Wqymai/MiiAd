@@ -7,16 +7,15 @@ import android.os.Handler;
 
 import com.mg.mv4.ActivityCompat;
 import com.mg.mv4.ContextCompat;
+import com.mg.others.model.GdtInfoModel;
 import com.mg.others.model.SDKConfigModel;
 import com.mg.others.utils.CommonUtils;
 import com.mg.others.utils.LocalKeyConstants;
+import com.mg.others.utils.LogUtils;
 import com.mg.others.utils.MiiLocalStrEncrypt;
 import com.mg.others.utils.SP;
 
 import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.READ_PHONE_STATE;
@@ -30,6 +29,7 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 public class MiiBaseAD {
 
     protected SDKConfigModel sdk;
+
     protected boolean isFirstEnter(Context mContext){
         boolean isFirst= (boolean) SP.getParam(SP.CONFIG,mContext,SP.FIRSTHB,true);
         if (isFirst){
@@ -47,12 +47,12 @@ public class MiiBaseAD {
     判断广告来源方式 1：广告源都关闭了 2：按比例展示其中一家 3：先哪家再哪家
     */
     protected SourceAssignModel checkADSource(Context mContext){
-
+      SourceAssignModel saModel=new SourceAssignModel();
+      try {
         sdk = CommonUtils.readParcel(mContext, MConstant.CONFIG_FILE_NAME);
         if (sdk == null){
             return null;
         }
-        SourceAssignModel saModel=new SourceAssignModel();
         int sf_mg = sdk.getSf_mg();
         int sf_gdt = sdk.getSf_gdt();
         int sum = sf_gdt + sf_mg;
@@ -78,6 +78,9 @@ public class MiiBaseAD {
                 saModel.firstChoose = 2;
             }
         }
+      }catch (Exception e){
+          e.printStackTrace();
+      }
         return saModel;
     }
 
@@ -93,22 +96,29 @@ public class MiiBaseAD {
     }
 
 
-    protected Map<String,String> getGdtIds(Context context){
-        Map<String,String> maps=new HashMap<>();
-        SDKConfigModel sdkConfig=checkSdkConfig(sdk,context);
+    // a=AID s=SPID b=BPID i=IPID
+    protected GdtInfoModel getGdtIds(Context context){
+        SDKConfigModel sdkConfig = checkSdkConfig(sdk,context);
+        GdtInfoModel gdt=new GdtInfoModel();
         try {
             String gdtIds = sdkConfig.getList();
             String gdtIds_json = MiiLocalStrEncrypt.deCodeStringToString(gdtIds, LocalKeyConstants.LOCAL_GDT);
             JSONObject object=new JSONObject(gdtIds_json);
-            maps.put("AID",object.optString("AID"));
-            maps.put("SPID",object.optString("SPID"));
-            maps.put("BPID",object.optString("BPID"));
-            maps.put("IPID",object.optString("IPID"));
+            gdt.setAPPID(object.optString("a"));
+            gdt.setSplashPosID(object.optString("s"));
         }
         catch (Exception e){
+            gdt.setAPPID(MiiLocalStrEncrypt.deCodeStringToString(MConstant.AID,LocalKeyConstants.LOCAL_GDT));
+            gdt.setSplashPosID(MiiLocalStrEncrypt.deCodeStringToString(MConstant.SPID,LocalKeyConstants.LOCAL_GDT));
             e.printStackTrace();
         }
-        return maps;
+        if (gdt.getAPPID() == null || gdt.getAPPID().equals("")){
+            gdt.setAPPID(MiiLocalStrEncrypt.deCodeStringToString(MConstant.AID,LocalKeyConstants.LOCAL_GDT));
+        }
+        if (gdt.getSplashPosID() == null || gdt.getSplashPosID().equals("")){
+            gdt.setSplashPosID(MiiLocalStrEncrypt.deCodeStringToString(MConstant.SPID,LocalKeyConstants.LOCAL_GDT));
+        }
+        return gdt;
     }
 
 

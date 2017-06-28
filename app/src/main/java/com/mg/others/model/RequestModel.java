@@ -495,4 +495,24 @@ public class RequestModel {
         return params;
     }
 
+    public static Map<String,String> getRequestSdkEpParams(String imei,int type, String errorcode,long dt){
+        Map<String,String> params=new HashMap<>();
+        try {
+            long curr=System.currentTimeMillis()/1000;
+            params.put("action","SDKEP");
+            params.put("appid",MConstant.APPID);
+            params.put("ver",MConstant.MSDK_VERSION);
+            params.put("tp",String.valueOf(curr));
+            params.put("imei",imei);
+            params.put("type",String.valueOf(type));
+            params.put("dt",String.valueOf(dt));
+            params.put("resultCode",errorcode);
+            params.put("sign",CommonUtils.hashSign("SDKEP"+MConstant.APPID+ MConstant.MSDK_VERSION + curr + type + imei + dt));
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return params;
+    }
+
 }

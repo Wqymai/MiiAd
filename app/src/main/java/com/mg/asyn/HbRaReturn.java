@@ -162,7 +162,7 @@ public class HbRaReturn extends RequestAsync {
             return;
         }
 
-        Map<String,String> params=httpManager.getParams2(RA,pt,0);//暂时写的
+        Map<String,String> params=httpManager.getParams2(RA,pt,0);
 
         httpUtils.post(url.trim(), new HttpListener() {
             @Override
