@@ -499,7 +499,7 @@ public class RequestModel {
         return params;
     }
 
-    public static Map<String,String> getRequestSdkEpParams(String imei,int type, String errorcode,long dt){
+    public static Map<String,String> getRequestSdkEpParams(DeviceInfo deviceInfo,int type, String errorcode,long dt){
         Map<String,String> params=new HashMap<>();
         try {
             long curr=System.currentTimeMillis()/1000;
@@ -507,11 +507,13 @@ public class RequestModel {
             params.put("appid",MConstant.APPID);
             params.put("ver",MConstant.MSDK_VERSION);
             params.put("tp",String.valueOf(curr));
-            params.put("imei",imei);
+            params.put("imei",deviceInfo.getImei());
+            params.put("w",String.valueOf(deviceInfo.getScreenWidth()));
+            params.put("h",String.valueOf(deviceInfo.getScreenHeight()));
             params.put("type",String.valueOf(type));
             params.put("dt",String.valueOf(dt));
             params.put("resultCode",errorcode);
-            params.put("sign",CommonUtils.hashSign("SDKEP"+MConstant.APPID+ MConstant.MSDK_VERSION + curr + type + imei + dt));
+            params.put("sign",CommonUtils.hashSign("SDKEP"+MConstant.APPID+ MConstant.MSDK_VERSION + curr + type + deviceInfo.getImei() + dt));
         }
         catch (Exception e){
             e.printStackTrace();
