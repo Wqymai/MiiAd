@@ -3,8 +3,6 @@ package com.mg.others.task;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.telephony.TelephonyManager;
 import android.telephony.cdma.CdmaCellLocation;
@@ -24,6 +22,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 
 /**
  * 异步初始化用户信息Task
@@ -89,10 +89,10 @@ public class DeviceInfoTask extends MTask<Void, Void, DeviceInfo> {
             imsi = tm.getSubscriberId();
             //iccid
             iccid = tm.getSimSerialNumber();
-            //inet_mac
-            WifiManager wifi = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
-            WifiInfo wifiInfo = wifi.getConnectionInfo();
-            mac = wifiInfo.getMacAddress();
+//            //inet_mac
+//            WifiManager wifi = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
+//            WifiInfo wifiInfo = wifi.getConnectionInfo();
+//            mac = wifiInfo.getMacAddress();
             //mcc mnc
             String networkOperator = tm.getNetworkOperator();
             if (TextUtils.isEmpty(networkOperator)) {
@@ -241,7 +241,7 @@ public class DeviceInfoTask extends MTask<Void, Void, DeviceInfo> {
             mDeviceInfo.setAndroidAdid(androidAdid);
             mDeviceInfo.setImei(imei);
             mDeviceInfo.setImsi(imsi);
-            mDeviceInfo.setMac(mac);
+            mDeviceInfo.setMac(getMacAddress());
             mDeviceInfo.setMcc(mcc);
             mDeviceInfo.setMnc(mnc);
             mDeviceInfo.setOsVersion(osVersion);
@@ -295,6 +295,35 @@ public class DeviceInfoTask extends MTask<Void, Void, DeviceInfo> {
             mListener.deviceInfoLoaded(deviceInfo);
         }
     }
+
+    public  String getMacAddress(){
+ /*获取mac地址有一点需要注意的就是android 6.0版本后，以下注释方法不再适用，不管任何手机都会返回"02:00:00:00:00:00"这个默认的mac地址，这是googel官方为了加强权限管理而禁用了getSYstemService(Context.WIFI_SERVICE)方法来获得mac地址。*/
+        String macAddress = null;
+        StringBuffer buf = new StringBuffer();
+        NetworkInterface networkInterface = null;
+        try {
+            networkInterface = NetworkInterface.getByName("eth1");
+            if (networkInterface == null) {
+                networkInterface = NetworkInterface.getByName("wlan0");
+            }
+            if (networkInterface == null) {
+                return "02:00:00:00:00:02";
+            }
+            byte[] addr = networkInterface.getHardwareAddress();
+            for (byte b : addr) {
+                buf.append(String.format("%02X:", b));
+            }
+            if (buf.length() > 0) {
+                buf.deleteCharAt(buf.length() - 1);
+            }
+            macAddress = buf.toString();
+        } catch (SocketException e) {
+            e.printStackTrace();
+            return "02:00:00:00:00:02";
+        }
+        return macAddress;
+    }
+
 
 
 }

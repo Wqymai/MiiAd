@@ -53,6 +53,17 @@ public class MainActivity extends Activity {
 //        Log.i("TAG", MiiLocalStrEncrypt.enCodeStringToString("{\"a\":\"1101152570\"," +
 //                "\"s\":\"8863364436303842593\",\"b\":\"9079537218417626401\"," +
 //                "\"i\":\"8575134060152130849\"}", LocalKeyConstants.LOCAL_GDT));
+        //测试的黑白名单
+        //QzJEODg0MUQxODRBMjk5QjNBNUFGNjhDNjZBRThFMTkyOTgzQjBGRUEyRjg4OTQ5RDQ3QjAzMDA2RDA4RjA3MzE2M0ExREVGRTY3Q0UwRDc4QzNFM0M0Njk4REYyMjFEMUM0QjY5Q0I0QjhBOTNGNjcwOTI2MzUyOUU0MkQ0N0Y1NTlCNDU2MDNEQzQzMERGNEY4QTIwRTQ5NEE4MERBN0E4RjBDNjczQUQ5NUQ1RDdGRkQwODlDMUFGMjA4RTc2MjU3RTVDRkFBMEZDNjcxQUVFOUY0NEI1RUJGMTQ5RDU=
+
+
+
+//        Log.i("TAG", MiiLocalStrEncrypt.enCodeStringToString("{\"a\":\"1105667610\"," +
+//                "\"s\":\"3020822156957219\",\"b\":\"\"," +
+//                "\"i\":\"\"}", LocalKeyConstants.LOCAL_GDT));
+
+        //正式的黑白名单
+        //QUUwMjQ4OEI4ODY3OUM0MUExODYxNkNBOEREQjcwNEU3RkMxODcwMUZBQjVBQjMxOEM2OEU2NjA1QkY2NTYwODhGN0M3MUEwMDY5MUQwRTI4RTYxNTg0N0VCRkE1Nzk1QUVDRTAzNDdGNDVCODA0RDdGNUM3MDZBNjhGMTU2QTk=
 
 
 //        Log.i("TAG","a="+MiiLocalStrEncrypt.enCodeStringToString("1101152570", LocalKeyConstants.LOCAL_GDT));

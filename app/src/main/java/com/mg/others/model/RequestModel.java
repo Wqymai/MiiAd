@@ -358,6 +358,8 @@ public class RequestModel {
                 break;
 
             case MConstant.request_type.ni:
+                requestModel.setW(String.valueOf(mDeviceInfo.getScreenWidth()));
+                requestModel.setH(String.valueOf(mDeviceInfo.getScreenHeight()));
                 requestModel.setDt("1");
                 requestModel.setDtv(mDeviceInfo.getImei());
                 requestModel.setSign(CommonUtils.hashSign(Action+key+ MConstant.MSDK_VERSION
@@ -421,6 +423,8 @@ public class RequestModel {
                 params.put("dt",requestModel.getDt());
                 params.put("dtv",requestModel.getDtv());
                 params.put("sign",requestModel.getSign());
+                params.put("w",requestModel.getW());
+                params.put("h",requestModel.getH());
                 break;
         }
         String url = CommonUtils.MapToString(params);
