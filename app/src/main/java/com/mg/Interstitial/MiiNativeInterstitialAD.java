@@ -153,11 +153,11 @@ public class MiiNativeInterstitialAD extends MiiBaseAD {
         }
 
         if (saModel.type == 1){
-            LogUtils.i(MConstant.TAG," SUM = 0");
+
             listener.onMiiNoAD(3005);
             return;
         }
-        LogUtils.i(MConstant.TAG,"SUM = 100");
+
 
         new HbRaReturn(reqAsyncModel).fetchMGAD();
 
@@ -194,14 +194,6 @@ public class MiiNativeInterstitialAD extends MiiBaseAD {
                 }
             });
 
-            String html5="<!DOCTYPE html><html><head><meta name='viewport' " +
-                    "content='width=device-width,initial-scale=1,maximum-scale=1," +
-                    "user-scalable=no'><meta charset='utf-8'><title>Insert title " +
-                    "here</title><style type='text/css'>*{margin:0;padding:0}html," +
-                    "body{width:100%;height:100%;background-color:#FFF;" +
-                    "overflow:hidden}img{border:0}</style></head><body style=\"height: 100%;" +
-                    "width: 100%;\"><img src=\"http://192.168.199.191:8080/TestDemo/image/xfzg" +
-                    ".jpg\" height=\"100%\" width=\"100%\"/></body></body></html>";
             webView.loadDataWithBaseURL("",adModel.getPage() , "text/html", "utf-8", "");
             adContainer.addView(webView);
 

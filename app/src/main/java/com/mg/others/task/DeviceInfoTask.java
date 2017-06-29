@@ -216,8 +216,8 @@ public class DeviceInfoTask extends MTask<Void, Void, DeviceInfo> {
 
 
             DisplayMetrics metric = mContext.getResources().getDisplayMetrics();
-            dip = metric.density;//分辨率
-            density = metric.density;//屏幕密度
+            dip = metric.density;
+            density = metric.densityDpi;
 
             try {
                 AdvertisingIdClient.AdInfo adInfo = AdvertisingIdClient.getAdvertisingIdInfo(mContext);

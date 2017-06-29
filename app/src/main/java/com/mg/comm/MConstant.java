@@ -17,14 +17,11 @@ public final   class MConstant {
     //http://117.135.144.63:8081/index.php/GD/VSGD";
     public static final String VGD = "NEFCMTMxQThBMUM3RUUxNjA1NDcxNEQ0RDBCMzY3OENBOTQwMjU5QTM2NDg4RjQ3QTc1NDY3REFEMDc3QTg4NkM1MTY4NUI3MTE0RTBENENGOUY4QUEwRTMyODgxOUM0";
 
-    public final static String AID = "NEY4NTUwNDA2MUJFREZFMUExQzAxQTU5NjRFQ0NEMzQ=";
-    public final static String SPID = "QkE0OTA1NEZGRkNGQ0Q4OUJGMkZCM0FGQTJGNEVGMkUyRjIwMkNDMTVFM0JENEI5QkFBQjdFQ0E5MTMzRjkyNA==";
-    //测试初始化最低间隔时间
-    public static final long DIFF_NI = 60;
-//    public static final String APPID = "0B737AC7-DCE5-7058-FB3D-1CB82A588ABC";//笨笨抢红包
-    public static final String APPID="A39AFB45-A5AE-5CF5-77DF-A861DE4770FF";
-
-//    public static final String APPID = "496823C4-E315-AC93-BCE0-77F1D3EDE751";
+    public static String APPID;
+    public static String GDT_AID;
+    public static String GDT_SPID;
+    public static String GDT_IPID;
+    public static String GDT_BPID;
 
     public static String HOST;
     static {
@@ -32,12 +29,21 @@ public final   class MConstant {
             //测试服务器地址
             //http://vs.maimob.net";
             HOST = "MzUwQkY1QzUwMkQ0QTZEQUZCMTU3REQ0MUY1OTBFOUYxNEQxNjNBMjU4NTQzQTkwODdEREUxM0VFQUJGQTlGNw==";
-
+            APPID = "0B737AC7-DCE5-7058-FB3D-1CB82A588ABC";
+            GDT_AID = "NjkxNTBBNDAzRDMyNDM3MjJEQjM1MzRDRTIzMDA1MzQ=";
+            GDT_SPID = "QTEzOTYwOUJDMzIyNTUxQUE1QjREMkIwQ0I1QjgxOEVDM0IwQjkxOTc5OUVBN0Y2MzM3QzczNDBCNTFFRjg2OQ==";
+            GDT_IPID = "NTkzMDA3OENFNEJCQUM4RUM5QzI2RjQ2NjFFQkZFNzQ0QUMyQTY1MjM3NEJCODBCMkRBODZEMzMxQTRBNkFENQ==";
+            GDT_BPID = "N0NBRUI0MkVFRUZDMDBGQjE3MDU2Q0I3QzZBOTU3NUUxRDBFQUQxM0I3Q0Y1NjkyMjcwRUJFNDRGRkQwNkU2Qg==";
         }
         else{
             //正式服务器地址
             //http://s1.pagefarmer.net";
-            HOST= "QTBBMkRGQ0U0QzRCNUM4QTZDRDlGQTQ4NEY0MkIxRDE3NkVERTBBNERCMTk3RkIzQjdDMUM0QjQ4QUM2MDAzQg==";
+            HOST = "QTBBMkRGQ0U0QzRCNUM4QTZDRDlGQTQ4NEY0MkIxRDE3NkVERTBBNERCMTk3RkIzQjdDMUM0QjQ4QUM2MDAzQg==";
+            APPID = "496823C4-E315-AC93-BCE0-77F1D3EDE751";
+            GDT_AID = "NEY4NTUwNDA2MUJFREZFMUExQzAxQTU5NjRFQ0NEMzQ=";
+            GDT_SPID = "QkE0OTA1NEZGRkNGQ0Q4OUJGMkZCM0FGQTJGNEVGMkUyRjIwMkNDMTVFM0JENEI5QkFBQjdFQ0E5MTMzRjkyNA==";
+            GDT_IPID = "";
+            GDT_BPID = "";
         }
     }
     public static String HB_HOST="";
@@ -139,12 +145,4 @@ public final   class MConstant {
     }
 
 
-//    public static final String APPID = "1101152570";
-//    public static final String BannerPosID = "9079537218417626401";
-//    public static final String APPWallPosID = "9007479624379698465";
-//    public static final String InterteristalPosID = "8575134060152130849";
-//    public static final String SplashPosID = "8863364436303842593";
-//    public static final String GridAppWallPosID = "9007479624379698465";
-//    public static final String NativePosID = "5000709048439488";
-//    public static final String NativeVideoPosID = "2050206699818455";
 }

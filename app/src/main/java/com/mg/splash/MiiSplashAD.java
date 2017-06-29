@@ -110,12 +110,9 @@ public class MiiSplashAD extends MiiBaseAD{
                      }
                      break;
                  case 500:
-
                      listener.onMiiNoAD(1000);
-
                      break;
                  case 600:
-
                      Init();
                      break;
 

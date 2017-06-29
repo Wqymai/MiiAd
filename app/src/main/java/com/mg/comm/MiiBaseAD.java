@@ -11,7 +11,6 @@ import com.mg.others.model.GdtInfoModel;
 import com.mg.others.model.SDKConfigModel;
 import com.mg.others.utils.CommonUtils;
 import com.mg.others.utils.LocalKeyConstants;
-import com.mg.others.utils.LogUtils;
 import com.mg.others.utils.MiiLocalStrEncrypt;
 import com.mg.others.utils.SP;
 
@@ -106,17 +105,27 @@ public class MiiBaseAD {
             JSONObject object=new JSONObject(gdtIds_json);
             gdt.setAPPID(object.optString("a"));
             gdt.setSplashPosID(object.optString("s"));
+            gdt.setInterteristalPosID(object.optString("i"));
+            gdt.setBannerPosID(object.optString("b"));
         }
         catch (Exception e){
-            gdt.setAPPID(MiiLocalStrEncrypt.deCodeStringToString(MConstant.AID,LocalKeyConstants.LOCAL_GDT));
-            gdt.setSplashPosID(MiiLocalStrEncrypt.deCodeStringToString(MConstant.SPID,LocalKeyConstants.LOCAL_GDT));
+            gdt.setAPPID(MiiLocalStrEncrypt.deCodeStringToString(MConstant.GDT_AID,LocalKeyConstants.LOCAL_GDT));
+            gdt.setSplashPosID(MiiLocalStrEncrypt.deCodeStringToString(MConstant.GDT_SPID,LocalKeyConstants.LOCAL_GDT));
+            gdt.setInterteristalPosID(MiiLocalStrEncrypt.deCodeStringToString(MConstant.GDT_IPID,LocalKeyConstants.LOCAL_GDT));
+            gdt.setBannerPosID(MiiLocalStrEncrypt.deCodeStringToString(MConstant.GDT_BPID,LocalKeyConstants.LOCAL_GDT));
             e.printStackTrace();
         }
         if (gdt.getAPPID() == null || gdt.getAPPID().equals("")){
-            gdt.setAPPID(MiiLocalStrEncrypt.deCodeStringToString(MConstant.AID,LocalKeyConstants.LOCAL_GDT));
+            gdt.setAPPID(MiiLocalStrEncrypt.deCodeStringToString(MConstant.GDT_AID,LocalKeyConstants.LOCAL_GDT));
         }
         if (gdt.getSplashPosID() == null || gdt.getSplashPosID().equals("")){
-            gdt.setSplashPosID(MiiLocalStrEncrypt.deCodeStringToString(MConstant.SPID,LocalKeyConstants.LOCAL_GDT));
+            gdt.setSplashPosID(MiiLocalStrEncrypt.deCodeStringToString(MConstant.GDT_SPID,LocalKeyConstants.LOCAL_GDT));
+        }
+        if (gdt.getInterteristalPosID() == null || gdt.getInterteristalPosID().equals("")){
+            gdt.setSplashPosID(MiiLocalStrEncrypt.deCodeStringToString(MConstant.GDT_IPID,LocalKeyConstants.LOCAL_GDT));
+        }
+        if (gdt.getBannerPosID() == null || gdt.getBannerPosID().equals("")){
+            gdt.setSplashPosID(MiiLocalStrEncrypt.deCodeStringToString(MConstant.GDT_BPID,LocalKeyConstants.LOCAL_GDT));
         }
         return gdt;
     }

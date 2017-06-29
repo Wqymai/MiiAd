@@ -29,16 +29,17 @@ import android.widget.TextView;
 import com.mg.asyn.FirstEnter;
 import com.mg.asyn.HbRaNoReturn;
 import com.mg.asyn.HbRaReturn;
+import com.mg.asyn.JustHbRelative;
 import com.mg.asyn.ReqAsyncModel;
 import com.mg.comm.ADClickHelper;
 import com.mg.comm.ImageDownloadHelper;
 import com.mg.comm.MConstant;
-import com.mg.comm.MhttpRequestHelper;
-import com.mg.interf.MiiADListener;
 import com.mg.comm.MiiBaseAD;
+import com.mg.interf.MiiADListener;
 import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
+import com.mg.others.model.GdtInfoModel;
 import com.mg.others.utils.CommonUtils;
 import com.mg.others.utils.LogUtils;
 import com.mg.others.utils.SP;
@@ -147,7 +148,6 @@ public class MiiInterstitialAD  extends MiiBaseAD{
     }
     private void Init(){
         if (isFirstEnter(mContext)){
-            //new MhttpRequestHelper(mContext,mainHandler,0,listener).fetchMGAD(true);
             new FirstEnter(reqAsyncModel).fetchMGAD();
             return;
         }
@@ -158,8 +158,19 @@ public class MiiInterstitialAD  extends MiiBaseAD{
     private void openGDTAD(final boolean shouldReturn){
         LogUtils.i(MConstant.TAG,"load gdt");
 
-        new MhttpRequestHelper(mContext,mainHandler,0,listener).fetchMGAD3();
-        iad = new InterstitialAD(mActivity, appid, interstitialid);
+        new JustHbRelative(reqAsyncModel).fetchMGAD();
+
+        String AID = "";
+        String IPID = "";
+        GdtInfoModel model = getGdtIds(mContext);
+        try {
+            AID = model.getAPPID();
+            IPID = model.getInterteristalPosID();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        iad = new InterstitialAD(mActivity, AID, IPID);
         iad.setADListener(new AbstractInterstitialADListener() {
             @Override
             public void onADReceive() {
@@ -176,7 +187,6 @@ public class MiiInterstitialAD  extends MiiBaseAD{
             public void onNoAD(int i) {
                 if (!shouldReturn){
 
-                    //new MhttpRequestHelper(mContext,mainHandler,3,listener).fetchMGAD1(true);
                     new HbRaReturn(reqAsyncModel).fetchMGAD();
 
                     return;
@@ -214,7 +224,6 @@ public class MiiInterstitialAD  extends MiiBaseAD{
 
             if (saModel.firstChoose == 1){
 
-                //new MhttpRequestHelper(mContext,mainHandler,3,listener).fetchMGAD(false);
                 new HbRaReturn(reqAsyncModel).fetchMGAD();
             }
             else {
@@ -227,7 +236,6 @@ public class MiiInterstitialAD  extends MiiBaseAD{
 
             if (saModel.firstChoose == 1){
 
-                //new MhttpRequestHelper(mContext,mainHandler,3,listener).fetchMGAD1(false);
                 new HbRaNoReturn(reqAsyncModel).fetchMGAD();
 
             }

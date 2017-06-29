@@ -9,8 +9,12 @@ import android.widget.Button;
 
 import com.android.others.R;
 import com.mg.Interstitial.MiiInterstitialAD;
+import com.mg.comm.MConstant;
 import com.mg.interf.MiiADListener;
 import com.mg.interf.MiiNativeADDataRef;
+import com.mg.interf.MiiNativeListener;
+import com.mg.nativ.MiiNativeAD;
+import com.mg.others.utils.LogUtils;
 
 /**
  * Created by wuqiyan on 17/6/9.
@@ -51,8 +55,10 @@ public class MainActivity extends Activity {
 //                "\"i\":\"8575134060152130849\"}", LocalKeyConstants.LOCAL_GDT));
 
 
-//        Log.i("TAG",MiiLocalStrEncrypt.enCodeStringToString("1105667610",LocalKeyConstants.LOCAL_GDT));
-//        Log.i("TAG",MiiLocalStrEncrypt.enCodeStringToString("3020822156957219",LocalKeyConstants.LOCAL_GDT));
+//        Log.i("TAG","a="+MiiLocalStrEncrypt.enCodeStringToString("1101152570", LocalKeyConstants.LOCAL_GDT));
+//        Log.i("TAG", "s="+MiiLocalStrEncrypt.enCodeStringToString("8863364436303842593",LocalKeyConstants.LOCAL_GDT));
+//        Log.i("TAG", "i="+MiiLocalStrEncrypt.enCodeStringToString("8575134060152130849",LocalKeyConstants.LOCAL_GDT));
+//        Log.i("TAG", "i="+MiiLocalStrEncrypt.enCodeStringToString("9079537218417626401",LocalKeyConstants.LOCAL_GDT));
 
 
 
@@ -169,34 +175,34 @@ public class MainActivity extends Activity {
 
 
 
-//        new MiiNativeAD(this, new MiiNativeListener() {
-//            @Override
-//            public void onADLoaded(MiiNativeADDataRef dataRef) {
-//                if (dataRef != null){
-//                    LogUtils.i(MConstant.TAG,"原生广告加载成功");
-//                    openDialogAct2.setEnabled(true);
-//                    adDataRef = dataRef;
-//                }
-//            }
-//
-//            @Override
-//            public void onMiiNoAD(int errCode) {
-//                LogUtils.i(MConstant.TAG,"原生广告加载失败 "+errCode);
-//            }
-//        });
-//        openDialogAct2 = (Button) findViewById(R.id.open_dialogAct2);
-//        openDialogAct2.setEnabled(false);
-//        openDialogAct2.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                Intent intent=new Intent(MainActivity.this,DialogActivity2.class);
-//                Bundle bundle=new Bundle();
-//                bundle.putSerializable("AdData", adDataRef);
-//                intent.putExtras(bundle);
-//                startActivity(intent);
-//            }
-//        });
+        new MiiNativeAD(this, new MiiNativeListener() {
+            @Override
+            public void onADLoaded(MiiNativeADDataRef dataRef) {
+                if (dataRef != null){
+                    LogUtils.i(MConstant.TAG,"原生广告加载成功");
+                    openDialogAct2.setEnabled(true);
+                    adDataRef = dataRef;
+                }
+            }
+
+            @Override
+            public void onMiiNoAD(int errCode) {
+                LogUtils.i(MConstant.TAG,"原生广告加载失败 "+errCode);
+            }
+        });
+        openDialogAct2 = (Button) findViewById(R.id.open_dialogAct2);
+        openDialogAct2.setEnabled(false);
+        openDialogAct2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent=new Intent(MainActivity.this,DialogActivity2.class);
+                Bundle bundle=new Bundle();
+                bundle.putSerializable("AdData", adDataRef);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
 
     }
 
