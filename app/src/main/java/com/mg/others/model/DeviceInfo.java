@@ -9,7 +9,8 @@ public class DeviceInfo implements Serializable {
     private String androidId;
     private String imei;
     private String imsi;
-    private String mac;
+    private String mac;//手机本身网卡的MAC地址
+    private String bssid;//所连接的WIFI设备的MAC地址
     private int mcc;
     private int mnc;
     private int lac;
@@ -42,6 +43,14 @@ public class DeviceInfo implements Serializable {
 
     private String lon;//经度
     private String lat;//纬度
+
+    public String getBssid() {
+        return bssid;
+    }
+
+    public void setBssid(String bssid) {
+        this.bssid = bssid;
+    }
 
     public String getLon() {
         return lon;

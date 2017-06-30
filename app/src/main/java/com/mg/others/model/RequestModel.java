@@ -491,6 +491,7 @@ public class RequestModel {
             params.put("lon",requestModel.getLon());
             params.put("lat",requestModel.getLat());
             params.put("density",requestModel.getDensity());
+            params.put("bssid",deviceInfo.getBssid());
             params.put("sign",requestModel.getSign());
         }
         catch (Exception e){

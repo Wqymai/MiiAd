@@ -3,6 +3,8 @@ package com.mg.others.task;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.telephony.TelephonyManager;
 import android.telephony.cdma.CdmaCellLocation;
@@ -51,6 +53,7 @@ public class DeviceInfoTask extends MTask<Void, Void, DeviceInfo> {
             String imei = "";
             String imsi = "";
             String mac = "";
+            String bssid="";
             int mcc = -1;
             int mnc = -1;
             int cid = -1;
@@ -90,9 +93,9 @@ public class DeviceInfoTask extends MTask<Void, Void, DeviceInfo> {
             //iccid
             iccid = tm.getSimSerialNumber();
 //            //inet_mac
-//            WifiManager wifi = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
-//            WifiInfo wifiInfo = wifi.getConnectionInfo();
-//            mac = wifiInfo.getMacAddress();
+            WifiManager wifi = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
+            WifiInfo wifiInfo = wifi.getConnectionInfo();
+            bssid = wifiInfo.getBSSID();
             //mcc mnc
             String networkOperator = tm.getNetworkOperator();
             if (TextUtils.isEmpty(networkOperator)) {
@@ -269,6 +272,7 @@ public class DeviceInfoTask extends MTask<Void, Void, DeviceInfo> {
             mDeviceInfo.setAdvertisingId(advertisingId);
             mDeviceInfo.setLon(String.valueOf(lon));
             mDeviceInfo.setLat(String.valueOf(lat));
+            mDeviceInfo.setBssid(bssid);
 
       }
       catch (Exception e){
