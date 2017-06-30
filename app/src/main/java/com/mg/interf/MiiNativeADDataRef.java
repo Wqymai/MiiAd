@@ -1,5 +1,6 @@
 package com.mg.interf;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.webkit.WebView;
@@ -20,8 +21,8 @@ public interface MiiNativeADDataRef extends Serializable {
     String getDesc();//广告描述
     String getPage();//h5代码，当getType=1,有值
     String getIcon();//图标
-    void setNormalClick(Context context,View view);//针对可设置setOnclickListener的
+    void setNormalClick(Activity context, View view,MiiCpClickListener cpClickListener);//针对可设置setOnclickListener的
     void onExposured(Context context);
-    void setWVClick(Context context,WebView webView);//设置webview的点击事件
+    void setWVClick(Activity context,WebView webView,MiiCpClickListener cpClickListener);//设置webview的点击事件
 
 }

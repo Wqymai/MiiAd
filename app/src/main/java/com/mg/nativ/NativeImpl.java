@@ -1,5 +1,6 @@
 package com.mg.nativ;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -12,6 +13,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.mg.comm.ADClickHelper;
+import com.mg.interf.MiiCpClickListener;
 import com.mg.interf.MiiNativeADDataRef;
 import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
@@ -68,8 +70,9 @@ public class NativeImpl implements MiiNativeADDataRef {
         return  adModel.getIcon();
     }
 
+
     @Override
-    public void setNormalClick(final Context context, final View view) {
+    public void setNormalClick(final Activity activity, final View view, final MiiCpClickListener cpClickListener) {
 
         if (adModel.getType() != 4){
             //点击调用
@@ -78,11 +81,12 @@ public class NativeImpl implements MiiNativeADDataRef {
                 public void onClick(View v) {
                   try {
                     AdModel ad= (AdModel) adModel.clone();
-                    new ADClickHelper(context).AdClick(ad);
+                    new ADClickHelper(activity.getApplicationContext()).AdClick(ad);
                   }
                   catch (Exception e){
                       e.printStackTrace();
                   }
+                  cpClickListener.click();
                 }
             });
 
@@ -121,7 +125,7 @@ public class NativeImpl implements MiiNativeADDataRef {
     }
 
     @Override
-    public void setWVClick(final Context context,final WebView webView) {
+    public void setWVClick(final Activity activity, final WebView webView, final MiiCpClickListener cpClickListener) {
         if (adModel.getType() == 4){
 
                 WebSettings settings = webView.getSettings();
@@ -141,7 +145,9 @@ public class NativeImpl implements MiiNativeADDataRef {
                         view.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
 
                         //点击上报
-                        HttpManager.reportEvent(adModel, AdReport.EVENT_CLICK, context);
+                        HttpManager.reportEvent(adModel, AdReport.EVENT_CLICK, activity.getApplicationContext());
+
+                        cpClickListener.click();
                         return true;
                     }
                 });
