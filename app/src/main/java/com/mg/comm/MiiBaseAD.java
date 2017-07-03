@@ -2,8 +2,15 @@ package com.mg.comm;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Handler;
+import android.view.Gravity;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.mg.mv4.ActivityCompat;
 import com.mg.mv4.ContextCompat;
@@ -19,13 +26,14 @@ import org.json.JSONObject;
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.READ_PHONE_STATE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
 
 
 /**
  * Created by wuqiyan on 2017/6/13.
  */
 
-public class MiiBaseAD {
+public abstract class MiiBaseAD {
 
     protected SDKConfigModel sdk;
 
@@ -176,5 +184,41 @@ public class MiiBaseAD {
             e.printStackTrace();
         }
     }
+    //"广告"提示
+    public TextView tvADCreate(Activity mActivity){
+        TextView tv=new TextView(mActivity);
+        tv.setText("广告");
+        tv.setTextSize(10);
+        tv.setPadding(5,3,5,3);
+        tv.setBackgroundColor(Color.argb(50, 41, 36, 33));
+        tv.setGravity(Gravity.CENTER);
+        tv.setTextColor(Color.parseColor("#FFF0F5"));
+        FrameLayout.LayoutParams lp=new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lp.gravity=Gravity.RIGHT|Gravity.BOTTOM;
+        tv.setLayoutParams(lp);
+        return tv;
+    }
+
+    //true是竖屏 false是横屏
+    public boolean checkOrientation(Activity mActivity){
+        Configuration mConfiguration = mActivity.getResources().getConfiguration(); //获取设置的配置信息
+
+        int ori = mConfiguration.orientation ; //获取屏幕方向
+
+        if (ori == mConfiguration.ORIENTATION_PORTRAIT) {
+
+            mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            return true;
+
+        } else if (ori == mConfiguration.ORIENTATION_LANDSCAPE){
+
+            mActivity.setRequestedOrientation(SCREEN_ORIENTATION_LANDSCAPE);
+            return false;
+
+        }
+        return true;
+    }
+
+    public abstract void recycle();
 
 }

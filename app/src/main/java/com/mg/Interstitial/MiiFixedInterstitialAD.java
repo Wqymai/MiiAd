@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -52,15 +53,17 @@ import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
 
 /**
  * Created by wuqiyan on 2017/6/11.
+ * 固定形式的插屏
  */
 
-public class MiiInterstitialAD  extends MiiBaseAD{
+public class MiiFixedInterstitialAD extends MiiBaseAD{
 
     private Context mContext;
     private Activity mActivity;
     private AdModel adModel;
     private MiiADListener listener;
     private MiiImageView imageView;
+    private WebView webView;
     private MiiCircleTextView cancel;
     private RelativeLayout relativeLayout;
     private AlertDialog dlg;
@@ -69,8 +72,6 @@ public class MiiInterstitialAD  extends MiiBaseAD{
     final static double  H_P = 0.8;
     final  static double W_P = 0.8;
     private InterstitialAD iad;
-    private String appid;
-    private String interstitialid;
     private boolean isShade;
     private ReqAsyncModel reqAsyncModel = new ReqAsyncModel();
 
@@ -84,7 +85,6 @@ public class MiiInterstitialAD  extends MiiBaseAD{
                     checkOpenAD();
                     break;
                 case 200:
-
                     try {
                         adModel= (AdModel) msg.obj;
                         checkADType(adModel);
@@ -94,7 +94,6 @@ public class MiiInterstitialAD  extends MiiBaseAD{
                     }
                     break;
                 case 300:
-
                     try {
                         Bitmap bitmap= (Bitmap) msg.obj;
                         if (bitmap == null){
@@ -124,25 +123,22 @@ public class MiiInterstitialAD  extends MiiBaseAD{
         }
     };
 
-    public MiiInterstitialAD(Activity mActivity, String appid,String interstitialid,boolean isShade,final MiiADListener listener){
+    public MiiFixedInterstitialAD(Activity mActivity, boolean isShade, final MiiADListener listener){
         this.mContext = mActivity.getApplicationContext();
         this.mActivity = mActivity;
         this.listener = listener;
         this.isShade = isShade;
-        this.appid = appid;
-        this.interstitialid = interstitialid;
 
         reqAsyncModel.context = this.mContext;
         reqAsyncModel.handler = this.mainHandler;
         reqAsyncModel.listener = this.listener;
         reqAsyncModel.pt = 3;
 
-
-
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             check23AbovePermission(mActivity,mainHandler);
             return;
         }
+
         Init();
 
     }
@@ -262,8 +258,7 @@ public class MiiInterstitialAD  extends MiiBaseAD{
             checkShade(null,adModel.getPage());
         }
         else {
-            new ImageDownloadHelper(mActivity.getResources().getConfiguration().orientation)
-                    .downloadShowImage(mContext,adModel.getImage(),3,mainHandler);
+            new ImageDownloadHelper(0).downloadShowImage(mContext,adModel.getImage(),3,mainHandler);
         }
 
     }
@@ -444,6 +439,28 @@ public class MiiInterstitialAD  extends MiiBaseAD{
                     }
                 }
             });
+
+            imageView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+
+                            adModel.setDownx(String.valueOf(event.getX()));
+                            adModel.setDowny(String.valueOf(event.getY()));
+                            break;
+                        case MotionEvent.ACTION_UP:
+
+                            adModel.setUpx(String.valueOf(event.getX()));
+                            adModel.setUpy(String.valueOf(event.getY()));
+                            break;
+                        default:
+                            break;
+                    }
+                    return false;
+                }
+            });
+
        }catch (Exception e){
            e.printStackTrace();
        }
@@ -459,7 +476,7 @@ public class MiiInterstitialAD  extends MiiBaseAD{
         relativeLayout.addView(imageView);
     }
     private void buildWebView(String html){
-        WebView webView = new WebView(mActivity);
+        webView = new WebView(mActivity);
         RelativeLayout.LayoutParams params_webview = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
         webView.setLayoutParams(params_webview);
         WebSettings settings = webView.getSettings();
@@ -489,7 +506,7 @@ public class MiiInterstitialAD  extends MiiBaseAD{
 
     private void buildOthersView(){
 
-        //关闭按钮
+        //添加关闭按钮
         cancel=new MiiCircleTextView(mActivity);
         cancel.setGravity(Gravity.CENTER);
         cancel.setText("X");
@@ -502,18 +519,21 @@ public class MiiInterstitialAD  extends MiiBaseAD{
         lp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         relativeLayout.addView(cancel, lp);
 
-        //"广告"提示
-        tv=new TextView(mActivity);
-        tv.setText("广告");
-        tv.setTextSize(8);
-        tv.setPadding(5,3,5,3);
-        tv.setBackgroundColor(Color.argb(50, 41, 36, 33));
-        tv.setGravity(Gravity.CENTER);
-        tv.setTextColor(Color.parseColor("#FFF0F5"));
-        RelativeLayout.LayoutParams tvlp=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        tvlp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        tvlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        relativeLayout.addView(tv,tvlp);
+//        //"广告"提示
+//        tv=new TextView(mActivity);
+//        tv.setText("广告");
+//        tv.setTextSize(8);
+//        tv.setPadding(5,3,5,3);
+//        tv.setBackgroundColor(Color.argb(50, 41, 36, 33));
+//        tv.setGravity(Gravity.CENTER);
+//        tv.setTextColor(Color.parseColor("#FFF0F5"));
+//        RelativeLayout.LayoutParams tvlp=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//        tvlp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+//        tvlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+
+        //添加"广告"字样
+        tv = tvADCreate(mActivity);
+        relativeLayout.addView(tv);
 
     }
 
@@ -533,4 +553,6 @@ public class MiiInterstitialAD  extends MiiBaseAD{
         return true;
     }
 
+    @Override
+    public void recycle() {}
 }

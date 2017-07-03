@@ -127,4 +127,9 @@ public class MiiNativeAD extends MiiBaseAD {
         //回调
         mListener.onADLoaded(ref);
     }
+
+    @Override
+    public void recycle() {
+
+    }
 }

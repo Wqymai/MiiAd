@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -13,6 +12,7 @@ import android.net.http.SslError;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -29,21 +29,20 @@ import com.mg.asyn.ReqAsyncModel;
 import com.mg.comm.ADClickHelper;
 import com.mg.comm.ImageDownloadHelper;
 import com.mg.comm.MConstant;
-import com.mg.interf.MiiADListener;
 import com.mg.comm.MiiBaseAD;
+import com.mg.interf.MiiADListener;
 import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
 import com.mg.others.utils.LogUtils;
 import com.mg.others.utils.SP;
 
-import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-
 /**
  * Created by wuqiyan on 17/6/19.
+ * 自定义的插屏
  */
 
-public class MiiNativeInterstitialAD extends MiiBaseAD {
+public class MiiAutoInterstitialAD extends MiiBaseAD {
 
     private Activity mActivity;
     private Context mContext;
@@ -52,7 +51,6 @@ public class MiiNativeInterstitialAD extends MiiBaseAD {
     private AdModel adModel;
     private WebView webView;
     private ImageView adImageView;
-    boolean oren;
     private ReqAsyncModel reqAsyncModel = new ReqAsyncModel();
 
     Handler mainHandler = new Handler(){
@@ -83,7 +81,7 @@ public class MiiNativeInterstitialAD extends MiiBaseAD {
                         if (bitmap == null){
                             return;
                         }
-                        showNativeInterstitialAD(bitmap);
+                        showAutoInterstitialAD(bitmap);
                     }
                     catch (Exception e){
                         e.printStackTrace();
@@ -105,7 +103,7 @@ public class MiiNativeInterstitialAD extends MiiBaseAD {
         }
     };
 
-    public MiiNativeInterstitialAD(Activity activity, ViewGroup adContainer, MiiADListener listener){
+    public MiiAutoInterstitialAD(Activity activity, ViewGroup adContainer, MiiADListener listener){
 
 
         if (activity == null || listener==null){
@@ -158,14 +156,13 @@ public class MiiNativeInterstitialAD extends MiiBaseAD {
             return;
         }
 
-
         new HbRaReturn(reqAsyncModel).fetchMGAD();
 
     }
 
     private void  checkADType(AdModel adModel){
         //检查横竖屏
-        checkOrientation();
+        checkOrientation(mActivity);
 
         if (adModel.getType() == 4){//h5广告
             LogUtils.i(MConstant.TAG,"加载H5广告...");
@@ -216,7 +213,7 @@ public class MiiNativeInterstitialAD extends MiiBaseAD {
 
     }
 
-    private void showNativeInterstitialAD(final Bitmap bitmap){
+    private void showAutoInterstitialAD(final Bitmap bitmap){
         try {
 
             LogUtils.i(MConstant.TAG,"开始展示...");
@@ -248,70 +245,91 @@ public class MiiNativeInterstitialAD extends MiiBaseAD {
                     new ADClickHelper(mContext).AdClick(adModel);
                 }
             });
+            adImageView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            adModel.setDownx(String.valueOf(event.getX()));
+                            adModel.setDowny(String.valueOf(event.getY()));
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            adModel.setUpx(String.valueOf(event.getX()));
+                            adModel.setUpy(String.valueOf(event.getY()));
+                            break;
+                        default:
+                            break;
+                    }
+                    return false;
+                }
+            });
         }catch (Exception e){
             e.printStackTrace();
         }
     }
 
-    //true是竖屏 false是横屏
-    public boolean checkOrientation(){
-        Configuration mConfiguration = mActivity.getResources().getConfiguration(); //获取设置的配置信息
+//    //true是竖屏 false是横屏
+//    public boolean checkOrientation(){
+//        Configuration mConfiguration = mActivity.getResources().getConfiguration(); //获取设置的配置信息
+//
+//        int ori = mConfiguration.orientation ; //获取屏幕方向
+//
+//        if (ori == mConfiguration.ORIENTATION_PORTRAIT) {
+//
+//            mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//            return true;
+//
+//        } else if (ori == mConfiguration.ORIENTATION_LANDSCAPE){
+//
+//            mActivity.setRequestedOrientation(SCREEN_ORIENTATION_LANDSCAPE);
+//            return false;
+//
+//        }
+//        return true;
+//    }
 
-        int ori = mConfiguration.orientation ; //获取屏幕方向
 
-        if (ori == mConfiguration.ORIENTATION_PORTRAIT) {
 
-            mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-            return true;
-
-        } else if (ori == mConfiguration.ORIENTATION_LANDSCAPE){
-
-            mActivity.setRequestedOrientation(SCREEN_ORIENTATION_LANDSCAPE);
-            return false;
-
-        }
-        return true;
-    }
-
+    @Override
     public void recycle(){
-      try {
+        try {
 
-        mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+            mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 
-        listener.onMiiADDismissed();
+            listener.onMiiADDismissed();
 
-        if (adImageView != null){
-            Drawable drawable = adImageView.getDrawable();
-            if (drawable != null && drawable instanceof BitmapDrawable) {
-                BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
-                Bitmap bitmap = bitmapDrawable.getBitmap();
-                if (bitmap != null && !bitmap.isRecycled()) {
-                    bitmap.recycle();
+            if (adImageView != null){
+                Drawable drawable = adImageView.getDrawable();
+                if (drawable != null && drawable instanceof BitmapDrawable) {
+                    BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+                    Bitmap bitmap = bitmapDrawable.getBitmap();
+                    if (bitmap != null && !bitmap.isRecycled()) {
+                        bitmap.recycle();
+                    }
+                }
+
+            }
+            if ( webView!= null){
+                ViewParent parent = webView.getParent();
+                if (parent != null) {
+                    ((ViewGroup) parent).removeView(webView);
+                }
+                webView.stopLoading();
+                // 退出时调用此方法，移除绑定的服务，否则某些特定系统会报错
+                webView.getSettings().setJavaScriptEnabled(false);
+                webView.clearHistory();
+                webView.clearView();
+                webView.removeAllViews();
+                try {
+                    webView.destroy();
+                } catch (Throwable ex) {
+
                 }
             }
-
         }
-        if (webView != null){
-            ViewParent parent = webView.getParent();
-            if (parent != null) {
-                ((ViewGroup) parent).removeView(webView);
-            }
-            webView.stopLoading();
-            // 退出时调用此方法，移除绑定的服务，否则某些特定系统会报错
-            webView.getSettings().setJavaScriptEnabled(false);
-            webView.clearHistory();
-            webView.clearView();
-            webView.removeAllViews();
-            try {
-                webView.destroy();
-            } catch (Throwable ex) {
-
-            }
+        catch (Exception e){
+            e.printStackTrace();
         }
-      }
-      catch (Exception e){
-          e.printStackTrace();
-      }
     }
 
 }

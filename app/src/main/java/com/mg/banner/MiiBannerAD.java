@@ -3,16 +3,19 @@ package com.mg.banner;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
-import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
-import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -29,11 +32,12 @@ import com.mg.asyn.ReqAsyncModel;
 import com.mg.comm.ADClickHelper;
 import com.mg.comm.ImageDownloadHelper;
 import com.mg.comm.MConstant;
-import com.mg.interf.MiiADListener;
 import com.mg.comm.MiiBaseAD;
+import com.mg.interf.MiiADListener;
 import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
+import com.mg.others.model.GdtInfoModel;
 import com.mg.others.utils.CommonUtils;
 import com.mg.others.utils.LogUtils;
 import com.mg.others.utils.SP;
@@ -69,7 +73,6 @@ public class MiiBannerAD extends MiiBaseAD {
                     startupAD();
                     break;
                 case 200:
-                    LogUtils.i(MConstant.TAG,"收到ra返回结果了");
                     try {
                         adModel= (AdModel) msg.obj;
                         checkADType(adModel);
@@ -152,6 +155,7 @@ public class MiiBannerAD extends MiiBaseAD {
         }
         startupAD();
     }
+
     private void startupAD(){
 
         SourceAssignModel saModel = checkADSource(mContext);
@@ -162,12 +166,12 @@ public class MiiBannerAD extends MiiBaseAD {
         }
 
         if (saModel.type == 1){
-            LogUtils.i(MConstant.TAG," SUM = 0");
+
             listener.onMiiNoAD(3005);
             return;
         }
         else if (saModel.type == 2){
-            LogUtils.i(MConstant.TAG," SUM = 100");
+
             if (saModel.firstChoose == 1){
 
                 new HbRaReturn(reqAsyncModel).fetchMGAD();
@@ -180,10 +184,9 @@ public class MiiBannerAD extends MiiBaseAD {
         }
         else if (saModel.type == 3){
 
-            LogUtils.i(MConstant.TAG," SUM > 100");
+
 
             if (saModel.firstChoose == 1){
-
 
                 new HbRaNoReturn(reqAsyncModel).fetchMGAD();
 
@@ -197,12 +200,22 @@ public class MiiBannerAD extends MiiBaseAD {
 
     private void openGDTAD(final boolean shouldReturn) {
 
-        LogUtils.i(MConstant.TAG,"加载广点通...");
         new JustHbRelative(reqAsyncModel).fetchMGAD();
 
-        final BannerView bv = new BannerView(mActivity, ADSize.BANNER,appid,bannerid);
-        bv.setRefresh(30);
+        String AID = "";
+        String BPID = "";
+        GdtInfoModel model = getGdtIds(mContext);
 
+        try {
+            AID = model.getAPPID();
+            BPID = model.getBannerPosID();
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        final BannerView bv = new BannerView(mActivity, ADSize.BANNER,AID,BPID);
+        bv.setRefresh(30);
         bv.setADListener(new AbstractBannerADListener() {
             @Override
             public void onNoAD(int i) {
@@ -263,8 +276,6 @@ public class MiiBannerAD extends MiiBaseAD {
             adContainer.addView(webView);
 
 
-//            TextView tv = tvADCreate();
-//            adContainer.addView(tv);
 
             //展示上报
             HttpManager.reportEvent(adModel, AdReport.EVENT_SHOW, mContext);
@@ -281,49 +292,36 @@ public class MiiBannerAD extends MiiBaseAD {
 
 
         }else {
-//            LogUtils.i(MConstant.TAG,"开始展示...");
-//            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
-//            adImageView = new ImageView(mActivity);
-//            adImageView.setLayoutParams(layoutParams);
-//            adImageView.setScaleType(ImageView.ScaleType.FIT_XY);
-//            adContainer.addView(adImageView);
-//
-//            TextView tv = tvADCreate();
-//            adContainer.addView(tv);
-
 
             new ImageDownloadHelper(0).downloadShowImage(mContext,adModel.getImage(),1,mainHandler);
         }
 
     }
-    //"广告"提示
-    private TextView tvADCreate(){
-        TextView tv=new TextView(mActivity);
-        tv.setText("广告");
-        tv.setTextSize(10);
-        tv.setPadding(5,3,5,3);
-        tv.setBackgroundColor(Color.argb(50, 41, 36, 33));
-        tv.setGravity(Gravity.CENTER);
-        tv.setTextColor(Color.parseColor("#FFF0F5"));
-        FrameLayout.LayoutParams lp=new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        lp.gravity=Gravity.RIGHT|Gravity.BOTTOM;
-        tv.setLayoutParams(lp);
-        return tv;
-    }
+//    //"广告"提示
+//    private TextView tvADCreate(){
+//        TextView tv=new TextView(mActivity);
+//        tv.setText("广告");
+//        tv.setTextSize(10);
+//        tv.setPadding(5,3,5,3);
+//        tv.setBackgroundColor(Color.argb(50, 41, 36, 33));
+//        tv.setGravity(Gravity.CENTER);
+//        tv.setTextColor(Color.parseColor("#FFF0F5"));
+//        FrameLayout.LayoutParams lp=new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//        lp.gravity=Gravity.RIGHT|Gravity.BOTTOM;
+//        tv.setLayoutParams(lp);
+//        return tv;
+//    }
     private void showBannerAD(final Bitmap bitmap){
         try {
 
-            LogUtils.i(MConstant.TAG,"开始展示...");
             FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
             adImageView = new ImageView(mActivity);
             adImageView.setLayoutParams(layoutParams);
             adImageView.setScaleType(ImageView.ScaleType.FIT_XY);
             adContainer.addView(adImageView);
 
-//            TextView tv = tvADCreate();
-//            adContainer.addView(tv);
-
-
+            TextView tv = tvADCreate(mActivity);
+            adContainer.addView(tv);
 
             adImageView.setImageBitmap(bitmap);
 
@@ -332,7 +330,6 @@ public class MiiBannerAD extends MiiBaseAD {
 
             //广告成功展示
             listener.onMiiADPresent();
-
 
             //记录展示次数
             int show_num = (int) SP.getParam(SP.CONFIG, mContext, SP.FOT, 0);
@@ -344,19 +341,77 @@ public class MiiBannerAD extends MiiBaseAD {
                 public void onClick(View v) {
 
                     listener.onMiiADClicked();
-                    listener.onMiiADDismissed();
-
 
                     new ADClickHelper(mContext).AdClick(adModel);
 
+                }
+            });
 
-                    if (bitmap != null){
-                        bitmap.recycle();
+            adImageView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+
+                            adModel.setDownx(String.valueOf(event.getX()));
+                            adModel.setDowny(String.valueOf(event.getY()));
+                            break;
+                        case MotionEvent.ACTION_UP:
+
+                            adModel.setUpx(String.valueOf(event.getX()));
+                            adModel.setUpy(String.valueOf(event.getY()));
+                            break;
+                        default:
+                            break;
                     }
-
+                    return false;
                 }
             });
         }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+
+    //关闭banner广告时调用
+    @Override
+    public void recycle() {
+        try {
+
+            mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+
+            listener.onMiiADDismissed();
+
+            if (adImageView != null){
+                Drawable drawable = adImageView.getDrawable();
+                if (drawable != null && drawable instanceof BitmapDrawable) {
+                    BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+                    Bitmap bitmap = bitmapDrawable.getBitmap();
+                    if (bitmap != null && !bitmap.isRecycled()) {
+                        bitmap.recycle();
+                    }
+                }
+
+            }
+            if (webView != null){
+                ViewParent parent = webView.getParent();
+                if (parent != null) {
+                    ((ViewGroup) parent).removeView(webView);
+                }
+                webView.stopLoading();
+                // 退出时调用此方法，移除绑定的服务，否则某些特定系统会报错
+                webView.getSettings().setJavaScriptEnabled(false);
+                webView.clearHistory();
+                webView.clearView();
+                webView.removeAllViews();
+                try {
+                    webView.destroy();
+                } catch (Throwable ex) {
+
+                }
+            }
+        }
+        catch (Exception e){
             e.printStackTrace();
         }
     }

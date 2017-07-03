@@ -4,14 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,10 +59,7 @@ public class MiiSplashAD extends MiiBaseAD{
      private WebView webView;
      private CountDownTimer timer;
 
-     private boolean gdtReturn;
      private ReqAsyncModel reqAsyncModel = new ReqAsyncModel();
-
-
 
      Handler mainHandler = new Handler(){
          @Override
@@ -131,7 +126,6 @@ public class MiiSplashAD extends MiiBaseAD{
         this.skipContainer=skipContainer;
 
         this.listener = adListener;
-
 
 
         if ( activity == null || adContainer == null || skipContainer == null){
@@ -235,32 +229,32 @@ public class MiiSplashAD extends MiiBaseAD{
 
     }
 
-     //"广告"提示
-     private TextView tvADCreate(){
-         TextView tv=new TextView(mActivity);
-         tv.setText("广告");
-         tv.setTextSize(10);
-         tv.setPadding(5,3,5,3);
-         tv.setBackgroundColor(Color.argb(50, 41, 36, 33));
-         tv.setGravity(Gravity.CENTER);
-         tv.setTextColor(Color.parseColor("#FFF0F5"));
-         FrameLayout.LayoutParams lp=new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-         lp.gravity=Gravity.RIGHT|Gravity.BOTTOM;
-         tv.setLayoutParams(lp);
-         return tv;
-     }
+//     //"广告"提示
+//     private TextView tvADCreate(){
+//         TextView tv=new TextView(mActivity);
+//         tv.setText("广告");
+//         tv.setTextSize(10);
+//         tv.setPadding(5,3,5,3);
+//         tv.setBackgroundColor(Color.argb(50, 41, 36, 33));
+//         tv.setGravity(Gravity.CENTER);
+//         tv.setTextColor(Color.parseColor("#FFF0F5"));
+//         FrameLayout.LayoutParams lp=new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//         lp.gravity=Gravity.RIGHT|Gravity.BOTTOM;
+//         tv.setLayoutParams(lp);
+//         return tv;
+//     }
 
      private void showSplashAD(final Bitmap bitmap){
 
        try {
 
              FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
-             adImageView=new ImageView(mActivity);
+             adImageView = new ImageView(mActivity);
              adImageView.setLayoutParams(layoutParams);
              adImageView.setScaleType(ImageView.ScaleType.FIT_XY);
              adContainer.addView(adImageView);
 
-             TextView tv=tvADCreate();
+             TextView tv = tvADCreate(mActivity);
              adContainer.addView(tv);
 
              adImageView.setImageBitmap(bitmap);
@@ -445,6 +439,7 @@ public class MiiSplashAD extends MiiBaseAD{
             public void onNoAD(int i) {
                 //广点通请求广告失败上报
                 HttpManager.reportGdtEvent(0,String.valueOf(i),mContext);
+
                 if (!shouldReturn){
                     new HbRaReturn(reqAsyncModel).fetchMGAD();
                     return;
@@ -474,5 +469,10 @@ public class MiiSplashAD extends MiiBaseAD{
                 listener.onMiiADTick(l);
             }
         }, 0);
+    }
+
+    @Override
+    public void recycle() {
+
     }
 }
