@@ -6,13 +6,13 @@
     <FrameLayout
         android:id="@+id/adContainer"
         android:layout_gravity="center"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <ImageView
         android:id="@+id/ad_holder"
         android:src="@mipmap/ic_launcher"
-        android:layout_width="500px"
-        android:layout_height="500px"/>
+        android:layout_width="300dp"
+        android:layout_height="300dp"/>
 
     <TextView
 

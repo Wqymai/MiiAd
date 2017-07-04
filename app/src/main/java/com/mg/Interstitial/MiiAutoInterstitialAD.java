@@ -165,7 +165,7 @@ public class MiiAutoInterstitialAD extends MiiBaseAD {
         checkOrientation(mActivity);
 
         if (adModel.getType() == 4){//h5广告
-            LogUtils.i(MConstant.TAG,"加载H5广告...");
+
             webView = new WebView(mActivity);
             FrameLayout.LayoutParams params_webview = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
             webView.setLayoutParams(params_webview);

@@ -16,7 +16,6 @@ import android.telephony.TelephonyManager;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 
-import com.android.others.BuildConfig;
 import com.mg.comm.MConstant;
 import com.mg.others.model.AdModel;
 
@@ -381,7 +380,7 @@ public class CommonUtils {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
                 i.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                Uri contentUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID+ ".fileProvider", file);
+                Uri contentUri = FileProvider.getUriForFile(context, context.getPackageName()+ ".fileProvider", file);
                 i.setDataAndType(contentUri, "application/vnd.android.package-archive");
             }
             else {

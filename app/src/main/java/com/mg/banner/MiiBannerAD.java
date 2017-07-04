@@ -55,8 +55,6 @@ public class MiiBannerAD extends MiiBaseAD {
     private Context mContext;
     private Activity mActivity;
     private ViewGroup adContainer;
-    private String appid;
-    private String bannerid;
     private MiiADListener listener;
     private AdModel adModel;
     private WebView webView;
@@ -119,13 +117,11 @@ public class MiiBannerAD extends MiiBaseAD {
         }
     };
 
-    public MiiBannerAD(Activity activity, ViewGroup adContainer, String appid, String bannerid, MiiADListener listener){
+    public MiiBannerAD(Activity activity, ViewGroup adContainer, MiiADListener listener){
 
         this.mContext = activity.getApplicationContext();
         this.mActivity = activity;
         this.adContainer = adContainer;
-        this.appid = appid;
-        this.bannerid = bannerid;
         this.listener = listener;
 
         if (activity == null || adContainer == null){
@@ -214,14 +210,17 @@ public class MiiBannerAD extends MiiBaseAD {
             e.printStackTrace();
         }
 
+        //记录开始请求广点通时间戳
+        SP.setParam(SP.CONFIG, mContext, SP.GDT_ST, System.currentTimeMillis());
+
         final BannerView bv = new BannerView(mActivity, ADSize.BANNER,AID,BPID);
         bv.setRefresh(30);
         bv.setADListener(new AbstractBannerADListener() {
             @Override
             public void onNoAD(int i) {
-
+                //广点通请求广告失败上报
+                HttpManager.reportGdtEvent(0,String.valueOf(i),mContext);
                 if (!shouldReturn){
-
                     new HbRaReturn(reqAsyncModel).fetchMGAD();
                     return;
                 }
@@ -230,15 +229,18 @@ public class MiiBannerAD extends MiiBaseAD {
 
             @Override
             public void onADReceiv() {
+                //广点通请求广告成功上报
+                HttpManager.reportGdtEvent(1,null,mContext);
                 adContainer.addView(bv);
                 listener.onMiiADPresent();
             }
 
             @Override
             public void onADClicked() {
+                //广点通请求广告成功上报
+                HttpManager.reportGdtEvent(2,null,mContext);
                 listener.onMiiADClicked();
             }
-
         });
         bv.loadAD();
 
@@ -246,7 +248,7 @@ public class MiiBannerAD extends MiiBaseAD {
     private void  checkADType(AdModel adModel){
 
         if (adModel.getType() == 4){//h5广告
-            LogUtils.i(MConstant.TAG,"加载H5广告...");
+
             webView = new WebView(mActivity);
             FrameLayout.LayoutParams params_webview = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, (int) (CommonUtils.getScreenH(mContext) * 0.1));
             webView.setLayoutParams(params_webview);
@@ -274,7 +276,6 @@ public class MiiBannerAD extends MiiBaseAD {
 
             webView.loadDataWithBaseURL("",adModel.getPage() , "text/html", "utf-8", "");
             adContainer.addView(webView);
-
 
 
             //展示上报

@@ -166,21 +166,33 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
             e.printStackTrace();
         }
 
+        //记录开始请求广点通时间戳
+        SP.setParam(SP.CONFIG, mContext, SP.GDT_ST, System.currentTimeMillis());
+
         iad = new InterstitialAD(mActivity, AID, IPID);
         iad.setADListener(new AbstractInterstitialADListener() {
             @Override
             public void onADReceive() {
+
+                //广点通请求广告成功上报
+                HttpManager.reportGdtEvent(1,null,mContext);
+
                 if (isShade){
                     iad.show();
 
                 }else {
                     iad.showAsPopupWindow();
                 }
+
                 listener.onMiiADPresent();
             }
 
             @Override
             public void onNoAD(int i) {
+
+                //广点通请求广告失败上报
+                HttpManager.reportGdtEvent(0,String.valueOf(i),mContext);
+
                 if (!shouldReturn){
 
                     new HbRaReturn(reqAsyncModel).fetchMGAD();
@@ -191,6 +203,10 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
 
             @Override
             public void onADClicked() {
+
+                //广点通请求广告成功上报
+                HttpManager.reportGdtEvent(2,null,mContext);
+
                 listener.onMiiADClicked();
             }
 
@@ -527,13 +543,12 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
 //        tv.setBackgroundColor(Color.argb(50, 41, 36, 33));
 //        tv.setGravity(Gravity.CENTER);
 //        tv.setTextColor(Color.parseColor("#FFF0F5"));
-//        RelativeLayout.LayoutParams tvlp=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//        tvlp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-//        tvlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-
+        RelativeLayout.LayoutParams tvlp=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        tvlp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        tvlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         //添加"广告"字样
         tv = tvADCreate(mActivity);
-        relativeLayout.addView(tv);
+        relativeLayout.addView(tv,tvlp);
 
     }
 

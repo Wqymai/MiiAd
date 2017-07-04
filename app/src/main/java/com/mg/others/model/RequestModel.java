@@ -2,6 +2,7 @@ package com.mg.others.model;
 
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.util.Base64;
 
 import com.mg.comm.MConstant;
@@ -15,6 +16,8 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import static com.mg.comm.MConstant.request_type.p;
 
 
 /**
@@ -366,7 +369,7 @@ public class RequestModel {
                         + currentTime+"1"+mDeviceInfo.getImei()));
                 break;
 
-            case MConstant.request_type.p:
+            case p:
 
                 break;
 
@@ -493,11 +496,24 @@ public class RequestModel {
             params.put("density",requestModel.getDensity());
             params.put("bssid",deviceInfo.getBssid());
             params.put("sign",requestModel.getSign());
+            params.put("orientation",String.valueOf(getOri(mContext)));
         }
         catch (Exception e){
             e.printStackTrace();
         }
         return params;
+    }
+    public static int getOri(Context context){
+        Configuration mConfiguration = context.getResources().getConfiguration(); //获取设置的配置信息
+        int ori = mConfiguration.orientation ; //获取屏幕方向
+        int i = 0;
+        if (ori == mConfiguration.ORIENTATION_PORTRAIT) {
+            i = 0;
+
+        } else if (ori == mConfiguration.ORIENTATION_LANDSCAPE){
+            i = 1;
+        }
+        return i;
     }
 
     public static Map<String,String> getRequestSdkEpParams(DeviceInfo deviceInfo,int type, String errorcode,long dt){

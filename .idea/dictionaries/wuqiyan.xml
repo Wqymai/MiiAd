@@ -3,8 +3,10 @@
     <words>
       <w>aaid</w>
       <w>bannerid</w>
+      <w>bpid</w>
       <w>imgurl</w>
       <w>interstitialid</w>
+      <w>ipid</w>
       <w>ishtml</w>
       <w>mhttp</w>
       <w>sdkep</w>
