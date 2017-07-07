@@ -1,4 +1,4 @@
-package com.mg.others.utils;
+package com.mg.d.utils;
 
 import android.app.Activity;
 import android.content.Context;
@@ -6,10 +6,9 @@ import android.os.Environment;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.mg.interf.IModel;
+import com.mg.d.c.DynamicModel;
+import com.mg.d.c.a;
 import com.mg.interf.MiiADListener;
-import com.mg.others.model.AdModel;
-import com.mg.others.model.DynamicModel;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -23,18 +22,18 @@ import dalvik.system.DexClassLoader;
 
 public class MethodDynamicLoad {
 
-    public static void loadReportMethod(AdModel adModel, int type, Context context){
+    public static void loadReportMethod(a adModel, int type, Context context){
         File optimizedDexOutputPath = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "patch_dex.jar");
         File dexOutputDir = context.getDir("dex", 0);
         DexClassLoader cl = new DexClassLoader(optimizedDexOutputPath.getAbsolutePath(), dexOutputDir.getAbsolutePath(), null, context.getClassLoader());
         Class libProviderClazz = null;
         try {
-            libProviderClazz = cl.loadClass("com.mg.others.manager.HttpManager");
+            libProviderClazz = cl.loadClass("com.mg.d.b.d");
             Class[] method_class = new Class[3];
-            method_class[0] = AdModel.class;
+            method_class[0] = a.class;
             method_class[1] = int.class;
             method_class[2] = Context.class;
-            Method method = libProviderClazz.getDeclaredMethod("reportEvent", method_class);
+            Method method = libProviderClazz.getDeclaredMethod("a", method_class);
             method.setAccessible(true);
             Object[] method_arg = new Object[3];
             method_arg[0] = adModel;
@@ -47,13 +46,13 @@ public class MethodDynamicLoad {
             exception.printStackTrace();
         }
     }
-    public static void loadApkDownloadMethod(IModel adModel, Context context){
+    public static void loadApkDownloadMethod(a adModel, Context context){
         File optimizedDexOutputPath = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "patch_dex.jar");
         File dexOutputDir = context.getDir("dex", 0);
         DexClassLoader cl = new DexClassLoader(optimizedDexOutputPath.getAbsolutePath(), dexOutputDir.getAbsolutePath(), null, context.getClassLoader());
         Class libProviderClazz = null;
         try {
-            libProviderClazz = cl.loadClass("com.mg.others.comm.ADClickHelper");
+            libProviderClazz = cl.loadClass("com.mg.b.a");
             Class[] struct_class = new Class[1];
             struct_class[0] = Context.class;
             Constructor c = libProviderClazz.getConstructor(struct_class);
@@ -62,7 +61,7 @@ public class MethodDynamicLoad {
 
 
             Class[] method_class = new Class[1];
-            method_class[0] = AdModel.class;
+            method_class[0] = a.class;
             Method method = libProviderClazz.getDeclaredMethod("apkDownload", method_class);
             method.setAccessible(true);
             Object[] method_arg = new Object[1];
@@ -189,13 +188,13 @@ public class MethodDynamicLoad {
         return model;
     }
 
-    public static void loadAdClickMethod(Context context,AdModel ad){
+    public static void loadAdClickMethod(Context context,a ad){
         File optimizedDexOutputPath = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "patch_dex.jar");
         File dexOutputDir = context.getDir("dex", 0);
         DexClassLoader cl = new DexClassLoader(optimizedDexOutputPath.getAbsolutePath(), dexOutputDir.getAbsolutePath(), null, context.getClassLoader());
         Class libProviderClazz = null;
         try {
-            libProviderClazz = cl.loadClass("com.mg.others.comm.ADClickHelper");
+            libProviderClazz = cl.loadClass("com.mg.b.a");
             Class[] struct_class = new Class[1];
             struct_class[0] = Context.class;
             Constructor c = libProviderClazz.getConstructor(struct_class);
@@ -204,8 +203,8 @@ public class MethodDynamicLoad {
 
 
             Class[] method_class = new Class[1];
-            method_class[0] = AdModel.class;
-            Method method = libProviderClazz.getDeclaredMethod("AdClick", method_class);
+            method_class[0] = a.class;
+            Method method = libProviderClazz.getDeclaredMethod("a", method_class);
             method.setAccessible(true);
             Object[] method_arg = new Object[1];
             method_arg[0] = ad;

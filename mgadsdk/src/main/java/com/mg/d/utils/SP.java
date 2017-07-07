@@ -1,4 +1,4 @@
-package com.mg.others.utils;
+package com.mg.d.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;

@@ -23,6 +23,20 @@ public class AdReport implements Serializable {
 
     public String[] urlOpen;
 
+
+    @Override
+    public String toString() {
+        String s="urlShow="+urlShow+
+                " urlClick="+urlClick+
+                " urlDownloadStart="+urlDownloadStart+
+                " urlDownloadComplete="+urlDownloadComplete +
+                " urlInstallComplete="+urlInstallComplete+
+                " urlOpen="+urlOpen;
+        return s;
+
+
+    }
+
     public String[] getUrlShow() {
         return urlShow;
     }

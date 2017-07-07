@@ -12,74 +12,73 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.mg.d.c.a;
+import com.mg.d.utils.MethodDynamicLoad;
+import com.mg.d.utils.SP;
 import com.mg.interf.MiiCpClickListener;
 import com.mg.interf.MiiNativeADDataRef;
-import com.mg.others.model.AdModel;
-import com.mg.others.model.AdReport;
-import com.mg.others.utils.MethodDynamicLoad;
-import com.mg.others.utils.SP;
 
 /**
  * Created by wuqiyan on 17/6/21.
  */
 
-public class NativeImpl implements MiiNativeADDataRef {
+public class b implements MiiNativeADDataRef {
 
 
-    private AdModel adModel;
+    private a adModel;
 
 
-    public void setAdModel(AdModel model){
+    public void a(a model){
         this.adModel = model;
     }
 
     @Override
     public String getImg() {
-        return adModel.getImage();
+        return adModel.f();
     }
 
 
     @Override
     public int getType() {
-        return adModel.getType() == 4? 1 : 0;
+        return adModel.h() == 4? 1 : 0;
     }
 
     @Override
     public String getName() {
-        return adModel.getName();
+        return adModel.c();
     }
 
     @Override
     public String getTitle() {
-        return adModel.getTitle();
+        return adModel.d();
     }
 
     @Override
     public String getDesc() {
-        return adModel.getDesc();
+        return adModel.e();
     }
 
     @Override
     public String getPage() {
-        return adModel.getPage();
+        return adModel.l();
     }
 
     @Override
     public String getIcon() {
-        return  adModel.getIcon();
+        return  adModel.i();
     }
 
 
     @Override
     public void setNormalClick(final Activity activity, final View view, final MiiCpClickListener cpClickListener) {
 
-        if (adModel.getType() != 4){
+        if (adModel.h() != 4){
             //点击调用
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                   try {
-                    AdModel ad= (AdModel) adModel.clone();
+                    a ad= (a) adModel.clone();
                     //点击操作
                     MethodDynamicLoad.loadAdClickMethod(activity.getApplicationContext(),ad);
 
@@ -98,13 +97,13 @@ public class NativeImpl implements MiiNativeADDataRef {
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
 
-                            adModel.setDownx(String.valueOf(event.getX()));
-                            adModel.setDowny(String.valueOf(event.getY()));
+                            adModel.m(String.valueOf(event.getX()));
+                            adModel.n(String.valueOf(event.getY()));
                             break;
                         case MotionEvent.ACTION_UP:
 
-                            adModel.setUpx(String.valueOf(event.getX()));
-                            adModel.setUpy(String.valueOf(event.getY()));
+                            adModel.o(String.valueOf(event.getX()));
+                            adModel.p(String.valueOf(event.getY()));
                             break;
                     }
                     return false;
@@ -122,12 +121,12 @@ public class NativeImpl implements MiiNativeADDataRef {
         SP.setParam(SP.CONFIG, context, SP.FOT, show_num + 1);
 
         //展示上报
-        MethodDynamicLoad.loadReportMethod(adModel, AdReport.EVENT_CLICK, context);
+        MethodDynamicLoad.loadReportMethod(adModel,0, context);
     }
 
     @Override
     public void setWVClick(final Activity activity, final WebView webView, final MiiCpClickListener cpClickListener) {
-        if (adModel.getType() == 4){
+        if (adModel.h() == 4){
 
                 WebSettings settings = webView.getSettings();
                 settings.setDefaultTextEncodingName("utf-8") ;
@@ -146,13 +145,14 @@ public class NativeImpl implements MiiNativeADDataRef {
                         view.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
 
                         //点击上报
-                        MethodDynamicLoad.loadReportMethod(adModel, AdReport.EVENT_CLICK, activity.getApplicationContext());
+                        MethodDynamicLoad.loadReportMethod(adModel, 1, activity.getApplicationContext());
                         cpClickListener.click();
                         return true;
                     }
                 });
         }
     }
+
 
 
 }

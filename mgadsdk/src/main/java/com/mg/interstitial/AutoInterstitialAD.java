@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.view.ViewGroup;
 
 import com.mg.interf.MiiADListener;
-import com.mg.others.model.DynamicModel;
-import com.mg.others.utils.MethodDynamicLoad;
+import com.mg.d.c.DynamicModel;
+import com.mg.d.utils.MethodDynamicLoad;
 
 /**
  * Created by wuqiyan on 17/7/6.

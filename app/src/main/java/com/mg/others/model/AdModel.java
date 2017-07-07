@@ -6,44 +6,33 @@ import java.io.Serializable;
 public class AdModel implements Serializable,Cloneable {
 
     private String id;
-
     private String name;
-
     private String title;
-
     private String desc;
-
     private String image;
-
     private String pkName;
-
     private String category;
-
     private long size;
-
     private int type;                   //广告点击后续操作类型    1、apk下载     2、web网页  4、H5
     private String page;//H5代码（type=4,值有效）
-
     private String icon;
-
     private String url;
-
     private AdReport reportBean;
-
     private String apkFilePath;
-
-
     private int pt;                     //1: banner，2: 全屏， 3: 半屏， 4: 信息流，5：广告墙 ，6：push
-
     private int et;                     //广告过期时间，单位 秒，超过过期时间请重新获取广告。为0则该广告不能做缓存。
-
     private int displayTime;            //广告展示时间
-
     private int delayTime;              //插屏广告延迟展示时间
-
     private boolean hasJumpButton;      //是否有跳过按钮
-
     private int jumpFunction;           //点击跳过按钮对应的功能
+    private int toggleSence;            //广告的触发场景
+    private int flag;       //点击广告是跳转还是关闭
+    private String bp;//banner广告的位置
+    private String downx;
+    private String downy;
+    private String upx;
+    private String upy;
+    private String clickid;
 
     public int getFlag() {
         return flag;
@@ -52,17 +41,6 @@ public class AdModel implements Serializable,Cloneable {
     public void setFlag(int flag) {
         this.flag = flag;
     }
-
-    private int toggleSence;            //广告的触发场景
-
-    private int flag;       //点击广告是跳转还是关闭
-    private String bp;//banner广告的位置
-
-    private String downx;
-    private String downy;
-    private String upx;
-    private String upy;
-    private String clickid;
 
     public String getClickid() {
         return clickid;
@@ -282,19 +260,34 @@ public class AdModel implements Serializable,Cloneable {
     @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        sb.append("\n name="+name+"\n");
+        sb.append("id="+id+"\n");
+        sb.append("name="+name+"\n");
         sb.append("title="+title+"\n");
+        sb.append("desc="+desc+"\n");
+        sb.append("image="+image+"\n");
+        sb.append("pkName="+pkName+"\n");
+        sb.append("category="+category+"\n");
+        sb.append("size="+size+"\n");
+        sb.append("type="+type+"\n");
+        sb.append("page="+page + "\n");
         sb.append("icon="+icon+"\n");
-        sb.append("img="+image+"\n");
-        sb.append("url="+url + "\n");
+        sb.append("url="+url+"\n");
+        sb.append("reportBean="+reportBean+"\n");
+        sb.append("apkFilePath="+apkFilePath+"\n");
         sb.append("pt="+pt+"\n");
         sb.append("et="+et+"\n");
         sb.append("displayTime="+displayTime+"\n");
-        sb.append("delayTime="+delayTime+"\n");
-        sb.append("hasJumpButton="+hasJumpButton+"\n");
-        sb.append("jumpFunction="+jumpFunction+"\n");
-        sb.append("type="+type+"\n");
+        sb.append("delayTime="+delayTime);
+        sb.append("hasJumpButton="+hasJumpButton);
+        sb.append("jumpFunction="+jumpFunction);
+        sb.append("toggleSence="+toggleSence);
         sb.append("flag="+flag);
+        sb.append("bp="+bp);
+        sb.append("downx="+downx);
+        sb.append("downy="+downy);
+        sb.append("upx="+upx);
+        sb.append("upy="+upy);
+        sb.append("clickid="+clickid);
 
         return sb.toString();
     }

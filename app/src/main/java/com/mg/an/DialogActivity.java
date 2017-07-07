@@ -11,7 +11,7 @@
 //import android.widget.Toast;
 //
 //import com.android.others.R;
-//import com.mg.Interstitial.MiiAutoInterstitialAD;
+//import com.mg.interstitial.MiiAutoInterstitialAD;
 //import com.mg.interf.MiiADListener;
 //
 ///**

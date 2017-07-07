@@ -13,8 +13,8 @@
 //
 //import com.android.others.R;
 //import com.mg.comm.MConstant;
+//import com.mg.interf.AbsADData;
 //import com.mg.interf.MiiCpClickListener;
-//import com.mg.interf.MiiNativeADDataRef;
 //import com.mg.others.utils.LogUtils;
 //
 //import java.io.InputStream;
@@ -35,7 +35,7 @@
 //    protected void onCreate(@Nullable Bundle savedInstanceState) {
 //        super.onCreate(savedInstanceState);
 //        setContentView(R.layout.dialog2);
-//        final MiiNativeADDataRef ref = (MiiNativeADDataRef) getIntent().getSerializableExtra("AdData");
+//        final AbsADData ref = (AbsADData) getIntent().getSerializableExtra("AdData");
 //
 //
 //        LogUtils.i(MConstant.TAG, "imgurl="+ref.getImg()+" type="+ref.getType());

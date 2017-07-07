@@ -115,10 +115,10 @@ public class MainActivity extends Activity {
                 if (dataRef != null){
                     openNative.setEnabled(true);
                     adDataRef = dataRef;
-
-
                 }
             }
+
+
 
             @Override
             public void onMiiNoAD(int errCode) {

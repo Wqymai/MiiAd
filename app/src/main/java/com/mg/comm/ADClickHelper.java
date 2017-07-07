@@ -130,7 +130,9 @@ public class ADClickHelper {
     }
 
     public void apkDownload(AdModel ad){
-
+        if (ad == null){
+            return;
+        }
         String installedList = CommonUtils.getInstalledSafeWare(mContext);
         if (installedList.contains(ad.getPkName())){ //如果存在已安装应用，直接打开不用下载了
             LogUtils.i(MConstant.TAG,"already installed");

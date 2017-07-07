@@ -5,7 +5,7 @@
 //
 //import android.view.ViewGroup;
 //
-//import com.mg.Interstitial.MiiFixedInterstitialAD;
+//import com.mg.interstitial.MiiFixedInterstitialAD;
 //import com.mg.interf.MiiADListener;
 //import com.mg.splash.MiiSplashAD;
 //

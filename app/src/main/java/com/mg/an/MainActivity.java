@@ -8,11 +8,11 @@
 //import android.widget.Button;
 //
 //import com.android.others.R;
-//import com.mg.Interstitial.MiiFixedInterstitialAD;
 //import com.mg.comm.MConstant;
+//import com.mg.interf.AbsADData;
 //import com.mg.interf.MiiADListener;
-//import com.mg.interf.MiiNativeADDataRef;
 //import com.mg.interf.MiiNativeListener;
+//import com.mg.interstitial.MiiFixedInterstitialAD;
 //import com.mg.nativ.MiiNativeAD;
 //import com.mg.others.utils.LogUtils;
 //
@@ -28,7 +28,7 @@
 //    Button openNativeInterstitial;
 //    Button openDialogAct;
 //    Button openDialogAct2;
-//    private MiiNativeADDataRef adDataRef;
+//    private AbsADData adDataRef;
 //
 ////    @Override
 ////    public boolean onTouchEvent(MotionEvent event) {
@@ -193,13 +193,22 @@
 //        //原生
 //        new MiiNativeAD(this, new MiiNativeListener() {
 //            @Override
-//            public void onADLoaded(MiiNativeADDataRef dataRef) {
+//            public void onADLoaded(AbsADData dataRef) {
 //                if (dataRef != null){
 //                    LogUtils.i(MConstant.TAG,"原生广告加载成功");
 //                    openDialogAct2.setEnabled(true);
 //                    adDataRef = dataRef;
 //                }
 //            }
+//
+////            @Override
+////            public void onADLoaded(MiiNativeADDataRef dataRef) {
+////                if (dataRef != null){
+////                    LogUtils.i(MConstant.TAG,"原生广告加载成功");
+////                    openDialogAct2.setEnabled(true);
+////                    adDataRef = dataRef;
+////                }
+////            }
 //
 //            @Override
 //            public void onMiiNoAD(int errCode) {
