@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/MiiAd.iml" filepath="$PROJECT_DIR$/MiiAd.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mgadsdk/mgadsdk.iml" filepath="$PROJECT_DIR$/mgadsdk/mgadsdk.iml" />
     </modules>
   </component>
 </project>

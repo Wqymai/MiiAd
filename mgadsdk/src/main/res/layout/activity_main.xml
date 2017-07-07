@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.mg.MainActivity">
+
+    <Button
+        android:text="打开splash广告"
+        android:id="@+id/open_splash_ad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/open_interstitial_noshade"
+        android:text="打开插屏广告 没有遮罩"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <Button
+
+        android:id="@+id/open_interstitial_shade"
+        android:text="打开插屏广告 有遮罩"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:text="打开原生广告"
+        android:id="@+id/open_native"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <Button
+
+        android:id="@+id/open_banner"
+        android:text="打开banner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:text="打开自定义插屏"
+        android:id="@+id/open_autoInter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>
