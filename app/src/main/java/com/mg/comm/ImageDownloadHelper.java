@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Message;
-import android.widget.ImageView;
 
 import com.mg.others.http.HttpUtils;
 import com.mg.others.utils.LogUtils;
@@ -15,10 +14,6 @@ import com.mg.others.utils.imager.ImageSizeUtil;
 import java.io.File;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
-import static android.R.attr.bitmap;
-import static android.R.attr.height;
-import static android.R.attr.width;
 
 
 /**

@@ -1,4 +1,4 @@
-package com.mg.Interstitial;
+package com.mg.interstitial;
 
 import android.app.Activity;
 import android.app.AlertDialog;

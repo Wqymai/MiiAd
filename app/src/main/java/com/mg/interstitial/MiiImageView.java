@@ -1,4 +1,4 @@
-package com.mg.Interstitial;
+package com.mg.interstitial;
 
 import android.content.Context;
 import android.graphics.Canvas;

@@ -1,4 +1,4 @@
-package com.mg.Interstitial;
+package com.mg.interstitial;
 
 import android.app.Activity;
 import android.content.Context;
@@ -22,6 +22,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.mg.asyn.FirstEnter;
 import com.mg.asyn.HbRaReturn;
@@ -216,12 +217,16 @@ public class MiiAutoInterstitialAD extends MiiBaseAD {
     private void showAutoInterstitialAD(final Bitmap bitmap){
         try {
 
-            LogUtils.i(MConstant.TAG,"开始展示...");
             FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
             adImageView = new ImageView(mActivity);
             adImageView.setLayoutParams(layoutParams);
             adImageView.setScaleType(ImageView.ScaleType.FIT_XY);
             adContainer.addView(adImageView);
+
+
+            TextView tv = tvADCreate(mActivity);
+            adContainer.addView(tv);
+
 
             adImageView.setImageBitmap(bitmap);
 
@@ -293,7 +298,7 @@ public class MiiAutoInterstitialAD extends MiiBaseAD {
     @Override
     public void recycle(){
         try {
-
+            LogUtils.i(MConstant.TAG,"调用了自由插屏的recycle()");
             mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 
             listener.onMiiADDismissed();

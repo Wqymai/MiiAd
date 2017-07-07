@@ -6,6 +6,7 @@ import android.os.Environment;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.mg.interf.IModel;
 import com.mg.interf.MiiADListener;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.DynamicModel;
@@ -46,7 +47,7 @@ public class MethodDynamicLoad {
             exception.printStackTrace();
         }
     }
-    public static void loadApkDownloadMethod(AdModel adModel, Context context){
+    public static void loadApkDownloadMethod(IModel adModel, Context context){
         File optimizedDexOutputPath = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "patch_dex.jar");
         File dexOutputDir = context.getDir("dex", 0);
         DexClassLoader cl = new DexClassLoader(optimizedDexOutputPath.getAbsolutePath(), dexOutputDir.getAbsolutePath(), null, context.getClassLoader());
@@ -108,7 +109,7 @@ public class MethodDynamicLoad {
         Class<?> libProviderClazz = null;
 
         try {
-            libProviderClazz = cl.loadClass("com.mg.Interstitial.MiiFixedInterstitialAD");
+            libProviderClazz = cl.loadClass("com.mg.interstitial.MiiFixedInterstitialAD");
             Class[] args1 = new Class[3];
             args1[0] = Activity.class;
             args1[1] = boolean.class;
@@ -135,7 +136,7 @@ public class MethodDynamicLoad {
         Object object = null;
         DynamicModel model = new DynamicModel();
         try {
-            libProviderClazz = cl.loadClass("com.mg.Interstitial.MiiAutoInterstitialAD");
+            libProviderClazz = cl.loadClass("com.mg.interstitial.MiiAutoInterstitialAD");
             Class[] args1 = new Class[3];
             args1[0] = Activity.class;
             args1[1] = ViewGroup.class;
@@ -152,7 +153,6 @@ public class MethodDynamicLoad {
             model.object = object;
 
         } catch (Exception exception) {
-
             exception.printStackTrace();
         }
         return model;

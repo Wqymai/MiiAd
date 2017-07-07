@@ -378,7 +378,7 @@ public class MiiBannerAD extends MiiBaseAD {
     @Override
     public void recycle() {
         try {
-
+            LogUtils.i(MConstant.TAG,"调用了banner的recycle()");
             mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 
             listener.onMiiADDismissed();

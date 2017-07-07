@@ -4,9 +4,6 @@ import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
 
-import com.mg.comm.MConstant;
-import com.mg.others.utils.LogUtils;
-
 import java.util.List;
 
 /**

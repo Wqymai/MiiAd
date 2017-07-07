@@ -80,7 +80,6 @@ public class NativeImpl implements MiiNativeADDataRef {
                 public void onClick(View v) {
                   try {
                     AdModel ad= (AdModel) adModel.clone();
-
                     //点击操作
                     MethodDynamicLoad.loadAdClickMethod(activity.getApplicationContext(),ad);
 
