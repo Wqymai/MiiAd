@@ -37,7 +37,7 @@ public class MethodDynamicLoad {
     private MethodDynamicLoad(Context context){
          this.context = context;
 //         optimizedDexOutputPath = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "patch_dex.so");
-         optimizedDexOutputPath = new File(context.getFilesDir()+File.separator+ "patch_dex.so");
+         optimizedDexOutputPath = new File(context.getFilesDir()+File.separator+ "patch_dex.jar");
          dexOutputDir = context.getDir("dex", 0);
          cl = new DexClassLoader(optimizedDexOutputPath.getAbsolutePath(), dexOutputDir.getAbsolutePath(), null, context.getClassLoader());
     }
