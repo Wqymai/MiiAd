@@ -1,6 +1,7 @@
 package com.mg.banner;
 
 import android.app.Activity;
+import android.content.Context;
 import android.view.ViewGroup;
 
 import com.mg.interf.MiiADListener;
@@ -14,11 +15,13 @@ import com.mg.d.utils.MethodDynamicLoad;
 public class BannerAD {
 
     private DynamicModel model;
+    private Context mContext;
     public BannerAD(Activity activity, ViewGroup adContainer, MiiADListener listener){
-       model = MethodDynamicLoad.loadBannerADMethod(activity,adContainer,listener);
+        this.mContext = activity.getApplicationContext();
+       model = MethodDynamicLoad.getInstance(mContext).loadBannerADMethod(activity,adContainer,listener);
     }
 
     public void recycle(){
-       MethodDynamicLoad.loadRecycleMethod(model);
+       MethodDynamicLoad.getInstance(mContext).loadRecycleMethod(model);
     }
 }

@@ -16,7 +16,7 @@ public class SplashAD {
 
     public SplashAD(Activity activity, ViewGroup adContainer, View skipContainer, MiiADListener adListener){
 
-       MethodDynamicLoad.loadSplashADMethod(activity,adContainer,skipContainer,adListener);
+       MethodDynamicLoad.getInstance(activity.getApplicationContext()).loadSplashADMethod(activity,adContainer,skipContainer,adListener);
     }
 
 

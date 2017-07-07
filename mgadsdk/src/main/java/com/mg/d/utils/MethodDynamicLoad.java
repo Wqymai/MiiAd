@@ -2,13 +2,13 @@ package com.mg.d.utils;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.Environment;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.mg.d.c.DynamicModel;
 import com.mg.d.c.a;
 import com.mg.interf.MiiADListener;
+import com.mg.interf.MiiNativeListener;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -22,10 +22,40 @@ import dalvik.system.DexClassLoader;
 
 public class MethodDynamicLoad {
 
-    public static void loadReportMethod(a adModel, int type, Context context){
-        File optimizedDexOutputPath = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "patch_dex.jar");
-        File dexOutputDir = context.getDir("dex", 0);
-        DexClassLoader cl = new DexClassLoader(optimizedDexOutputPath.getAbsolutePath(), dexOutputDir.getAbsolutePath(), null, context.getClassLoader());
+//    public static File outputFile;
+//    public static File DexOutputPath(Context context){
+//        outputFile = new File(context.getFilesDir()+ File.separator +"dex"+File.separator+"patch_dex.so");
+//        return outputFile;
+//    }
+
+    private static volatile MethodDynamicLoad instance = null;
+    Context context;
+    File optimizedDexOutputPath;
+    File dexOutputDir;
+    DexClassLoader cl;
+
+    private MethodDynamicLoad(Context context){
+         this.context = context;
+//         optimizedDexOutputPath = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "patch_dex.so");
+         optimizedDexOutputPath = new File(context.getFilesDir()+File.separator+ "patch_dex.so");
+         dexOutputDir = context.getDir("dex", 0);
+         cl = new DexClassLoader(optimizedDexOutputPath.getAbsolutePath(), dexOutputDir.getAbsolutePath(), null, context.getClassLoader());
+    }
+    public static MethodDynamicLoad getInstance(Context context) {
+        if (instance == null) {
+            synchronized (MethodDynamicLoad.class) {
+                if (instance == null) {
+                    instance = new MethodDynamicLoad(context);
+                }
+            }
+        }
+        return instance;
+    }
+
+    public  void loadReportMethod(a adModel, int type, Context context){
+//        File optimizedDexOutputPath = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "patch_dex.so");
+//        File dexOutputDir = context.getDir("dex", 0);
+//        DexClassLoader cl = new DexClassLoader(optimizedDexOutputPath.getAbsolutePath(), dexOutputDir.getAbsolutePath(), null, context.getClassLoader());
         Class libProviderClazz = null;
         try {
             libProviderClazz = cl.loadClass("com.mg.d.b.d");
@@ -42,14 +72,13 @@ public class MethodDynamicLoad {
             method.invoke(null, method_arg);
 
         } catch (Exception exception) {
-
             exception.printStackTrace();
         }
     }
-    public static void loadApkDownloadMethod(a adModel, Context context){
-        File optimizedDexOutputPath = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "patch_dex.jar");
-        File dexOutputDir = context.getDir("dex", 0);
-        DexClassLoader cl = new DexClassLoader(optimizedDexOutputPath.getAbsolutePath(), dexOutputDir.getAbsolutePath(), null, context.getClassLoader());
+    public  void loadApkDownloadMethod(a adModel, Context context){
+//        File optimizedDexOutputPath = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "patch_dex.so");
+//        File dexOutputDir = context.getDir("dex", 0);
+//        DexClassLoader cl = new DexClassLoader(optimizedDexOutputPath.getAbsolutePath(), dexOutputDir.getAbsolutePath(), null, context.getClassLoader());
         Class libProviderClazz = null;
         try {
             libProviderClazz = cl.loadClass("com.mg.b.a");
@@ -73,10 +102,10 @@ public class MethodDynamicLoad {
             exception.printStackTrace();
         }
     }
-    public static void loadSplashADMethod(Activity activity, ViewGroup adContainer, View skipContainer, MiiADListener adListener){
-        File optimizedDexOutputPath = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "patch_dex.jar");
-        File dexOutputDir = activity.getDir("dex", 0);
-        DexClassLoader cl = new DexClassLoader(optimizedDexOutputPath.getAbsolutePath(), dexOutputDir.getAbsolutePath(), null, activity.getClassLoader());
+    public  void loadSplashADMethod(Activity activity, ViewGroup adContainer, View skipContainer, MiiADListener adListener){
+//        File optimizedDexOutputPath = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "patch_dex.so");
+//        File dexOutputDir = activity.getDir("dex", 0);
+//        DexClassLoader cl = new DexClassLoader(optimizedDexOutputPath.getAbsolutePath(), dexOutputDir.getAbsolutePath(), null, activity.getClassLoader());
         Class<?> libProviderClazz = null;
 
         try {
@@ -101,10 +130,10 @@ public class MethodDynamicLoad {
         }
 
     }
-    public static void loadFixedInterstitialADMethod(Activity activity, boolean isShade, MiiADListener listener){
-        File optimizedDexOutputPath = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "patch_dex.jar");
-        File dexOutputDir = activity.getDir("dex", 0);
-        DexClassLoader cl = new DexClassLoader(optimizedDexOutputPath.getAbsolutePath(), dexOutputDir.getAbsolutePath(), null, activity.getClassLoader());
+    public  void loadFixedInterstitialADMethod(Activity activity, boolean isShade, MiiADListener listener){
+//        File optimizedDexOutputPath = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "patch_dex.so");
+//        File dexOutputDir = activity.getDir("dex", 0);
+//        DexClassLoader cl = new DexClassLoader(optimizedDexOutputPath.getAbsolutePath(), dexOutputDir.getAbsolutePath(), null, activity.getClassLoader());
         Class<?> libProviderClazz = null;
 
         try {
@@ -127,10 +156,10 @@ public class MethodDynamicLoad {
         }
     }
 
-    public static DynamicModel loadAutoInterstitialADMethod(Activity activity, ViewGroup adContainer, MiiADListener listener){
-        File optimizedDexOutputPath = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "patch_dex.jar");
-        File dexOutputDir = activity.getDir("dex", 0);
-        DexClassLoader cl = new DexClassLoader(optimizedDexOutputPath.getAbsolutePath(), dexOutputDir.getAbsolutePath(), null, activity.getClassLoader());
+    public  DynamicModel loadAutoInterstitialADMethod(Activity activity, ViewGroup adContainer, MiiADListener listener){
+//        File optimizedDexOutputPath = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "patch_dex.so");
+//        File dexOutputDir = activity.getDir("dex", 0);
+//        DexClassLoader cl = new DexClassLoader(optimizedDexOutputPath.getAbsolutePath(), dexOutputDir.getAbsolutePath(), null, activity.getClassLoader());
         Class<?> libProviderClazz = null;
         Object object = null;
         DynamicModel model = new DynamicModel();
@@ -157,10 +186,10 @@ public class MethodDynamicLoad {
         return model;
     }
 
-    public static DynamicModel loadBannerADMethod(Activity activity, ViewGroup adContainer, MiiADListener listener){
-        File optimizedDexOutputPath = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "patch_dex.jar");
-        File dexOutputDir = activity.getDir("dex", 0);
-        DexClassLoader cl = new DexClassLoader(optimizedDexOutputPath.getAbsolutePath(), dexOutputDir.getAbsolutePath(), null, activity.getClassLoader());
+    public  DynamicModel loadBannerADMethod(Activity activity, ViewGroup adContainer, MiiADListener listener){
+//        File optimizedDexOutputPath = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "patch_dex.so");
+//        File dexOutputDir = activity.getDir("dex", 0);
+//        DexClassLoader cl = new DexClassLoader(optimizedDexOutputPath.getAbsolutePath(), dexOutputDir.getAbsolutePath(), null, activity.getClassLoader());
         Class<?> libProviderClazz = null;
         Object object = null;
         DynamicModel model = new DynamicModel();
@@ -188,10 +217,10 @@ public class MethodDynamicLoad {
         return model;
     }
 
-    public static void loadAdClickMethod(Context context,a ad){
-        File optimizedDexOutputPath = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "patch_dex.jar");
-        File dexOutputDir = context.getDir("dex", 0);
-        DexClassLoader cl = new DexClassLoader(optimizedDexOutputPath.getAbsolutePath(), dexOutputDir.getAbsolutePath(), null, context.getClassLoader());
+    public  void loadAdClickMethod(Context context,a ad){
+//        File optimizedDexOutputPath = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "patch_dex.so");
+//        File dexOutputDir = context.getDir("dex", 0);
+//        DexClassLoader cl = new DexClassLoader(optimizedDexOutputPath.getAbsolutePath(), dexOutputDir.getAbsolutePath(), null, context.getClassLoader());
         Class libProviderClazz = null;
         try {
             libProviderClazz = cl.loadClass("com.mg.b.a");
@@ -216,7 +245,31 @@ public class MethodDynamicLoad {
         }
     }
 
-    public static void loadRecycleMethod(DynamicModel model){
+    public void loadNativeADMethod(Activity activity,MiiNativeListener listener){
+//        File optimizedDexOutputPath = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "patch_dex.so");
+//        File dexOutputDir = activity.getDir("dex", 0);
+//        DexClassLoader cl = new DexClassLoader(optimizedDexOutputPath.getAbsolutePath(), dexOutputDir.getAbsolutePath(), null, activity.getClassLoader());
+        Class<?> libProviderClazz = null;
+        try {
+            libProviderClazz = cl.loadClass("com.mg.nativ.MiiNativeAD");
+            Class[] args1 = new Class[2];
+            args1[0] = Activity.class;
+            args1[1] = MiiNativeListener.class;
+
+            Object[] argments = new Object[2];
+            argments[0] = activity;
+            argments[1] = listener;
+            Constructor c = libProviderClazz.getConstructor(args1);
+            c.setAccessible(true);
+            c.newInstance(argments);
+
+        } catch (Exception exception) {
+
+            exception.printStackTrace();
+        }
+    }
+
+    public  void loadRecycleMethod(DynamicModel model){
         try {
             Method method = model.aClass.getDeclaredMethod("recycle", new Class[]{});
             method.setAccessible(true);

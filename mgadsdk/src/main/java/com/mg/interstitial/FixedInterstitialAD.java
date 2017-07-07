@@ -13,7 +13,7 @@ public class FixedInterstitialAD {
 
     public FixedInterstitialAD(Activity activity, boolean isShade, MiiADListener listener){
 
-        MethodDynamicLoad.loadFixedInterstitialADMethod(activity,isShade,listener);
+        MethodDynamicLoad.getInstance(activity.getApplicationContext()).loadFixedInterstitialADMethod(activity,isShade,listener);
     }
 
 }

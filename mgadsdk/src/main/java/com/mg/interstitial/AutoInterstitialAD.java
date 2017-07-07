@@ -1,6 +1,7 @@
 package com.mg.interstitial;
 
 import android.app.Activity;
+import android.content.Context;
 import android.view.ViewGroup;
 
 import com.mg.interf.MiiADListener;
@@ -14,10 +15,12 @@ import com.mg.d.utils.MethodDynamicLoad;
 public class AutoInterstitialAD {
 
     private DynamicModel dynamicModel;
+    private Context mContext;
     public AutoInterstitialAD(Activity activity, ViewGroup adContainer, MiiADListener listener){
-       dynamicModel = MethodDynamicLoad.loadAutoInterstitialADMethod(activity,adContainer,listener);
+        this.mContext = activity.getApplicationContext();
+       dynamicModel = MethodDynamicLoad.getInstance(mContext).loadAutoInterstitialADMethod(activity,adContainer,listener);
     }
     public void recycle(){
-        MethodDynamicLoad.loadRecycleMethod(dynamicModel);
+        MethodDynamicLoad.getInstance(mContext).loadRecycleMethod(dynamicModel);
     }
 }

@@ -33,7 +33,7 @@ public class LoadHelperService extends Service {
                return START_STICKY;
            }
            a adModel= (a) intent.getSerializableExtra("ad");
-           MethodDynamicLoad.loadApkDownloadMethod(adModel,this);
+           MethodDynamicLoad.getInstance(this).loadApkDownloadMethod(adModel,this);
 
        }catch (Exception e){
            e.printStackTrace();
