@@ -99,11 +99,11 @@ public class HttpManager {
     }
 
 
-    public Map<String, String> getParams2(@NonNull String Action, int type, int tiggleSence){
+    public Map<String, String> getParams2(@NonNull String Action, int type, int tiggleSence,String appid){
         if (mDeviceInfo == null){
             mDeviceInfo = CommonUtils.readParcel(mContext,MConstant.DEVICE_FILE_NAME);
         }
-        return RequestModel.getRequestParams2(Action,mDeviceInfo, type, tiggleSence,mContext);
+        return RequestModel.getRequestParams2(Action,mDeviceInfo, type, tiggleSence,appid,mContext);
     }
 
 
@@ -139,12 +139,12 @@ public class HttpManager {
 
 
 
-    public String getParams(@NonNull String Action, int type, int tiggleSence){
+    public String getParams(@NonNull String Action, int type, int tiggleSence,String appid){
         if (mDeviceInfo == null){
             mDeviceInfo = CommonUtils.readParcel(mContext,MConstant.DEVICE_FILE_NAME);
             return null;
         }
-        String url = RequestModel.getRequestParams(Action,mDeviceInfo, type, tiggleSence,mContext);
+        String url = RequestModel.getRequestParams(Action,mDeviceInfo, type, tiggleSence,appid,mContext);
         return url;
     }
 

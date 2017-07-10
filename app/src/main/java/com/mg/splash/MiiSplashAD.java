@@ -116,7 +116,7 @@ public class MiiSplashAD extends MiiBaseAD{
          }
      };
 
-    public  MiiSplashAD(Activity activity, ViewGroup adContainer,View skipContainer ,MiiADListener adListener){
+    public  MiiSplashAD(Activity activity, ViewGroup adContainer,View skipContainer ,String appid,MiiADListener adListener){
 
         this.mActivity = activity;
 
@@ -138,6 +138,7 @@ public class MiiSplashAD extends MiiBaseAD{
         reqAsyncModel.handler = this.mainHandler;
         reqAsyncModel.listener = this.listener;
         reqAsyncModel.pt = 2;
+        reqAsyncModel.appid = appid;
 
         if(Build.VERSION.SDK_INT >= M){
             check23AbovePermission(mActivity,mainHandler);

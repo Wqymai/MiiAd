@@ -9,7 +9,6 @@ import android.widget.Button;
 
 import com.android.others.R;
 import com.mg.comm.MConstant;
-
 import com.mg.interf.MiiADListener;
 import com.mg.interf.MiiNativeADDataRef;
 import com.mg.interf.MiiNativeListener;
@@ -90,7 +89,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
 
-                new MiiFixedInterstitialAD(MainActivity.this,false, new MiiADListener() {
+                new MiiFixedInterstitialAD(MainActivity.this,false,MConstant.APPID, new MiiADListener() {
                     @Override
                     public void onMiiNoAD(int errCode) {
                         Log.i(Constants.TAG,"onMiiNoAD "+errCode);
@@ -130,7 +129,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
 
-                new MiiFixedInterstitialAD(MainActivity.this,true, new MiiADListener() {
+                new MiiFixedInterstitialAD(MainActivity.this,true,MConstant.APPID, new MiiADListener() {
                     @Override
                     public void onMiiNoAD(int errCode) {
                         Log.i(Constants.TAG,"onMiiNoAD 2"+errCode);
@@ -202,7 +201,7 @@ public class MainActivity extends Activity {
 
 
         //原生
-        new MiiNativeAD(this, new MiiNativeListener() {
+        new MiiNativeAD(this,MConstant.APPID, new MiiNativeListener() {
             @Override
             public void onADLoaded(MiiNativeADDataRef dataRef) {
                 if (dataRef != null){
@@ -242,6 +241,14 @@ public class MainActivity extends Activity {
             }
         });
 
+
+
+//        String url = "openapp.jdmobile://virtual?params=%7B%22sourceValue%22:%220_productDetail_97%22,%22des%22:%22productDetail%22,%22skuId%22:%2211892134487%22,%22category%22:%22jump%22,%22sourceType%22:%22PCUBE_CHANNEL%22%7D";
+//        Intent intent1 = new Intent();
+//        intent1.setAction("android.intent.action.VIEW");
+//        Uri uri = Uri.parse(url);
+//        intent1.setData(uri);
+//        startActivity(intent1);
     }
 
 }

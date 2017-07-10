@@ -56,7 +56,7 @@ public class MiiNativeAD extends MiiBaseAD {
         }
     };
 
-    public MiiNativeAD(Activity activity, MiiNativeListener listener){
+    public MiiNativeAD(Activity activity,String appid, MiiNativeListener listener){
 
         this.mContext = activity.getApplicationContext();
         this.mListener = listener;
@@ -66,6 +66,7 @@ public class MiiNativeAD extends MiiBaseAD {
         reqAsyncModel.handler = this.mainHandler;
         reqAsyncModel.listener = this.mListener;
         reqAsyncModel.pt = 4;//信息流
+        reqAsyncModel.appid = appid;
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             check23AbovePermission(mActivity,mainHandler);

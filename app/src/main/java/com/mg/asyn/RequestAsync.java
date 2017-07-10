@@ -25,6 +25,7 @@ public class RequestAsync {
     protected Context mContext;
     protected HttpManager httpManager;
     protected MiiAbsADListener listener;
+    protected String appid;
     protected SDKConfigModel sdkConfigModel;
     protected int pt;//请求广告的类型  2-开屏 3-插屏
 

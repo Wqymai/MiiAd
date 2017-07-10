@@ -33,7 +33,7 @@ public class BannerAcitvity extends Activity {
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               bannerAD = new MiiBannerAD(BannerAcitvity.this, bannerContainer, new MiiADListener() {
+               bannerAD = new MiiBannerAD(BannerAcitvity.this, bannerContainer,MConstant.APPID, new MiiADListener() {
 
                     @Override
                     public void onMiiNoAD(int errCode) {

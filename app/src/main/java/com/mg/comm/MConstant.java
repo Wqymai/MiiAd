@@ -17,7 +17,7 @@ public final   class MConstant {
     //http://117.135.144.63:8081/index.php/GD/VSGD";
     public static final String VGD = "NEFCMTMxQThBMUM3RUUxNjA1NDcxNEQ0RDBCMzY3OENBOTQwMjU5QTM2NDg4RjQ3QTc1NDY3REFEMDc3QTg4NkM1MTY4NUI3MTE0RTBENENGOUY4QUEwRTMyODgxOUM0";
 
-    public static String APPID;
+    public static String APPID = "0B737AC7-DCE5-7058-FB3D-1CB82A588ABC";
     public static String GDT_AID;
     public static String GDT_SPID;
     public static String GDT_IPID;
@@ -29,7 +29,7 @@ public final   class MConstant {
             //测试服务器地址
             //http://vs.maimob.net";
             HOST = "MzUwQkY1QzUwMkQ0QTZEQUZCMTU3REQ0MUY1OTBFOUYxNEQxNjNBMjU4NTQzQTkwODdEREUxM0VFQUJGQTlGNw==";
-            APPID = "0B737AC7-DCE5-7058-FB3D-1CB82A588ABC";
+//            APPID = "0B737AC7-DCE5-7058-FB3D-1CB82A588ABC";
             GDT_AID = "NjkxNTBBNDAzRDMyNDM3MjJEQjM1MzRDRTIzMDA1MzQ=";
             GDT_SPID = "QTEzOTYwOUJDMzIyNTUxQUE1QjREMkIwQ0I1QjgxOEVDM0IwQjkxOTc5OUVBN0Y2MzM3QzczNDBCNTFFRjg2OQ==";
             GDT_IPID = "NTkzMDA3OENFNEJCQUM4RUM5QzI2RjQ2NjFFQkZFNzQ0QUMyQTY1MjM3NEJCODBCMkRBODZEMzMxQTRBNkFENQ==";
@@ -39,7 +39,7 @@ public final   class MConstant {
             //正式服务器地址
             //http://s1.pagefarmer.net";
             HOST = "QTBBMkRGQ0U0QzRCNUM4QTZDRDlGQTQ4NEY0MkIxRDE3NkVERTBBNERCMTk3RkIzQjdDMUM0QjQ4QUM2MDAzQg==";
-            APPID = "4ED960BE-9E19-7DFE-A545-33B86B508C3D";
+//            APPID = "4ED960BE-9E19-7DFE-A545-33B86B508C3D";
             GDT_AID = "NEY4NTUwNDA2MUJFREZFMUExQzAxQTU5NjRFQ0NEMzQ=";
             GDT_SPID = "QkE0OTA1NEZGRkNGQ0Q4OUJGMkZCM0FGQTJGNEVGMkUyRjIwMkNDMTVFM0JENEI5QkFBQjdFQ0E5MTMzRjkyNA==";
             GDT_IPID = "";

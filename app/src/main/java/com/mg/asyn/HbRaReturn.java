@@ -2,6 +2,7 @@ package com.mg.asyn;
 
 import android.os.Message;
 import android.util.Base64;
+
 import com.mg.comm.MConstant;
 import com.mg.others.http.HttpListener;
 import com.mg.others.http.HttpResponse;
@@ -16,8 +17,10 @@ import com.mg.others.utils.LocalKeyConstants;
 import com.mg.others.utils.LogUtils;
 import com.mg.others.utils.MiiLocalStrEncrypt;
 import com.mg.others.utils.SP;
+
 import java.util.List;
 import java.util.Map;
+
 import static com.mg.others.manager.HttpManager.NI;
 import static com.mg.others.manager.HttpManager.RA;
 
@@ -76,7 +79,7 @@ public class HbRaReturn extends RequestAsync {
         }
 
         HttpUtils httpUtils = new HttpUtils(mContext);
-        final String url = httpManager.getParams(NI, 0, 0);
+        final String url = httpManager.getParams(NI, 0, 0,appid);
 
         if (url == null||url.equals("")){
 
@@ -162,7 +165,7 @@ public class HbRaReturn extends RequestAsync {
             return;
         }
 
-        Map<String,String> params=httpManager.getParams2(RA,pt,0);
+        Map<String,String> params=httpManager.getParams2(RA,pt,0,appid);
 
         httpUtils.post(url.trim(), new HttpListener() {
             @Override

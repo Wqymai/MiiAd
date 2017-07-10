@@ -104,7 +104,7 @@ public class MiiAutoInterstitialAD extends MiiBaseAD {
         }
     };
 
-    public MiiAutoInterstitialAD(Activity activity, ViewGroup adContainer, MiiADListener listener){
+    public MiiAutoInterstitialAD(Activity activity, ViewGroup adContainer,String appid, MiiADListener listener){
 
 
         if (activity == null || listener==null){
@@ -125,6 +125,7 @@ public class MiiAutoInterstitialAD extends MiiBaseAD {
         reqAsyncModel.handler = this.mainHandler;
         reqAsyncModel.listener = this.listener;
         reqAsyncModel.pt = 3;
+        reqAsyncModel.appid = appid;
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             check23AbovePermission(mActivity,mainHandler);

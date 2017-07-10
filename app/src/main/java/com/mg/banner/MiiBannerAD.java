@@ -118,7 +118,7 @@ public class MiiBannerAD extends MiiBaseAD {
         }
     };
 
-    public MiiBannerAD(Activity activity, ViewGroup adContainer, MiiADListener listener){
+    public MiiBannerAD(Activity activity, ViewGroup adContainer,String appid, MiiADListener listener){
 
         this.mContext = activity.getApplicationContext();
         this.mActivity = activity;
@@ -133,6 +133,7 @@ public class MiiBannerAD extends MiiBaseAD {
         reqAsyncModel.handler = this.mainHandler;
         reqAsyncModel.listener = this.listener;
         reqAsyncModel.pt = 1;
+        reqAsyncModel.appid = appid;
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             check23AbovePermission(mActivity,mainHandler);
