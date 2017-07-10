@@ -16,6 +16,7 @@ import com.mg.d.c.a;
 import com.mg.d.utils.MethodDynamicLoad;
 import com.mg.d.utils.SP;
 import com.mg.interf.MiiCpClickListener;
+import com.mg.interf.MiiCpTouchListener;
 import com.mg.interf.MiiNativeADDataRef;
 
 /**
@@ -70,7 +71,7 @@ public class b implements MiiNativeADDataRef {
 
 
     @Override
-    public void setNormalClick(final Activity activity, final View view, final MiiCpClickListener cpClickListener) {
+    public void setNormalClick(final Activity activity, final View view, final MiiCpClickListener cpClickListener, final MiiCpTouchListener cpTouchListener) {
 
         if (adModel.h() != 4){
             //点击调用
@@ -106,6 +107,7 @@ public class b implements MiiNativeADDataRef {
                             adModel.p(String.valueOf(event.getY()));
                             break;
                     }
+                    cpTouchListener.touch();
                     return false;
                 }
             });

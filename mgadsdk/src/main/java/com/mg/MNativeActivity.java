@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.mg.interf.MiiCpClickListener;
+import com.mg.interf.MiiCpTouchListener;
 import com.mg.interf.MiiNativeADDataRef;
 
 import java.io.InputStream;
@@ -83,6 +84,11 @@ public class MNativeActivity extends Activity {
                 public void click() {
                     System.out.println("我是cp的数据1");
                     finish();
+                }
+            }, new MiiCpTouchListener() {
+                @Override
+                public void touch() {
+
                 }
             });
 

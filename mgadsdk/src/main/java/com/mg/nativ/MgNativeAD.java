@@ -11,7 +11,7 @@ import com.mg.interf.MiiNativeListener;
 
 public class MgNativeAD {
 
-    public MgNativeAD(Activity activity, MiiNativeListener listener){
+    public MgNativeAD(Activity activity,String appid, MiiNativeListener listener){
 //        File optimizedDexOutputPath = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "patch_dex.so");
 //        File dexOutputDir = activity.getDir("dex", 0);
 //        DexClassLoader cl = new DexClassLoader(optimizedDexOutputPath.getAbsolutePath(), dexOutputDir.getAbsolutePath(), null, activity.getClassLoader());
@@ -33,6 +33,6 @@ public class MgNativeAD {
 //
 //            exception.printStackTrace();
 //        }
-        MethodDynamicLoad.getInstance(activity.getApplicationContext()).loadNativeADMethod(activity,listener);
+        MethodDynamicLoad.getInstance(activity.getApplicationContext()).loadNativeADMethod(activity,appid,listener);
     }
 }

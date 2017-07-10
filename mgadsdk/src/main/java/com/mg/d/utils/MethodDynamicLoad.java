@@ -102,7 +102,7 @@ public class MethodDynamicLoad {
             exception.printStackTrace();
         }
     }
-    public  void loadSplashADMethod(Activity activity, ViewGroup adContainer, View skipContainer, MiiADListener adListener){
+    public  void loadSplashADMethod(Activity activity, ViewGroup adContainer, View skipContainer,String appid, MiiADListener adListener){
 //        File optimizedDexOutputPath = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "patch_dex.so");
 //        File dexOutputDir = activity.getDir("dex", 0);
 //        DexClassLoader cl = new DexClassLoader(optimizedDexOutputPath.getAbsolutePath(), dexOutputDir.getAbsolutePath(), null, activity.getClassLoader());
@@ -110,17 +110,19 @@ public class MethodDynamicLoad {
 
         try {
             libProviderClazz = cl.loadClass("com.mg.splash.MiiSplashAD");
-            Class[] args1 = new Class[4];
+            Class[] args1 = new Class[5];
             args1[0] = Activity.class;
             args1[1] = ViewGroup.class;
             args1[2] = View.class;
-            args1[3] = MiiADListener.class;
+            args1[3] = String.class;
+            args1[4] = MiiADListener.class;
 
-            Object[] argments = new Object[4];
+            Object[] argments = new Object[5];
             argments[0] = activity;
             argments[1] = adContainer;
             argments[2] = skipContainer;
-            argments[3] = adListener;
+            argments[3] = appid;
+            argments[4] = adListener;
             Constructor c = libProviderClazz.getConstructor(args1);
             c.setAccessible(true);
             c.newInstance(argments);
@@ -130,7 +132,7 @@ public class MethodDynamicLoad {
         }
 
     }
-    public  void loadFixedInterstitialADMethod(Activity activity, boolean isShade, MiiADListener listener){
+    public  void loadFixedInterstitialADMethod(Activity activity, boolean isShade,String appid, MiiADListener listener){
 //        File optimizedDexOutputPath = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "patch_dex.so");
 //        File dexOutputDir = activity.getDir("dex", 0);
 //        DexClassLoader cl = new DexClassLoader(optimizedDexOutputPath.getAbsolutePath(), dexOutputDir.getAbsolutePath(), null, activity.getClassLoader());
@@ -138,15 +140,17 @@ public class MethodDynamicLoad {
 
         try {
             libProviderClazz = cl.loadClass("com.mg.interstitial.MiiFixedInterstitialAD");
-            Class[] args1 = new Class[3];
+            Class[] args1 = new Class[4];
             args1[0] = Activity.class;
             args1[1] = boolean.class;
-            args1[2] = MiiADListener.class;
+            args1[2] = String.class;
+            args1[3] = MiiADListener.class;
 
-            Object[] argments = new Object[3];
+            Object[] argments = new Object[4];
             argments[0] = activity;
             argments[1] = isShade;
-            argments[2] = listener;
+            argments[2] = appid;
+            argments[3] = listener;
             Constructor c = libProviderClazz.getConstructor(args1);
             c.setAccessible(true);
             c.newInstance(argments);
@@ -156,7 +160,7 @@ public class MethodDynamicLoad {
         }
     }
 
-    public  DynamicModel loadAutoInterstitialADMethod(Activity activity, ViewGroup adContainer, MiiADListener listener){
+    public  DynamicModel loadAutoInterstitialADMethod(Activity activity, ViewGroup adContainer,String appid, MiiADListener listener){
 //        File optimizedDexOutputPath = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "patch_dex.so");
 //        File dexOutputDir = activity.getDir("dex", 0);
 //        DexClassLoader cl = new DexClassLoader(optimizedDexOutputPath.getAbsolutePath(), dexOutputDir.getAbsolutePath(), null, activity.getClassLoader());
@@ -165,15 +169,17 @@ public class MethodDynamicLoad {
         DynamicModel model = new DynamicModel();
         try {
             libProviderClazz = cl.loadClass("com.mg.interstitial.MiiAutoInterstitialAD");
-            Class[] args1 = new Class[3];
+            Class[] args1 = new Class[4];
             args1[0] = Activity.class;
             args1[1] = ViewGroup.class;
-            args1[2] = MiiADListener.class;
+            args1[2] = String.class;
+            args1[3] = MiiADListener.class;
 
-            Object[] argments = new Object[3];
+            Object[] argments = new Object[4];
             argments[0] = activity;
             argments[1] = adContainer;
-            argments[2] = listener;
+            argments[2] = appid;
+            argments[3] = listener;
             Constructor c = libProviderClazz.getConstructor(args1);
             c.setAccessible(true);
             object = c.newInstance(argments);
@@ -186,7 +192,7 @@ public class MethodDynamicLoad {
         return model;
     }
 
-    public  DynamicModel loadBannerADMethod(Activity activity, ViewGroup adContainer, MiiADListener listener){
+    public  DynamicModel loadBannerADMethod(Activity activity, ViewGroup adContainer,String appid, MiiADListener listener){
 //        File optimizedDexOutputPath = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "patch_dex.so");
 //        File dexOutputDir = activity.getDir("dex", 0);
 //        DexClassLoader cl = new DexClassLoader(optimizedDexOutputPath.getAbsolutePath(), dexOutputDir.getAbsolutePath(), null, activity.getClassLoader());
@@ -195,15 +201,17 @@ public class MethodDynamicLoad {
         DynamicModel model = new DynamicModel();
         try {
             libProviderClazz = cl.loadClass("com.mg.banner.MiiBannerAD");
-            Class[] args1 = new Class[3];
+            Class[] args1 = new Class[4];
             args1[0] = Activity.class;
             args1[1] = ViewGroup.class;
-            args1[2] = MiiADListener.class;
+            args1[2] = String.class;
+            args1[3] = MiiADListener.class;
 
-            Object[] argments = new Object[3];
+            Object[] argments = new Object[4];
             argments[0] = activity;
             argments[1] = adContainer;
-            argments[2] = listener;
+            argments[2] = appid;
+            argments[3] = listener;
             Constructor c = libProviderClazz.getConstructor(args1);
             c.setAccessible(true);
             object = c.newInstance(argments);
@@ -245,20 +253,22 @@ public class MethodDynamicLoad {
         }
     }
 
-    public void loadNativeADMethod(Activity activity,MiiNativeListener listener){
+    public void loadNativeADMethod(Activity activity,String appid,MiiNativeListener listener){
 //        File optimizedDexOutputPath = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "patch_dex.so");
 //        File dexOutputDir = activity.getDir("dex", 0);
 //        DexClassLoader cl = new DexClassLoader(optimizedDexOutputPath.getAbsolutePath(), dexOutputDir.getAbsolutePath(), null, activity.getClassLoader());
         Class<?> libProviderClazz = null;
         try {
             libProviderClazz = cl.loadClass("com.mg.nativ.MiiNativeAD");
-            Class[] args1 = new Class[2];
+            Class[] args1 = new Class[3];
             args1[0] = Activity.class;
-            args1[1] = MiiNativeListener.class;
+            args1[1] = String.class;
+            args1[2] = MiiNativeListener.class;
 
-            Object[] argments = new Object[2];
+            Object[] argments = new Object[3];
             argments[0] = activity;
-            argments[1] = listener;
+            argments[1] = appid;
+            argments[2] = listener;
             Constructor c = libProviderClazz.getConstructor(args1);
             c.setAccessible(true);
             c.newInstance(argments);

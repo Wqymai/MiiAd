@@ -16,9 +16,9 @@ public class MgBannerAD {
 
     private DynamicModel model;
     private Context mContext;
-    public MgBannerAD(Activity activity, ViewGroup adContainer, MiiADListener listener){
+    public MgBannerAD(Activity activity, ViewGroup adContainer,String appid, MiiADListener listener){
         this.mContext = activity.getApplicationContext();
-       model = MethodDynamicLoad.getInstance(mContext).loadBannerADMethod(activity,adContainer,listener);
+       model = MethodDynamicLoad.getInstance(mContext).loadBannerADMethod(activity,adContainer,appid,listener);
     }
 
     public void recycle(){

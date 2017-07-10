@@ -11,9 +11,9 @@ import com.mg.d.utils.MethodDynamicLoad;
 
 public class MgFixedInterstitialAD {
 
-    public MgFixedInterstitialAD(Activity activity, boolean isShade, MiiADListener listener){
+    public MgFixedInterstitialAD(Activity activity, boolean isShade,String appid, MiiADListener listener){
 
-        MethodDynamicLoad.getInstance(activity.getApplicationContext()).loadFixedInterstitialADMethod(activity,isShade,listener);
+        MethodDynamicLoad.getInstance(activity.getApplicationContext()).loadFixedInterstitialADMethod(activity,isShade,appid,listener);
     }
 
 }

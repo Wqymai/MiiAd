@@ -84,14 +84,12 @@ public class MiiSplashAD extends MiiBaseAD{
                     break;
                  case 300:
                      try {
-
                          Bitmap bitmap = (Bitmap) msg.obj;
-
                          if (bitmap == null){
                              adContainer.removeView(adImageView);
                              return;
                          }
-                        showSplashAD(bitmap);
+                         showSplashAD(bitmap);
                      }
                      catch (Exception e){
                          adContainer.removeView(adImageView);

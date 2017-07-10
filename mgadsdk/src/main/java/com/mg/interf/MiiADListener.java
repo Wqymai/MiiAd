@@ -9,5 +9,6 @@ public interface MiiADListener extends MiiAbsADListener {
     void onMiiADDismissed();
     void onMiiADPresent();
     void onMiiADClicked();
+    void onMiiADTouched();
     void onMiiADTick(long millisUntilFinished);
 }

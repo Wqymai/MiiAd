@@ -14,9 +14,9 @@ import com.mg.d.utils.MethodDynamicLoad;
 public class MgSplashAD {
 
 
-    public MgSplashAD(Activity activity, ViewGroup adContainer, View skipContainer, MiiADListener adListener){
+    public MgSplashAD(Activity activity, ViewGroup adContainer, View skipContainer,String appid, MiiADListener adListener){
 
-       MethodDynamicLoad.getInstance(activity.getApplicationContext()).loadSplashADMethod(activity,adContainer,skipContainer,adListener);
+       MethodDynamicLoad.getInstance(activity.getApplicationContext()).loadSplashADMethod(activity,adContainer,skipContainer,appid,adListener);
     }
 
 

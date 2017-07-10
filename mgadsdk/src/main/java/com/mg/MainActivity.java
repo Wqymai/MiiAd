@@ -44,7 +44,7 @@ public class MainActivity extends Activity {
         openInter_noshade.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new MgFixedInterstitialAD(MainActivity.this, false, new MiiADListener() {
+                new MgFixedInterstitialAD(MainActivity.this, false,Contants.APPID, new MiiADListener() {
                     @Override
                     public void onMiiADDismissed() {
 
@@ -57,6 +57,11 @@ public class MainActivity extends Activity {
 
                     @Override
                     public void onMiiADClicked() {
+
+                    }
+
+                    @Override
+                    public void onMiiADTouched() {
 
                     }
 
@@ -77,7 +82,7 @@ public class MainActivity extends Activity {
         openInter_shade.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new MgFixedInterstitialAD(MainActivity.this, true, new MiiADListener() {
+                new MgFixedInterstitialAD(MainActivity.this, true, Contants.APPID,new MiiADListener() {
                     @Override
                     public void onMiiADDismissed() {
 
@@ -90,6 +95,11 @@ public class MainActivity extends Activity {
 
                     @Override
                     public void onMiiADClicked() {
+
+                    }
+
+                    @Override
+                    public void onMiiADTouched() {
 
                     }
 
@@ -109,7 +119,7 @@ public class MainActivity extends Activity {
 
         openNative = (Button) findViewById(R.id.open_native);
 //        原生广告
-        new MgNativeAD(this, new MiiNativeListener() {
+        new MgNativeAD(this,Contants.APPID, new MiiNativeListener() {
             @Override
             public void onADLoaded(MiiNativeADDataRef dataRef) {
                 if (dataRef != null){

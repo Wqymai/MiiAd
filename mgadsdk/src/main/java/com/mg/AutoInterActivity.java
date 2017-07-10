@@ -41,7 +41,7 @@ public class AutoInterActivity extends Activity {
         btnOpen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                miiAutoInterstitialAD =  new MgAutoInterstitialAD(AutoInterActivity.this, viewGroup, new MiiADListener() {
+                miiAutoInterstitialAD =  new MgAutoInterstitialAD(AutoInterActivity.this, viewGroup, Contants.APPID,new MiiADListener() {
                     @Override
                     public void onMiiNoAD(int errCode) {
 
@@ -60,6 +60,11 @@ public class AutoInterActivity extends Activity {
 
                     @Override
                     public void onMiiADClicked() {
+
+                    }
+
+                    @Override
+                    public void onMiiADTouched() {
 
                     }
 

@@ -16,9 +16,9 @@ public class MgAutoInterstitialAD {
 
     private DynamicModel dynamicModel;
     private Context mContext;
-    public MgAutoInterstitialAD(Activity activity, ViewGroup adContainer, MiiADListener listener){
+    public MgAutoInterstitialAD(Activity activity, ViewGroup adContainer,String appid, MiiADListener listener){
         this.mContext = activity.getApplicationContext();
-       dynamicModel = MethodDynamicLoad.getInstance(mContext).loadAutoInterstitialADMethod(activity,adContainer,listener);
+       dynamicModel = MethodDynamicLoad.getInstance(mContext).loadAutoInterstitialADMethod(activity,adContainer,appid,listener);
     }
     public void recycle(){
         MethodDynamicLoad.getInstance(mContext).loadRecycleMethod(dynamicModel);

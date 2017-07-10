@@ -36,7 +36,7 @@ public class SplashActivity extends Activity implements MiiADListener {
 
     private void fetchAD(SplashActivity mainActivity, ViewGroup container, TextView skipView,
                          MiiADListener listener) {
-        splashAD = new MgSplashAD(mainActivity,container,skipView,listener);
+        splashAD = new MgSplashAD(mainActivity,container,skipView,Contants.APPID,listener);
 
     }
 
@@ -48,6 +48,7 @@ public class SplashActivity extends Activity implements MiiADListener {
     @Override
     public void onMiiADDismissed() {
         Log.i("ad_demo",  "SplashADDismissed");
+        finish();
     }
 
     @Override
@@ -58,6 +59,11 @@ public class SplashActivity extends Activity implements MiiADListener {
     @Override
     public void onMiiADClicked() {
         Log.i("ad_demo",  "SplashADClicked");
+    }
+
+    @Override
+    public void onMiiADTouched() {
+
     }
 
     @Override
