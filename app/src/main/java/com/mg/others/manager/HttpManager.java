@@ -107,11 +107,11 @@ public class HttpManager {
     }
 
 
-    public Map<String, String> getSDKEpParams(int type, String errorcode,long dt){
+    public Map<String, String> getSDKEpParams(int type,int pt, String errorcode,long dt){
         if (mDeviceInfo == null){
             mDeviceInfo = CommonUtils.readParcel(mContext,MConstant.DEVICE_FILE_NAME);
         }
-        return RequestModel.getRequestSdkEpParams(mDeviceInfo, type, errorcode,dt);
+        return RequestModel.getRequestSdkEpParams(mDeviceInfo, pt,type, errorcode,dt);
     }
 
     //是否过了今天
@@ -209,7 +209,7 @@ public class HttpManager {
     /**
      * 广点通数据上报
      */
-    public static void reportGdtEvent(int type,String errorCode,Context mContext){
+    public static void reportGdtEvent(int type,int pt,String errorCode,Context mContext){
         long curr = System.currentTimeMillis();
         long st = (long) SP.getParam(SP.CONFIG, mContext, SP.GDT_ST, System.currentTimeMillis());
         long diff = curr - st;
@@ -225,7 +225,7 @@ public class HttpManager {
             public void onFail(Exception e) {
 
             }
-        }, getInstance(mContext).getSDKEpParams(type, errorCode, diff));
+        }, getInstance(mContext).getSDKEpParams(type,pt, errorCode, diff));
     }
     /**
      * 数据上报
@@ -273,6 +273,10 @@ public class HttpManager {
             case AdReport.EVENT_SHOW:
 
                 urls = adModel.getReportBean().getUrlShow();
+                break;
+            case AdReport.EVENT_INSTALL_START:
+
+                urls = adModel.getReportBean().getUrlInstallStart();
                 break;
         }
         if (urls == null){

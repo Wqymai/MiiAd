@@ -12,11 +12,11 @@ import com.mg.d.utils.MethodDynamicLoad;
  * Created by wuqiyan on 17/7/6.
  */
 
-public class AutoInterstitialAD {
+public class MgAutoInterstitialAD {
 
     private DynamicModel dynamicModel;
     private Context mContext;
-    public AutoInterstitialAD(Activity activity, ViewGroup adContainer, MiiADListener listener){
+    public MgAutoInterstitialAD(Activity activity, ViewGroup adContainer, MiiADListener listener){
         this.mContext = activity.getApplicationContext();
        dynamicModel = MethodDynamicLoad.getInstance(mContext).loadAutoInterstitialADMethod(activity,adContainer,listener);
     }

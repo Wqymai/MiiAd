@@ -25,5 +25,4 @@ public interface MiiNativeADDataRef extends Serializable {
     void onExposured(Context context);
     void setWVClick(Activity context, WebView webView, MiiCpClickListener cpClickListener);//设置webview的点击事件
 
-
 }

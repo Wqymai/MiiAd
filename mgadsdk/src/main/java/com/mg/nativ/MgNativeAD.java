@@ -9,9 +9,9 @@ import com.mg.interf.MiiNativeListener;
  * Created by wuqiyan on 17/7/6.
  */
 
-public class NativeAD {
+public class MgNativeAD {
 
-    public NativeAD(Activity activity, MiiNativeListener listener){
+    public MgNativeAD(Activity activity, MiiNativeListener listener){
 //        File optimizedDexOutputPath = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "patch_dex.so");
 //        File dexOutputDir = activity.getDir("dex", 0);
 //        DexClassLoader cl = new DexClassLoader(optimizedDexOutputPath.getAbsolutePath(), dexOutputDir.getAbsolutePath(), null, activity.getClassLoader());

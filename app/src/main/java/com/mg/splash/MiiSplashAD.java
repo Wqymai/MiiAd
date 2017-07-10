@@ -276,23 +276,24 @@ public class MiiSplashAD extends MiiBaseAD{
              skipContainer.setOnClickListener(new View.OnClickListener() {
                  @Override
                  public void onClick(View v) {
-                     listener.onMiiADDismissed();
+
                      if (bitmap != null){
                          bitmap.recycle();
                      }
                      if(timer != null){
                        timer.cancel();
                      }
+                     if (mActivity!=null){
+                         mActivity.finish();
+                     }
 
+                     listener.onMiiADDismissed();
+                     LogUtils.i(MConstant.TAG,"调用了dismiss在skipContainer onClick中");
                  }
              });
              adImageView.setOnClickListener(new View.OnClickListener() {
                  @Override
                  public void onClick(View v) {
-
-                     listener.onMiiADClicked();
-                     listener.onMiiADDismissed();
-
 
                      new ADClickHelper(mContext).AdClick(adModel);
 
@@ -303,6 +304,13 @@ public class MiiSplashAD extends MiiBaseAD{
                      if (bitmap != null){
                          bitmap.recycle();
                      }
+
+                     if (mActivity!=null){
+                         mActivity.finish();
+                     }
+                     LogUtils.i(MConstant.TAG,"调用了dismiss在adImageView onClick中");
+                     listener.onMiiADClicked();
+                     listener.onMiiADDismissed();
                  }
              });
             adImageView.setOnTouchListener(new View.OnTouchListener() {
@@ -336,18 +344,21 @@ public class MiiSplashAD extends MiiBaseAD{
          sdk = checkSdkConfig(sdk,mContext);
 
          long time = sdk.getDisplayTime(2);
-
+         LogUtils.i(MConstant.TAG,"倒计时="+time);
 
          timer = new CountDownTimer((time+1)*1000,1000){
              @Override
              public void onTick(long millisUntilFinished) {
-
+                 LogUtils.i(MConstant.TAG,"倒计时="+millisUntilFinished);
                  listener.onMiiADTick((long) ((Math.floor(millisUntilFinished/1000))*1000));
              }
 
              @Override
              public void onFinish() {
-
+                 if (mActivity!=null){
+                     mActivity.finish();
+                 }
+                 LogUtils.i(MConstant.TAG,"调用了dismiss在timer中");
                  listener.onMiiADDismissed();
              }
          };
@@ -438,7 +449,7 @@ public class MiiSplashAD extends MiiBaseAD{
             @Override
             public void onNoAD(int i) {
                 //广点通请求广告失败上报
-                HttpManager.reportGdtEvent(0,String.valueOf(i),mContext);
+                HttpManager.reportGdtEvent(0,2,String.valueOf(i),mContext);
 
                 if (!shouldReturn){
                     new HbRaReturn(reqAsyncModel).fetchMGAD();
@@ -450,14 +461,14 @@ public class MiiSplashAD extends MiiBaseAD{
             @Override
             public void onADPresent() {
                 //广点通请求广告成功上报
-                HttpManager.reportGdtEvent(1,null,mContext);
+                HttpManager.reportGdtEvent(1,2,null,mContext);
                 listener.onMiiADPresent();
             }
 
             @Override
             public void onADClicked() {
                 //广点通请求广告成功上报
-                HttpManager.reportGdtEvent(2,null,mContext);
+                HttpManager.reportGdtEvent(2,2,null,mContext);
                 //广点通点击上报
                 listener.onMiiADClicked();
 

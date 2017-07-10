@@ -219,7 +219,7 @@ public class MiiBannerAD extends MiiBaseAD {
             @Override
             public void onNoAD(int i) {
                 //广点通请求广告失败上报
-                HttpManager.reportGdtEvent(0,String.valueOf(i),mContext);
+                HttpManager.reportGdtEvent(0,1,String.valueOf(i),mContext);
                 if (!shouldReturn){
                     new HbRaReturn(reqAsyncModel).fetchMGAD();
                     return;
@@ -230,7 +230,7 @@ public class MiiBannerAD extends MiiBaseAD {
             @Override
             public void onADReceiv() {
                 //广点通请求广告成功上报
-                HttpManager.reportGdtEvent(1,null,mContext);
+                HttpManager.reportGdtEvent(1,1,null,mContext);
                 adContainer.addView(bv);
                 listener.onMiiADPresent();
             }
@@ -238,7 +238,7 @@ public class MiiBannerAD extends MiiBaseAD {
             @Override
             public void onADClicked() {
                 //广点通请求广告成功上报
-                HttpManager.reportGdtEvent(2,null,mContext);
+                HttpManager.reportGdtEvent(2,1,null,mContext);
                 listener.onMiiADClicked();
             }
         });

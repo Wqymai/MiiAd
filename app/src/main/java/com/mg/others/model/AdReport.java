@@ -10,6 +10,7 @@ public class AdReport implements Serializable {
     public static final int EVENT_DOWNLOAD_COMPLETE = 3;
     public static final int EVENT_INSTALL_COMLETE = 4;
     public static final int EVENT_OPEN = 5;
+    public static final int EVENT_INSTALL_START = 6;
 
     public String[] urlShow;
 
@@ -18,6 +19,16 @@ public class AdReport implements Serializable {
     public String[] urlDownloadStart;
 
     public String[] urlDownloadComplete;
+
+    public String[] urlInstallStart;
+
+    public String[] getUrlInstallStart() {
+        return urlInstallStart;
+    }
+
+    public void setUrlInstallStart(String[] urlInstallStart) {
+        this.urlInstallStart = urlInstallStart;
+    }
 
     public String[] urlInstallComplete;
 
@@ -31,7 +42,8 @@ public class AdReport implements Serializable {
                 " urlDownloadStart="+urlDownloadStart+
                 " urlDownloadComplete="+urlDownloadComplete +
                 " urlInstallComplete="+urlInstallComplete+
-                " urlOpen="+urlOpen;
+                " urlOpen="+urlOpen+
+                " urlInstallStart"+ urlInstallStart;
         return s;
 
 

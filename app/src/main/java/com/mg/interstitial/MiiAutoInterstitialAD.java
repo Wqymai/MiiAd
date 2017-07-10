@@ -22,7 +22,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.mg.asyn.FirstEnter;
 import com.mg.asyn.HbRaReturn;
@@ -223,9 +222,8 @@ public class MiiAutoInterstitialAD extends MiiBaseAD {
             adImageView.setScaleType(ImageView.ScaleType.FIT_XY);
             adContainer.addView(adImageView);
 
-
-            TextView tv = tvADCreate(mActivity);
-            adContainer.addView(tv);
+//            TextView tv = tvADCreate(mActivity);
+//            adContainer.addView(tv);
 
 
             adImageView.setImageBitmap(bitmap);

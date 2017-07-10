@@ -9,9 +9,9 @@ import com.mg.d.utils.MethodDynamicLoad;
  * Created by wuqiyan on 17/7/6.
  */
 
-public class FixedInterstitialAD {
+public class MgFixedInterstitialAD {
 
-    public FixedInterstitialAD(Activity activity, boolean isShade, MiiADListener listener){
+    public MgFixedInterstitialAD(Activity activity, boolean isShade, MiiADListener listener){
 
         MethodDynamicLoad.getInstance(activity.getApplicationContext()).loadFixedInterstitialADMethod(activity,isShade,listener);
     }

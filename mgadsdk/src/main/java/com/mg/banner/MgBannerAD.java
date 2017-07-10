@@ -12,11 +12,11 @@ import com.mg.d.utils.MethodDynamicLoad;
  * Created by wuqiyan on 17/7/6.
  */
 
-public class BannerAD {
+public class MgBannerAD {
 
     private DynamicModel model;
     private Context mContext;
-    public BannerAD(Activity activity, ViewGroup adContainer, MiiADListener listener){
+    public MgBannerAD(Activity activity, ViewGroup adContainer, MiiADListener listener){
         this.mContext = activity.getApplicationContext();
        model = MethodDynamicLoad.getInstance(mContext).loadBannerADMethod(activity,adContainer,listener);
     }

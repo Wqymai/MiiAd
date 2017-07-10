@@ -11,10 +11,10 @@ import com.mg.d.utils.MethodDynamicLoad;
  * Created by wuqiyan on 17/7/5.
  */
 
-public class SplashAD {
+public class MgSplashAD {
 
 
-    public SplashAD(Activity activity, ViewGroup adContainer, View skipContainer, MiiADListener adListener){
+    public MgSplashAD(Activity activity, ViewGroup adContainer, View skipContainer, MiiADListener adListener){
 
        MethodDynamicLoad.getInstance(activity.getApplicationContext()).loadSplashADMethod(activity,adContainer,skipContainer,adListener);
     }

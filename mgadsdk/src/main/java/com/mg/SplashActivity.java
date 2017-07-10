@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mg.interf.MiiADListener;
-import com.mg.splash.SplashAD;
+import com.mg.splash.MgSplashAD;
 
 
 /**
@@ -18,7 +18,7 @@ import com.mg.splash.SplashAD;
 
 public class SplashActivity extends Activity implements MiiADListener {
 
-    private SplashAD splashAD;
+    private MgSplashAD splashAD;
     private ViewGroup container;
     private TextView skipView;
     private ImageView splashHolder;
@@ -36,7 +36,7 @@ public class SplashActivity extends Activity implements MiiADListener {
 
     private void fetchAD(SplashActivity mainActivity, ViewGroup container, TextView skipView,
                          MiiADListener listener) {
-        splashAD = new SplashAD(mainActivity,container,skipView,listener);
+        splashAD = new MgSplashAD(mainActivity,container,skipView,listener);
 
     }
 
@@ -48,7 +48,6 @@ public class SplashActivity extends Activity implements MiiADListener {
     @Override
     public void onMiiADDismissed() {
         Log.i("ad_demo",  "SplashADDismissed");
-        finish();
     }
 
     @Override

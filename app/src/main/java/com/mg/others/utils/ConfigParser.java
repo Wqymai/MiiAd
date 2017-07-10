@@ -39,7 +39,7 @@ public class ConfigParser {
 
     public static SDKConfigModel parseConfig(String result) {
 
-        LogUtils.i(MConstant.TAG, "parse Config = " + result);
+
         SDKConfigModel sdk = null;
         JSONObject object = null;
         JSONObject object_ad = null;

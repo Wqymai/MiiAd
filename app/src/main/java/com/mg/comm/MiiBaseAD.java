@@ -194,7 +194,7 @@ public abstract class MiiBaseAD {
         tv.setGravity(Gravity.CENTER);
         tv.setTextColor(Color.parseColor("#FFF0F5"));
         FrameLayout.LayoutParams lp=new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        lp.gravity=Gravity.RIGHT|Gravity.BOTTOM;
+        lp.gravity = Gravity.RIGHT|Gravity.BOTTOM;
         tv.setLayoutParams(lp);
         return tv;
     }

@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.mg.banner.BannerAD;
+import com.mg.banner.MgBannerAD;
 import com.mg.interf.MiiADListener;
 
 /**
@@ -20,7 +20,7 @@ public class BannerActivity extends Activity {
     ViewGroup bannerContainer;
     Button refresh;
     Button close;
-    BannerAD bannerAD;
+    MgBannerAD bannerAD;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,7 +32,7 @@ public class BannerActivity extends Activity {
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bannerAD = new BannerAD(BannerActivity.this, bannerContainer, new MiiADListener() {
+                bannerAD = new MgBannerAD(BannerActivity.this, bannerContainer, new MiiADListener() {
 
                     @Override
                     public void onMiiNoAD(int errCode) {

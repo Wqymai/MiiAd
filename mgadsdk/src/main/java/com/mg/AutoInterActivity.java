@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.mg.interf.MiiADListener;
-import com.mg.interstitial.AutoInterstitialAD;
+import com.mg.interstitial.MgAutoInterstitialAD;
 
 /**
  * Created by wuqiyan on 17/7/7.
@@ -19,7 +19,7 @@ public class AutoInterActivity extends Activity {
     ViewGroup viewGroup;
     Button btnOpen;
     Button btnClose;
-    AutoInterstitialAD miiAutoInterstitialAD;
+    MgAutoInterstitialAD miiAutoInterstitialAD;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +41,7 @@ public class AutoInterActivity extends Activity {
         btnOpen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                miiAutoInterstitialAD =  new AutoInterstitialAD(AutoInterActivity.this, viewGroup, new MiiADListener() {
+                miiAutoInterstitialAD =  new MgAutoInterstitialAD(AutoInterActivity.this, viewGroup, new MiiADListener() {
                     @Override
                     public void onMiiNoAD(int errCode) {
 

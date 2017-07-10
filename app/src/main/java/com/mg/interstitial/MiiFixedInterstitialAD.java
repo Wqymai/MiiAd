@@ -175,7 +175,7 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
             public void onADReceive() {
 
                 //广点通请求广告成功上报
-                HttpManager.reportGdtEvent(1,null,mContext);
+                HttpManager.reportGdtEvent(1,3,null,mContext);
 
                 if (isShade){
                     iad.show();
@@ -191,7 +191,7 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
             public void onNoAD(int i) {
 
                 //广点通请求广告失败上报
-                HttpManager.reportGdtEvent(0,String.valueOf(i),mContext);
+                HttpManager.reportGdtEvent(0,3,String.valueOf(i),mContext);
 
                 if (!shouldReturn){
 
@@ -205,7 +205,7 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
             public void onADClicked() {
 
                 //广点通请求广告成功上报
-                HttpManager.reportGdtEvent(2,null,mContext);
+                HttpManager.reportGdtEvent(2,3,null,mContext);
 
                 listener.onMiiADClicked();
             }
