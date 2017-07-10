@@ -245,7 +245,7 @@ public class MiiBannerAD extends MiiBaseAD {
         bv.loadAD();
 
     }
-    private void  checkADType(AdModel adModel){
+    private void  checkADType(final AdModel adModel){
 
         if (adModel.getType() == 4){//h5广告
 
@@ -266,6 +266,9 @@ public class MiiBannerAD extends MiiBaseAD {
                 public boolean shouldOverrideUrlLoading(WebView view, String url) {
                     view.stopLoading();
                     view.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+
+                    //点击上报
+                    HttpManager.reportEvent(adModel, AdReport.EVENT_CLICK, mContext);
 
                     //广告点击回调
                     listener.onMiiADClicked();

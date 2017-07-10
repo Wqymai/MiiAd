@@ -160,7 +160,7 @@ public class MiiAutoInterstitialAD extends MiiBaseAD {
 
     }
 
-    private void  checkADType(AdModel adModel){
+    private void  checkADType(final AdModel adModel){
         //检查横竖屏
         checkOrientation(mActivity);
 
@@ -183,6 +183,9 @@ public class MiiAutoInterstitialAD extends MiiBaseAD {
                 public boolean shouldOverrideUrlLoading(WebView view, String url) {
                     view.stopLoading();
                     view.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+
+                    //点击上报
+                    HttpManager.reportEvent(adModel, AdReport.EVENT_CLICK, mContext);
 
                     mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
                     listener.onMiiADClicked();

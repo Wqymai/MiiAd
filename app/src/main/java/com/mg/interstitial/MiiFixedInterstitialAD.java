@@ -510,6 +510,10 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
                 view.stopLoading();
                 view.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
 
+
+                //点击上报
+                HttpManager.reportEvent(adModel, AdReport.EVENT_CLICK, mContext);
+
                 //广告点击回调
                 listener.onMiiADClicked();
 
