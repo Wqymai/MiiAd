@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.others.R;
+import com.mg.comm.MConstant;
 import com.mg.interstitial.MiiAutoInterstitialAD;
 import com.mg.interf.MiiADListener;
 
@@ -29,7 +30,7 @@ public class DialogActivity extends Activity {
         setContentView(R.layout.dialog);
         viewGroup = (ViewGroup) findViewById(R.id.adContainer);
         adHolder = (ImageView) findViewById(R.id.ad_holder);
-        miiAutoInterstitialAD =  new MiiAutoInterstitialAD(DialogActivity.this, viewGroup, new MiiADListener() {
+        miiAutoInterstitialAD =  new MiiAutoInterstitialAD(DialogActivity.this, viewGroup, MConstant.APPID,new MiiADListener() {
             @Override
             public void onMiiNoAD(int errCode) {
 

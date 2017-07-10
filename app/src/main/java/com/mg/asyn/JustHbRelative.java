@@ -51,7 +51,7 @@ public class JustHbRelative extends RequestAsync {
         }
 
         HttpUtils httpUtils = new HttpUtils(mContext);
-        final String url = httpManager.getParams(NI, 0, 0);
+        final String url = httpManager.getParams(NI, 0, 0,appid);
 
         if (url == null||url.equals("")){
 

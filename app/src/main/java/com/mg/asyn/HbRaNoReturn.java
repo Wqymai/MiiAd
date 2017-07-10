@@ -78,7 +78,7 @@ public class HbRaNoReturn extends RequestAsync {
         }
 
         HttpUtils httpUtils = new HttpUtils(mContext);
-        final String url = httpManager.getParams(NI, 0, 0);
+        final String url = httpManager.getParams(NI, 0, 0,appid);
         if (url == null||url.equals("")){
 
             mainHandler.sendEmptyMessage(400);
@@ -173,7 +173,7 @@ public class HbRaNoReturn extends RequestAsync {
             return;
         }
 
-        Map<String,String> params=httpManager.getParams2(RA,pt,0);
+        Map<String,String> params=httpManager.getParams2(RA,pt,0,appid);
 
         httpUtils.post(url.trim(), new HttpListener() {
             @Override

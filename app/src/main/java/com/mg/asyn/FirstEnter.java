@@ -48,7 +48,7 @@ public class FirstEnter extends RequestAsync {
         }
 
         HttpUtils httpUtils = new HttpUtils(mContext);
-        final String url = httpManager.getParams(NI, 0, 0);
+        final String url = httpManager.getParams(NI, 0, 0,appid);
         if (url == null||url.equals("")){
 
             listener.onMiiNoAD(3001);

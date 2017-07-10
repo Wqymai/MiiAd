@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.android.others.R;
+import com.mg.comm.MConstant;
 import com.mg.interf.MiiADListener;
 import com.mg.interstitial.MiiAutoInterstitialAD;
 
@@ -42,7 +43,7 @@ public class AutoInterActivity extends Activity {
         btnOpen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                miiAutoInterstitialAD =  new MiiAutoInterstitialAD(AutoInterActivity.this, viewGroup, new MiiADListener() {
+                miiAutoInterstitialAD =  new MiiAutoInterstitialAD(AutoInterActivity.this, viewGroup, MConstant.APPID, new MiiADListener() {
                     @Override
                     public void onMiiNoAD(int errCode) {
 

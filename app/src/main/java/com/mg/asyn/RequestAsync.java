@@ -38,6 +38,7 @@ public class RequestAsync {
         this.mContext = model.context;
         this.listener = model.listener;
         this.pt = model.pt;
+        this.appid = model.appid;
     }
 
 
