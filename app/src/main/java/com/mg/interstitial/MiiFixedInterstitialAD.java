@@ -473,6 +473,7 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
                         default:
                             break;
                     }
+                    listener.onMiiADTouched();
                     return false;
                 }
             });

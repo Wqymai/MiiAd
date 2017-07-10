@@ -9,8 +9,8 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.android.others.R;
-import com.mg.interstitial.MiiAutoInterstitialAD;
 import com.mg.interf.MiiADListener;
+import com.mg.interstitial.MiiAutoInterstitialAD;
 
 /**
  * Created by wuqiyan on 17/6/19.
@@ -61,6 +61,11 @@ public class AutoInterActivity extends Activity {
 
                     @Override
                     public void onMiiADClicked() {
+
+                    }
+
+                    @Override
+                    public void onMiiADTouched() {
 
                     }
 

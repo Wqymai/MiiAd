@@ -112,6 +112,11 @@ public class MainActivity extends Activity {
                     }
 
                     @Override
+                    public void onMiiADTouched() {
+
+                    }
+
+                    @Override
                     public void onMiiADTick(long millisUntilFinished) {
 
                     }
@@ -144,6 +149,11 @@ public class MainActivity extends Activity {
                     @Override
                     public void onMiiADClicked() {
                         Log.i(Constants.TAG,"onMiiADClicked 2");
+                    }
+
+                    @Override
+                    public void onMiiADTouched() {
+
                     }
 
                     @Override

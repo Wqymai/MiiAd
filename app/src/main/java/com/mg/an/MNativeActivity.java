@@ -15,6 +15,7 @@ import com.android.others.R;
 import com.mg.comm.MConstant;
 
 import com.mg.interf.MiiCpClickListener;
+import com.mg.interf.MiiCpTouchListener;
 import com.mg.interf.MiiNativeADDataRef;
 import com.mg.others.utils.LogUtils;
 
@@ -88,6 +89,11 @@ public class MNativeActivity extends Activity {
                 public void click() {
                     System.out.println("我是cp的数据1");
                     finish();
+                }
+            }, new MiiCpTouchListener() {
+                @Override
+                public void touch() {
+
                 }
             });
 

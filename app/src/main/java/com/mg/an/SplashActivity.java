@@ -62,6 +62,11 @@ public class  SplashActivity extends Activity implements MiiADListener {
     }
 
     @Override
+    public void onMiiADTouched() {
+
+    }
+
+    @Override
     public void onMiiADTick(long millisUntilFinished) {
         LogUtils.i(MConstant.TAG, "SplashADTick " + millisUntilFinished+ "ms");
         skipView.setText(String.format(SKIP_TEXT, (Math.round(millisUntilFinished / 1000f))));

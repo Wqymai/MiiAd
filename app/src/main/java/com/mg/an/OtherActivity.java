@@ -43,6 +43,11 @@ public class OtherActivity extends Activity {
             }
 
             @Override
+            public void onMiiADTouched() {
+
+            }
+
+            @Override
             public void onMiiADTick(long millisUntilFinished) {
 
             }
@@ -69,7 +74,12 @@ public class OtherActivity extends Activity {
 
                     }
 
-                    @Override
+            @Override
+            public void onMiiADTouched() {
+
+            }
+
+            @Override
                     public void onMiiADTick(long millisUntilFinished) {
 
                     }

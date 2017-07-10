@@ -56,7 +56,12 @@ public class BannerAcitvity extends Activity {
                         LogUtils.i(MConstant.TAG,"onMiiADClicked");
                     }
 
-                    @Override
+                   @Override
+                   public void onMiiADTouched() {
+
+                   }
+
+                   @Override
                     public void onMiiADTick(long millisUntilFinished) {
 
                     }

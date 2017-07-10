@@ -59,6 +59,11 @@ public class DialogActivity extends Activity {
             }
 
             @Override
+            public void onMiiADTouched() {
+
+            }
+
+            @Override
             public void onMiiADTick(long millisUntilFinished) {
                 //不回调
             }

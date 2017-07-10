@@ -14,6 +14,7 @@ import android.webkit.WebViewClient;
 
 import com.mg.comm.ADClickHelper;
 import com.mg.interf.MiiCpClickListener;
+import com.mg.interf.MiiCpTouchListener;
 import com.mg.interf.MiiNativeADDataRef;
 import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
@@ -72,7 +73,7 @@ public class NativeImpl implements MiiNativeADDataRef {
 
 
     @Override
-    public void setNormalClick(final Activity activity, final View view, final MiiCpClickListener cpClickListener) {
+    public void setNormalClick(final Activity activity, final View view, final MiiCpClickListener cpClickListener, final MiiCpTouchListener cpTouchListener) {
 
         if (adModel.getType() != 4){
             //点击调用
@@ -106,6 +107,7 @@ public class NativeImpl implements MiiNativeADDataRef {
                             adModel.setUpy(String.valueOf(event.getY()));
                             break;
                     }
+                    cpTouchListener.touch();
                     return false;
                 }
             });

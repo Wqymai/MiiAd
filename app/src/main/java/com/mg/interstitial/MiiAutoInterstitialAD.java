@@ -266,6 +266,7 @@ public class MiiAutoInterstitialAD extends MiiBaseAD {
                         default:
                             break;
                     }
+                    listener.onMiiADTouched();
                     return false;
                 }
             });

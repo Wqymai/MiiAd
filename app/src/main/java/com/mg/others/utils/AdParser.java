@@ -77,6 +77,7 @@ public class AdParser {
                     JSONArray de = object_cb.optJSONArray(DE);
                     JSONArray ie = object_cb.optJSONArray(IE);
                     JSONArray a  = object_cb.optJSONArray(A);
+                    JSONArray is = object_cb.optJSONArray(IS);
 
                     String[] array_pv = parserCb(pv);
                     String[] array_c  = parserCb(c);
@@ -84,6 +85,7 @@ public class AdParser {
                     String[] array_de = parserCb(de);
                     String[] array_ie = parserCb(ie);
                     String[] array_a  = parserCb(a);
+                    String[] array_is = parserCb(is);
 
                     AdReport adReport = new AdReport();
                     adReport.setUrlClick(array_c);
@@ -92,6 +94,7 @@ public class AdParser {
                     adReport.setUrlInstallComplete(array_ie);
                     adReport.setUrlShow(array_pv);
                     adReport.setUrlOpen(array_a);
+                    adReport.setUrlInstallStart(array_is);
 
                     ad.setUrl(url);
                     ad.setCategory(category);

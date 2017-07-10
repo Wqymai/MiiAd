@@ -368,6 +368,7 @@ public class MiiBannerAD extends MiiBaseAD {
                         default:
                             break;
                     }
+                    listener.onMiiADTouched();
                     return false;
                 }
             });

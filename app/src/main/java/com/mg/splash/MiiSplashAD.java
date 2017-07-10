@@ -219,6 +219,7 @@ public class MiiSplashAD extends MiiBaseAD{
                     if (timer != null){
                         timer.cancel();
                     }
+
                 }
             });
 
@@ -283,9 +284,6 @@ public class MiiSplashAD extends MiiBaseAD{
                      if(timer != null){
                        timer.cancel();
                      }
-                     if (mActivity!=null){
-                         mActivity.finish();
-                     }
 
                      listener.onMiiADDismissed();
                      LogUtils.i(MConstant.TAG,"调用了dismiss在skipContainer onClick中");
@@ -305,9 +303,6 @@ public class MiiSplashAD extends MiiBaseAD{
                          bitmap.recycle();
                      }
 
-                     if (mActivity!=null){
-                         mActivity.finish();
-                     }
                      LogUtils.i(MConstant.TAG,"调用了dismiss在adImageView onClick中");
                      listener.onMiiADClicked();
                      listener.onMiiADDismissed();
@@ -331,6 +326,7 @@ public class MiiSplashAD extends MiiBaseAD{
                         default:
                             break;
                     }
+                    listener.onMiiADTouched();
                     return false;
                 }
             });
@@ -355,9 +351,6 @@ public class MiiSplashAD extends MiiBaseAD{
 
              @Override
              public void onFinish() {
-                 if (mActivity!=null){
-                     mActivity.finish();
-                 }
                  LogUtils.i(MConstant.TAG,"调用了dismiss在timer中");
                  listener.onMiiADDismissed();
              }
