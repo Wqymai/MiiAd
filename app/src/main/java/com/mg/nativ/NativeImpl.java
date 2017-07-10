@@ -16,6 +16,7 @@ import com.mg.comm.ADClickHelper;
 import com.mg.interf.MiiCpClickListener;
 import com.mg.interf.MiiCpTouchListener;
 import com.mg.interf.MiiNativeADDataRef;
+import com.mg.others.manager.ApkDownloadManager;
 import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
@@ -148,6 +149,9 @@ public class NativeImpl implements MiiNativeADDataRef {
 
                         //点击上报
                         HttpManager.reportEvent(adModel, AdReport.EVENT_CLICK, activity.getApplicationContext());
+
+                        //监控安装完成
+                        ApkDownloadManager.getIntance(activity.getApplicationContext());
 
                         cpClickListener.click();
                         return true;
