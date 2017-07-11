@@ -33,6 +33,24 @@ public class AdModel implements Serializable,Cloneable {
     private String upx;
     private String upy;
     private String clickid;
+    private String deeplink;
+    private String sourceMark;
+
+    public String getSourceMark() {
+        return sourceMark;
+    }
+
+    public void setSourceMark(String sourceMark) {
+        this.sourceMark = sourceMark;
+    }
+
+    public String getDeeplink() {
+        return deeplink;
+    }
+
+    public void setDeeplink(String deeplink) {
+        this.deeplink = deeplink;
+    }
 
     public int getFlag() {
         return flag;
@@ -288,6 +306,7 @@ public class AdModel implements Serializable,Cloneable {
         sb.append("upx="+upx);
         sb.append("upy="+upy);
         sb.append("clickid="+clickid);
+        sb.append("deeplink="+deeplink);
 
         return sb.toString();
     }

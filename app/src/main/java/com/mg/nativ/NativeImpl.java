@@ -72,6 +72,16 @@ public class NativeImpl implements MiiNativeADDataRef {
         return  adModel.getIcon();
     }
 
+    @Override
+    public String getSourceMark() {
+        return adModel.getSourceMark();
+    }
+
+    @Override
+    public String getDeepLink() {
+        return adModel.getDeeplink();
+    }
+
 
     @Override
     public void setNormalClick(final Activity activity, final View view, final MiiCpClickListener cpClickListener, final MiiCpTouchListener cpTouchListener) {

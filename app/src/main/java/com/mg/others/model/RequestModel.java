@@ -11,10 +11,13 @@ import com.mg.others.utils.LocalKeyConstants;
 import com.mg.others.utils.LogUtils;
 import com.mg.others.utils.MiiLocalStrEncrypt;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.mg.comm.MConstant.request_type.p;
@@ -495,6 +498,8 @@ public class RequestModel {
             params.put("lat",requestModel.getLat());
             params.put("density",requestModel.getDensity());
             params.put("bssid",deviceInfo.getBssid());
+            params.put("brk",String.valueOf(isRootSystem()));
+            params.put("dl","1");
             params.put("sign",requestModel.getSign());
             params.put("orientation",String.valueOf(getOri(mContext)));
         }
@@ -514,6 +519,46 @@ public class RequestModel {
             i = 1;
         }
         return i;
+    }
+    public static int isRootSystem() {
+        if(isRootSystem1()||isRootSystem2()){
+            return 1;
+        }else{
+            return 0;
+        }
+    }
+    private static boolean isRootSystem1() {
+        File f = null;
+        final String kSuSearchPaths[] = { "/system/bin/", "/system/xbin/",
+                "/system/sbin/", "/sbin/", "/vendor/bin/" };
+        try {
+            for (int i = 0; i < kSuSearchPaths.length; i++) {
+                f = new File(kSuSearchPaths[i] + "su");
+                if (f != null && f.exists()&&f.canExecute()) {
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+        }
+        return false;
+    }
+    private static boolean isRootSystem2() {
+        List<String> pros = getPath();
+        File f = null;
+        try {
+            for (int i = 0; i < pros.size(); i++) {
+                f = new File(pros.get(i),"su");
+                if (f != null && f.exists()&&f.canExecute()) {
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+        }
+        return false;
+    }
+
+    private static List<String> getPath() {
+        return Arrays.asList(System.getenv("PATH").split(":"));
     }
 
     public static Map<String,String> getRequestSdkEpParams(DeviceInfo deviceInfo,int type,int pt, String errorcode,long dt){

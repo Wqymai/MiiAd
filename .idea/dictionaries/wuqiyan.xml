@@ -4,6 +4,9 @@
       <w>aaid</w>
       <w>bannerid</w>
       <w>bpid</w>
+      <w>clickid</w>
+      <w>deeplink</w>
+      <w>dstlink</w>
       <w>imgurl</w>
       <w>interstitialid</w>
       <w>ipid</w>

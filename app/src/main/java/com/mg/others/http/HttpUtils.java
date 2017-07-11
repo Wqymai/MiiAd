@@ -174,9 +174,9 @@ public class HttpUtils {
 				i++;
 			}
 
-			httpExecutor.execute(new HttpPost(url, l, Base64.encodeToString(sb.toString().getBytes(),Base64.NO_WRAP), parameter));
+			httpExecutor.execute(new HttpPost(url, l, Base64.encodeToString(sb.toString().getBytes(),Base64.NO_WRAP), parameter,mContext));
 		} else {
-			httpExecutor.execute(new HttpPost(url, l, null, parameter));
+			httpExecutor.execute(new HttpPost(url, l, null, parameter,mContext));
 		}
 	}
 
@@ -280,11 +280,12 @@ public class HttpUtils {
 	}
 
 	private static class HttpPost implements Runnable {
-		public HttpPost(String address, HttpListener l, String postData, HttpParameter httpParameter) {
+		public HttpPost(String address, HttpListener l, String postData, HttpParameter httpParameter,Context context) {
 			this.mListener = l;
 			this.mURL = address;
 			this.postData = postData;
 			this.parameter = httpParameter;
+			this.context = context;
 		}
 
 		@Override
@@ -299,7 +300,7 @@ public class HttpUtils {
 			try {
 				url = new URL(mURL);
 				urlConnection = (HttpURLConnection) url.openConnection();
-				setURLConnectionParameters(POST, urlConnection, this.parameter,null);
+				setURLConnectionParameters(POST, urlConnection, this.parameter,context);
 
 				if (postData != null && postData.length() > 512)
 					urlConnection.setChunkedStreamingMode(5);
@@ -370,6 +371,7 @@ public class HttpUtils {
 		private HttpListener mListener;
 		private String postData;
 		private HttpParameter parameter;
+		private Context context;
 
 	}
 
@@ -884,10 +886,7 @@ public class HttpUtils {
 
 		urlConnection.setConnectTimeout(parameter.connectTimeOut);
 		urlConnection.setReadTimeout(parameter.soTimeOut);
-		urlConnection.setRequestProperty("User-Agent", parameter.userAgent);
-
-
-
+		urlConnection.setRequestProperty("User-Agent",  parameter.userAgent);
 
 		switch (methodHint) {
 			case GET:

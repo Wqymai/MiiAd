@@ -43,6 +43,8 @@ public class AdParser {
     public static final String IS = "is";
     public static final String IE = "ie";
     public static final String A = "a";
+    public static final String DEEPLINK="deeplink";
+    public static final String SOURCEMARK ="sourceMark";
 
 
     public static List<AdModel> parseAd(String response){
@@ -69,6 +71,8 @@ public class AdParser {
                     String url = object_ad.optString(URL);
                     int pt = object_ad.optInt(PT);
                     int et = object_ad.optInt(ET);
+                    String deeplink = object_ad.optString(DEEPLINK);
+                    String sourceMark = object_ad.optString(SOURCEMARK);
 
                     JSONObject object_cb = object_ad.optJSONObject(CB);
                     JSONArray pv = object_cb.optJSONArray(PV);
@@ -110,6 +114,8 @@ public class AdParser {
                     ad.setReportBean(adReport);
                     ad.setPt(pt);
                     ad.setEt(et);
+                    ad.setDeeplink(deeplink);
+                    ad.setSourceMark(sourceMark);
                     adModels.add(ad);
                 }
             }else {

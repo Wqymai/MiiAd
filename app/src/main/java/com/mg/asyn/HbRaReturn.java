@@ -78,7 +78,7 @@ public class HbRaReturn extends RequestAsync {
             httpManager= HttpManager.getInstance(mContext);
         }
 
-        HttpUtils httpUtils = new HttpUtils(mContext);
+
         final String url = httpManager.getParams(NI, 0, 0,appid);
 
         if (url == null||url.equals("")){
@@ -86,6 +86,7 @@ public class HbRaReturn extends RequestAsync {
             listener.onMiiNoAD(3001);
             return;
         }
+        HttpUtils httpUtils = new HttpUtils(mContext);
         httpUtils.get(url, new HttpListener() {
             @Override
             public void onSuccess(HttpResponse response) {
@@ -158,7 +159,7 @@ public class HbRaReturn extends RequestAsync {
             httpManager = HttpManager.getInstance(mContext);
         }
 
-        HttpUtils httpUtils = new HttpUtils(mContext);
+
         final  String url=httpManager.getRaUrl(RA);
         if (url == null || url.equals("")){
             listener.onMiiNoAD(3002);
@@ -166,7 +167,7 @@ public class HbRaReturn extends RequestAsync {
         }
 
         Map<String,String> params=httpManager.getParams2(RA,pt,0,appid);
-
+        HttpUtils httpUtils = new HttpUtils(mContext);
         httpUtils.post(url.trim(), new HttpListener() {
             @Override
             public void onSuccess(HttpResponse response) {

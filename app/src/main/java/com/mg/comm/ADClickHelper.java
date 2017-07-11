@@ -1,10 +1,10 @@
 package com.mg.comm;
 
 
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.mg.others.http.HttpListener;
@@ -39,10 +39,35 @@ public class ADClickHelper {
     //点击打开
     public void AdClick(final AdModel ad) {
 
-        LogUtils.i(MConstant.TAG,"url="+ad.getUrl());
         if (ad == null) {
             return;
         }
+        //优先处理deeplink
+        String deepLink = ad.getDeeplink();
+        if (deepLink != null && !deepLink.equals("")){
+          try {
+            //点击上报
+            HttpManager.reportEvent(ad, AdReport.EVENT_CLICK, mContext);
+
+            //通过deeplink打开应用
+            Intent intent = new Intent();
+            intent.setAction("android.intent.action.VIEW");
+            Uri uri = Uri.parse(deepLink);
+            intent.setData(uri);
+            mContext.startActivity(intent);
+
+          }catch (Exception e){//如果打不开deeplink就使用url
+
+              normalClick(ad);
+          }
+        }
+        else {
+            normalClick(ad);
+        }
+
+    }
+
+    private void normalClick(final AdModel ad){
         String adUrl = replaceAdUrl(ad);
         if (ad.getType()!=5){
             //点击上报
@@ -63,12 +88,12 @@ public class ADClickHelper {
         else {
 
             if (httpUtils == null){
-              httpUtils = new HttpUtils(mContext);
+                httpUtils = new HttpUtils(mContext);
             }
             httpUtils.get(adUrl, new HttpListener() {
                 @Override
                 public void onSuccess(HttpResponse response) {
-                  try {
+                    try {
 
                         Map<String,String> map = parseType5Res(response.entity());
                         //点击上报
@@ -84,9 +109,9 @@ public class ADClickHelper {
                         }
                         startDownload(ad);
 
-                  }catch (Exception e){
-                      e.printStackTrace();
-                  }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }
 
                 @Override
@@ -101,19 +126,19 @@ public class ADClickHelper {
     private void startDownload(AdModel ad){
 
         if (CommonUtils.getNetworkSubType(mContext) == CommonUtils.NET_TYPE_WIFI) {
-//            Intent intent=new Intent(mContext,LoadHelperService.class);
-//            Bundle bundle=new Bundle();
-//            bundle.putSerializable("ad",ad);
-//            intent.putExtras(bundle);
-//            mContext.startService(intent);
-
-            Intent intent = new Intent();
-            ComponentName cn = new ComponentName(mContext, "com.mg.service.LoadHelperService");
-            intent.setComponent(cn);
+            Intent intent=new Intent(mContext,LoadHelperService.class);
             Bundle bundle=new Bundle();
             bundle.putSerializable("ad",ad);
             intent.putExtras(bundle);
             mContext.startService(intent);
+
+//            Intent intent = new Intent();
+//            ComponentName cn = new ComponentName(mContext, "com.mg.service.LoadHelperService");
+//            intent.setComponent(cn);
+//            Bundle bundle=new Bundle();
+//            bundle.putSerializable("ad",ad);
+//            intent.putExtras(bundle);
+//            mContext.startService(intent);
         }
 
     }

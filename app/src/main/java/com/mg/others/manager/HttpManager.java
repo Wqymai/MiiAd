@@ -286,7 +286,7 @@ public class HttpManager {
         for (String str : urls){
             if (!TextUtils.isEmpty(str)){
 
-              if (adModel.getType()==4){
+              if (adModel.getType() == 4){
 
                 httpUtils.get(str,null);
 

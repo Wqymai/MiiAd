@@ -259,6 +259,9 @@ public class MiiSplashAD extends MiiBaseAD{
              adContainer.addView(adImageView);
 
              TextView tv = tvADCreate(mActivity);
+             if (adModel.getSourceMark()!= null && !adModel.getSourceMark().equals("")){
+                tv.setText(adModel.getSourceMark()+"|广告");
+             }
              adContainer.addView(tv);
 
              adImageView.setImageBitmap(bitmap);
@@ -343,18 +346,18 @@ public class MiiSplashAD extends MiiBaseAD{
          sdk = checkSdkConfig(sdk,mContext);
 
          long time = sdk.getDisplayTime(2);
-         LogUtils.i(MConstant.TAG,"倒计时="+time);
+
 
          timer = new CountDownTimer((time+1)*1000,1000){
              @Override
              public void onTick(long millisUntilFinished) {
-                 LogUtils.i(MConstant.TAG,"倒计时="+millisUntilFinished);
+
                  listener.onMiiADTick((long) ((Math.floor(millisUntilFinished/1000))*1000));
              }
 
              @Override
              public void onFinish() {
-                 LogUtils.i(MConstant.TAG,"调用了dismiss在timer中");
+
                  listener.onMiiADDismissed();
              }
          };
@@ -409,9 +412,9 @@ public class MiiSplashAD extends MiiBaseAD{
             else {
 
                 openGDTAD(false);
+
             }
         }
-
     }
 
     private void openGDTAD(final boolean shouldReturn){
