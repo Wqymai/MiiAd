@@ -111,7 +111,7 @@ public class HttpManager {
         if (mDeviceInfo == null){
             mDeviceInfo = CommonUtils.readParcel(mContext,MConstant.DEVICE_FILE_NAME);
         }
-        return RequestModel.getRequestSdkEpParams(mDeviceInfo, pt,type, errorcode,dt);
+        return RequestModel.getRequestSdkEpParams(mDeviceInfo,type,pt, errorcode,dt);
     }
 
     //是否过了今天

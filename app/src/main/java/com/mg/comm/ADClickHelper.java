@@ -46,9 +46,6 @@ public class ADClickHelper {
         String deepLink = ad.getDeeplink();
         if (deepLink != null && !deepLink.equals("")){
           try {
-            //点击上报
-            HttpManager.reportEvent(ad, AdReport.EVENT_CLICK, mContext);
-
             //通过deeplink打开应用
             Intent intent = new Intent();
             intent.setAction("android.intent.action.VIEW");
@@ -56,6 +53,8 @@ public class ADClickHelper {
             intent.setData(uri);
             mContext.startActivity(intent);
 
+            //点击上报
+            HttpManager.reportEvent(ad, AdReport.EVENT_CLICK, mContext);
           }catch (Exception e){//如果打不开deeplink就使用url
 
               normalClick(ad);
@@ -78,10 +77,10 @@ public class ADClickHelper {
                 return;
             }
             else {
-                if (adUrl.contains("click")){
-                    CommonUtils.openBrowser(mContext, adUrl);
-                    return;
-                }
+//                if (adUrl.contains("click")){
+//                    CommonUtils.openBrowser(mContext, adUrl);
+//                    return;
+//                }
                 startDownload(ad);
             }
         }
