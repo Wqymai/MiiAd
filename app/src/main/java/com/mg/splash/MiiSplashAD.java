@@ -89,6 +89,7 @@ public class MiiSplashAD extends MiiBaseAD{
                              adContainer.removeView(adImageView);
                              return;
                          }
+                         LogUtils.i(MConstant.TAG,"splash 收到bitmap");
                          showSplashAD(bitmap);
                      }
                      catch (Exception e){
@@ -266,11 +267,12 @@ public class MiiSplashAD extends MiiBaseAD{
 
              adImageView.setImageBitmap(bitmap);
 
-             //展示上报
-             HttpManager.reportEvent(adModel, AdReport.EVENT_SHOW, mContext);
 
              //广告成功展示
              listener.onMiiADPresent();
+
+             //展示上报
+             HttpManager.reportEvent(adModel, AdReport.EVENT_SHOW, mContext);
 
 
              //倒计时开始
@@ -290,9 +292,8 @@ public class MiiSplashAD extends MiiBaseAD{
                      if(timer != null){
                        timer.cancel();
                      }
-
                      listener.onMiiADDismissed();
-                     LogUtils.i(MConstant.TAG,"调用了dismiss在skipContainer onClick中");
+
                  }
              });
              adImageView.setOnClickListener(new View.OnClickListener() {
@@ -300,18 +301,15 @@ public class MiiSplashAD extends MiiBaseAD{
                  public void onClick(View v) {
 
                      new ADClickHelper(mContext).AdClick(adModel);
-
-                     if (timer != null){
-                       timer.cancel();
-                     }
-
                      if (bitmap != null){
                          bitmap.recycle();
                      }
-
-                     LogUtils.i(MConstant.TAG,"调用了dismiss在adImageView onClick中");
+                     if (timer != null){
+                         timer.cancel();
+                     }
                      listener.onMiiADClicked();
                      listener.onMiiADDismissed();
+
                  }
              });
             adImageView.setOnTouchListener(new View.OnTouchListener() {
@@ -483,6 +481,6 @@ public class MiiSplashAD extends MiiBaseAD{
 
     @Override
     public void recycle() {
-
+        mActivity.finish();
     }
 }

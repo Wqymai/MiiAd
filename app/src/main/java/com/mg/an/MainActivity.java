@@ -1,9 +1,11 @@
 //package com.mg.an;
 //
 //import android.app.Activity;
+//import android.content.Context;
 //import android.content.Intent;
 //import android.graphics.Bitmap;
 //import android.graphics.BitmapFactory;
+//import android.net.Uri;
 //import android.os.Bundle;
 //import android.util.Log;
 //import android.view.View;
@@ -265,6 +267,8 @@
 ////            }
 ////        }).start();
 //
+////        openBrowser(this,"http://m.baidu.com/cpro.php?TjCK00jP7BRjGSbTEaUflixmcuORZ3C-9oDXbA9cVlbIJJkTxTFF203u-HjGa-iPYGHFFw0gb03UqlCle8JlvnwlUQ1VTid8ws2Ju9E4UsSs_WmBjbJecF-wG3bnodRnHMgSH23igeAECaWX_t9SMSrBIxoKRsc5b2k4gV_UgPPP5pKFds.DR_iuTAMZ4RTDH5-8vc6hes_YD_gnEeTjngy5ZGmeQeoSkM5MulyxZug8iWzzUPvH_3eV-xgKfYt_U_DY2ycYlTqerQKM3P2knnqQ5W_oLF4mTTzs1f_I-MZk3J0.IgF_5y9YIZ0lQztYmhwBPADVQyDvmHT3nHN-QhPEUit0IAYqn0KYIHYYPH01n1ms0Zwb5H00Ivsqn6KWUMw85yDvmHT3nHN-gvPsT6KWpAdb5HD0TvPCUyfqnfK1TjYYnfK-XZfqn0K9uAP_mgP15HDk0ZPbpdqv5Hf0ULnqn0KBTWYs0ZIGuZwC5Hnvn0KCuy-MpZfqn10s0ZIG5HD0XA-s5fK1uykh5H00TvwogLu-TMPGUv3qPi3sQWc0Uh71IZ0qn0KzT1Ys0APh5H00mLwV5yF9pywdfLN1IDG1Uv30Uh7YIHY40A-Ypyfqn0KGIA-8uhqGujYs0AIspyfqn0Kzuyuspyfqn0KWTZFEpyfq0APEUgK_uHYs0A7bgLnqPvwhnHDzPjFBuWDsrjIBrfK_mysq0A7Ypyfq0A7YIZbq0ZI1Thnqn0K9uNqYmgcq0A-1gvVYmHY0Tvk1Thnqn0K1UAPo5H00Tvkopyfqn0KBIywMugwxug9spyfqn0K9pg0qUhRvIDfzyD-Afhm0Iy-s5NwGgL7vNNuWgdG80APC5H00IA7z5Hc0TvN_UANzgv-b5Hc0pgPxmgKs5HD0mgKsgv-b5HcLrHR4rHRYrjm0mLN1IjY0pgPxIv-zuyk-TLnqnfKLmgKxIZ-suHYk0ZK_5H00UynqmWFbPAFhnhD0UgmqnfK8IM0qna3snj0snj0sn0KMrHYk0AuGTMPYgLF-uv-EUWYz0ZP-mvq8u7qzuyIGUv3qrjcz0ZP1TjYz0ZP1Tjcqn0KYIZ0qnsKbpgPYTjYs0A7B5HD0myw35HD0TAuYTh7buHYzn0KsTLwzmyw-5HcsnjD0TA-b5H00ILKGujYs0A7bIZ-suHYs0ZPGThN8uANz5H00TLIGujYs0ZPYXgK-5H00mgKsgLPGujY0uZws5Hc0pgwV5H00UMwYTjY10A7bmWYs0APzm1YdnjRkns0");
+//
 //    }
 //
 //    public static Bitmap getHttpBitmap(String url) {
@@ -288,6 +292,20 @@
 //            e.printStackTrace();
 //        }
 //        return bitmap;
+//    }
+//
+//    public static void openBrowser(Context mContext , String url) {
+//        try {
+//            Intent intent = new Intent();
+//            intent.setAction(Intent.ACTION_VIEW);
+//            Uri content_url = Uri.parse(url);
+//            intent.addCategory(Intent.CATEGORY_BROWSABLE);
+//            intent.setData(content_url);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            mContext.startActivity(intent);
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
 //    }
 //
 //}

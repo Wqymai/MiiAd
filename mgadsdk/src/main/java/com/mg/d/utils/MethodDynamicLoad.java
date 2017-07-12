@@ -102,12 +102,13 @@ public class MethodDynamicLoad {
             exception.printStackTrace();
         }
     }
-    public  void loadSplashADMethod(Activity activity, ViewGroup adContainer, View skipContainer,String appid, MiiADListener adListener){
+    public  DynamicModel loadSplashADMethod(Activity activity, ViewGroup adContainer, View skipContainer,String appid, MiiADListener adListener){
 //        File optimizedDexOutputPath = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "patch_dex.so");
 //        File dexOutputDir = activity.getDir("dex", 0);
 //        DexClassLoader cl = new DexClassLoader(optimizedDexOutputPath.getAbsolutePath(), dexOutputDir.getAbsolutePath(), null, activity.getClassLoader());
         Class<?> libProviderClazz = null;
-
+        Object object = null;
+        DynamicModel model = new DynamicModel();
         try {
             libProviderClazz = cl.loadClass("com.mg.splash.MiiSplashAD");
             Class[] args1 = new Class[5];
@@ -125,11 +126,14 @@ public class MethodDynamicLoad {
             argments[4] = adListener;
             Constructor c = libProviderClazz.getConstructor(args1);
             c.setAccessible(true);
-            c.newInstance(argments);
+            object = c.newInstance(argments);
+            model.object = object;
+            model.aClass = libProviderClazz;
 
         } catch (Exception exception) {
             exception.printStackTrace();
         }
+        return model;
 
     }
     public  void loadFixedInterstitialADMethod(Activity activity, boolean isShade,String appid, MiiADListener listener){

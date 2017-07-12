@@ -16,7 +16,7 @@ import com.mg.splash.MgSplashAD;
  * Created by wuqiyan on 17/6/9.
  */
 
-public class SplashActivity extends Activity implements MiiADListener {
+public class SplashActivity extends Activity{
 
     private MgSplashAD splashAD;
     private ViewGroup container;
@@ -31,45 +31,50 @@ public class SplashActivity extends Activity implements MiiADListener {
         container = (ViewGroup) this.findViewById(R.id.splash_container);
         skipView = (TextView) findViewById(R.id.skip_view);
         splashHolder = (ImageView) findViewById(R.id.splash_holder);
-        fetchAD(this, container, skipView, this);
+        fetchAD(this, container, skipView);
     }
 
-    private void fetchAD(SplashActivity mainActivity, ViewGroup container, TextView skipView,
-                         MiiADListener listener) {
-        splashAD = new MgSplashAD(mainActivity,container,skipView,Contants.APPID,listener);
+    private void fetchAD(SplashActivity mainActivity, ViewGroup container, final TextView skipView) {
+        splashAD = new MgSplashAD(mainActivity, container, skipView, Contants.APPID, new MiiADListener() {
+
+
+            @Override
+            public void onMiiADDismissed() {
+                Log.i("ad_demo", "SplashADDismissed");
+                splashAD.recycle();
+            }
+
+            @Override
+            public void onMiiADPresent() {
+                Log.i("ad_demo",  "SplashADPresent");
+                splashHolder.setVisibility(View.INVISIBLE);
+
+            }
+
+            @Override
+            public void onMiiADClicked() {
+                Log.i("ad_demo",  "SplashADClicked");
+            }
+
+            @Override
+            public void onMiiADTouched() {
+
+            }
+
+            @Override
+            public void onMiiADTick(long millisUntilFinished) {
+                Log.i("ad_demo",  "SplashADTick " + millisUntilFinished+ "ms");
+                skipView.setText(String.format(SKIP_TEXT, (Math.round(millisUntilFinished / 1000f))));
+            }
+
+            @Override
+            public void onMiiNoAD(int errCode) {
+                Log.i("ad_demo", "SplashNoAD "+errCode);
+            }
+        });
 
     }
 
-    @Override
-    public void onMiiNoAD(int errCode) {
-        Log.i("ad_demo", "SplashNoAD "+errCode);
-    }
 
-    @Override
-    public void onMiiADDismissed() {
-        Log.i("ad_demo",  "SplashADDismissed");
-        finish();
-    }
-
-    @Override
-    public void onMiiADPresent() {
-        splashHolder.setVisibility(View.INVISIBLE); // 广告展示后一定要把预设的开屏图片隐藏起来
-    }
-
-    @Override
-    public void onMiiADClicked() {
-        Log.i("ad_demo",  "SplashADClicked");
-    }
-
-    @Override
-    public void onMiiADTouched() {
-
-    }
-
-    @Override
-    public void onMiiADTick(long millisUntilFinished) {
-        Log.i("ad_demo",  "SplashADTick " + millisUntilFinished+ "ms");
-        skipView.setText(String.format(SKIP_TEXT, (Math.round(millisUntilFinished / 1000f))));
-    }
 
 }

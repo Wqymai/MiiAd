@@ -9,9 +9,7 @@ import android.widget.Button;
 
 import com.mg.interf.MiiADListener;
 import com.mg.interf.MiiNativeADDataRef;
-import com.mg.interf.MiiNativeListener;
 import com.mg.interstitial.MgFixedInterstitialAD;
-import com.mg.nativ.MgNativeAD;
 
 
 public class MainActivity extends Activity {
@@ -47,17 +45,17 @@ public class MainActivity extends Activity {
                 new MgFixedInterstitialAD(MainActivity.this, false,Contants.APPID, new MiiADListener() {
                     @Override
                     public void onMiiADDismissed() {
-
+                        Log.i("ad_demo", "插屏 ADDismissed");
                     }
 
                     @Override
                     public void onMiiADPresent() {
-
+                        Log.i("ad_demo", "插屏 ADPresent");
                     }
 
                     @Override
                     public void onMiiADClicked() {
-
+                        Log.i("ad_demo", "插屏 ADClicked");
                     }
 
                     @Override
@@ -72,7 +70,7 @@ public class MainActivity extends Activity {
 
                     @Override
                     public void onMiiNoAD(int errCode) {
-
+                        Log.i("ad_demo", "插屏 NoAD");
                     }
                 });
             }
@@ -119,22 +117,22 @@ public class MainActivity extends Activity {
 
         openNative = (Button) findViewById(R.id.open_native);
 //        原生广告
-        new MgNativeAD(this,Contants.APPID, new MiiNativeListener() {
-            @Override
-            public void onADLoaded(MiiNativeADDataRef dataRef) {
-                if (dataRef != null){
-                    openNative.setEnabled(true);
-                    adDataRef = dataRef;
-                }
-            }
-
-
-
-            @Override
-            public void onMiiNoAD(int errCode) {
-                Log.i("ad_demo","原生广告加载失败 "+errCode);
-            }
-        });
+//        new MgNativeAD(this,Contants.APPID, new MiiNativeListener() {
+//            @Override
+//            public void onADLoaded(MiiNativeADDataRef dataRef) {
+//                if (dataRef != null){
+//                    openNative.setEnabled(true);
+//                    adDataRef = dataRef;
+//                }
+//            }
+//
+//
+//
+//            @Override
+//            public void onMiiNoAD(int errCode) {
+//                Log.i("ad_demo","原生广告加载失败 "+errCode);
+//            }
+//        });
         openNative.setEnabled(false);
         openNative.setOnClickListener(new View.OnClickListener() {
             @Override

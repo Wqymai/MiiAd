@@ -35,45 +35,54 @@ public class b implements MiiNativeADDataRef {
 
     @Override
     public String getImg() {
-        return adModel.f();
+        return adModel.h();
     }
 
 
     @Override
     public int getType() {
-        return adModel.h() == 4? 1 : 0;
+        return adModel.j() == 4? 1 : 0;
     }
 
     @Override
     public String getName() {
-        return adModel.c();
-    }
-
-    @Override
-    public String getTitle() {
-        return adModel.d();
-    }
-
-    @Override
-    public String getDesc() {
         return adModel.e();
     }
 
     @Override
+    public String getTitle() {
+        return adModel.f();
+    }
+
+    @Override
+    public String getDesc() {
+        return adModel.g();
+    }
+
+    @Override
     public String getPage() {
-        return adModel.l();
+        return adModel.n();
     }
 
     @Override
     public String getIcon() {
-        return  adModel.i();
+        return  adModel.k();
+    }
+    public final String getSourceMark()
+    {
+        return adModel.a();
+    }
+
+    public final String getDeepLink()
+    {
+        return adModel.b();
     }
 
 
     @Override
     public void setNormalClick(final Activity activity, final View view, final MiiCpClickListener cpClickListener, final MiiCpTouchListener cpTouchListener) {
 
-        if (adModel.h() != 4){
+        if (adModel.j() != 4){
             //点击调用
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -98,13 +107,13 @@ public class b implements MiiNativeADDataRef {
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
 
-                            adModel.m(String.valueOf(event.getX()));
-                            adModel.n(String.valueOf(event.getY()));
+                            adModel.o(String.valueOf(event.getX()));
+                            adModel.p(String.valueOf(event.getY()));
                             break;
                         case MotionEvent.ACTION_UP:
 
-                            adModel.o(String.valueOf(event.getX()));
-                            adModel.p(String.valueOf(event.getY()));
+                            adModel.q(String.valueOf(event.getX()));
+                            adModel.r(String.valueOf(event.getY()));
                             break;
                     }
                     cpTouchListener.touch();
@@ -128,7 +137,7 @@ public class b implements MiiNativeADDataRef {
 
     @Override
     public void setWVClick(final Activity activity, final WebView webView, final MiiCpClickListener cpClickListener) {
-        if (adModel.h() == 4){
+        if (adModel.j() == 4){
 
                 WebSettings settings = webView.getSettings();
                 settings.setDefaultTextEncodingName("utf-8") ;

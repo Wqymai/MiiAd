@@ -330,13 +330,35 @@ public class a implements Serializable,Cloneable {
     private String r;
     private String s;
     private String t;
+    private String u;
+    private String v;
 
     public final String a()
+    {
+        return this.v;
+    }
+
+    public final void a(String paramString)
+    {
+        this.v = paramString;
+    }
+
+    public final String b()
+    {
+        return this.u;
+    }
+
+    public final void b(String paramString)
+    {
+        this.u = paramString;
+    }
+
+    public final String c()
     {
         return this.t;
     }
 
-    public final void a(String paramString)
+    public final void c(String paramString)
     {
         this.t = paramString;
     }
@@ -351,77 +373,77 @@ public class a implements Serializable,Cloneable {
         this.o = paramInt;
     }
 
-    public final String b()
+    public final String d()
     {
         return this.m;
     }
 
-    public final void b(String paramString)
+    public final void d(String paramString)
     {
         this.m = paramString;
     }
 
-    public final void c(String paramString)
+    public final void e(String paramString)
     {
         this.a = paramString;
     }
 
-    public final String c()
+    public final String e()
     {
         return this.b;
     }
 
-    public final void d(String paramString)
+    public final void f(String paramString)
     {
         this.b = paramString;
     }
 
-    public final String d()
+    public final String f()
     {
         return this.c;
     }
 
-    public final void e(String paramString)
+    public final void g(String paramString)
     {
         this.c = paramString;
     }
 
-    public final String e()
+    public final String g()
     {
         return this.d;
     }
 
-    public final void f(String paramString)
+    public final void h(String paramString)
     {
         this.d = paramString;
     }
 
-    public final String f()
+    public final String h()
     {
         return this.e;
     }
 
-    public final void g(String paramString)
+    public final void i(String paramString)
     {
         this.e = paramString;
     }
 
-    public final String g()
+    public final String i()
     {
         return this.f;
     }
 
-    public final void h(String paramString)
+    public final void j(String paramString)
     {
         this.f = paramString;
     }
 
-    public final void i(String paramString)
+    public final void k(String paramString)
     {
         this.g = paramString;
     }
 
-    public final int h()
+    public final int j()
     {
         return this.h;
     }
@@ -431,27 +453,27 @@ public class a implements Serializable,Cloneable {
         this.h = paramInt;
     }
 
-    public final String i()
+    public final String k()
     {
         return this.j;
     }
 
-    public final void j(String paramString)
+    public final void l(String paramString)
     {
         this.j = paramString;
     }
 
-    public final String j()
+    public final String l()
     {
         return this.k;
     }
 
-    public final void k(String paramString)
+    public final void m(String paramString)
     {
         this.k = paramString;
     }
 
-    public final b k()
+    public final b m()
     {
         return this.l;
     }
@@ -461,52 +483,52 @@ public class a implements Serializable,Cloneable {
         this.l = paramb;
     }
 
-    public final String l()
+    public final String n()
     {
         return this.i;
     }
 
-    public final void l(String paramString)
+    public final void n(String paramString)
     {
         this.i = paramString;
     }
 
-    public final String m()
+    public final String o()
     {
         return this.p;
     }
 
-    public final void m(String paramString)
+    public final void o(String paramString)
     {
         this.p = paramString;
     }
 
-    public final String n()
+    public final String p()
     {
         return this.q;
     }
 
-    public final void n(String paramString)
+    public final void p(String paramString)
     {
         this.q = paramString;
     }
 
-    public final String o()
+    public final String q()
     {
         return this.r;
     }
 
-    public final void o(String paramString)
+    public final void q(String paramString)
     {
         this.r = paramString;
     }
 
-    public final String p()
+    public final String r()
     {
         return this.s;
     }
 
-    public final void p(String paramString)
+    public final void r(String paramString)
     {
         this.s = paramString;
     }
@@ -542,6 +564,7 @@ public class a implements Serializable,Cloneable {
         localStringBuffer.append("upx=" + this.r);
         localStringBuffer.append("upy=" + this.s);
         localStringBuffer.append("clickid=" + this.t);
+        localStringBuffer.append("deeplink=" + this.u);
         return localStringBuffer.toString();
     }
 
