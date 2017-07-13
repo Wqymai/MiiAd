@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.mg.others.http.HttpUtils;
+import com.mg.others.utils.LogUtils;
 import com.mg.others.utils.imager.DownloadImgUtils;
 import com.mg.others.utils.imager.ImageSizeUtil;
 
@@ -31,6 +32,7 @@ public class ImageDownloadHelper {
         final File file = getDiskCacheDir(context, md5(url));
         if (file.exists())
         {
+            LogUtils.i(MConstant.TAG,"加载缓存图片");
             Bitmap bm;
             bm = loadImageFromLocal(file.getAbsolutePath(),context);
             Message msg = new Message();
@@ -46,6 +48,7 @@ public class ImageDownloadHelper {
                     boolean downloadState = DownloadImgUtils.downloadImgByUrl(url, file);
                     if (downloadState)// 如果下载成功
                     {
+                        LogUtils.i(MConstant.TAG,"图片下载成功");
                         Bitmap bm = loadImageFromLocal(file.getAbsolutePath(),context);
                         Message msg = new Message();
                         msg.obj = bm;

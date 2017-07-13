@@ -31,7 +31,6 @@ import com.mg.comm.ImageDownloadHelper;
 import com.mg.comm.MConstant;
 import com.mg.comm.MiiBaseAD;
 import com.mg.interf.MiiADListener;
-import com.mg.others.manager.ApkDownloadManager;
 import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
@@ -251,7 +250,8 @@ public class MiiAutoInterstitialAD extends MiiBaseAD {
                 public void onClick(View v) {
                     mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
                     listener.onMiiADClicked();
-                    new ADClickHelper(mContext).AdClick(adModel);
+                    AdModel ad = (AdModel) adModel.clone();
+                    new ADClickHelper(mContext).AdClick(ad);
                 }
             });
             adImageView.setOnTouchListener(new View.OnTouchListener() {

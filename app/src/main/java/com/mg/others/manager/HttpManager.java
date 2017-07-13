@@ -238,6 +238,8 @@ public class HttpManager {
      * @param eventType
      */
     public static void reportEvent(AdModel adModel, int eventType, Context mContext){
+
+      try{
         if (adModel == null){
             return;
         }
@@ -302,6 +304,9 @@ public class HttpManager {
               }
             }
         }
+      }catch (Exception e){
+          e.printStackTrace();
+      }
     }
 
 

@@ -29,12 +29,14 @@ import com.mg.asyn.JustHbRelative;
 import com.mg.asyn.ReqAsyncModel;
 import com.mg.comm.ADClickHelper;
 import com.mg.comm.ImageDownloadHelper;
+import com.mg.comm.MConstant;
 import com.mg.comm.MiiBaseAD;
 import com.mg.interf.MiiADListener;
 import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
 import com.mg.others.model.GdtInfoModel;
+import com.mg.others.utils.LogUtils;
 import com.mg.others.utils.SP;
 import com.qq.e.ads.splash.SplashAD;
 import com.qq.e.ads.splash.SplashADListener;
@@ -83,6 +85,7 @@ public class MiiSplashAD extends MiiBaseAD{
                     }
                     break;
                  case 300:
+                     LogUtils.i(MConstant.TAG,"收到bitmap");
                      try {
                          Bitmap bitmap = (Bitmap) msg.obj;
                          if (bitmap == null){
@@ -262,7 +265,16 @@ public class MiiSplashAD extends MiiBaseAD{
       }else {
           try {
 
+            if (adModel.getUrl() == null || adModel.getUrl().equals("")){
+
+                listener.onMiiNoAD(3011);
+
+            }
+            else {
+
               new ImageDownloadHelper(0).downloadShowImage(mContext,adModel.getImage(),2,mainHandler);
+
+            }
 
           }catch (Exception e){
 
@@ -291,13 +303,11 @@ public class MiiSplashAD extends MiiBaseAD{
 
              adImageView.setImageBitmap(bitmap);
 
-
              //广告成功展示
              listener.onMiiADPresent();
 
              //展示上报
              HttpManager.reportEvent(adModel, AdReport.EVENT_SHOW, mContext);
-
 
              //倒计时开始
              adCountDownTimer();
@@ -336,8 +346,8 @@ public class MiiSplashAD extends MiiBaseAD{
                  public void onClick(View v) {
 
                     try {
-
-                         new ADClickHelper(mContext).AdClick(adModel);
+                         AdModel ad= (AdModel) adModel.clone();
+                         new ADClickHelper(mContext).AdClick(ad);
                          if (bitmap != null){
                              bitmap.recycle();
                          }
@@ -383,8 +393,10 @@ public class MiiSplashAD extends MiiBaseAD{
             });
 
        }catch (Exception e){
+
            listener.onMiiNoAD(3009);
            e.printStackTrace();
+
        }
      }
      private void adCountDownTimer(){
@@ -411,8 +423,10 @@ public class MiiSplashAD extends MiiBaseAD{
          timer.start();
 
        }catch (Exception e){
+
            listener.onMiiNoAD(3008);
            e.printStackTrace();
+
        }
 
      }
@@ -477,8 +491,10 @@ public class MiiSplashAD extends MiiBaseAD{
            SPID = model.getSplashPosID();
 
         }catch (Exception e){
+
            listener.onMiiNoAD(3007);
            e.printStackTrace();
+
         }
 
         //记录开始请求广点通时间戳

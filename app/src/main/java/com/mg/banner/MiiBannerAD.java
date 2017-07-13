@@ -316,8 +316,16 @@ public class MiiBannerAD extends MiiBaseAD {
         }else {
 
           try {
+              if (adModel.getUrl()==null || adModel.getUrl().equals("")){
 
-              new ImageDownloadHelper(0).downloadShowImage(mContext,adModel.getImage(),1,mainHandler);
+                  listener.onMiiNoAD(3011);
+
+              }
+              else {
+
+                  new ImageDownloadHelper(0).downloadShowImage(mContext,adModel.getImage(),1,mainHandler);
+
+              }
 
           }catch (Exception e){
 
@@ -326,7 +334,6 @@ public class MiiBannerAD extends MiiBaseAD {
 
           }
         }
-
     }
 
     private void showBannerAD(final Bitmap bitmap){
@@ -359,8 +366,8 @@ public class MiiBannerAD extends MiiBaseAD {
                 public void onClick(View v) {
 
                   try {
-
-                    new ADClickHelper(mContext).AdClick(adModel);
+                    AdModel ad= (AdModel) adModel.clone();
+                    new ADClickHelper(mContext).AdClick(ad);
                     if (bitmap != null){
                         bitmap.recycle();
                     }

@@ -30,7 +30,7 @@ public class DownloadImgUtils
 		{
 			URL url = new URL(urlStr);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
+			conn.setConnectTimeout(3000);
 			is = conn.getInputStream();
 			fos = new FileOutputStream(file);
 			byte[] buf = new byte[512];
@@ -45,22 +45,23 @@ public class DownloadImgUtils
 		} catch (Exception e)
 		{
 			e.printStackTrace();
+
 		} finally
 		{
 			try
 			{
-				if (is != null)
-					is.close();
+				if (is != null) is.close();
 			} catch (IOException e)
 			{
+
 			}
 
 			try
 			{
-				if (fos != null)
-					fos.close();
+				if (fos != null) fos.close();
 			} catch (IOException e)
 			{
+
 			}
 		}
 

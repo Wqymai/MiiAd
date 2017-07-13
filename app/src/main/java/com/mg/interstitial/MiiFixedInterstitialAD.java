@@ -37,7 +37,6 @@ import com.mg.comm.ImageDownloadHelper;
 import com.mg.comm.MConstant;
 import com.mg.comm.MiiBaseAD;
 import com.mg.interf.MiiADListener;
-import com.mg.others.manager.ApkDownloadManager;
 import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
@@ -442,7 +441,8 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
 
                     mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 
-                    new ADClickHelper(mContext).AdClick(adModel);
+                    AdModel ad= (AdModel) adModel.clone();
+                    new ADClickHelper(mContext).AdClick(ad);
 
                     //广告点击
                     listener.onMiiADClicked();

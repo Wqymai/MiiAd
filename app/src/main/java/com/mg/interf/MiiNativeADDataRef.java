@@ -12,7 +12,6 @@ import java.io.Serializable;
  */
 
 public interface MiiNativeADDataRef extends Serializable {
-    static final long serialVersionUID = -7060210544600464481L;
 
     String getImg();//图片地址
     int getType();//1.html5的 0.非html5的
