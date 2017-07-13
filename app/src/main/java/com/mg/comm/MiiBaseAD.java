@@ -106,7 +106,7 @@ public abstract class MiiBaseAD {
     // a=AID s=SPID b=BPID i=IPID
     protected GdtInfoModel getGdtIds(Context context){
         SDKConfigModel sdkConfig = checkSdkConfig(sdk,context);
-        GdtInfoModel gdt=new GdtInfoModel();
+        GdtInfoModel gdt = new GdtInfoModel();
         try {
             String gdtIds = sdkConfig.getList();
             String gdtIds_json = MiiLocalStrEncrypt.deCodeStringToString(gdtIds, LocalKeyConstants.LOCAL_GDT);
@@ -181,6 +181,7 @@ public abstract class MiiBaseAD {
                 mainHandler.sendEmptyMessage(600);
             }
         }catch (Exception e){
+            mainHandler.sendEmptyMessage(500);
             e.printStackTrace();
         }
     }

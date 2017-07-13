@@ -41,6 +41,7 @@ public class MiiNativeAD extends MiiBaseAD {
                         setAdModel();
                     }
                     catch (Exception e){
+                        mListener.onMiiNoAD(3002);
                         e.printStackTrace();
                     }
                     break;
@@ -57,23 +58,27 @@ public class MiiNativeAD extends MiiBaseAD {
     };
 
     public MiiNativeAD(Activity activity,String appid, MiiNativeListener listener){
+      try {
+          this.mContext = activity.getApplicationContext();
+          this.mListener = listener;
+          this.mActivity = activity;
 
-        this.mContext = activity.getApplicationContext();
-        this.mListener = listener;
-        this.mActivity = activity;
+          reqAsyncModel.context = this.mContext;
+          reqAsyncModel.handler = this.mainHandler;
+          reqAsyncModel.listener = this.mListener;
+          reqAsyncModel.pt = 4;//信息流
+          reqAsyncModel.appid = appid;
 
-        reqAsyncModel.context = this.mContext;
-        reqAsyncModel.handler = this.mainHandler;
-        reqAsyncModel.listener = this.mListener;
-        reqAsyncModel.pt = 4;//信息流
-        reqAsyncModel.appid = appid;
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+              check23AbovePermission(mActivity, mainHandler);
+              return;
+          }
+          Init();
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            check23AbovePermission(mActivity,mainHandler);
-            return;
-        }
-        Init();
-
+      }catch (Exception e){
+          mListener.onMiiNoAD(2001);
+          e.printStackTrace();
+      }
     }
     private void Init(){
         if (isFirstEnter(mContext)){
@@ -85,19 +90,22 @@ public class MiiNativeAD extends MiiBaseAD {
 
     private void startupAD(){
 
-        SourceAssignModel saModel = checkADSource(mContext);
+         try {
+            SourceAssignModel saModel = checkADSource(mContext);
+            if (saModel == null){
+                new FirstEnter(reqAsyncModel).fetchMGAD();
+                return;
+            }
+            if (saModel.type == 1){
+                mListener.onMiiNoAD(3005);
+                return;
+            }
+            new HbRaReturn(reqAsyncModel).fetchMGAD();
 
-        if (saModel == null){
-            new FirstEnter(reqAsyncModel).fetchMGAD();
-            return;
-        }
-
-        if (saModel.type == 1){
-            mListener.onMiiNoAD(3005);
-            return;
-        }
-
-        new HbRaReturn(reqAsyncModel).fetchMGAD();
+         }catch (Exception e){
+             mListener.onMiiNoAD(3012);
+             e.printStackTrace();
+         }
 
     }
     private  void setAdModel(){
@@ -106,25 +114,7 @@ public class MiiNativeAD extends MiiBaseAD {
         }
         ref = new NativeImpl();
         ref.setAdModel(adModel);
-
-//        if (adModel.getType() == 4){
-//            String html5="<!DOCTYPE html><html><head><meta name='viewport' " +
-//                    "content='width=device-width,initial-scale=1,maximum-scale=1," +
-//                    "user-scalable=no'><meta charset='utf-8'><title>Insert title " +
-//                    "here</title><style type='text/css'>*{margin:0;padding:0}html," +
-//                    "body{width:100%;height:100%;background-color:#FFF;" +
-//                    "overflow:hidden}img{border:0}</style></head><body style=\"height: 100%;" +
-//                    "width: 100%;\"><a href=\"http://www.baidu.com\"><img " +
-//                    "src=\"http://192.168.199.191:8080/TestDemo/image/xfzg.jpg\" height=\"100%\" " +
-//                    "width=\"100%\" /></a></body></body></html>";
-//            ref.setAdType(1);
-//            ref.setImgContent(adModel.getPage());//是h5广告的话 设置是h5代码
-//
-//        }
-//        else {
-//            ref.setAdType(0);
-//            ref.setImgContent(adModel.getImage());//如果不是h5广告的话 设置广告图片链接
-//        }
+        ref.setListener(mListener);
         //回调
         mListener.onADLoaded(ref);
     }

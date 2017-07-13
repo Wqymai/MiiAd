@@ -516,9 +516,6 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
                 //点击上报
                 HttpManager.reportEvent(adModel, AdReport.EVENT_CLICK, mContext);
 
-                //监控安装完成
-                ApkDownloadManager.getIntance(mContext);
-
                 //广告点击回调
                 listener.onMiiADClicked();
 
@@ -544,14 +541,6 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
         lp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         relativeLayout.addView(cancel, lp);
 
-//        //"广告"提示
-//        tv=new TextView(mActivity);
-//        tv.setText("广告");
-//        tv.setTextSize(8);
-//        tv.setPadding(5,3,5,3);
-//        tv.setBackgroundColor(Color.argb(50, 41, 36, 33));
-//        tv.setGravity(Gravity.CENTER);
-//        tv.setTextColor(Color.parseColor("#FFF0F5"));
         RelativeLayout.LayoutParams tvlp=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         tvlp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         tvlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);

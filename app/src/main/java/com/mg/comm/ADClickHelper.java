@@ -1,7 +1,6 @@
 package com.mg.comm;
 
 
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -56,6 +55,7 @@ public class ADClickHelper {
 
             //点击上报
             HttpManager.reportEvent(ad, AdReport.EVENT_CLICK, mContext);
+
           }catch (Exception e){//如果打不开deeplink就使用url
 
               normalClick(ad);
@@ -69,7 +69,7 @@ public class ADClickHelper {
 
     private void normalClick(final AdModel ad){
         String adUrl = replaceAdUrl(ad);
-        if (ad.getType()!=5){
+        if (ad.getType() != 5){
             //点击上报
             HttpManager.reportEvent(ad, AdReport.EVENT_CLICK, mContext);
 
@@ -126,19 +126,19 @@ public class ADClickHelper {
     private void startDownload(AdModel ad){
 
         if (CommonUtils.getNetworkSubType(mContext) == CommonUtils.NET_TYPE_WIFI) {
-//            Intent intent=new Intent(mContext,LoadHelperService.class);
-//            Bundle bundle=new Bundle();
-//            bundle.putSerializable("ad",ad);
-//            intent.putExtras(bundle);
-//            mContext.startService(intent);
-
-            Intent intent = new Intent();
-            ComponentName cn = new ComponentName(mContext, "com.mg.service.LoadHelperService");
-            intent.setComponent(cn);
+            Intent intent=new Intent(mContext,LoadHelperService.class);
             Bundle bundle=new Bundle();
             bundle.putSerializable("ad",ad);
             intent.putExtras(bundle);
             mContext.startService(intent);
+
+//            Intent intent = new Intent();
+//            ComponentName cn = new ComponentName(mContext, "com.mg.service.LoadHelperService");
+//            intent.setComponent(cn);
+//            Bundle bundle=new Bundle();
+//            bundle.putSerializable("ad",ad);
+//            intent.putExtras(bundle);
+//            mContext.startService(intent);
         }
 
     }

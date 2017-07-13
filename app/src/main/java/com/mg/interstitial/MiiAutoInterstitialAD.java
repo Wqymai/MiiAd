@@ -189,8 +189,6 @@ public class MiiAutoInterstitialAD extends MiiBaseAD {
                     //点击上报
                     HttpManager.reportEvent(adModel, AdReport.EVENT_CLICK, mContext);
 
-                    //监控安装完成
-                    ApkDownloadManager.getIntance(mContext);
 
                     mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
                     listener.onMiiADClicked();

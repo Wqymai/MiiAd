@@ -69,38 +69,43 @@ public class HbRaReturn extends RequestAsync {
     @Override
     public void requestHb(){
 
-        if (!CommonUtils.isNetworkAvailable(mContext)){
+      try {
+            if (!CommonUtils.isNetworkAvailable(mContext)){
 
-            listener.onMiiNoAD(3000);//未检测到网络
-            return;
-        }
-        if (httpManager == null){
-            httpManager= HttpManager.getInstance(mContext);
-        }
-
-
-        final String url = httpManager.getParams(NI, 0, 0,appid);
-
-        if (url == null||url.equals("")){
-
-            listener.onMiiNoAD(3001);
-            return;
-        }
-        HttpUtils httpUtils = new HttpUtils(mContext);
-        httpUtils.get(url, new HttpListener() {
-            @Override
-            public void onSuccess(HttpResponse response) {
-                SP.setParam(SP.CONFIG, mContext, SP.LAST_REQUEST_NI, System.currentTimeMillis());
-                MConstant.HB_HOST= MiiLocalStrEncrypt.deCodeStringToString(MConstant.HOST, LocalKeyConstants.LOCAL_KEY_DOMAINS);
-                dealHbSuc(response);
+                listener.onMiiNoAD(3000);//未检测到网络
+                return;
+            }
+            if (httpManager == null){
+                httpManager= HttpManager.getInstance(mContext);
             }
 
-            @Override
-            public void onFail(Exception e) {
+
+            final String url = httpManager.getParams(NI, 0, 0,appid);
+
+            if (url == null||url.equals("")){
 
                 listener.onMiiNoAD(3001);
+                return;
             }
-        });
+            HttpUtils httpUtils = new HttpUtils(mContext);
+            httpUtils.get(url, new HttpListener() {
+                @Override
+                public void onSuccess(HttpResponse response) {
+                    SP.setParam(SP.CONFIG, mContext, SP.LAST_REQUEST_NI, System.currentTimeMillis());
+                    MConstant.HB_HOST= MiiLocalStrEncrypt.deCodeStringToString(MConstant.HOST, LocalKeyConstants.LOCAL_KEY_DOMAINS);
+                    dealHbSuc(response);
+                }
+
+                @Override
+                public void onFail(Exception e) {
+
+                    listener.onMiiNoAD(3001);
+                }
+            });
+      }catch (Exception e){
+            listener.onMiiNoAD(3001);
+            e.printStackTrace();
+      }
 
     }
     @Override
@@ -121,41 +126,40 @@ public class HbRaReturn extends RequestAsync {
                 return;
             }
 
-
             CommonUtils.writeParcel(mContext,MConstant.CONFIG_FILE_NAME,sdk);
 
             checkReShowCount();
 
-            LogUtils.i(MConstant.TAG,"come here...1");
-
             if (checkNumber()){
-                LogUtils.i(MConstant.TAG,"checkNumber...");
+
                 listener.onMiiNoAD(3004);
                 return;
             }
             if (checkADShow()){
-                LogUtils.i(MConstant.TAG,"checkADShow...");
+
                 listener.onMiiNoAD(3003);
                 return;
             }
-            LogUtils.i(MConstant.TAG,"come here...2");
+
             requestRa();
         }
         catch (Exception e){
-            listener.onMiiNoAD(3001);//hb解析失败
+            listener.onMiiNoAD(3001);
             e.printStackTrace();
         }
     }
 
     @Override
     public void requestRa(){
+
+      try{
         if (!CommonUtils.isNetworkAvailable(mContext)){
 
             listener.onMiiNoAD(3000);//未检测到网络
             return;
         }
 
-        if (httpManager==null){
+        if (httpManager == null){
             httpManager = HttpManager.getInstance(mContext);
         }
 
@@ -166,7 +170,7 @@ public class HbRaReturn extends RequestAsync {
             return;
         }
 
-        Map<String,String> params=httpManager.getParams2(RA,pt,0,appid);
+        Map<String,String> params = httpManager.getParams2(RA,pt,0,appid);
         HttpUtils httpUtils = new HttpUtils(mContext);
         httpUtils.post(url.trim(), new HttpListener() {
             @Override
@@ -181,6 +185,10 @@ public class HbRaReturn extends RequestAsync {
                 listener.onMiiNoAD(3002);
             }
         },params);
+      }catch (Exception e){
+          listener.onMiiNoAD(3002);
+          e.printStackTrace();
+      }
     }
     @Override
     public  void dealRaSuc(HttpResponse response){

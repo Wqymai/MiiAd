@@ -34,7 +34,6 @@ import com.mg.comm.ImageDownloadHelper;
 import com.mg.comm.MConstant;
 import com.mg.comm.MiiBaseAD;
 import com.mg.interf.MiiADListener;
-import com.mg.others.manager.ApkDownloadManager;
 import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
@@ -74,44 +73,42 @@ public class MiiBannerAD extends MiiBaseAD {
                 case 200:
                     try {
                         adModel= (AdModel) msg.obj;
+                        if (adModel == null){
+                            listener.onMiiNoAD(3002);
+                            return;
+                        }
                         checkADType(adModel);
                     }
                     catch (Exception e){
-
+                        listener.onMiiNoAD(3002);
                         e.printStackTrace();
                     }
                     break;
                 case 300:
-                    LogUtils.i(MConstant.TAG," 收到bitmap...");
                     try {
                         Bitmap bitmap = (Bitmap) msg.obj;
                         if (bitmap == null){
-                            adContainer.removeView(adImageView);
+                            listener.onMiiNoAD(3011);
                             return;
                         }
                         showBannerAD(bitmap);
                     }
                     catch (Exception e){
-                        adContainer.removeView(adImageView);
+                        listener.onMiiNoAD(3011);
                         e.printStackTrace();
                     }
                     break;
                 case 400:
-                    try {
-                        openGDTAD(true);
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
+                    openGDTAD(true);
                     break;
                 case 500:
-
                     listener.onMiiNoAD(1000);
-
                     break;
                 case 600:
-
                     Init();
-
+                    break;
+                case 700:
+                    listener.onMiiNoAD(3011);
                     break;
             }
 
@@ -120,6 +117,7 @@ public class MiiBannerAD extends MiiBaseAD {
 
     public MiiBannerAD(Activity activity, ViewGroup adContainer,String appid, MiiADListener listener){
 
+      try{
         this.mContext = activity.getApplicationContext();
         this.mActivity = activity;
         this.adContainer = adContainer;
@@ -142,6 +140,13 @@ public class MiiBannerAD extends MiiBaseAD {
 
         Init();
 
+      }catch (Exception e){
+
+          listener.onMiiNoAD(2001);
+          e.printStackTrace();
+
+      }
+
     }
 
     private void Init(){
@@ -156,43 +161,47 @@ public class MiiBannerAD extends MiiBaseAD {
 
     private void startupAD(){
 
-        SourceAssignModel saModel = checkADSource(mContext);
+      try {
 
-        if (saModel == null){
-            new FirstEnter(reqAsyncModel).fetchMGAD();
-            return;
-        }
+          SourceAssignModel saModel = checkADSource(mContext);
 
-        if (saModel.type == 1){
+          if (saModel == null) {
+              new FirstEnter(reqAsyncModel).fetchMGAD();
+              return;
+          }
 
-            listener.onMiiNoAD(3005);
-            return;
-        }
-        else if (saModel.type == 2){
+          if (saModel.type == 1) {
 
-            if (saModel.firstChoose == 1){
+              listener.onMiiNoAD(3005);
+              return;
 
-                new HbRaReturn(reqAsyncModel).fetchMGAD();
-            }
-            else {
+          } else if (saModel.type == 2) {
 
-                openGDTAD(true);
+              if (saModel.firstChoose == 1) {
 
-            }
-        }
-        else if (saModel.type == 3){
+                  new HbRaReturn(reqAsyncModel).fetchMGAD();
+              } else {
+
+                  openGDTAD(true);
+
+              }
+          } else if (saModel.type == 3) {
 
 
+              if (saModel.firstChoose == 1) {
 
-            if (saModel.firstChoose == 1){
+                  new HbRaNoReturn(reqAsyncModel).fetchMGAD();
 
-                new HbRaNoReturn(reqAsyncModel).fetchMGAD();
+              } else {
+                  openGDTAD(false);
+              }
+          }
+      }catch (Exception e){
 
-            }
-            else {
-                openGDTAD(false);
-            }
-        }
+          listener.onMiiNoAD(3012);
+          e.printStackTrace();
+
+      }
 
     }
 
@@ -202,13 +211,14 @@ public class MiiBannerAD extends MiiBaseAD {
 
         String AID = "";
         String BPID = "";
-        GdtInfoModel model = getGdtIds(mContext);
-
         try {
+
+            GdtInfoModel model = getGdtIds(mContext);
             AID = model.getAPPID();
             BPID = model.getBannerPosID();
 
         }catch (Exception e){
+            listener.onMiiNoAD(3007);
             e.printStackTrace();
         }
 
@@ -251,75 +261,74 @@ public class MiiBannerAD extends MiiBaseAD {
 
         if (adModel.getType() == 4){//h5广告
 
-            webView = new WebView(mActivity);
-            FrameLayout.LayoutParams params_webview = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, (int) (CommonUtils.getScreenH(mContext) * 0.1));
-            webView.setLayoutParams(params_webview);
-            WebSettings settings = webView.getSettings();
-            settings.setDefaultTextEncodingName("utf-8") ;
-            settings.setJavaScriptEnabled(true);
-            settings.setDomStorageEnabled(true);
-            settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
-            webView.setWebViewClient(new WebViewClient(){
-                @Override
-                public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-                    handler.proceed();
-                }
-                @Override
-                public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                    view.stopLoading();
-                    view.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+          try {
+              webView = new WebView(mActivity);
+              FrameLayout.LayoutParams params_webview = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, (int) (CommonUtils.getScreenH(mContext) * 0.1));
 
-                    //点击上报
-                    HttpManager.reportEvent(adModel, AdReport.EVENT_CLICK, mContext);
+              webView.setLayoutParams(params_webview);
+              WebSettings settings = webView.getSettings();
+              settings.setDefaultTextEncodingName("utf-8");
+              settings.setJavaScriptEnabled(true);
+              settings.setDomStorageEnabled(true);
+              settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+              webView.setWebViewClient(new WebViewClient() {
+                  @Override
+                  public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError
+                          error) {
+                      handler.proceed();
+                  }
 
-                    //监控安装完成
-                    ApkDownloadManager.getIntance(mContext);
+                  @Override
+                  public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                      view.stopLoading();
+                      view.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
 
-                    //广告点击回调
-                    listener.onMiiADClicked();
+                      //点击上报
+                      HttpManager.reportEvent(adModel, AdReport.EVENT_CLICK, mContext);
 
-                    return true;
-                }
-            });
+                      //广告点击回调
+                      listener.onMiiADClicked();
 
-            webView.loadDataWithBaseURL("",adModel.getPage() , "text/html", "utf-8", "");
-            adContainer.addView(webView);
+                      return true;
+                  }
+              });
 
+              webView.loadDataWithBaseURL("", adModel.getPage(), "text/html", "utf-8", "");
+              adContainer.addView(webView);
 
-            //展示上报
-            HttpManager.reportEvent(adModel, AdReport.EVENT_SHOW, mContext);
+              //展示上报
+              HttpManager.reportEvent(adModel, AdReport.EVENT_SHOW, mContext);
 
-            //广告成功展示
-            listener.onMiiADPresent();
+              //广告成功展示
+              listener.onMiiADPresent();
 
+              //记录展示次数
+              int show_num = (int) SP.getParam(SP.CONFIG, mContext, SP.FOT, 0);
+              SP.setParam(SP.CONFIG, mContext, SP.FOT, show_num + 1);
 
+          }catch (Exception e){
 
-            //记录展示次数
-            int show_num = (int) SP.getParam(SP.CONFIG, mContext, SP.FOT, 0);
-            SP.setParam(SP.CONFIG, mContext, SP.FOT, show_num + 1);
+              listener.onMiiNoAD(3010);
+              e.printStackTrace();
 
-
+          }
 
         }else {
 
-            new ImageDownloadHelper(0).downloadShowImage(mContext,adModel.getImage(),1,mainHandler);
+          try {
+
+              new ImageDownloadHelper(0).downloadShowImage(mContext,adModel.getImage(),1,mainHandler);
+
+          }catch (Exception e){
+
+              listener.onMiiNoAD(3011);
+              e.printStackTrace();
+
+          }
         }
 
     }
-//    //"广告"提示
-//    private TextView tvADCreate(){
-//        TextView tv=new TextView(mActivity);
-//        tv.setText("广告");
-//        tv.setTextSize(10);
-//        tv.setPadding(5,3,5,3);
-//        tv.setBackgroundColor(Color.argb(50, 41, 36, 33));
-//        tv.setGravity(Gravity.CENTER);
-//        tv.setTextColor(Color.parseColor("#FFF0F5"));
-//        FrameLayout.LayoutParams lp=new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//        lp.gravity=Gravity.RIGHT|Gravity.BOTTOM;
-//        tv.setLayoutParams(lp);
-//        return tv;
-//    }
+
     private void showBannerAD(final Bitmap bitmap){
         try {
 
@@ -349,9 +358,20 @@ public class MiiBannerAD extends MiiBaseAD {
                 @Override
                 public void onClick(View v) {
 
-                    listener.onMiiADClicked();
+                  try {
 
                     new ADClickHelper(mContext).AdClick(adModel);
+                    if (bitmap != null){
+                        bitmap.recycle();
+                    }
+
+                  }catch (Exception e){
+
+                      listener.onMiiNoAD(3013);
+                      e.printStackTrace();
+
+                  }
+                    listener.onMiiADClicked();
 
                 }
             });
@@ -378,6 +398,7 @@ public class MiiBannerAD extends MiiBaseAD {
                 }
             });
         }catch (Exception e){
+            listener.onMiiNoAD(3009);
             e.printStackTrace();
         }
     }
@@ -389,8 +410,6 @@ public class MiiBannerAD extends MiiBaseAD {
         try {
             LogUtils.i(MConstant.TAG,"调用了banner的recycle()");
             mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-
-            listener.onMiiADDismissed();
 
             if (adImageView != null){
                 Drawable drawable = adImageView.getDrawable();
@@ -416,12 +435,16 @@ public class MiiBannerAD extends MiiBaseAD {
                 webView.removeAllViews();
                 try {
                     webView.destroy();
-                } catch (Throwable ex) {
-
+                } catch (Exception e) {
+                    listener.onMiiNoAD(3015);
+                    e.printStackTrace();
                 }
             }
+
+            listener.onMiiADDismissed();
         }
         catch (Exception e){
+            listener.onMiiNoAD(3015);
             e.printStackTrace();
         }
     }

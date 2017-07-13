@@ -13,6 +13,7 @@ import android.os.Message;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -28,15 +29,12 @@ import com.mg.asyn.JustHbRelative;
 import com.mg.asyn.ReqAsyncModel;
 import com.mg.comm.ADClickHelper;
 import com.mg.comm.ImageDownloadHelper;
-import com.mg.comm.MConstant;
 import com.mg.comm.MiiBaseAD;
 import com.mg.interf.MiiADListener;
-import com.mg.others.manager.ApkDownloadManager;
 import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
 import com.mg.others.model.GdtInfoModel;
-import com.mg.others.utils.LogUtils;
 import com.mg.others.utils.SP;
 import com.qq.e.ads.splash.SplashAD;
 import com.qq.e.ads.splash.SplashADListener;
@@ -70,15 +68,17 @@ public class MiiSplashAD extends MiiBaseAD{
                  case 100:
                      startupAD();
                      break;
-
                  case 200:
-
                     try {
-                        adModel= (AdModel) msg.obj;
+                        adModel = (AdModel) msg.obj;
+                        if (adModel == null){
+                            listener.onMiiNoAD(3002);
+                            return;
+                        }
                         checkADType(adModel);
                     }
                     catch (Exception e){
-
+                        listener.onMiiNoAD(3002);
                         e.printStackTrace();
                     }
                     break;
@@ -86,23 +86,18 @@ public class MiiSplashAD extends MiiBaseAD{
                      try {
                          Bitmap bitmap = (Bitmap) msg.obj;
                          if (bitmap == null){
-                             adContainer.removeView(adImageView);
+                             listener.onMiiNoAD(3011);
                              return;
                          }
-                         LogUtils.i(MConstant.TAG,"splash 收到bitmap");
                          showSplashAD(bitmap);
                      }
                      catch (Exception e){
-                         adContainer.removeView(adImageView);
+                         listener.onMiiNoAD(3011);
                          e.printStackTrace();
                      }
                      break;
                  case 400:
-                     try {
-                        openGDTAD(true);
-                     }catch (Exception e){
-                         e.printStackTrace();
-                     }
+                     openGDTAD(true);
                      break;
                  case 500:
                      listener.onMiiNoAD(1000);
@@ -110,42 +105,50 @@ public class MiiSplashAD extends MiiBaseAD{
                  case 600:
                      Init();
                      break;
+                 case 700:
+                     listener.onMiiNoAD(3011);
+                     break;
 
              }
          }
      };
 
     public  MiiSplashAD(Activity activity, ViewGroup adContainer,View skipContainer ,String appid,MiiADListener adListener){
+      try{
+            this.mActivity = activity;
 
-        this.mActivity = activity;
+            this.mContext = activity.getApplicationContext();
 
-        this.mContext = activity.getApplicationContext();
+            this.adContainer=adContainer;
 
-        this.adContainer=adContainer;
+            this.skipContainer=skipContainer;
 
-        this.skipContainer=skipContainer;
+            this.listener = adListener;
 
-        this.listener = adListener;
+            if ( activity == null || adContainer == null || skipContainer == null){
+                listener.onMiiNoAD(2000);
+                return;
+            }
 
+            reqAsyncModel.context = this.mContext;
+            reqAsyncModel.handler = this.mainHandler;
+            reqAsyncModel.listener = this.listener;
+            reqAsyncModel.pt = 2;
+            reqAsyncModel.appid = appid;
 
-        if ( activity == null || adContainer == null || skipContainer == null){
-            listener.onMiiNoAD(2000);
-            return;
-        }
+            if(Build.VERSION.SDK_INT >= M){
+                check23AbovePermission(mActivity,mainHandler);
+                return;
+            }
 
-        reqAsyncModel.context = this.mContext;
-        reqAsyncModel.handler = this.mainHandler;
-        reqAsyncModel.listener = this.listener;
-        reqAsyncModel.pt = 2;
-        reqAsyncModel.appid = appid;
+            Init();
+      }
+      catch (Exception e){
 
-        if(Build.VERSION.SDK_INT >= M){
-            check23AbovePermission(mActivity,mainHandler);
-            return;
-        }
+          listener.onMiiNoAD(2001);
+          e.printStackTrace();
 
-        Init();
-
+      }
 
     }
 
@@ -160,8 +163,8 @@ public class MiiSplashAD extends MiiBaseAD{
 
     private void  checkADType(final AdModel adModel){
 
-        if (adModel.getType() == 4){//h5广告
-
+      if (adModel.getType() == 4){
+         try {
             webView = new WebView(mActivity);
             FrameLayout.LayoutParams params_webview = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
             webView.setLayoutParams(params_webview);
@@ -183,16 +186,12 @@ public class MiiSplashAD extends MiiBaseAD{
                     //点击上报
                     HttpManager.reportEvent(adModel, AdReport.EVENT_CLICK, mContext);
 
-                    //监控安装完成
-                    ApkDownloadManager.getIntance(mContext);
-
-
-                    listener.onMiiADClicked();
-                    listener.onMiiADDismissed();
-
                     if (timer != null){
                         timer.cancel();
                     }
+
+                    listener.onMiiADClicked();
+                    listener.onMiiADDismissed();
 
                     return true;
                 }
@@ -200,7 +199,6 @@ public class MiiSplashAD extends MiiBaseAD{
 
             webView.loadDataWithBaseURL("",adModel.getPage() , "text/html", "utf-8", "");
             adContainer.addView(webView);
-
 
             //展示上报
             HttpManager.reportEvent(adModel, AdReport.EVENT_SHOW, mContext);
@@ -218,36 +216,62 @@ public class MiiSplashAD extends MiiBaseAD{
             skipContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //广告关闭回调
-                    listener.onMiiADDismissed();
-                    if (timer != null){
-                        timer.cancel();
-                    }
+
+                  try {
+                      if (timer != null){
+                          timer.cancel();
+                      }
+                      if (webView != null){
+                          ViewParent parent = webView.getParent();
+                          if (parent != null) {
+                              ((ViewGroup) parent).removeView(webView);
+                          }
+                          webView.stopLoading();
+                          webView.getSettings().setJavaScriptEnabled(false);
+                          webView.clearHistory();
+                          webView.clearView();
+                          webView.removeAllViews();
+                          try {
+                              webView.destroy();
+                          } catch (Exception e) {
+
+                              listener.onMiiNoAD(3014);
+                              e.printStackTrace();
+
+                          }
+                      }
+                  }
+                  catch (Exception e){
+
+                      listener.onMiiNoAD(3014);
+                      e.printStackTrace();
+
+                  }
+
+                  listener.onMiiADDismissed();
 
                 }
             });
+         }catch (Exception e){
 
-        }else {
+               listener.onMiiNoAD(3010);
+               e.printStackTrace();
 
-            new ImageDownloadHelper(0).downloadShowImage(mContext,adModel.getImage(),2,mainHandler);
-        }
+         }
+
+      }else {
+          try {
+
+              new ImageDownloadHelper(0).downloadShowImage(mContext,adModel.getImage(),2,mainHandler);
+
+          }catch (Exception e){
+
+              listener.onMiiNoAD(3011);
+              e.printStackTrace();
+          }
+      }
 
     }
-
-//     //"广告"提示
-//     private TextView tvADCreate(){
-//         TextView tv=new TextView(mActivity);
-//         tv.setText("广告");
-//         tv.setTextSize(10);
-//         tv.setPadding(5,3,5,3);
-//         tv.setBackgroundColor(Color.argb(50, 41, 36, 33));
-//         tv.setGravity(Gravity.CENTER);
-//         tv.setTextColor(Color.parseColor("#FFF0F5"));
-//         FrameLayout.LayoutParams lp=new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//         lp.gravity=Gravity.RIGHT|Gravity.BOTTOM;
-//         tv.setLayoutParams(lp);
-//         return tv;
-//     }
 
      private void showSplashAD(final Bitmap bitmap){
 
@@ -286,13 +310,24 @@ public class MiiSplashAD extends MiiBaseAD{
                  @Override
                  public void onClick(View v) {
 
+                   try {
+
                      if (bitmap != null){
                          bitmap.recycle();
                      }
                      if(timer != null){
                        timer.cancel();
                      }
-                     listener.onMiiADDismissed();
+
+                   }
+                   catch (Exception e){
+
+                       listener.onMiiNoAD(3013);
+                       e.printStackTrace();
+
+                   }
+
+                   listener.onMiiADDismissed();
 
                  }
              });
@@ -300,15 +335,25 @@ public class MiiSplashAD extends MiiBaseAD{
                  @Override
                  public void onClick(View v) {
 
-                     new ADClickHelper(mContext).AdClick(adModel);
-                     if (bitmap != null){
-                         bitmap.recycle();
-                     }
-                     if (timer != null){
-                         timer.cancel();
-                     }
-                     listener.onMiiADClicked();
-                     listener.onMiiADDismissed();
+                    try {
+
+                         new ADClickHelper(mContext).AdClick(adModel);
+                         if (bitmap != null){
+                             bitmap.recycle();
+                         }
+                         if (timer != null){
+                             timer.cancel();
+                         }
+
+                    }catch (Exception e){
+
+                        listener.onMiiNoAD(3013);
+                        e.printStackTrace();
+
+                    }
+
+                    listener.onMiiADClicked();
+                    listener.onMiiADDismissed();
 
                  }
              });
@@ -322,11 +367,13 @@ public class MiiSplashAD extends MiiBaseAD{
                             adModel.setDownx(String.valueOf(event.getX()));
                             adModel.setDowny(String.valueOf(event.getY()));
                             break;
+
                         case MotionEvent.ACTION_UP:
 
                             adModel.setUpx(String.valueOf(event.getX()));
                             adModel.setUpy(String.valueOf(event.getY()));
                             break;
+
                         default:
                             break;
                     }
@@ -336,15 +383,17 @@ public class MiiSplashAD extends MiiBaseAD{
             });
 
        }catch (Exception e){
+           listener.onMiiNoAD(3009);
            e.printStackTrace();
        }
      }
      private void adCountDownTimer(){
 
+       try {
+
          sdk = checkSdkConfig(sdk,mContext);
 
          long time = sdk.getDisplayTime(2);
-
 
          timer = new CountDownTimer((time+1)*1000,1000){
              @Override
@@ -361,74 +410,74 @@ public class MiiSplashAD extends MiiBaseAD{
          };
          timer.start();
 
+       }catch (Exception e){
+           listener.onMiiNoAD(3008);
+           e.printStackTrace();
+       }
+
      }
 
 
-    private int count = 0;
     private void startupAD(){
+
+      try{
 
         SourceAssignModel saModel = checkADSource(mContext);
 
         if (saModel == null){
 
-            if (count < 3){
-              count++;
-              new FirstEnter(reqAsyncModel).fetchMGAD();
-            }
+            new FirstEnter(reqAsyncModel).fetchMGAD();
+
             return;
         }
-        count = 0;
+
         int type = saModel.type;
         int firstChoose = saModel.firstChoose;
 
-        LogUtils.i(MConstant.TAG,"assign source: type="+type+" firstChoose="+firstChoose);
-
         if (type == 1){
-
             listener.onMiiNoAD(3005);
             return;
         }
         else if (type == 2){
 
             if (firstChoose == 1){
-
                 new HbRaReturn(reqAsyncModel).fetchMGAD();
             }
             else {
-
                 openGDTAD(true);
-
             }
         }
         else if (type ==3){
 
             if (firstChoose == 1){
-
                 new HbRaNoReturn(reqAsyncModel).fetchMGAD();
-
             }
             else {
-
                 openGDTAD(false);
-
             }
         }
+      }catch (Exception e){
+
+          listener.onMiiNoAD(3012);
+          e.printStackTrace();
+
+      }
     }
 
     private void openGDTAD(final boolean shouldReturn){
-
-        LogUtils.i(MConstant.TAG,"load gdt...");
 
         new JustHbRelative(reqAsyncModel).fetchMGAD();
 
         String AID = "";
         String SPID = "";
-        GdtInfoModel model = getGdtIds(mContext);
         try {
+
+           GdtInfoModel model = getGdtIds(mContext);
            AID = model.getAPPID();
            SPID = model.getSplashPosID();
 
         }catch (Exception e){
+           listener.onMiiNoAD(3007);
            e.printStackTrace();
         }
 
@@ -481,6 +530,8 @@ public class MiiSplashAD extends MiiBaseAD{
 
     @Override
     public void recycle() {
-        mActivity.finish();
+        if (mActivity != null){
+           mActivity.finish();
+        }
     }
 }

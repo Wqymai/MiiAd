@@ -8,7 +8,6 @@ import android.util.Base64;
 import com.mg.comm.MConstant;
 import com.mg.others.utils.CommonUtils;
 import com.mg.others.utils.LocalKeyConstants;
-import com.mg.others.utils.LogUtils;
 import com.mg.others.utils.MiiLocalStrEncrypt;
 
 import java.io.File;
@@ -390,64 +389,17 @@ public class RequestModel {
         params.put("appid", appid);
         params.put("ver", requestModel.getVer());
         params.put("tp", requestModel.getTp());
-//        boolean isImeiTest = false;
-//        switch(Action){
-//            case MConstant.request_type.hb:
-//                isImeiTest = false;
-//                params.put("is",requestModel.getIs());
-//                params.put("dt",requestModel.getDt());
-//                params.put("dtv",requestModel.getDtv());
-//                params.put("ic",requestModel.getIc());
-//                params.put("w",requestModel.getW());
-//                params.put("h",requestModel.getH());
-//                params.put("brand",requestModel.getBrand().trim().replace(" ",""));
-//                params.put("mod",requestModel.getMod().trim().replace(" ",""));
-//                params.put("os","android");
-//                params.put("ov",requestModel.getOv());
-//                params.put("sdkVersion",requestModel.getSdkVersion());
-//                params.put("mcc", requestModel.getMcc());
-//                params.put("mnc", requestModel.getMnc());
-//                params.put("lac",requestModel.getLac());
-//                params.put("cid",requestModel.getCid());
-//                params.put("nt",String.valueOf(requestModel.getNt()));
-//                params.put("mac", requestModel.getMac());
-//                params.put("pt", String.valueOf(requestModel.getPt()));
-//                params.put("st",String.valueOf(tiggleSence));
-//                params.put("pl",requestModel.getPl());
-//                params.put("adrid",requestModel.getAdrid());
-//                params.put("adnum",String.valueOf(requestModel.getAdnum()));
-//                try {
-//                    params.put("ua", URLEncoder.encode(requestModel.getUa(),"UTF-8"));
-//                } catch (UnsupportedEncodingException e) {
-//                    e.printStackTrace();
-//                }
-//                params.put("dip",requestModel.getDip());
-//                params.put("sign",requestModel.getSign());
-//                break;
-//
-//            case MConstant.request_type.ni:
-                params.put("dt",requestModel.getDt());
-                params.put("dtv",requestModel.getDtv());
-                params.put("sign",requestModel.getSign());
-                params.put("w",requestModel.getW());
-                params.put("h",requestModel.getH());
-//                break;
-//        }
-//        String url = CommonUtils.MapToString(params);
+        params.put("dt",requestModel.getDt());
+        params.put("dtv",requestModel.getDtv());
+        params.put("sign",requestModel.getSign());
+        params.put("w",requestModel.getW());
+        params.put("h",requestModel.getH());
+
         String url_base64 = Base64.encodeToString(CommonUtils.MapToString(params).getBytes(),Base64.NO_WRAP);
         StringBuffer sb = new StringBuffer();
-        LogUtils.i(MConstant.TAG,"HOST:"+ MiiLocalStrEncrypt.deCodeStringToString(MConstant.HOST, LocalKeyConstants.LOCAL_KEY_DOMAINS)+" HB_HOST:"+MConstant.HB_HOST+" Action:"+Action);
         if (Action.equals(MConstant.request_type.ni)){
             sb.append(MiiLocalStrEncrypt.deCodeStringToString(MConstant.HOST, LocalKeyConstants.LOCAL_KEY_DOMAINS));
         }
-//        if (Action.equals(MConstant.request_type.hb)){
-//            if (MConstant.HB_HOST.equals("")){
-//                sb.append(MiiLocalStrEncrypt.deCodeStringToString(MConstant.HOST, LocalKeyConstants.LOCAL_KEY_DOMAINS));
-//            }
-//            else {
-//                sb.append(MConstant.HB_HOST);
-//            }
-//        }
         sb.append(MiiLocalStrEncrypt.deCodeStringToString(MConstant.SUFFIX,LocalKeyConstants.LOCAL_KEY_ACTIONS));
         sb.append("/");
         sb.append(Action);
@@ -458,7 +410,7 @@ public class RequestModel {
     }
 
     public static Map<String,String> getRequestParams2(String Action, DeviceInfo deviceInfo, int type, int tiggleSence,String appid, Context mContext){
-        Map<String,String> params=new HashMap<>();
+        Map<String,String> params = new HashMap<>();
         try {
             RequestModel requestModel = getRequestModel(Action, deviceInfo, type, tiggleSence, mContext);
             params.put("action",requestModel.getAction());

@@ -20,7 +20,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.security.cert.CertificateException;
@@ -95,7 +94,7 @@ public class HttpUtils {
 	private Context mContext;
 
 	static {
-		defaultParamter = new HttpParameter(3000, 5000);
+		defaultParamter = new HttpParameter(5000, 5000);
 		globleParameters = defaultParamter;
 	}
 
@@ -332,30 +331,30 @@ public class HttpUtils {
 				response.setStatus(urlConnection.getResponseCode());
 
 				mListener.onSuccess(response);
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
+			} catch (Exception e) {
 				mListener.onFail(e);
-			} catch (IOException e) {
 				e.printStackTrace();
-				mListener.onFail(e);
 			} finally {
 				try {
 					if (osw != null) {
 						osw.close();
 					}
 				} catch (IOException e) {
+					mListener.onFail(e);
 					e.printStackTrace();
 				} finally {
 					try {
 						if (br != null)
 							br.close();
 					} catch (IOException e) {
+						mListener.onFail(e);
 						e.printStackTrace();
 					} finally {
 						try {
 							if (in != null)
 								in.close();
 						} catch (IOException e) {
+							mListener.onFail(e);
 							e.printStackTrace();
 						} finally {
 							if (urlConnection != null)
@@ -871,7 +870,7 @@ public class HttpUtils {
 	private static void setURLConnectionParameters(int methodHint, HttpURLConnection urlConnection,
 												   HttpParameter parameter, Context mContext) {
 		if (parameter.userAgent == HttpParameter.DEFAULT_AGENT){
-			parameter = new HttpParameter(7000, 7000);
+			parameter = new HttpParameter(5000, 5000);
 			if (mContext == null){
 				parameter.userAgent = HttpParameter.DEFAULT_AGENT;
 			}else {

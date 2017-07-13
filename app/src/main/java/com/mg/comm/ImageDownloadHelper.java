@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.mg.others.http.HttpUtils;
-import com.mg.others.utils.LogUtils;
 import com.mg.others.utils.imager.DownloadImgUtils;
 import com.mg.others.utils.imager.ImageSizeUtil;
 
@@ -29,42 +28,32 @@ public class ImageDownloadHelper {
 
 
     public  void downloadShowImage(final Context context, final String url, final int adType, final Handler mainHandler){
-        LogUtils.i(MConstant.TAG,"url="+url);
-
         final File file = getDiskCacheDir(context, md5(url));
-
-
-        if (file.exists())// 如果在缓存文件中发现
+        if (file.exists())
         {
-
-            LogUtils.i(MConstant.TAG,"加载缓存...");
             Bitmap bm;
             bm = loadImageFromLocal(file.getAbsolutePath(),context);
-
-            LogUtils.i(MConstant.TAG,"bitmap 大小="+bm.getByteCount());
             Message msg = new Message();
             msg.obj = bm;
-            msg.what=300;
+            msg.what = 300;
             mainHandler.sendMessage(msg);
         }
         else {
-            LogUtils.i(MConstant.TAG,"需要下载图片...");
+
             Runnable runnable = new Runnable() {
                 @Override
                 public void run() {
                     boolean downloadState = DownloadImgUtils.downloadImgByUrl(url, file);
-                    LogUtils.i(MConstant.TAG,"下载是否成功="+downloadState);
                     if (downloadState)// 如果下载成功
                     {
-                        Bitmap bm = null;
-
-                        bm = loadImageFromLocal(file.getAbsolutePath(),context);
-
-                        LogUtils.i(MConstant.TAG,"bitmap 大小="+bm.getByteCount());
+                        Bitmap bm = loadImageFromLocal(file.getAbsolutePath(),context);
                         Message msg = new Message();
                         msg.obj = bm;
                         msg.what = 300;
                         mainHandler.sendMessage(msg);
+                    }
+                    else {
+                        mainHandler.sendEmptyMessage(700);
                     }
                 }
             };

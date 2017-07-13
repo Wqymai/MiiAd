@@ -16,7 +16,7 @@ import com.mg.comm.ADClickHelper;
 import com.mg.interf.MiiCpClickListener;
 import com.mg.interf.MiiCpTouchListener;
 import com.mg.interf.MiiNativeADDataRef;
-import com.mg.others.manager.ApkDownloadManager;
+import com.mg.interf.MiiNativeListener;
 import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
@@ -30,10 +30,13 @@ public class NativeImpl implements MiiNativeADDataRef {
 
 
     private AdModel adModel;
-
+    private MiiNativeListener listener;
 
     public void setAdModel(AdModel model){
         this.adModel = model;
+    }
+    public void setListener(MiiNativeListener listener){
+        this.listener = listener;
     }
 
     @Override
@@ -77,15 +80,12 @@ public class NativeImpl implements MiiNativeADDataRef {
         return adModel.getSourceMark();
     }
 
-    @Override
-    public String getDeepLink() {
-        return adModel.getDeeplink();
-    }
+
 
 
     @Override
     public void setNormalClick(final Activity activity, final View view, final MiiCpClickListener cpClickListener, final MiiCpTouchListener cpTouchListener) {
-
+      try {
         if (adModel.getType() != 4){
             //点击调用
             view.setOnClickListener(new View.OnClickListener() {
@@ -96,6 +96,7 @@ public class NativeImpl implements MiiNativeADDataRef {
                     new ADClickHelper(activity.getApplicationContext()).AdClick(ad);
                   }
                   catch (Exception e){
+                      listener.onMiiNoAD(3013);
                       e.printStackTrace();
                   }
                   cpClickListener.click();
@@ -123,6 +124,10 @@ public class NativeImpl implements MiiNativeADDataRef {
                 }
             });
         }
+      }catch (Exception e){
+          listener.onMiiNoAD(3013);
+          e.printStackTrace();
+      }
 
     }
 
@@ -132,21 +137,19 @@ public class NativeImpl implements MiiNativeADDataRef {
         //记录展示次数
         int show_num = (int) SP.getParam(SP.CONFIG, context, SP.FOT, 0);
         SP.setParam(SP.CONFIG, context, SP.FOT, show_num + 1);
-
         //展示上报
         HttpManager.reportEvent(adModel, AdReport.EVENT_SHOW, context);
     }
 
     @Override
     public void setWVClick(final Activity activity, final WebView webView, final MiiCpClickListener cpClickListener) {
-        if (adModel.getType() == 4){
-
+       try{
+            if (adModel.getType() == 4){
                 WebSettings settings = webView.getSettings();
                 settings.setDefaultTextEncodingName("utf-8") ;
                 settings.setJavaScriptEnabled(true);
                 settings.setDomStorageEnabled(true);
                 settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
-
                 webView.setWebViewClient(new WebViewClient(){
                     @Override
                     public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
@@ -156,18 +159,17 @@ public class NativeImpl implements MiiNativeADDataRef {
                     public boolean shouldOverrideUrlLoading(WebView view, String url) {
                         view.stopLoading();
                         view.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
-
                         //点击上报
                         HttpManager.reportEvent(adModel, AdReport.EVENT_CLICK, activity.getApplicationContext());
-
-                        //监控安装完成
-                        ApkDownloadManager.getIntance(activity.getApplicationContext());
-
                         cpClickListener.click();
                         return true;
                     }
                 });
-        }
+            }
+       }catch (Exception e){
+           listener.onMiiNoAD(3014);
+           e.printStackTrace();
+       }
     }
 
 }

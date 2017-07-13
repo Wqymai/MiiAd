@@ -42,6 +42,7 @@ public class JustHbRelative extends RequestAsync {
 
     @Override
     protected void requestHb() {
+      try {
         if (!CommonUtils.isNetworkAvailable(mContext)){
 
             return;
@@ -70,6 +71,9 @@ public class JustHbRelative extends RequestAsync {
 
             }
         });
+      }catch (Exception e){
+          e.printStackTrace();
+      }
     }
 
 

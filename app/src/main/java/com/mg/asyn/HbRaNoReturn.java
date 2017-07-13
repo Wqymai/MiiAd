@@ -37,6 +37,7 @@ public class HbRaNoReturn extends RequestAsync {
 
     @Override
     public  void startRequest( ){
+      try {
 
         if (!checkSDKConfigModel()){
             requestHb();
@@ -63,9 +64,15 @@ public class HbRaNoReturn extends RequestAsync {
             }
             requestHb();
         }
+      }catch (Exception e){
+          mainHandler.sendEmptyMessage(400);
+          e.printStackTrace();
+      }
     }
     @Override
     public void requestHb( ){
+      try {
+
 
         if (!CommonUtils.isNetworkAvailable(mContext)){
 
@@ -99,6 +106,10 @@ public class HbRaNoReturn extends RequestAsync {
                 mainHandler.sendEmptyMessage(400);
             }
         });
+      }catch (Exception e){
+          mainHandler.sendEmptyMessage(400);
+          e.printStackTrace();
+      }
     }
 
     @Override
@@ -146,13 +157,16 @@ public class HbRaNoReturn extends RequestAsync {
         catch (Exception e){
 
             mainHandler.sendEmptyMessage(400);
-
             e.printStackTrace();
         }
     }
 
     @Override
     public void requestRa( ){
+
+      try {
+
+
         if (!CommonUtils.isNetworkAvailable(mContext)){
 
             mainHandler.sendEmptyMessage(400);
@@ -189,6 +203,10 @@ public class HbRaNoReturn extends RequestAsync {
 
             }
         },params);
+      }catch (Exception e){
+          mainHandler.sendEmptyMessage(400);
+          e.printStackTrace();
+      }
     }
 
     @Override

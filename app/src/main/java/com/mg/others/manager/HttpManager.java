@@ -210,6 +210,8 @@ public class HttpManager {
      * 广点通数据上报
      */
     public static void reportGdtEvent(int type,int pt,String errorCode,Context mContext){
+
+      try{
         long curr = System.currentTimeMillis();
         long st = (long) SP.getParam(SP.CONFIG, mContext, SP.GDT_ST, System.currentTimeMillis());
         long diff = curr - st;
@@ -226,6 +228,9 @@ public class HttpManager {
 
             }
         }, getInstance(mContext).getSDKEpParams(type,pt, errorCode, diff));
+      }catch (Exception e){
+          e.printStackTrace();
+      }
     }
     /**
      * 数据上报

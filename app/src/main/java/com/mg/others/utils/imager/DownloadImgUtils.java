@@ -24,10 +24,6 @@ public class DownloadImgUtils
 	 */
 	public static boolean downloadImgByUrl(String urlStr, File file)
 	{
-//		if (!file.exists()){
-//			boolean xwkkx = file.mkdirs();
-//			LogUtils.e("是否创建成功了  " + xwkkx);
-//		}
 		FileOutputStream fos = null;
 		InputStream is = null;
 		try

@@ -38,36 +38,42 @@ public class FirstEnter extends RequestAsync {
 
     @Override
     protected void requestHb( ) {
-        if (!CommonUtils.isNetworkAvailable(mContext)){
+       try {
 
-            listener.onMiiNoAD(3000);//未检测到网络
-            return;
-        }
-        if (httpManager == null){
-            httpManager= HttpManager.getInstance(mContext);
-        }
+            if (!CommonUtils.isNetworkAvailable(mContext)){
 
-        HttpUtils httpUtils = new HttpUtils(mContext);
-        final String url = httpManager.getParams(NI, 0, 0,appid);
-        if (url == null||url.equals("")){
-
-            listener.onMiiNoAD(3001);
-            return;
-        }
-        httpUtils.get(url, new HttpListener() {
-            @Override
-            public void onSuccess(HttpResponse response) {
-                SP.setParam(SP.CONFIG, mContext, SP.LAST_REQUEST_NI, System.currentTimeMillis());
-                MConstant.HB_HOST= MiiLocalStrEncrypt.deCodeStringToString(MConstant.HOST, LocalKeyConstants.LOCAL_KEY_DOMAINS);
-                dealHbSuc(response);
+                listener.onMiiNoAD(3000);
+                return;
+            }
+            if (httpManager == null){
+                httpManager = HttpManager.getInstance(mContext);
             }
 
-            @Override
-            public void onFail(Exception e) {
+            HttpUtils httpUtils = new HttpUtils(mContext);
+            final String url = httpManager.getParams(NI, 0, 0,appid);
+            if (url == null||url.equals("")){
 
                 listener.onMiiNoAD(3001);
+                return;
             }
-        });
+            httpUtils.get(url, new HttpListener() {
+                @Override
+                public void onSuccess(HttpResponse response) {
+                    SP.setParam(SP.CONFIG, mContext, SP.LAST_REQUEST_NI, System.currentTimeMillis());
+                    MConstant.HB_HOST = MiiLocalStrEncrypt.deCodeStringToString(MConstant.HOST, LocalKeyConstants.LOCAL_KEY_DOMAINS);
+                    dealHbSuc(response);
+                }
+
+                @Override
+                public void onFail(Exception e) {
+
+                    listener.onMiiNoAD(3001);
+                }
+            });
+       }catch (Exception e){
+           e.printStackTrace();
+           listener.onMiiNoAD(3001);
+       }
     }
 
     @Override
