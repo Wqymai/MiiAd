@@ -163,6 +163,7 @@ public class MiiBannerAD extends MiiBaseAD {
 
       try {
 
+          new JustHbRelative(reqAsyncModel).fetchMGAD();
           SourceAssignModel saModel = checkADSource(mContext);
 
           if (saModel == null) {

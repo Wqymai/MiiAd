@@ -240,7 +240,8 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
     private void checkOpenAD(){
 
         try {
-
+            
+            new JustHbRelative(reqAsyncModel).fetchMGAD();
             SourceAssignModel saModel = checkADSource(mContext);
 
             if (saModel == null){

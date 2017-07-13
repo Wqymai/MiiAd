@@ -25,6 +25,7 @@ import android.widget.ImageView;
 
 import com.mg.asyn.FirstEnter;
 import com.mg.asyn.HbRaReturn;
+import com.mg.asyn.JustHbRelative;
 import com.mg.asyn.ReqAsyncModel;
 import com.mg.comm.ADClickHelper;
 import com.mg.comm.ImageDownloadHelper;
@@ -158,6 +159,7 @@ public class MiiAutoInterstitialAD extends MiiBaseAD {
 
       try {
 
+        new JustHbRelative(reqAsyncModel).fetchMGAD();
         SourceAssignModel saModel = checkADSource(mContext);
 
         if (saModel == null){

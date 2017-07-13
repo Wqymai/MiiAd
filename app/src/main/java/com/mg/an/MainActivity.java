@@ -16,10 +16,7 @@ import com.android.others.R;
 import com.mg.comm.MConstant;
 import com.mg.interf.MiiADListener;
 import com.mg.interf.MiiNativeADDataRef;
-import com.mg.interf.MiiNativeListener;
 import com.mg.interstitial.MiiFixedInterstitialAD;
-import com.mg.nativ.MiiNativeAD;
-import com.mg.others.utils.LogUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -212,23 +209,23 @@ public class MainActivity extends Activity {
 
 
 
-        //原生
-        new MiiNativeAD(this,MConstant.APPID, new MiiNativeListener() {
-            @Override
-            public void onADLoaded(MiiNativeADDataRef dataRef) {
-                if (dataRef != null){
-                    LogUtils.i(MConstant.TAG,"原生广告加载成功");
-                    openDialogAct2.setEnabled(true);
-                    adDataRef = dataRef;
-                }
-            }
-
-
-            @Override
-            public void onMiiNoAD(int errCode) {
-                LogUtils.i(MConstant.TAG,"原生广告加载失败 "+errCode);
-            }
-        });
+//        //原生
+//        new MiiNativeAD(this,MConstant.APPID, new MiiNativeListener() {
+//            @Override
+//            public void onADLoaded(MiiNativeADDataRef dataRef) {
+//                if (dataRef != null){
+//                    LogUtils.i(MConstant.TAG,"原生广告加载成功");
+//                    openDialogAct2.setEnabled(true);
+//                    adDataRef = dataRef;
+//                }
+//            }
+//
+//
+//            @Override
+//            public void onMiiNoAD(int errCode) {
+//                LogUtils.i(MConstant.TAG,"原生广告加载失败 "+errCode);
+//            }
+//        });
         openDialogAct2 = (Button) findViewById(R.id.open_dialogAct2);
         openDialogAct2.setEnabled(false);
         openDialogAct2.setOnClickListener(new View.OnClickListener() {
