@@ -16,7 +16,6 @@ import com.mg.comm.ADClickHelper;
 import com.mg.interf.MiiCpClickListener;
 import com.mg.interf.MiiCpTouchListener;
 import com.mg.interf.MiiNativeADDataRef;
-import com.mg.interf.MiiNativeListener;
 import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
@@ -30,14 +29,11 @@ public class NativeImpl implements MiiNativeADDataRef {
 
 
     private AdModel adModel;
-    private MiiNativeListener listener;
 
     public void setAdModel(AdModel model){
         this.adModel = model;
     }
-    public void setListener(MiiNativeListener listener){
-        this.listener = listener;
-    }
+
 
     @Override
     public String getImg() {
@@ -96,7 +92,6 @@ public class NativeImpl implements MiiNativeADDataRef {
                     new ADClickHelper(activity.getApplicationContext()).AdClick(ad);
                   }
                   catch (Exception e){
-                      listener.onMiiNoAD(3013);
                       e.printStackTrace();
                   }
                   cpClickListener.click();
@@ -125,7 +120,6 @@ public class NativeImpl implements MiiNativeADDataRef {
             });
         }
       }catch (Exception e){
-          listener.onMiiNoAD(3013);
           e.printStackTrace();
       }
 
@@ -167,7 +161,6 @@ public class NativeImpl implements MiiNativeADDataRef {
                 });
             }
        }catch (Exception e){
-           listener.onMiiNoAD(3014);
            e.printStackTrace();
        }
     }

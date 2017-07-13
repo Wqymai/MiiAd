@@ -114,7 +114,6 @@ public class MiiNativeAD extends MiiBaseAD {
         }
         ref = new NativeImpl();
         ref.setAdModel(adModel);
-        ref.setListener(mListener);
         //回调
         mListener.onADLoaded(ref);
     }

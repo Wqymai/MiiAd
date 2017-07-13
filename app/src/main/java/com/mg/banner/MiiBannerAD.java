@@ -316,7 +316,7 @@ public class MiiBannerAD extends MiiBaseAD {
         }else {
 
           try {
-              if (adModel.getUrl()==null || adModel.getUrl().equals("")){
+              if (adModel.getImage()==null || adModel.getImage().equals("")){
 
                   listener.onMiiNoAD(3011);
 
@@ -374,11 +374,10 @@ public class MiiBannerAD extends MiiBaseAD {
 
                   }catch (Exception e){
 
-                      listener.onMiiNoAD(3013);
                       e.printStackTrace();
 
                   }
-                    listener.onMiiADClicked();
+                  listener.onMiiADClicked();
 
                 }
             });
@@ -417,7 +416,6 @@ public class MiiBannerAD extends MiiBaseAD {
         try {
             LogUtils.i(MConstant.TAG,"调用了banner的recycle()");
             mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-
             if (adImageView != null){
                 Drawable drawable = adImageView.getDrawable();
                 if (drawable != null && drawable instanceof BitmapDrawable) {
@@ -443,7 +441,6 @@ public class MiiBannerAD extends MiiBaseAD {
                 try {
                     webView.destroy();
                 } catch (Exception e) {
-                    listener.onMiiNoAD(3015);
                     e.printStackTrace();
                 }
             }
@@ -451,7 +448,6 @@ public class MiiBannerAD extends MiiBaseAD {
             listener.onMiiADDismissed();
         }
         catch (Exception e){
-            listener.onMiiNoAD(3015);
             e.printStackTrace();
         }
     }

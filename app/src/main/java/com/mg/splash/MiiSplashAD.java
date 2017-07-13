@@ -238,7 +238,6 @@ public class MiiSplashAD extends MiiBaseAD{
                               webView.destroy();
                           } catch (Exception e) {
 
-                              listener.onMiiNoAD(3014);
                               e.printStackTrace();
 
                           }
@@ -246,7 +245,6 @@ public class MiiSplashAD extends MiiBaseAD{
                   }
                   catch (Exception e){
 
-                      listener.onMiiNoAD(3014);
                       e.printStackTrace();
 
                   }
@@ -265,7 +263,7 @@ public class MiiSplashAD extends MiiBaseAD{
       }else {
           try {
 
-            if (adModel.getUrl() == null || adModel.getUrl().equals("")){
+            if (adModel.getImage() == null || adModel.getImage().equals("")){
 
                 listener.onMiiNoAD(3011);
 
@@ -332,7 +330,6 @@ public class MiiSplashAD extends MiiBaseAD{
                    }
                    catch (Exception e){
 
-                       listener.onMiiNoAD(3013);
                        e.printStackTrace();
 
                    }
@@ -357,7 +354,6 @@ public class MiiSplashAD extends MiiBaseAD{
 
                     }catch (Exception e){
 
-                        listener.onMiiNoAD(3013);
                         e.printStackTrace();
 
                     }

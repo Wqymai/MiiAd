@@ -17,6 +17,7 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.SslErrorHandler;
@@ -34,7 +35,6 @@ import com.mg.asyn.JustHbRelative;
 import com.mg.asyn.ReqAsyncModel;
 import com.mg.comm.ADClickHelper;
 import com.mg.comm.ImageDownloadHelper;
-import com.mg.comm.MConstant;
 import com.mg.comm.MiiBaseAD;
 import com.mg.interf.MiiADListener;
 import com.mg.others.manager.HttpManager;
@@ -42,7 +42,6 @@ import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
 import com.mg.others.model.GdtInfoModel;
 import com.mg.others.utils.CommonUtils;
-import com.mg.others.utils.LogUtils;
 import com.mg.others.utils.SP;
 import com.qq.e.ads.interstitial.AbstractInterstitialADListener;
 import com.qq.e.ads.interstitial.InterstitialAD;
@@ -86,31 +85,34 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
                     break;
                 case 200:
                     try {
-                        adModel= (AdModel) msg.obj;
+                        adModel = (AdModel) msg.obj;
+                        if (adModel == null){
+                            listener.onMiiNoAD(3002);
+                            return;
+                        }
                         checkADType(adModel);
                     }
                     catch (Exception e){
+                        listener.onMiiNoAD(3002);
                         e.printStackTrace();
                     }
                     break;
                 case 300:
                     try {
-                        Bitmap bitmap= (Bitmap) msg.obj;
+                        Bitmap bitmap = (Bitmap) msg.obj;
                         if (bitmap == null){
+                            listener.onMiiNoAD(3011);
                             return;
                         }
                         checkShade(bitmap,null);
                     }
                     catch (Exception e){
+                        listener.onMiiNoAD(3011);
                         e.printStackTrace();
                     }
                     break;
                 case 400:
-                    try {
-                        openGDTAD(true);
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
+                    openGDTAD(true);
                     break;
                 case 500:
                     listener.onMiiNoAD(1000);
@@ -118,30 +120,41 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
                 case 600:
                     Init();
                     break;
+                case 700:
+                    listener.onMiiNoAD(3011);
+                    break;
             }
 
         }
     };
 
     public MiiFixedInterstitialAD(Activity mActivity, boolean isShade,String appid, final MiiADListener listener){
-        this.mContext = mActivity.getApplicationContext();
-        this.mActivity = mActivity;
-        this.listener = listener;
-        this.isShade = isShade;
 
-        reqAsyncModel.context = this.mContext;
-        reqAsyncModel.handler = this.mainHandler;
-        reqAsyncModel.listener = this.listener;
-        reqAsyncModel.pt = 3;
-        reqAsyncModel.appid = appid;
+      try {
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            check23AbovePermission(mActivity,mainHandler);
-            return;
-        }
+          this.mContext = mActivity.getApplicationContext();
+          this.mActivity = mActivity;
+          this.listener = listener;
+          this.isShade = isShade;
 
-        Init();
+          reqAsyncModel.context = this.mContext;
+          reqAsyncModel.handler = this.mainHandler;
+          reqAsyncModel.listener = this.listener;
+          reqAsyncModel.pt = 3;
+          reqAsyncModel.appid = appid;
 
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+              check23AbovePermission(mActivity, mainHandler);
+              return;
+          }
+
+          Init();
+      }
+      catch (Exception e){
+
+          listener.onMiiNoAD(2001);
+          e.printStackTrace();
+      }
     }
     private void Init(){
         if (isFirstEnter(mContext)){
@@ -153,18 +166,21 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
 
 
     private void openGDTAD(final boolean shouldReturn){
-        LogUtils.i(MConstant.TAG,"load gdt");
+
 
         new JustHbRelative(reqAsyncModel).fetchMGAD();
 
         String AID = "";
         String IPID = "";
-        GdtInfoModel model = getGdtIds(mContext);
         try {
+            GdtInfoModel model = getGdtIds(mContext);
             AID = model.getAPPID();
             IPID = model.getInterteristalPosID();
         }catch (Exception e){
+
+            listener.onMiiNoAD(3007);
             e.printStackTrace();
+
         }
 
         //记录开始请求广点通时间戳
@@ -223,40 +239,47 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
 
     private void checkOpenAD(){
 
-        SourceAssignModel saModel = checkADSource(mContext);
+        try {
 
-        if (saModel == null){
-            new FirstEnter(reqAsyncModel).fetchMGAD();
-            return;
-        }
+            SourceAssignModel saModel = checkADSource(mContext);
 
-        if (saModel.type == 1){
-            return;
-        }
-        else if (saModel.type == 2){
-
-            if (saModel.firstChoose == 1){
-
-                new HbRaReturn(reqAsyncModel).fetchMGAD();
+            if (saModel == null){
+                new FirstEnter(reqAsyncModel).fetchMGAD();
+                return;
             }
-            else {
 
-                openGDTAD(true);
+            if (saModel.type == 1){
+                return;
+            }
+            else if (saModel.type == 2){
 
+                if (saModel.firstChoose == 1){
+
+                    new HbRaReturn(reqAsyncModel).fetchMGAD();
+                }
+                else {
+
+                    openGDTAD(true);
+
+                }
+            }
+            else if (saModel.type == 3){
+
+                if (saModel.firstChoose == 1){
+
+                    new HbRaNoReturn(reqAsyncModel).fetchMGAD();
+
+                }
+                else {
+                    openGDTAD(false);
+                }
             }
         }
-        else if (saModel.type == 3){
+        catch (Exception e){
 
-            if (saModel.firstChoose == 1){
-
-                new HbRaNoReturn(reqAsyncModel).fetchMGAD();
-
-            }
-            else {
-                openGDTAD(false);
-            }
+            listener.onMiiNoAD(3012);
+            e.printStackTrace();
         }
-
     }
 
     private void checkShade(Bitmap bitmap,String html){
@@ -271,11 +294,30 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
 
 
     private void checkADType(AdModel adModel){
-        if (adModel.getType() == 4){//h5广告
+        if (adModel.getType() == 4){
+
             checkShade(null,adModel.getPage());
+
         }
         else {
-            new ImageDownloadHelper(0).downloadShowImage(mContext,adModel.getImage(),3,mainHandler);
+            try {
+                if (adModel.getImage() == null || adModel.getImage().equals("")){
+
+                    listener.onMiiNoAD(3011);
+
+                }else {
+
+                     new ImageDownloadHelper(0).downloadShowImage(mContext,adModel.getImage(),3,mainHandler);
+
+                }
+            }
+            catch (Exception e){
+
+                listener.onMiiNoAD(3011);
+                e.printStackTrace();
+
+            }
+
         }
 
     }
@@ -291,61 +333,67 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
     */
     private void  showNoShade(Bitmap bitmap,String html){
 
-        //检查横竖屏
-        oren = checkOrientation();
+        try {
 
-        buildDialog();
+            //检查横竖屏
+            oren = checkOrientation();
 
-        Window window = dlg.getWindow();
-        WindowManager.LayoutParams params1 = new WindowManager.LayoutParams();
-        int screenH = CommonUtils.getScreenH(mContext);
-        int screenW = CommonUtils.getScreenW(mContext);
+            buildDialog();
 
-        boolean ishtml5 = bitmap!=null ? false:true;
-        double H_W_P = ishtml5 ? 1.2: bitmap.getWidth()/bitmap.getHeight();
+            Window window = dlg.getWindow();
+            WindowManager.LayoutParams params1 = new WindowManager.LayoutParams();
+            int screenH = CommonUtils.getScreenH(mContext);
+            int screenW = CommonUtils.getScreenW(mContext);
+
+            boolean ishtml5 = bitmap != null ? false : true;
+            double H_W_P = ishtml5 ? 1.2 : bitmap.getWidth() / bitmap.getHeight();
 
 
-        if (oren){//竖屏
-            params1.width =(int) (screenW * W_P);
-            params1.height = (int) ((screenW * W_P)/H_W_P);
-        }else {
-            params1.width = (int)(screenH * H_P);
-            params1.height = (int) (screenH * H_P/H_W_P);
+            if (oren) {//竖屏
+                params1.width = (int) (screenW * W_P);
+                params1.height = (int) ((screenW * W_P) / H_W_P);
+            } else {
+                params1.width = (int) (screenH * H_P);
+                params1.height = (int) (screenH * H_P / H_W_P);
+            }
+            window.setAttributes(params1);
+
+
+            RelativeLayout.LayoutParams pParams = new RelativeLayout.LayoutParams(ViewGroup
+                    .LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            relativeLayout = new RelativeLayout(mActivity);
+            relativeLayout.setLayoutParams(pParams);
+            relativeLayout.setBackgroundColor(Color.TRANSPARENT);
+
+
+            if (ishtml5) {
+                buildWebView(html);
+            } else {
+                buildImageView(bitmap);
+            }
+
+            buildOthersView();
+
+            window.addContentView(relativeLayout, pParams);
+
+            //广告成功展示
+            listener.onMiiADPresent();
+
+            //展示上报
+            HttpManager.reportEvent(adModel, AdReport.EVENT_SHOW, mContext);
+
+            //记录展示次数
+            int show_num = (int) SP.getParam(SP.CONFIG, mContext, SP.FOT, 0);
+            SP.setParam(SP.CONFIG, mContext, SP.FOT, show_num + 1);
+
+            setClick(ishtml5, bitmap);
         }
-        window.setAttributes(params1);
+        catch (Exception e){
 
+            listener.onMiiNoAD(3009);
+            e.printStackTrace();
 
-        RelativeLayout.LayoutParams pParams=new RelativeLayout.LayoutParams(ViewGroup
-                .LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        relativeLayout=new RelativeLayout(mActivity);
-        relativeLayout.setLayoutParams(pParams);
-        relativeLayout.setBackgroundColor(Color.TRANSPARENT);
-
-
-        if (ishtml5){
-            buildWebView(html);
         }
-        else {
-            buildImageView(bitmap);
-        }
-
-        buildOthersView();
-
-
-        window.addContentView(relativeLayout,pParams);
-
-
-        //广告成功展示
-        listener.onMiiADPresent();
-
-        //展示上报
-        HttpManager.reportEvent(adModel, AdReport.EVENT_SHOW, mContext);
-
-        //记录展示次数
-        int show_num = (int) SP.getParam(SP.CONFIG, mContext, SP.FOT, 0);
-        SP.setParam(SP.CONFIG, mContext, SP.FOT, show_num + 1);
-
-        setClick(ishtml5,bitmap);
     }
 
 
@@ -353,6 +401,8 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
     弹出框有遮罩效果的
     */
     public void showShade(Bitmap bitmap,String html) {
+
+      try {
 
         //检查横竖屏
         oren = checkOrientation();
@@ -388,7 +438,9 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
             buildWebView(html);
         }
         else {
+
             buildImageView(bitmap);
+
         }
 
         buildOthersView();
@@ -408,6 +460,13 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
 
         setClick(ishtml5,bitmap);
 
+      }
+      catch (Exception e){
+
+          listener.onMiiNoAD(3009);
+          e.printStackTrace();
+
+      }
     }
 
     private void setClick(boolean ishtml5, final Bitmap bitmap){
@@ -417,17 +476,42 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
                 @Override
                 public void onClick(View v) {
 
-                    mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+                  try {
+                        mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+                        if (dlg != null){
+                           dlg.dismiss();
+                        }
+                        if (bitmap != null){
+                            bitmap.recycle();
+                        }
 
-                    listener.onMiiADDismissed();
+                        if (webView != null){
+                            ViewParent parent = webView.getParent();
+                            if (parent != null) {
+                                ((ViewGroup) parent).removeView(webView);
+                            }
+                            webView.stopLoading();
+                            webView.getSettings().setJavaScriptEnabled(false);
+                            webView.clearHistory();
+                            webView.clearView();
+                            webView.removeAllViews();
+                            try {
 
-                    if (bitmap != null){
-                        bitmap.recycle();
-                    }
+                                webView.destroy();
 
-                    if (dlg != null){
-                      dlg.dismiss();
-                    }
+                            } catch (Exception e) {
+
+                                e.printStackTrace();
+
+                            }
+                        }
+                  }
+                  catch (Exception e){
+
+                      e.printStackTrace();
+
+                  }
+                  listener.onMiiADDismissed();
 
                 }
             });
@@ -438,23 +522,25 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
                 @Override
                 public void onClick(View v) {
 
+                  try {
+                        mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+                        AdModel ad= (AdModel) adModel.clone();
+                        new ADClickHelper(mContext).AdClick(ad);
 
-                    mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+                        if (dlg != null){
+                            dlg.dismiss();
+                        }
+                        if (bitmap != null){
+                            bitmap.recycle();
+                        }
 
-                    AdModel ad= (AdModel) adModel.clone();
-                    new ADClickHelper(mContext).AdClick(ad);
+                  }
+                  catch (Exception e){
+                      e.printStackTrace();
+                  }
 
-                    //广告点击
-                    listener.onMiiADClicked();
-                    //广告关闭
-                    listener.onMiiADDismissed();
-
-                    if (bitmap != null){
-                        bitmap.recycle();
-                    }
-                    if (dlg != null){
-                        dlg.dismiss();
-                    }
+                  listener.onMiiADClicked();
+                  listener.onMiiADDismissed();
                 }
             });
 
@@ -481,7 +567,9 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
             });
 
        }catch (Exception e){
+
            e.printStackTrace();
+
        }
     }
 
@@ -495,35 +583,44 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
         relativeLayout.addView(imageView);
     }
     private void buildWebView(String html){
-        webView = new WebView(mActivity);
-        RelativeLayout.LayoutParams params_webview = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-        webView.setLayoutParams(params_webview);
-        WebSettings settings = webView.getSettings();
-        settings.setDefaultTextEncodingName("utf-8") ;
-        settings.setJavaScriptEnabled(true);
-        settings.setDomStorageEnabled(true);
-        settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
-        webView.setWebViewClient(new WebViewClient(){
-            @Override
-            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-                handler.proceed();
-            }
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                view.stopLoading();
-                view.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
 
-                //点击上报
-                HttpManager.reportEvent(adModel, AdReport.EVENT_CLICK, mContext);
+        try{
+            webView = new WebView(mActivity);
+            RelativeLayout.LayoutParams params_webview = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+            webView.setLayoutParams(params_webview);
+            WebSettings settings = webView.getSettings();
+            settings.setDefaultTextEncodingName("utf-8") ;
+            settings.setJavaScriptEnabled(true);
+            settings.setDomStorageEnabled(true);
+            settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+            webView.setWebViewClient(new WebViewClient(){
+                @Override
+                public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+                    handler.proceed();
+                }
+                @Override
+                public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                    view.stopLoading();
+                    view.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
 
-                //广告点击回调
-                listener.onMiiADClicked();
+                    //点击上报
+                    HttpManager.reportEvent(adModel, AdReport.EVENT_CLICK, mContext);
 
-                return true;
-            }
-        });
+                    //广告点击回调
+                    listener.onMiiADClicked();
 
-        webView.loadDataWithBaseURL("",html , "text/html", "utf-8", "");
+                    return true;
+                }
+            });
+
+            webView.loadDataWithBaseURL("",html , "text/html", "utf-8", "");
+
+        }catch (Exception e){
+
+            listener.onMiiNoAD(3010);
+            e.printStackTrace();
+
+        }
     }
 
     private void buildOthersView(){

@@ -59,44 +59,50 @@ public class MiiAutoInterstitialAD extends MiiBaseAD {
             super.handleMessage(msg);
             switch (msg.what){
                 case 100:
-
                     startupAD();
                     break;
-
                 case 200:
-
                     try {
-                        adModel= (AdModel) msg.obj;
+                        adModel = (AdModel) msg.obj;
+                        if (adModel == null){
+                            listener.onMiiNoAD(3002);
+                            return;
+                        }
                         checkADType(adModel);
                     }
                     catch (Exception e){
+
+                        listener.onMiiNoAD(3002);
                         e.printStackTrace();
+
                     }
                     break;
-
                 case 300:
-
                     try {
                         Bitmap bitmap= (Bitmap) msg.obj;
                         if (bitmap == null){
+                            listener.onMiiNoAD(3011);
                             return;
                         }
                         showAutoInterstitialAD(bitmap);
                     }
                     catch (Exception e){
+
+                        listener.onMiiNoAD(3011);
                         e.printStackTrace();
+
                     }
                     break;
-
                 case 400:
                     break;
                 case 500:
-
                     listener.onMiiNoAD(1000);
                     break;
-
                 case 600:
                     Init();
+                    break;
+                case 700:
+                    listener.onMiiNoAD(3011);
                     break;
             }
 
@@ -105,33 +111,39 @@ public class MiiAutoInterstitialAD extends MiiBaseAD {
 
     public MiiAutoInterstitialAD(Activity activity, ViewGroup adContainer,String appid, MiiADListener listener){
 
+      try {
+          if (activity == null || listener == null) {
+              return;
+          }
 
-        if (activity == null || listener==null){
-            return;
-        }
+          this.mContext = activity.getApplicationContext();
+          this.mActivity = activity;
+          this.adContainer = adContainer;
+          this.listener = listener;
 
-        this.mContext = activity.getApplicationContext();
-        this.mActivity = activity;
-        this.adContainer = adContainer;
-        this.listener = listener;
+          if (adContainer == null) {
+              listener.onMiiNoAD(2000);
+              return;
+          }
 
-        if (adContainer == null){
-            listener.onMiiNoAD(2000);
-            return;
-        }
+          reqAsyncModel.context = this.mContext;
+          reqAsyncModel.handler = this.mainHandler;
+          reqAsyncModel.listener = this.listener;
+          reqAsyncModel.pt = 3;
+          reqAsyncModel.appid = appid;
 
-        reqAsyncModel.context = this.mContext;
-        reqAsyncModel.handler = this.mainHandler;
-        reqAsyncModel.listener = this.listener;
-        reqAsyncModel.pt = 3;
-        reqAsyncModel.appid = appid;
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+              check23AbovePermission(mActivity, mainHandler);
+              return;
+          }
+          Init();
+      }
+      catch (Exception e){
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            check23AbovePermission(mActivity,mainHandler);
-            return;
-        }
-        Init();
+          listener.onMiiNoAD(2001);
+          e.printStackTrace();
 
+      }
     }
     private void Init(){
 
@@ -143,6 +155,8 @@ public class MiiAutoInterstitialAD extends MiiBaseAD {
         startupAD();
     }
     private void startupAD(){
+
+      try {
 
         SourceAssignModel saModel = checkADSource(mContext);
 
@@ -158,7 +172,13 @@ public class MiiAutoInterstitialAD extends MiiBaseAD {
         }
 
         new HbRaReturn(reqAsyncModel).fetchMGAD();
+      }
+      catch (Exception e){
 
+          listener.onMiiNoAD(3012);
+          e.printStackTrace();
+
+      }
     }
 
     private void  checkADType(final AdModel adModel){
@@ -167,58 +187,82 @@ public class MiiAutoInterstitialAD extends MiiBaseAD {
 
         if (adModel.getType() == 4){//h5广告
 
-            webView = new WebView(mActivity);
-            FrameLayout.LayoutParams params_webview = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
-            webView.setLayoutParams(params_webview);
-            WebSettings settings = webView.getSettings();
-            settings.setDefaultTextEncodingName("utf-8") ;
-            settings.setJavaScriptEnabled(true);
-            settings.setDomStorageEnabled(true);
-            settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
-            webView.setWebViewClient(new WebViewClient(){
-                @Override
-                public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-                    handler.proceed();
-                }
-                @Override
-                public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                    view.stopLoading();
-                    view.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+            try {
+                webView = new WebView(mActivity);
+                FrameLayout.LayoutParams params_webview = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
+                webView.setLayoutParams(params_webview);
+                WebSettings settings = webView.getSettings();
+                settings.setDefaultTextEncodingName("utf-8") ;
+                settings.setJavaScriptEnabled(true);
+                settings.setDomStorageEnabled(true);
+                settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+                webView.setWebViewClient(new WebViewClient(){
+                    @Override
+                    public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+                        handler.proceed();
+                    }
+                    @Override
+                    public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                        view.stopLoading();
+                        view.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
 
-                    //点击上报
-                    HttpManager.reportEvent(adModel, AdReport.EVENT_CLICK, mContext);
+                        //点击上报
+                        HttpManager.reportEvent(adModel, AdReport.EVENT_CLICK, mContext);
 
+                        mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+                        listener.onMiiADClicked();
 
-                    mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-                    listener.onMiiADClicked();
+                        return true;
+                    }
+                });
 
-                    return true;
-                }
-            });
+                webView.loadDataWithBaseURL("",adModel.getPage() , "text/html", "utf-8", "");
+                adContainer.addView(webView);
 
-            webView.loadDataWithBaseURL("",adModel.getPage() , "text/html", "utf-8", "");
-            adContainer.addView(webView);
+                //展示上报
+                HttpManager.reportEvent(adModel, AdReport.EVENT_SHOW, mContext);
 
-            //展示上报
-            HttpManager.reportEvent(adModel, AdReport.EVENT_SHOW, mContext);
-
-            //广告成功展示
-            listener.onMiiADPresent();
-
-
-            //记录展示次数
-            int show_num = (int) SP.getParam(SP.CONFIG, mContext, SP.FOT, 0);
-            SP.setParam(SP.CONFIG, mContext, SP.FOT, show_num + 1);
+                //广告成功展示
+                listener.onMiiADPresent();
 
 
+                //记录展示次数
+                int show_num = (int) SP.getParam(SP.CONFIG, mContext, SP.FOT, 0);
+                SP.setParam(SP.CONFIG, mContext, SP.FOT, show_num + 1);
+
+            }
+            catch (Exception e){
+
+                listener.onMiiNoAD(3010);
+                e.printStackTrace();
+            }
         }else {
 
-            new ImageDownloadHelper(0).downloadShowImage(mContext,adModel.getImage(),1,mainHandler);
+           try {
+
+             if (adModel.getImage() == null || adModel.getImage().equals("")){
+
+                 listener.onMiiNoAD(3011);
+
+             }
+             else {
+
+                new ImageDownloadHelper(0).downloadShowImage(mContext,adModel.getImage(),1,mainHandler);
+
+             }
+           }
+           catch (Exception e){
+
+               listener.onMiiNoAD(3011);
+               e.printStackTrace();
+
+           }
         }
 
     }
 
     private void showAutoInterstitialAD(final Bitmap bitmap){
+
         try {
 
             FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
@@ -249,9 +293,9 @@ public class MiiAutoInterstitialAD extends MiiBaseAD {
                 @Override
                 public void onClick(View v) {
                     mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-                    listener.onMiiADClicked();
                     AdModel ad = (AdModel) adModel.clone();
                     new ADClickHelper(mContext).AdClick(ad);
+                    listener.onMiiADClicked();
                 }
             });
             adImageView.setOnTouchListener(new View.OnTouchListener() {
@@ -274,30 +318,12 @@ public class MiiAutoInterstitialAD extends MiiBaseAD {
                 }
             });
         }catch (Exception e){
+
+            listener.onMiiNoAD(3009);
             e.printStackTrace();
+
         }
     }
-
-//    //true是竖屏 false是横屏
-//    public boolean checkOrientation(){
-//        Configuration mConfiguration = mActivity.getResources().getConfiguration(); //获取设置的配置信息
-//
-//        int ori = mConfiguration.orientation ; //获取屏幕方向
-//
-//        if (ori == mConfiguration.ORIENTATION_PORTRAIT) {
-//
-//            mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-//            return true;
-//
-//        } else if (ori == mConfiguration.ORIENTATION_LANDSCAPE){
-//
-//            mActivity.setRequestedOrientation(SCREEN_ORIENTATION_LANDSCAPE);
-//            return false;
-//
-//        }
-//        return true;
-//    }
-
 
 
     @Override
