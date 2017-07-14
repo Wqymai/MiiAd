@@ -23,9 +23,8 @@ import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import com.mg.asyn.FirstEnter;
-import com.mg.asyn.HbRaReturn;
-import com.mg.asyn.JustHbRelative;
+import com.mg.asyn.HbReturn;
+import com.mg.asyn.RaReturn;
 import com.mg.asyn.ReqAsyncModel;
 import com.mg.comm.ADClickHelper;
 import com.mg.comm.ImageDownloadHelper;
@@ -100,7 +99,7 @@ public class MiiAutoInterstitialAD extends MiiBaseAD {
                     listener.onMiiNoAD(1000);
                     break;
                 case 600:
-                    Init();
+                    new HbReturn(reqAsyncModel).fetchMGAD();
                     break;
                 case 700:
                     listener.onMiiNoAD(3011);
@@ -137,7 +136,7 @@ public class MiiAutoInterstitialAD extends MiiBaseAD {
               check23AbovePermission(mActivity, mainHandler);
               return;
           }
-          Init();
+          new HbReturn(reqAsyncModel).fetchMGAD();
       }
       catch (Exception e){
 
@@ -146,24 +145,16 @@ public class MiiAutoInterstitialAD extends MiiBaseAD {
 
       }
     }
-    private void Init(){
 
-        if (isFirstEnter(mContext)){
-
-            new FirstEnter(reqAsyncModel).fetchMGAD();
-            return;
-        }
-        startupAD();
-    }
     private void startupAD(){
 
       try {
 
-        new JustHbRelative(reqAsyncModel).fetchMGAD();
+
         SourceAssignModel saModel = checkADSource(mContext);
 
         if (saModel == null){
-            new FirstEnter(reqAsyncModel).fetchMGAD();
+            new HbReturn(reqAsyncModel).fetchMGAD();
             return;
         }
 
@@ -173,7 +164,7 @@ public class MiiAutoInterstitialAD extends MiiBaseAD {
             return;
         }
 
-        new HbRaReturn(reqAsyncModel).fetchMGAD();
+        new RaReturn(reqAsyncModel).fetchMGAD();
       }
       catch (Exception e){
 

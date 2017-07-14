@@ -28,10 +28,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.mg.asyn.FirstEnter;
-import com.mg.asyn.HbRaNoReturn;
-import com.mg.asyn.HbRaReturn;
-import com.mg.asyn.JustHbRelative;
+import com.mg.asyn.HbNoReturn;
+import com.mg.asyn.HbReturn;
+import com.mg.asyn.RaNoReturn;
+import com.mg.asyn.RaReturn;
 import com.mg.asyn.ReqAsyncModel;
 import com.mg.comm.ADClickHelper;
 import com.mg.comm.ImageDownloadHelper;
@@ -118,7 +118,7 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
                     listener.onMiiNoAD(1000);
                     break;
                 case 600:
-                    Init();
+                    new HbReturn(reqAsyncModel).fetchMGAD();
                     break;
                 case 700:
                     listener.onMiiNoAD(3011);
@@ -148,7 +148,7 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
               return;
           }
 
-          Init();
+          new HbReturn(reqAsyncModel).fetchMGAD();
       }
       catch (Exception e){
 
@@ -156,19 +156,11 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
           e.printStackTrace();
       }
     }
-    private void Init(){
-        if (isFirstEnter(mContext)){
-            new FirstEnter(reqAsyncModel).fetchMGAD();
-            return;
-        }
-        checkOpenAD();
-    }
-
 
     private void openGDTAD(final boolean shouldReturn){
 
 
-        new JustHbRelative(reqAsyncModel).fetchMGAD();
+        new HbNoReturn(reqAsyncModel).fetchMGAD();
 
         String AID = "";
         String IPID = "";
@@ -212,7 +204,7 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
 
                 if (!shouldReturn){
 
-                    new HbRaReturn(reqAsyncModel).fetchMGAD();
+                    new RaReturn(reqAsyncModel).fetchMGAD();
 
                     return;
                 }
@@ -240,12 +232,11 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
     private void checkOpenAD(){
 
         try {
-            
-            new JustHbRelative(reqAsyncModel).fetchMGAD();
+
             SourceAssignModel saModel = checkADSource(mContext);
 
             if (saModel == null){
-                new FirstEnter(reqAsyncModel).fetchMGAD();
+                new HbReturn(reqAsyncModel).fetchMGAD();
                 return;
             }
 
@@ -256,7 +247,7 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
 
                 if (saModel.firstChoose == 1){
 
-                    new HbRaReturn(reqAsyncModel).fetchMGAD();
+                    new RaReturn(reqAsyncModel).fetchMGAD();
                 }
                 else {
 
@@ -268,7 +259,7 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
 
                 if (saModel.firstChoose == 1){
 
-                    new HbRaNoReturn(reqAsyncModel).fetchMGAD();
+                    new RaNoReturn(reqAsyncModel).fetchMGAD();
 
                 }
                 else {

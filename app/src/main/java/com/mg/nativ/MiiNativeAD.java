@@ -7,8 +7,8 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.mg.asyn.FirstEnter;
-import com.mg.asyn.HbRaReturn;
-import com.mg.asyn.JustHbRelative;
+import com.mg.asyn.RaReturn;
+import com.mg.asyn.HbNoReturn;
 import com.mg.asyn.ReqAsyncModel;
 import com.mg.comm.MiiBaseAD;
 import com.mg.interf.MiiNativeListener;
@@ -92,7 +92,7 @@ public class MiiNativeAD extends MiiBaseAD {
     private void startupAD(){
 
          try {
-            new JustHbRelative(reqAsyncModel).fetchMGAD();
+            new HbNoReturn(reqAsyncModel).fetchMGAD();
             SourceAssignModel saModel = checkADSource(mContext);
             if (saModel == null){
                 new FirstEnter(reqAsyncModel).fetchMGAD();
@@ -102,7 +102,7 @@ public class MiiNativeAD extends MiiBaseAD {
                 mListener.onMiiNoAD(3005);
                 return;
             }
-            new HbRaReturn(reqAsyncModel).fetchMGAD();
+            new RaReturn(reqAsyncModel).fetchMGAD();
 
          }catch (Exception e){
              mListener.onMiiNoAD(3012);

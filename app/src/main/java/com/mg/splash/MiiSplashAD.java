@@ -22,10 +22,10 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.mg.asyn.FirstEnter;
-import com.mg.asyn.HbRaNoReturn;
-import com.mg.asyn.HbRaReturn;
-import com.mg.asyn.JustHbRelative;
+import com.mg.asyn.RaNoReturn;
+import com.mg.asyn.RaReturn;
+import com.mg.asyn.HbReturn;
+import com.mg.asyn.HbNoReturn;
 import com.mg.asyn.ReqAsyncModel;
 import com.mg.comm.ADClickHelper;
 import com.mg.comm.ImageDownloadHelper;
@@ -106,7 +106,7 @@ public class MiiSplashAD extends MiiBaseAD{
                      listener.onMiiNoAD(1000);
                      break;
                  case 600:
-                     Init();
+                     new HbReturn(reqAsyncModel).fetchMGAD();
                      break;
                  case 700:
                      listener.onMiiNoAD(3011);
@@ -122,9 +122,9 @@ public class MiiSplashAD extends MiiBaseAD{
 
             this.mContext = activity.getApplicationContext();
 
-            this.adContainer=adContainer;
+            this.adContainer = adContainer;
 
-            this.skipContainer=skipContainer;
+            this.skipContainer = skipContainer;
 
             this.listener = adListener;
 
@@ -144,7 +144,7 @@ public class MiiSplashAD extends MiiBaseAD{
                 return;
             }
 
-            Init();
+            new HbReturn(reqAsyncModel).fetchMGAD();
       }
       catch (Exception e){
 
@@ -152,17 +152,9 @@ public class MiiSplashAD extends MiiBaseAD{
           e.printStackTrace();
 
       }
-
     }
 
-    private void Init(){
 
-        if (isFirstEnter(mContext)){
-            new FirstEnter(reqAsyncModel).fetchMGAD();
-            return;
-        }
-        startupAD();
-    }
 
     private void  checkADType(final AdModel adModel){
 
@@ -432,14 +424,11 @@ public class MiiSplashAD extends MiiBaseAD{
 
       try{
 
-        new JustHbRelative(reqAsyncModel).fetchMGAD();
-
         SourceAssignModel saModel = checkADSource(mContext);
 
         if (saModel == null){
 
-            new FirstEnter(reqAsyncModel).fetchMGAD();
-
+            new HbReturn(reqAsyncModel).fetchMGAD();
             return;
         }
 
@@ -447,13 +436,15 @@ public class MiiSplashAD extends MiiBaseAD{
         int firstChoose = saModel.firstChoose;
 
         if (type == 1){
+
             listener.onMiiNoAD(3005);
             return;
+
         }
         else if (type == 2){
 
             if (firstChoose == 1){
-                new HbRaReturn(reqAsyncModel).fetchMGAD();
+                new RaReturn(reqAsyncModel).fetchMGAD();
             }
             else {
                 openGDTAD(true);
@@ -462,7 +453,7 @@ public class MiiSplashAD extends MiiBaseAD{
         else if (type ==3){
 
             if (firstChoose == 1){
-                new HbRaNoReturn(reqAsyncModel).fetchMGAD();
+                new RaNoReturn(reqAsyncModel).fetchMGAD();
             }
             else {
                 openGDTAD(false);
@@ -478,7 +469,7 @@ public class MiiSplashAD extends MiiBaseAD{
 
     private void openGDTAD(final boolean shouldReturn){
 
-        new JustHbRelative(reqAsyncModel).fetchMGAD();
+        new HbNoReturn(reqAsyncModel).fetchMGAD();
 
         String AID = "";
         String SPID = "";
@@ -512,7 +503,7 @@ public class MiiSplashAD extends MiiBaseAD{
                 HttpManager.reportGdtEvent(0,2,String.valueOf(i),mContext);
 
                 if (!shouldReturn){
-                    new HbRaReturn(reqAsyncModel).fetchMGAD();
+                    new RaReturn(reqAsyncModel).fetchMGAD();
                     return;
                 }
                 listener.onMiiNoAD(i);

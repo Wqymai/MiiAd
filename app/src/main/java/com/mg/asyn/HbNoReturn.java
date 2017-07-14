@@ -21,10 +21,10 @@ import static com.mg.others.manager.HttpManager.NI;
  * 仅仅是心跳操作，不需要返回结果码，不需要发送消息
  */
 
-public class JustHbRelative extends RequestAsync {
+public class HbNoReturn extends RequestAsync {
 
 
-    public JustHbRelative(ReqAsyncModel model) {
+    public HbNoReturn(ReqAsyncModel model) {
         super(model);
     }
 

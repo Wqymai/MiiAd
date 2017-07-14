@@ -24,10 +24,10 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.mg.asyn.FirstEnter;
-import com.mg.asyn.HbRaNoReturn;
-import com.mg.asyn.HbRaReturn;
-import com.mg.asyn.JustHbRelative;
+import com.mg.asyn.HbNoReturn;
+import com.mg.asyn.HbReturn;
+import com.mg.asyn.RaNoReturn;
+import com.mg.asyn.RaReturn;
 import com.mg.asyn.ReqAsyncModel;
 import com.mg.comm.ADClickHelper;
 import com.mg.comm.ImageDownloadHelper;
@@ -105,7 +105,7 @@ public class MiiBannerAD extends MiiBaseAD {
                     listener.onMiiNoAD(1000);
                     break;
                 case 600:
-                    Init();
+                    new HbReturn(reqAsyncModel).fetchMGAD();
                     break;
                 case 700:
                     listener.onMiiNoAD(3011);
@@ -138,7 +138,8 @@ public class MiiBannerAD extends MiiBaseAD {
             return;
         }
 
-        Init();
+
+          new HbReturn(reqAsyncModel).fetchMGAD();
 
       }catch (Exception e){
 
@@ -149,25 +150,15 @@ public class MiiBannerAD extends MiiBaseAD {
 
     }
 
-    private void Init(){
-
-        if (isFirstEnter(mContext)){
-
-            new FirstEnter(reqAsyncModel).fetchMGAD();
-            return;
-        }
-        startupAD();
-    }
-
     private void startupAD(){
 
       try {
 
-          new JustHbRelative(reqAsyncModel).fetchMGAD();
+
           SourceAssignModel saModel = checkADSource(mContext);
 
           if (saModel == null) {
-              new FirstEnter(reqAsyncModel).fetchMGAD();
+              new HbReturn(reqAsyncModel).fetchMGAD();
               return;
           }
 
@@ -180,7 +171,7 @@ public class MiiBannerAD extends MiiBaseAD {
 
               if (saModel.firstChoose == 1) {
 
-                  new HbRaReturn(reqAsyncModel).fetchMGAD();
+                  new RaReturn(reqAsyncModel).fetchMGAD();
               } else {
 
                   openGDTAD(true);
@@ -191,7 +182,7 @@ public class MiiBannerAD extends MiiBaseAD {
 
               if (saModel.firstChoose == 1) {
 
-                  new HbRaNoReturn(reqAsyncModel).fetchMGAD();
+                  new RaNoReturn(reqAsyncModel).fetchMGAD();
 
               } else {
                   openGDTAD(false);
@@ -208,7 +199,7 @@ public class MiiBannerAD extends MiiBaseAD {
 
     private void openGDTAD(final boolean shouldReturn) {
 
-        new JustHbRelative(reqAsyncModel).fetchMGAD();
+        new HbNoReturn(reqAsyncModel).fetchMGAD();
 
         String AID = "";
         String BPID = "";
@@ -234,7 +225,7 @@ public class MiiBannerAD extends MiiBaseAD {
                 //广点通请求广告失败上报
                 HttpManager.reportGdtEvent(0,1,String.valueOf(i),mContext);
                 if (!shouldReturn){
-                    new HbRaReturn(reqAsyncModel).fetchMGAD();
+                    new RaReturn(reqAsyncModel).fetchMGAD();
                     return;
                 }
                 listener.onMiiNoAD(i);

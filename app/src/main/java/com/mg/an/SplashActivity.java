@@ -2,6 +2,7 @@ package com.mg.an;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -19,6 +20,7 @@ import com.mg.splash.MiiSplashAD;
 
 public class  SplashActivity extends Activity implements MiiADListener {
 
+    private String TAG = "AD_DEMO";
     private MiiSplashAD splashAD;
     private ViewGroup container;
     private TextView skipView;
@@ -32,44 +34,55 @@ public class  SplashActivity extends Activity implements MiiADListener {
         container = (ViewGroup) this.findViewById(R.id.splash_container);
         skipView = (TextView) findViewById(R.id.skip_view);
         splashHolder = (ImageView) findViewById(R.id.splash_holder);
-        fetchAD(this, container, skipView, this);
+        fetchAD(this, container, skipView,MConstant.APPID,this);
     }
 
-    private void fetchAD(SplashActivity mainActivity, ViewGroup container, TextView skipView,
-                               MiiADListener listener) {
-        splashAD=new MiiSplashAD(mainActivity,container,skipView,MConstant.APPID,listener);
+    /**
+     * @param activity  展示广告的activity
+     * @param container 展示广告的容器
+     * @param skipView  自定义跳过按钮：传入该view给SDK后，SDK会自动给它绑定点击跳过事件。SkipView的样式可以由开发者自由定制
+     * @param appid     麦广广告后台提供
+     * @param listener  广告回调
+     */
+    private void fetchAD(SplashActivity activity, ViewGroup container, View skipView,String appid,MiiADListener listener) {
+        splashAD = new MiiSplashAD(activity,container,skipView,appid,listener);
     }
 
     @Override
     public void onMiiNoAD(int errCode) {
-        LogUtils.i(MConstant.TAG, "SplashNoAD "+errCode);
+        Log.i(TAG, "SplashNoAD "+errCode);
     }
 
     @Override
     public void onMiiADDismissed() {
-        LogUtils.i(MConstant.TAG, "SplashADDismissed");
+        Log.i(TAG, "SplashADDismissed");
         finish();
     }
 
     @Override
     public void onMiiADPresent() {
-        LogUtils.i(MConstant.TAG, "SplashADPresent");
+        LogUtils.i(TAG, "SplashADPresent");
         splashHolder.setVisibility(View.INVISIBLE); // 广告展示后一定要把预设的开屏图片隐藏起来
     }
 
     @Override
     public void onMiiADClicked() {
-        LogUtils.i(MConstant.TAG, "SplashADClicked");
+        Log.i(TAG, "SplashADClicked");
     }
 
     @Override
     public void onMiiADTouched() {
-
+        Log.i(TAG, "SplashADTouched");
     }
 
+    /**
+     * 倒计时回调，返回广告还将被展示的剩余时间。
+     * 通过这个接口，开发者可以自行决定是否显示倒计时提示，或者还剩几秒的时候显示倒计时
+     * @param millisUntilFinished 剩余毫秒数
+     */
     @Override
     public void onMiiADTick(long millisUntilFinished) {
-        LogUtils.i(MConstant.TAG, "SplashADTick " + millisUntilFinished+ "ms");
+        Log.i(TAG, "SplashADTick " + millisUntilFinished+ "ms");
         skipView.setText(String.format(SKIP_TEXT, (Math.round(millisUntilFinished / 1000f))));
     }
 }
