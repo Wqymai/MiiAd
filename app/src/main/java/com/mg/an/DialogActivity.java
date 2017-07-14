@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -12,8 +13,8 @@ import android.widget.Toast;
 
 import com.android.others.R;
 import com.mg.comm.MConstant;
-import com.mg.interstitial.MiiAutoInterstitialAD;
 import com.mg.interf.MiiADListener;
+import com.mg.interstitial.MiiAutoInterstitialAD;
 
 /**
  * Created by wuqiyan on 17/6/21.
@@ -33,7 +34,7 @@ public class DialogActivity extends Activity {
         miiAutoInterstitialAD =  new MiiAutoInterstitialAD(DialogActivity.this, viewGroup, MConstant.APPID,new MiiADListener() {
             @Override
             public void onMiiNoAD(int errCode) {
-
+                Log.i(Constants.TAG,"自由插屏  onMiiNoAD  "+errCode);
             }
 
             @Override
@@ -49,19 +50,20 @@ public class DialogActivity extends Activity {
                 params.width = dip2px(getApplicationContext(),300);
                 viewGroup.setLayoutParams(params);
 
-                Toast.makeText(DialogActivity.this,"广告加载成功",Toast.LENGTH_SHORT).show();
+                Toast.makeText(DialogActivity.this,"自由插屏广告加载成功",Toast.LENGTH_SHORT).show();
                 viewGroup.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onMiiADClicked() {
+                Log.i(Constants.TAG,"自由插屏  onMiiADClicked");
                     miiAutoInterstitialAD.recycle();
                     finish();
             }
 
             @Override
             public void onMiiADTouched() {
-
+                Log.i(Constants.TAG,"自由插屏  onMiiADTouched");
             }
 
             @Override

@@ -40,6 +40,7 @@ public class MainActivity extends Activity {
     Button openDialogAct;
     Button openDialogAct2;
     ImageView showIv;
+    Button openNative;
     private MiiNativeADDataRef adDataRef;
 
 //    @Override
@@ -104,32 +105,32 @@ public class MainActivity extends Activity {
                 new MiiFixedInterstitialAD(MainActivity.this,false, MConstant.APPID, new MiiADListener() {
                     @Override
                     public void onMiiNoAD(int errCode) {
-                        Log.i(Constants.TAG,"onMiiNoAD "+errCode);
+                        Log.i(Constants.TAG,"固定插屏 noShade onMiiNoAD "+errCode);
                     }
 
                     @Override
                     public void onMiiADDismissed() {
-                        Log.i(Constants.TAG,"onMiiADDismissed");
+                        Log.i(Constants.TAG,"固定插屏 noShade onMiiADDismissed");
                     }
 
                     @Override
                     public void onMiiADPresent() {
-                        Log.i(Constants.TAG,"onMiiADPresent");
+                        Log.i(Constants.TAG,"固定插屏 noShade onMiiADPresent");
                     }
 
                     @Override
                     public void onMiiADClicked() {
-                        Log.i(Constants.TAG,"onMiiADClicked");
+                        Log.i(Constants.TAG,"固定插屏 noShade onMiiADClicked");
                     }
 
                     @Override
                     public void onMiiADTouched() {
-
+                        Log.i(Constants.TAG,"固定插屏 noShade onMiiADTouched");
                     }
 
                     @Override
                     public void onMiiADTick(long millisUntilFinished) {
-
+                        //不回调
                     }
             });
             }
@@ -144,32 +145,32 @@ public class MainActivity extends Activity {
                 new MiiFixedInterstitialAD(MainActivity.this,true,MConstant.APPID, new MiiADListener() {
                     @Override
                     public void onMiiNoAD(int errCode) {
-                        Log.i(Constants.TAG,"onMiiNoAD 2"+errCode);
+                        Log.i(Constants.TAG,"固定插屏 Shade onMiiNoAD "+errCode);
                     }
 
                     @Override
                     public void onMiiADDismissed() {
-                        Log.i(Constants.TAG,"onMiiADDismissed 2");
+                        Log.i(Constants.TAG,"固定插屏 Shade onMiiADDismissed ");
                     }
 
                     @Override
                     public void onMiiADPresent() {
-                        Log.i(Constants.TAG,"onMiiADPresent 2");
+                        Log.i(Constants.TAG,"固定插屏 Shade onMiiADPresent ");
                     }
 
                     @Override
                     public void onMiiADClicked() {
-                        Log.i(Constants.TAG,"onMiiADClicked 2");
+                        Log.i(Constants.TAG,"固定插屏 Shade onMiiADClicked ");
                     }
 
                     @Override
                     public void onMiiADTouched() {
-
+                        Log.i(Constants.TAG,"固定插屏 Shade onMiiADTouched ");
                     }
 
                     @Override
                     public void onMiiADTick(long millisUntilFinished) {
-
+                       //不回调
                     }
                 });
             }
@@ -186,19 +187,19 @@ public class MainActivity extends Activity {
             }
         });
 
-//        //自由插屏
-//        openNativeInterstitial= (Button) findViewById(R.id.open_nativeinterstitial);
-//        openNativeInterstitial.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//               startActivity(new Intent(MainActivity.this, AutoInterActivity.class));
-//            }
-//        });
+        //自由插屏1
+        openNativeInterstitial= (Button) findViewById(R.id.open_nativeinterstitial);
+        openNativeInterstitial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               startActivity(new Intent(MainActivity.this, AutoInterActivity.class));
+            }
+        });
 
 
 
 
-        //自由插屏
+        //自由插屏2
         openDialogAct = (Button) findViewById(R.id.open_dialogAct);
         openDialogAct.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -207,28 +208,32 @@ public class MainActivity extends Activity {
             }
         });
 
-
-
-
-
-
-//        //原生
-        new MiiNativeAD(this,MConstant.APPID, new MiiNativeListener() {
+        openNative = (Button) findViewById(R.id.open_native);
+        openNative.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onADLoaded(MiiNativeADDataRef dataRef) {
-                if (dataRef != null){
-                    LogUtils.i(MConstant.TAG,"原生广告加载成功");
-                    openDialogAct2.setEnabled(true);
-                    adDataRef = dataRef;
-                }
-            }
+            public void onClick(View v) {
+                //原生
+                new MiiNativeAD(MainActivity.this,MConstant.APPID, new MiiNativeListener() {
+                    @Override
+                    public void onADLoaded(MiiNativeADDataRef dataRef) {
+                        if (dataRef != null){
+                            LogUtils.i(MConstant.TAG,"原生广告加载成功");
+                            openDialogAct2.setEnabled(true);
+                            adDataRef = dataRef;
+                        }
+                    }
 
 
-            @Override
-            public void onMiiNoAD(int errCode) {
-                LogUtils.i(MConstant.TAG,"原生广告加载失败 "+errCode);
+                    @Override
+                    public void onMiiNoAD(int errCode) {
+                        LogUtils.i(MConstant.TAG,"原生广告加载失败 "+errCode);
+                    }
+                });
             }
         });
+
+
+
         openDialogAct2 = (Button) findViewById(R.id.open_dialogAct2);
         openDialogAct2.setEnabled(false);
         openDialogAct2.setOnClickListener(new View.OnClickListener() {

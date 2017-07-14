@@ -6,9 +6,8 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 
-import com.mg.asyn.FirstEnter;
+import com.mg.asyn.HbReturn;
 import com.mg.asyn.RaReturn;
-import com.mg.asyn.HbNoReturn;
 import com.mg.asyn.ReqAsyncModel;
 import com.mg.comm.MiiBaseAD;
 import com.mg.interf.MiiNativeListener;
@@ -51,7 +50,7 @@ public class MiiNativeAD extends MiiBaseAD {
                     mListener.onMiiNoAD(1000);
                     break;
                 case 600:
-                    Init();
+                    new HbReturn(reqAsyncModel).fetchMGAD();
                     break;
             }
 
@@ -74,28 +73,21 @@ public class MiiNativeAD extends MiiBaseAD {
               check23AbovePermission(mActivity, mainHandler);
               return;
           }
-          Init();
+          new HbReturn(reqAsyncModel).fetchMGAD();
 
       }catch (Exception e){
           mListener.onMiiNoAD(2001);
           e.printStackTrace();
       }
     }
-    private void Init(){
-        if (isFirstEnter(mContext)){
-            new FirstEnter(reqAsyncModel).fetchMGAD();
-            return;
-        }
-        startupAD();
-    }
 
     private void startupAD(){
 
          try {
-            new HbNoReturn(reqAsyncModel).fetchMGAD();
+
             SourceAssignModel saModel = checkADSource(mContext);
             if (saModel == null){
-                new FirstEnter(reqAsyncModel).fetchMGAD();
+                new HbReturn(reqAsyncModel).fetchMGAD();
                 return;
             }
             if (saModel.type == 1){
