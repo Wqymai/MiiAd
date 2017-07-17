@@ -24,9 +24,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.mg.asyn.HbNoReturn;
 import com.mg.asyn.HbReturn;
-import com.mg.asyn.RaNoReturn;
 import com.mg.asyn.RaReturn;
 import com.mg.asyn.ReqAsyncModel;
 import com.mg.comm.ADClickHelper;
@@ -37,13 +35,9 @@ import com.mg.interf.MiiADListener;
 import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
-import com.mg.others.model.GdtInfoModel;
 import com.mg.others.utils.CommonUtils;
 import com.mg.others.utils.LogUtils;
 import com.mg.others.utils.SP;
-import com.qq.e.ads.banner.ADSize;
-import com.qq.e.ads.banner.AbstractBannerADListener;
-import com.qq.e.ads.banner.BannerView;
 
 
 /**
@@ -98,9 +92,9 @@ public class MiiBannerAD extends MiiBaseAD {
                         e.printStackTrace();
                     }
                     break;
-                case 400:
-                    openGDTAD(true);
-                    break;
+//                case 400:
+//                    openGDTAD(true);
+//                    break;
                 case 500:
                     listener.onMiiNoAD(1000);
                     break;
@@ -168,27 +162,30 @@ public class MiiBannerAD extends MiiBaseAD {
               listener.onMiiNoAD(3005);
               return;
 
-          } else if (saModel.type == 2) {
-
-              if (saModel.firstChoose == 1) {
-
-                  new RaReturn(reqAsyncModel).fetchMGAD();
-              } else {
-
-                  openGDTAD(true);
-
-              }
-          } else if (saModel.type == 3) {
-
-
-              if (saModel.firstChoose == 1) {
-
-                  new RaNoReturn(reqAsyncModel).fetchMGAD();
-
-              } else {
-                  openGDTAD(false);
-              }
           }
+          new RaReturn(reqAsyncModel).fetchMGAD();
+//          else if (saModel.type == 2) {
+//
+//              if (saModel.firstChoose == 1) {
+//
+//                  new RaReturn(reqAsyncModel).fetchMGAD();
+//              } else {
+//
+//                  openGDTAD(true);
+//
+//              }
+//          }
+//          else if (saModel.type == 3) {
+//
+//
+//              if (saModel.firstChoose == 1) {
+//
+//                  new RaNoReturn(reqAsyncModel).fetchMGAD();
+//
+//              } else {
+//                  openGDTAD(false);
+//              }
+//          }
       }catch (Exception e){
 
           listener.onMiiNoAD(3012);
@@ -198,58 +195,58 @@ public class MiiBannerAD extends MiiBaseAD {
 
     }
 
-    private void openGDTAD(final boolean shouldReturn) {
-
-        new HbNoReturn(reqAsyncModel).fetchMGAD();
-
-        String AID = "";
-        String BPID = "";
-        try {
-
-            GdtInfoModel model = getGdtIds(mContext);
-            AID = model.getAPPID();
-            BPID = model.getBannerPosID();
-
-        }catch (Exception e){
-            listener.onMiiNoAD(3007);
-            e.printStackTrace();
-        }
-
-        //记录开始请求广点通时间戳
-        SP.setParam(SP.CONFIG, mContext, SP.GDT_ST, System.currentTimeMillis());
-
-        final BannerView bv = new BannerView(mActivity, ADSize.BANNER,AID,BPID);
-        bv.setRefresh(30);
-        bv.setADListener(new AbstractBannerADListener() {
-            @Override
-            public void onNoAD(int i) {
-                //广点通请求广告失败上报
-                HttpManager.reportGdtEvent(0,1,String.valueOf(i),mContext);
-                if (!shouldReturn){
-                    new RaReturn(reqAsyncModel).fetchMGAD();
-                    return;
-                }
-                listener.onMiiNoAD(i);
-            }
-
-            @Override
-            public void onADReceiv() {
-                //广点通请求广告成功上报
-                HttpManager.reportGdtEvent(1,1,null,mContext);
-                adContainer.addView(bv);
-                listener.onMiiADPresent();
-            }
-
-            @Override
-            public void onADClicked() {
-                //广点通请求广告成功上报
-                HttpManager.reportGdtEvent(2,1,null,mContext);
-                listener.onMiiADClicked();
-            }
-        });
-        bv.loadAD();
-
-    }
+//    private void openGDTAD(final boolean shouldReturn) {
+//
+//        new HbNoReturn(reqAsyncModel).fetchMGAD();
+//
+//        String AID = "";
+//        String BPID = "";
+//        try {
+//
+//            GdtInfoModel model = getGdtIds(mContext);
+//            AID = model.getAPPID();
+//            BPID = model.getBannerPosID();
+//
+//        }catch (Exception e){
+//            listener.onMiiNoAD(3007);
+//            e.printStackTrace();
+//        }
+//
+//        //记录开始请求广点通时间戳
+//        SP.setParam(SP.CONFIG, mContext, SP.GDT_ST, System.currentTimeMillis());
+//
+//        final BannerView bv = new BannerView(mActivity, ADSize.BANNER,AID,BPID);
+//        bv.setRefresh(30);
+//        bv.setADListener(new AbstractBannerADListener() {
+//            @Override
+//            public void onNoAD(int i) {
+//                //广点通请求广告失败上报
+//                HttpManager.reportGdtEvent(0,1,String.valueOf(i),mContext);
+//                if (!shouldReturn){
+//                    new RaReturn(reqAsyncModel).fetchMGAD();
+//                    return;
+//                }
+//                listener.onMiiNoAD(i);
+//            }
+//
+//            @Override
+//            public void onADReceiv() {
+//                //广点通请求广告成功上报
+//                HttpManager.reportGdtEvent(1,1,null,mContext);
+//                adContainer.addView(bv);
+//                listener.onMiiADPresent();
+//            }
+//
+//            @Override
+//            public void onADClicked() {
+//                //广点通请求广告成功上报
+//                HttpManager.reportGdtEvent(2,1,null,mContext);
+//                listener.onMiiADClicked();
+//            }
+//        });
+//        bv.loadAD();
+//
+//    }
     private void  checkADType(final AdModel adModel){
 
         if (adModel.getType() == 4){//h5广告

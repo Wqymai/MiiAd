@@ -18,7 +18,11 @@ public final   class MConstant {
     public static final String VGD = "NEFCMTMxQThBMUM3RUUxNjA1NDcxNEQ0RDBCMzY3OENBOTQwMjU5QTM2NDg4RjQ3QTc1NDY3REFEMDc3QTg4NkM1MTY4NUI3MTE0RTBENENGOUY4QUEwRTMyODgxOUM0";
 
     public static String APPID = "82c91b5ae71c55110c370f8c6671fc79";//4ED960BE-9E19-7DFE-A545-33B86B508C3D
-    public static String LID = "ZaexwvBE";
+    public static String KID = "ZaexwvBE";
+    public static String BID = "uyasA5Lo";
+    public static String IID = "tDF9HggD";
+    public static String NID = "E5PVS8MP";
+
     public static String GDT_AID;
     public static String GDT_SPID;
     public static String GDT_IPID;

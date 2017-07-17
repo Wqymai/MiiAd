@@ -28,9 +28,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.mg.asyn.HbNoReturn;
 import com.mg.asyn.HbReturn;
-import com.mg.asyn.RaNoReturn;
 import com.mg.asyn.RaReturn;
 import com.mg.asyn.ReqAsyncModel;
 import com.mg.comm.ADClickHelper;
@@ -40,10 +38,8 @@ import com.mg.interf.MiiADListener;
 import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
-import com.mg.others.model.GdtInfoModel;
 import com.mg.others.utils.CommonUtils;
 import com.mg.others.utils.SP;
-import com.qq.e.ads.interstitial.AbstractInterstitialADListener;
 import com.qq.e.ads.interstitial.InterstitialAD;
 
 import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
@@ -111,9 +107,9 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
                         e.printStackTrace();
                     }
                     break;
-                case 400:
-                    openGDTAD(true);
-                    break;
+//                case 400:
+//                    openGDTAD(true);
+//                    break;
                 case 500:
                     listener.onMiiNoAD(1000);
                     break;
@@ -158,76 +154,76 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
       }
     }
 
-    private void openGDTAD(final boolean shouldReturn){
-
-
-        new HbNoReturn(reqAsyncModel).fetchMGAD();
-
-        String AID = "";
-        String IPID = "";
-        try {
-            GdtInfoModel model = getGdtIds(mContext);
-            AID = model.getAPPID();
-            IPID = model.getInterteristalPosID();
-        }catch (Exception e){
-
-            listener.onMiiNoAD(3007);
-            e.printStackTrace();
-
-        }
-
-        //记录开始请求广点通时间戳
-        SP.setParam(SP.CONFIG, mContext, SP.GDT_ST, System.currentTimeMillis());
-
-        iad = new InterstitialAD(mActivity, AID, IPID);
-        iad.setADListener(new AbstractInterstitialADListener() {
-            @Override
-            public void onADReceive() {
-
-                //广点通请求广告成功上报
-                HttpManager.reportGdtEvent(1,3,null,mContext);
-
-                if (isShade){
-                    iad.show();
-
-                }else {
-                    iad.showAsPopupWindow();
-                }
-
-                listener.onMiiADPresent();
-            }
-
-            @Override
-            public void onNoAD(int i) {
-
-                //广点通请求广告失败上报
-                HttpManager.reportGdtEvent(0,3,String.valueOf(i),mContext);
-
-                if (!shouldReturn){
-
-                    new RaReturn(reqAsyncModel).fetchMGAD();
-
-                    return;
-                }
-            }
-
-            @Override
-            public void onADClicked() {
-
-                //广点通请求广告成功上报
-                HttpManager.reportGdtEvent(2,3,null,mContext);
-
-                listener.onMiiADClicked();
-            }
-
-            @Override
-            public void onADClosed() {
-
-                listener.onMiiADDismissed();
-            }
-        });
-        iad.loadAD();
-    }
+//    private void openGDTAD(final boolean shouldReturn){
+//
+//
+//        new HbNoReturn(reqAsyncModel).fetchMGAD();
+//
+//        String AID = "";
+//        String IPID = "";
+//        try {
+//            GdtInfoModel model = getGdtIds(mContext);
+//            AID = model.getAPPID();
+//            IPID = model.getInterteristalPosID();
+//        }catch (Exception e){
+//
+//            listener.onMiiNoAD(3007);
+//            e.printStackTrace();
+//
+//        }
+//
+//        //记录开始请求广点通时间戳
+//        SP.setParam(SP.CONFIG, mContext, SP.GDT_ST, System.currentTimeMillis());
+//
+//        iad = new InterstitialAD(mActivity, AID, IPID);
+//        iad.setADListener(new AbstractInterstitialADListener() {
+//            @Override
+//            public void onADReceive() {
+//
+//                //广点通请求广告成功上报
+//                HttpManager.reportGdtEvent(1,3,null,mContext);
+//
+//                if (isShade){
+//                    iad.show();
+//
+//                }else {
+//                    iad.showAsPopupWindow();
+//                }
+//
+//                listener.onMiiADPresent();
+//            }
+//
+//            @Override
+//            public void onNoAD(int i) {
+//
+//                //广点通请求广告失败上报
+//                HttpManager.reportGdtEvent(0,3,String.valueOf(i),mContext);
+//
+//                if (!shouldReturn){
+//
+//                    new RaReturn(reqAsyncModel).fetchMGAD();
+//
+//                    return;
+//                }
+//            }
+//
+//            @Override
+//            public void onADClicked() {
+//
+//                //广点通请求广告成功上报
+//                HttpManager.reportGdtEvent(2,3,null,mContext);
+//
+//                listener.onMiiADClicked();
+//            }
+//
+//            @Override
+//            public void onADClosed() {
+//
+//                listener.onMiiADDismissed();
+//            }
+//        });
+//        iad.loadAD();
+//    }
 
 
     private void checkOpenAD(){
@@ -242,31 +238,33 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
             }
 
             if (saModel.type == 1){
+                listener.onMiiNoAD(3005);
                 return;
             }
-            else if (saModel.type == 2){
-
-                if (saModel.firstChoose == 1){
-
-                    new RaReturn(reqAsyncModel).fetchMGAD();
-                }
-                else {
-
-                    openGDTAD(true);
-
-                }
-            }
-            else if (saModel.type == 3){
-
-                if (saModel.firstChoose == 1){
-
-                    new RaNoReturn(reqAsyncModel).fetchMGAD();
-
-                }
-                else {
-                    openGDTAD(false);
-                }
-            }
+            new RaReturn(reqAsyncModel).fetchMGAD();
+//            else if (saModel.type == 2){
+//
+//                if (saModel.firstChoose == 1){
+//
+//                    new RaReturn(reqAsyncModel).fetchMGAD();
+//                }
+//                else {
+//
+//                    openGDTAD(true);
+//
+//                }
+//            }
+//            else if (saModel.type == 3){
+//
+//                if (saModel.firstChoose == 1){
+//
+//                    new RaNoReturn(reqAsyncModel).fetchMGAD();
+//
+//                }
+//                else {
+//                    openGDTAD(false);
+//                }
+//            }
         }
         catch (Exception e){
 

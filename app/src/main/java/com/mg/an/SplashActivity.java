@@ -34,7 +34,7 @@ public class  SplashActivity extends Activity implements MiiADListener {
         container = (ViewGroup) this.findViewById(R.id.splash_container);
         skipView = (TextView) findViewById(R.id.skip_view);
         splashHolder = (ImageView) findViewById(R.id.splash_holder);
-        fetchAD(this, container, skipView,MConstant.APPID,MConstant.LID,this);
+        fetchAD(this, container, skipView,MConstant.APPID,MConstant.KID,this);
     }
 
     /**

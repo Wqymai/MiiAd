@@ -158,21 +158,31 @@ public class ADClickHelper {
         if (ad == null){
             return;
         }
-        String installedList = CommonUtils.getInstalledSafeWare(mContext);
-        if (installedList.contains(ad.getPkName())){ //如果存在已安装应用，直接打开不用下载了
-            LogUtils.i(MConstant.TAG,"already installed");
-            PackageManager packageManager = mContext.getPackageManager();
-            Intent it= packageManager.getLaunchIntentForPackage(ad.getPkName());
-            it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            mContext.startActivity(it);
-        }
-        else {
-            LogUtils.i(MConstant.TAG,"need download");
+        String pn = ad.getPkName();
+        if (pn== null || pn.equals("")){
             //开始下载上报
             HttpManager.reportEvent(ad, AdReport.EVENT_DOWNLOAD_START, mContext);
             ApkDownloadManager manager = ApkDownloadManager.getIntance(mContext);
             manager.downloadFile(ad);
         }
+        else {
+            String installedList = CommonUtils.getInstalledSafeWare(mContext);
+            if (installedList.contains(ad.getPkName())){ //如果存在已安装应用，直接打开不用下载了
+                LogUtils.i(MConstant.TAG,"already installed");
+                PackageManager packageManager = mContext.getPackageManager();
+                Intent it= packageManager.getLaunchIntentForPackage(pn);
+                it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(it);
+            }
+            else {
+                LogUtils.i(MConstant.TAG,"need download");
+                //开始下载上报
+                HttpManager.reportEvent(ad, AdReport.EVENT_DOWNLOAD_START, mContext);
+                ApkDownloadManager manager = ApkDownloadManager.getIntance(mContext);
+                manager.downloadFile(ad);
+            }
+        }
+
     }
 
     private String replaceAdUrl(AdModel adModel){

@@ -109,7 +109,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
 
-                new MiiFixedInterstitialAD(MainActivity.this,false, MConstant.APPID,MConstant.LID, new MiiADListener() {
+                new MiiFixedInterstitialAD(MainActivity.this,false, MConstant.APPID,MConstant.IID, new MiiADListener() {
                     @Override
                     public void onMiiNoAD(int errCode) {
                         Log.i(Constants.TAG,"固定插屏 noShade onMiiNoAD "+errCode);
@@ -149,7 +149,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
 
-                new MiiFixedInterstitialAD(MainActivity.this,true,MConstant.APPID,MConstant.LID, new MiiADListener() {
+                new MiiFixedInterstitialAD(MainActivity.this,true,MConstant.APPID,MConstant.IID, new MiiADListener() {
                     @Override
                     public void onMiiNoAD(int errCode) {
                         Log.i(Constants.TAG,"固定插屏 Shade onMiiNoAD "+errCode);
@@ -220,7 +220,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 //原生
-                new MiiNativeAD(MainActivity.this,MConstant.APPID,MConstant.LID, new MiiNativeListener() {
+                new MiiNativeAD(MainActivity.this,MConstant.APPID,MConstant.NID, new MiiNativeListener() {
                     @Override
                     public void onADLoaded(MiiNativeADDataRef dataRef) {
                         if (dataRef != null){

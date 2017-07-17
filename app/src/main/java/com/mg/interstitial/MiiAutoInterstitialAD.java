@@ -93,8 +93,8 @@ public class MiiAutoInterstitialAD extends MiiBaseAD {
 
                     }
                     break;
-                case 400:
-                    break;
+//                case 400:
+//                    break;
                 case 500:
                     listener.onMiiNoAD(1000);
                     break;

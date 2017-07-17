@@ -31,7 +31,7 @@ public class DialogActivity extends Activity {
         setContentView(R.layout.dialog);
         viewGroup = (ViewGroup) findViewById(R.id.adContainer);
         adHolder = (ImageView) findViewById(R.id.ad_holder);
-        miiAutoInterstitialAD =  new MiiAutoInterstitialAD(DialogActivity.this, viewGroup, MConstant.APPID,MConstant.LID,new MiiADListener() {
+        miiAutoInterstitialAD =  new MiiAutoInterstitialAD(DialogActivity.this, viewGroup, MConstant.APPID,MConstant.IID,new MiiADListener() {
             @Override
             public void onMiiNoAD(int errCode) {
                 Log.i(Constants.TAG,"自由插屏  onMiiNoAD  "+errCode);
