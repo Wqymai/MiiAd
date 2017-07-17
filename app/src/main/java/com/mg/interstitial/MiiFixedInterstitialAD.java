@@ -128,7 +128,7 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
         }
     };
 
-    public MiiFixedInterstitialAD(Activity mActivity, boolean isShade,String appid, final MiiADListener listener){
+    public MiiFixedInterstitialAD(Activity mActivity, boolean isShade,String appid,String lid, final MiiADListener listener){
 
       try {
 
@@ -142,6 +142,7 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
           reqAsyncModel.listener = this.listener;
           reqAsyncModel.pt = 3;
           reqAsyncModel.appid = appid;
+          reqAsyncModel.lid = lid;
 
           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
               check23AbovePermission(mActivity, mainHandler);
@@ -233,7 +234,7 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
 
         try {
 
-            SourceAssignModel saModel = checkADSource(mContext);
+            SourceAssignModel saModel = checkADSource(mContext,3);
 
             if (saModel == null){
                 new HbReturn(reqAsyncModel).fetchMGAD();

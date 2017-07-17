@@ -3,19 +3,15 @@ package com.mg.others.model;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.util.Base64;
 
 import com.mg.comm.MConstant;
 import com.mg.others.utils.CommonUtils;
-import com.mg.others.utils.LocalKeyConstants;
-import com.mg.others.utils.MiiLocalStrEncrypt;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -317,8 +313,8 @@ public class RequestModel {
         this.dip = dip;
     }
 
-    private static RequestModel getRequestModel(String Action, DeviceInfo mDeviceInfo, int type, int tiggleSence, Context mContext){
-        String key= MConstant.APPID;
+    private static RequestModel getRequestModel(String Action, DeviceInfo mDeviceInfo, int type, Context mContext){
+        String key = MConstant.APPID;
         long currentTime = System.currentTimeMillis();
         if (mDeviceInfo == null){
             return null;
@@ -348,7 +344,7 @@ public class RequestModel {
                 requestModel.setMac(mDeviceInfo.getMac());
                 //设置请求广告类型
                 requestModel.setPt(type);
-                requestModel.setSt(tiggleSence);
+                requestModel.setSt(0);
                 requestModel.setPl(CommonUtils.getInstalledSafeWare(mContext));
                 requestModel.setAdrid(mDeviceInfo.getAndroidId());
                 requestModel.setAdnum(1);
@@ -382,77 +378,56 @@ public class RequestModel {
         return requestModel;
     }
 
-    public static String getRequestParams(String Action, DeviceInfo deviceInfo,int type,int tiggleSence,String appid,Context mContext){
-        LinkedHashMap<String, String> params = new LinkedHashMap<>();
-        RequestModel requestModel = getRequestModel(Action, deviceInfo, type, tiggleSence, mContext);
-        params.put("action",requestModel.getAction());
-        params.put("appid", appid);
-        params.put("ver", requestModel.getVer());
-        params.put("tp", requestModel.getTp());
-        params.put("dt",requestModel.getDt());
-        params.put("dtv",requestModel.getDtv());
-        params.put("sign",requestModel.getSign());
-        params.put("w",requestModel.getW());
-        params.put("h",requestModel.getH());
 
-        String url_base64 = Base64.encodeToString(CommonUtils.MapToString(params).getBytes(),Base64.NO_WRAP);
-        StringBuffer sb = new StringBuffer();
-        if (Action.equals(MConstant.request_type.ni)){
-            sb.append(MiiLocalStrEncrypt.deCodeStringToString(MConstant.HOST, LocalKeyConstants.LOCAL_KEY_DOMAINS));
+
+    public static Map<String,String> getRequestParams2(DeviceInfo deviceInfo, int pt,String appid,String lid, Context mContext){
+        if (deviceInfo == null){
+            return null;
         }
-        sb.append(MiiLocalStrEncrypt.deCodeStringToString(MConstant.SUFFIX,LocalKeyConstants.LOCAL_KEY_ACTIONS));
-        sb.append("/");
-        sb.append(Action);
-        sb.append("?");
-        sb.append(MConstant.GET_KEY);
-        sb.append(url_base64);
-        return sb.toString();
-    }
-
-    public static Map<String,String> getRequestParams2(String Action, DeviceInfo deviceInfo, int type, int tiggleSence,String appid, Context mContext){
         Map<String,String> params = new HashMap<>();
         try {
-            RequestModel requestModel = getRequestModel(Action, deviceInfo, type, tiggleSence, mContext);
-            params.put("action",requestModel.getAction());
+            long currTime = System.currentTimeMillis();
+            params.put("action","sra");
             params.put("appid", appid);
-            params.put("ver", requestModel.getVer());
-            params.put("tp", requestModel.getTp());
-            params.put("is",requestModel.getIs());
-            params.put("dt",requestModel.getDt());
-            params.put("dtv",requestModel.getDtv());
-            params.put("ic",requestModel.getIc());
-            params.put("w",requestModel.getW());
-            params.put("h",requestModel.getH());
-            params.put("brand",requestModel.getBrand());
-            params.put("mod",requestModel.getMod());
+            params.put("ver", MConstant.MSDK_VERSION);
+            params.put("tp", String.valueOf(currTime));
+            params.put("is",deviceInfo.getImsi());
+            params.put("dt","1");
+            params.put("dtv",deviceInfo.getImei());
+            params.put("ic",deviceInfo.getIccid());
+            params.put("w",String.valueOf(deviceInfo.getScreenWidth()));
+            params.put("h",String.valueOf(deviceInfo.getScreenHeight()));
+            params.put("brand",deviceInfo.getProductBrand());
+            params.put("mod",deviceInfo.getProductModel());
             params.put("os","android");
-            params.put("ov",requestModel.getOv());
-            params.put("sdkVersion",requestModel.getSdkVersion());
-            params.put("mcc", requestModel.getMcc());
-            params.put("mnc", requestModel.getMnc());
-            params.put("lac",requestModel.getLac());
-            params.put("cid",requestModel.getCid());
-            params.put("nt", String.valueOf(requestModel.getNt()));
-            params.put("mac", requestModel.getMac());
-            params.put("pt", String.valueOf(requestModel.getPt()));
-            params.put("st", String.valueOf(tiggleSence));
-            params.put("pl",requestModel.getPl());
-            params.put("adrid",requestModel.getAdrid());
-            params.put("adnum", String.valueOf(requestModel.getAdnum()));
+            params.put("ov",deviceInfo.getOsVersionName());
+            params.put("sdkVersion",String.valueOf(deviceInfo.getOsVersion()));
+            params.put("mcc", String.valueOf(deviceInfo.getMcc()));
+            params.put("mnc", String.valueOf(deviceInfo.getMnc()));
+            params.put("lac",String.valueOf(deviceInfo.getLac()));
+            params.put("cid",String.valueOf(deviceInfo.getCid()));
+            params.put("nt", String.valueOf(CommonUtils.getNetworkSubType(mContext)));
+            params.put("mac", deviceInfo.getMac());
+            params.put("pt", String.valueOf(pt));
+            params.put("pl",CommonUtils.getInstalledSafeWare(mContext));
+            params.put("adrid",deviceInfo.getAndroidId());
+            params.put("adnum", "1");
             try {
-                params.put("ua", URLEncoder.encode(requestModel.getUa(),"UTF-8"));
+                params.put("ua", URLEncoder.encode(deviceInfo.getUserAgent(),"UTF-8"));
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
-            params.put("dip",requestModel.getDip());
-            params.put("aaid",requestModel.getAaid());
-            params.put("lon",requestModel.getLon());
-            params.put("lat",requestModel.getLat());
-            params.put("density",requestModel.getDensity());
+            params.put("dip",String.valueOf(deviceInfo.getDip()));
+            params.put("aaid",deviceInfo.getAdvertisingId());
+            params.put("lon",deviceInfo.getLon());
+            params.put("lat",deviceInfo.getLat());
+            params.put("density",deviceInfo.getDensity());
             params.put("bssid",deviceInfo.getBssid());
             params.put("brk",String.valueOf(isRootSystem()));
             params.put("dl","1");
-            params.put("sign",requestModel.getSign());
+            params.put("sign",CommonUtils.hashSign("sra"+appid+ MConstant.MSDK_VERSION
+                    + currTime+"1"+deviceInfo.getImei() + deviceInfo.getScreenWidth() + deviceInfo.getScreenHeight()));
+            params.put("lid",lid);
             params.put("orientation",String.valueOf(getOri(mContext)));
         }
         catch (Exception e){

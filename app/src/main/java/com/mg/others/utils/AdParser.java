@@ -43,6 +43,7 @@ public class AdParser {
     public static final String IS = "is";
     public static final String IE = "ie";
     public static final String A = "a";
+    public static final String IMGH = "imgh";
     public static final String DEEPLINK="deeplink";
     public static final String SOURCEMARK ="sourceMark";
 
@@ -58,9 +59,9 @@ public class AdParser {
                 for (int i = 0; i < array_data.length(); i++) {
                     AdModel ad = new AdModel();
                     JSONObject object_ad = (JSONObject) array_data.opt(i);
-                    String aid = (String) object_ad.opt(AID);
-                    String name = (String) object_ad.opt(NAME);
-                    String title = (String) object_ad.opt(TITLE);
+                    String aid = String.valueOf(object_ad.opt(AID));
+                    String name = String.valueOf(object_ad.opt(NAME));
+                    String title = String.valueOf(object_ad.opt(TITLE));
                     String desc = object_ad.optString(DESC);
                     String img = object_ad.optString(IMG);
                     String pk = object_ad.optString(PK);
@@ -69,8 +70,9 @@ public class AdParser {
                     String page=object_ad.optString(PAGE);
                     String icon = object_ad.optString(ICON);
                     String url = object_ad.optString(URL);
-                    int pt = object_ad.optInt(PT);
-                    int et = object_ad.optInt(ET);
+                    int imgh = object_ad.optInt(IMGH);
+
+
                     String deeplink = object_ad.optString(DEEPLINK);
                     String sourceMark = object_ad.optString(SOURCEMARK);
 
@@ -112,8 +114,7 @@ public class AdParser {
                     ad.setPage(page);
                     ad.setTitle(title);
                     ad.setReportBean(adReport);
-                    ad.setPt(pt);
-                    ad.setEt(et);
+                    ad.setImgh(imgh);
                     ad.setDeeplink(deeplink);
                     ad.setSourceMark(sourceMark);
                     adModels.add(ad);

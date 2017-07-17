@@ -1,7 +1,5 @@
 package com.mg.asyn;
 
-import android.util.Base64;
-
 import com.mg.comm.MConstant;
 import com.mg.others.http.HttpListener;
 import com.mg.others.http.HttpResponse;
@@ -14,7 +12,7 @@ import com.mg.others.utils.LocalKeyConstants;
 import com.mg.others.utils.MiiLocalStrEncrypt;
 import com.mg.others.utils.SP;
 
-import static com.mg.others.manager.HttpManager.NI;
+import java.util.Map;
 
 /**
  * Created by wuqiyan on 17/6/15.
@@ -51,14 +49,19 @@ public class HbNoReturn extends RequestAsync {
             httpManager= HttpManager.getInstance(mContext);
         }
 
-        HttpUtils httpUtils = new HttpUtils(mContext);
-        final String url = httpManager.getParams(NI, 0, 0,appid);
+        final String url = httpManager.getHbUrl();
 
         if (url == null||url.equals("")){
 
             return;
         }
-        httpUtils.get(url, new HttpListener() {
+
+        Map<String,String> params = httpManager.getHbParams(appid,lid);
+        if (params == null){
+            return;
+        }
+        HttpUtils httpUtils = new HttpUtils(mContext);
+        httpUtils.post(url, new HttpListener() {
             @Override
             public void onSuccess(HttpResponse response) {
                 SP.setParam(SP.CONFIG, mContext, SP.LAST_REQUEST_NI, System.currentTimeMillis());
@@ -70,7 +73,7 @@ public class HbNoReturn extends RequestAsync {
             public void onFail(Exception e) {
 
             }
-        });
+        },params);
       }catch (Exception e){
           e.printStackTrace();
       }
@@ -82,7 +85,7 @@ public class HbNoReturn extends RequestAsync {
         try {
             SDKConfigModel sdk = null;
 
-            String data = new String(Base64.decode(response.entity(),Base64.NO_WRAP));
+            String data = response.entity();
 
             if (data == null){
                 return;

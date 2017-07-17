@@ -84,6 +84,13 @@ public class MainActivity extends Activity {
 //        Log.i("TAG", "i="+MiiLocalStrEncrypt.enCodeStringToString("8575134060152130849",LocalKeyConstants.LOCAL_GDT));
 //        Log.i("TAG", "i="+MiiLocalStrEncrypt.enCodeStringToString("9079537218417626401",LocalKeyConstants.LOCAL_GDT));
 
+//        Log.i("TAG","真服域名="+ MiiLocalStrEncrypt.enCodeStringToString("http://sspapi.ilast.cc",
+//                LocalKeyConstants.LOCAL_KEY_DOMAINS));
+//
+//        Log.i("TAG","测服域名="+ MiiLocalStrEncrypt.enCodeStringToString("http://adtestf.maimob.net:8082",
+//                LocalKeyConstants.LOCAL_KEY_DOMAINS));
+//        Log.i("TAG","ACTION="+MiiLocalStrEncrypt.enCodeStringToString("/v/hb",LocalKeyConstants.LOCAL_KEY_ACTIONS));
+//        Log.i("TAG","ACTION="+MiiLocalStrEncrypt.enCodeStringToString("/v/sra",LocalKeyConstants.LOCAL_KEY_ACTIONS));
 
 
         openSplash= (Button) findViewById(R.id.open_splash_ad);
@@ -102,7 +109,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
 
-                new MiiFixedInterstitialAD(MainActivity.this,false, MConstant.APPID, new MiiADListener() {
+                new MiiFixedInterstitialAD(MainActivity.this,false, MConstant.APPID,MConstant.LID, new MiiADListener() {
                     @Override
                     public void onMiiNoAD(int errCode) {
                         Log.i(Constants.TAG,"固定插屏 noShade onMiiNoAD "+errCode);
@@ -142,7 +149,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
 
-                new MiiFixedInterstitialAD(MainActivity.this,true,MConstant.APPID, new MiiADListener() {
+                new MiiFixedInterstitialAD(MainActivity.this,true,MConstant.APPID,MConstant.LID, new MiiADListener() {
                     @Override
                     public void onMiiNoAD(int errCode) {
                         Log.i(Constants.TAG,"固定插屏 Shade onMiiNoAD "+errCode);
@@ -213,7 +220,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 //原生
-                new MiiNativeAD(MainActivity.this,MConstant.APPID, new MiiNativeListener() {
+                new MiiNativeAD(MainActivity.this,MConstant.APPID,MConstant.LID, new MiiNativeListener() {
                     @Override
                     public void onADLoaded(MiiNativeADDataRef dataRef) {
                         if (dataRef != null){

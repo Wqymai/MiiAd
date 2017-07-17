@@ -34,7 +34,7 @@ public class  SplashActivity extends Activity implements MiiADListener {
         container = (ViewGroup) this.findViewById(R.id.splash_container);
         skipView = (TextView) findViewById(R.id.skip_view);
         splashHolder = (ImageView) findViewById(R.id.splash_holder);
-        fetchAD(this, container, skipView,MConstant.APPID,this);
+        fetchAD(this, container, skipView,MConstant.APPID,MConstant.LID,this);
     }
 
     /**
@@ -44,8 +44,8 @@ public class  SplashActivity extends Activity implements MiiADListener {
      * @param appid     麦广广告后台提供
      * @param listener  广告回调
      */
-    private void fetchAD(SplashActivity activity, ViewGroup container, View skipView,String appid,MiiADListener listener) {
-        splashAD = new MiiSplashAD(activity,container,skipView,appid,listener);
+    private void fetchAD(SplashActivity activity, ViewGroup container, View skipView,String appid,String lid,MiiADListener listener) {
+        splashAD = new MiiSplashAD(activity,container,skipView,appid,lid,listener);
     }
 
     @Override

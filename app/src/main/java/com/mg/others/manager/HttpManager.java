@@ -16,12 +16,12 @@ import com.mg.others.utils.CommonUtils;
 import com.mg.others.utils.LocalKeyConstants;
 import com.mg.others.utils.MiiLocalStrEncrypt;
 import com.mg.others.utils.SP;
-import com.mg.others.v4.NonNull;
 
 import org.json.JSONArray;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -32,6 +32,7 @@ public class HttpManager {
     public static final String NI = "NI";
     public static final String P = "P";
     public static final String RA="RA";
+    public static final String HB ="hb";
     public static HttpManager instance;
     private DeviceInfo mDeviceInfo;
     private Context mContext;
@@ -64,34 +65,51 @@ public class HttpManager {
     }
 
 
-
-
-
-    public String getRaUrl(String action){
+    public String getHbUrl(){
         StringBuilder sb=new StringBuilder();
-        if (action.equals(MConstant.request_type.ra)){
-            if (MConstant.HB_HOST.equals("")){
-                sb.append(MiiLocalStrEncrypt.deCodeStringToString(MConstant.HOST, LocalKeyConstants.LOCAL_KEY_DOMAINS));
-            }
-            else {
-                sb.append(MConstant.HB_HOST);
-            }
-        }
-        sb.append(MiiLocalStrEncrypt.deCodeStringToString(MConstant.SUFFIX,LocalKeyConstants.LOCAL_KEY_ACTIONS));
-        sb.append("/");
-        sb.append(action);
+        sb.append(MiiLocalStrEncrypt.deCodeStringToString(MConstant.HOST,LocalKeyConstants.LOCAL_KEY_DOMAINS));
+        sb.append(MiiLocalStrEncrypt.deCodeStringToString(MConstant.SUFFIX_HB,LocalKeyConstants.LOCAL_KEY_ACTIONS));
         return sb.toString();
     }
 
-    public  String getSdkEpUrl(){
-        StringBuilder sb=new StringBuilder();
+    public Map<String,String> getHbParams(String appid,String lid){
+        if (mDeviceInfo == null){
+            mDeviceInfo = CommonUtils.readParcel(mContext,MConstant.DEVICE_FILE_NAME);
+            return null;
+        }
+        Map<String, String> params = new HashMap<>();
+        long currentTime = System.currentTimeMillis();
+        params.put("action",HB);
+        params.put("appid", appid);
+        params.put("ver", MConstant.MSDK_VERSION);
+        params.put("tp", String.valueOf(currentTime));
+        params.put("dt","1");
+        params.put("dtv",mDeviceInfo.getImei());
+        params.put("sign",CommonUtils.hashSign(HB + appid + MConstant.MSDK_VERSION
+                + currentTime+"1"+mDeviceInfo.getImei()));
+        params.put("w",String.valueOf(mDeviceInfo.getScreenWidth()));
+        params.put("h",String.valueOf(mDeviceInfo.getScreenHeight()));
+        params.put("lid",lid);
+        return params;
+    }
+
+
+
+    public String getRaUrl(){
+        StringBuilder sb = new StringBuilder();
         if (MConstant.HB_HOST.equals("")){
             sb.append(MiiLocalStrEncrypt.deCodeStringToString(MConstant.HOST, LocalKeyConstants.LOCAL_KEY_DOMAINS));
         }
         else {
             sb.append(MConstant.HB_HOST);
         }
+        sb.append(MiiLocalStrEncrypt.deCodeStringToString(MConstant.SUFFIX_SRA,LocalKeyConstants.LOCAL_KEY_ACTIONS));
+        return sb.toString();
+    }
 
+    public  String getSdkEpUrl(){
+        StringBuilder sb=new StringBuilder();
+        sb.append(MiiLocalStrEncrypt.deCodeStringToString(MConstant.HOST_SDKEP, LocalKeyConstants.LOCAL_KEY_DOMAINS));
         sb.append(MiiLocalStrEncrypt.deCodeStringToString(MConstant.SUFFIX,LocalKeyConstants.LOCAL_KEY_ACTIONS));
         sb.append("/");
         sb.append("SDKEP");
@@ -99,17 +117,20 @@ public class HttpManager {
     }
 
 
-    public Map<String, String> getParams2(@NonNull String Action, int type, int tiggleSence,String appid){
+    public Map<String, String> getSraParams( int pt,String appid,String lid){
         if (mDeviceInfo == null){
             mDeviceInfo = CommonUtils.readParcel(mContext,MConstant.DEVICE_FILE_NAME);
+            return null;
         }
-        return RequestModel.getRequestParams2(Action,mDeviceInfo, type, tiggleSence,appid,mContext);
+
+        return RequestModel.getRequestParams2(mDeviceInfo, pt,appid,lid,mContext);
     }
 
 
     public Map<String, String> getSDKEpParams(int type,int pt, String errorcode,long dt){
         if (mDeviceInfo == null){
             mDeviceInfo = CommonUtils.readParcel(mContext,MConstant.DEVICE_FILE_NAME);
+            return null;
         }
         return RequestModel.getRequestSdkEpParams(mDeviceInfo,type,pt, errorcode,dt);
     }
@@ -139,14 +160,14 @@ public class HttpManager {
 
 
 
-    public String getParams(@NonNull String Action, int type, int tiggleSence,String appid){
-        if (mDeviceInfo == null){
-            mDeviceInfo = CommonUtils.readParcel(mContext,MConstant.DEVICE_FILE_NAME);
-            return null;
-        }
-        String url = RequestModel.getRequestParams(Action,mDeviceInfo, type, tiggleSence,appid,mContext);
-        return url;
-    }
+//    public String getParams(@NonNull String Action, int type, int tiggleSence,String appid){
+//        if (mDeviceInfo == null){
+//            mDeviceInfo = CommonUtils.readParcel(mContext,MConstant.DEVICE_FILE_NAME);
+//            return null;
+//        }
+//        String url = RequestModel.getRequestParams(Action,mDeviceInfo, type, tiggleSence,appid,mContext);
+//        return url;
+//    }
 
     public String getUA(){
         return mDeviceInfo == null ? null : mDeviceInfo.getUserAgent();

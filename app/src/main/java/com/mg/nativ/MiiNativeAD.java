@@ -57,7 +57,7 @@ public class MiiNativeAD extends MiiBaseAD {
         }
     };
 
-    public MiiNativeAD(Activity activity,String appid, MiiNativeListener listener){
+    public MiiNativeAD(Activity activity,String appid,String lid, MiiNativeListener listener){
       try {
           this.mContext = activity.getApplicationContext();
           this.mListener = listener;
@@ -68,6 +68,7 @@ public class MiiNativeAD extends MiiBaseAD {
           reqAsyncModel.listener = this.mListener;
           reqAsyncModel.pt = 4;//信息流
           reqAsyncModel.appid = appid;
+          reqAsyncModel.lid = lid;
 
           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
               check23AbovePermission(mActivity, mainHandler);
@@ -85,7 +86,7 @@ public class MiiNativeAD extends MiiBaseAD {
 
          try {
 
-            SourceAssignModel saModel = checkADSource(mContext);
+            SourceAssignModel saModel = checkADSource(mContext,4);
             if (saModel == null){
                 new HbReturn(reqAsyncModel).fetchMGAD();
                 return;

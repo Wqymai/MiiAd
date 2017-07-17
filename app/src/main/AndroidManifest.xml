@@ -44,7 +44,7 @@
             ></activity>
         <service android:name="com.mg.comm.LoadHelperService"></service>
         <activity android:name="com.mg.an.BannerAcitvity"></activity>
-        <!--<activity android:name="com.mg.an.AutoInterActivity"></activity>-->
+        <activity android:name="com.mg.an.AutoInterActivity"></activity>
         <activity android:name="com.mg.an.DialogActivity"
             android:theme="@style/dialogstyle"
             ></activity>

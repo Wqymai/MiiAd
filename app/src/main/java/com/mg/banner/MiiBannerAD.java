@@ -115,7 +115,7 @@ public class MiiBannerAD extends MiiBaseAD {
         }
     };
 
-    public MiiBannerAD(Activity activity, ViewGroup adContainer,String appid, MiiADListener listener){
+    public MiiBannerAD(Activity activity, ViewGroup adContainer,String appid,String lid, MiiADListener listener){
 
       try{
         this.mContext = activity.getApplicationContext();
@@ -132,6 +132,7 @@ public class MiiBannerAD extends MiiBaseAD {
         reqAsyncModel.listener = this.listener;
         reqAsyncModel.pt = 1;
         reqAsyncModel.appid = appid;
+        reqAsyncModel.lid = lid;
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             check23AbovePermission(mActivity,mainHandler);
@@ -139,7 +140,7 @@ public class MiiBannerAD extends MiiBaseAD {
         }
 
 
-          new HbReturn(reqAsyncModel).fetchMGAD();
+        new HbReturn(reqAsyncModel).fetchMGAD();
 
       }catch (Exception e){
 
@@ -155,7 +156,7 @@ public class MiiBannerAD extends MiiBaseAD {
       try {
 
 
-          SourceAssignModel saModel = checkADSource(mContext);
+          SourceAssignModel saModel = checkADSource(mContext,1);
 
           if (saModel == null) {
               new HbReturn(reqAsyncModel).fetchMGAD();

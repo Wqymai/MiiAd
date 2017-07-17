@@ -28,6 +28,7 @@ public class RequestAsync {
     protected String appid;
     protected SDKConfigModel sdkConfigModel;
     protected int pt;//请求广告的类型  2-开屏 3-插屏
+    protected String lid;
 
     public RequestAsync(ReqAsyncModel model){
 
@@ -39,6 +40,7 @@ public class RequestAsync {
         this.listener = model.listener;
         this.pt = model.pt;
         this.appid = model.appid;
+        this.lid = model.lid;
     }
 
 
@@ -109,7 +111,7 @@ public class RequestAsync {
     检查sdk设置是否开了广告 true:没开 false:开了
     */
     protected boolean checkADShow(){
-        if (!sdkConfigModel.isAdShow()){
+        if (sdkConfigModel.getAdShow().equals("0")){
             return true;
         }
         return false;

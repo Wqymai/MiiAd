@@ -15,6 +15,7 @@ public class ReqAsyncModel {
     public Handler handler;
     public int pt;
     public String appid;
+    public String lid;
     public MiiAbsADListener listener;
 
 }

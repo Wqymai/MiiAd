@@ -53,15 +53,35 @@ public abstract class MiiBaseAD {
     /**
     判断广告来源方式 1：广告源都关闭了 2：按比例展示其中一家 3：先哪家再哪家
     */
-    protected SourceAssignModel checkADSource(Context mContext){
+    protected SourceAssignModel checkADSource(Context mContext,int pt){
+
+
+
       SourceAssignModel saModel=new SourceAssignModel();
       try {
         sdk = CommonUtils.readParcel(mContext, MConstant.CONFIG_FILE_NAME);
         if (sdk == null){
             return null;
         }
-        int sf_mg = sdk.getSf_mg();
-        int sf_gdt = sdk.getSf_gdt();
+
+        int sf_mg = 0 ;
+        int sf_gdt = 0 ;
+        if (pt == 1){//banner
+            sf_mg = sdk.getBsf_mg();
+            sf_gdt = sdk.getBsf_gdt();
+        }
+        else if (pt == 2){//开屏
+            sf_mg = sdk.getKsf_mg();
+            sf_gdt = sdk.getKsf_gdt();
+        }
+        else if (pt == 3){//插屏
+            sf_mg = sdk.getCsf_mg();
+            sf_gdt = sdk.getCsf_gdt();
+        }else {//信息流
+            sf_mg = sdk.getXsf_mg();
+            sf_gdt = sdk.getXsf_gdt();
+        }
+
         int sum = sf_gdt + sf_mg;
         if (sum == 0){
             saModel.type = 1;
@@ -108,7 +128,7 @@ public abstract class MiiBaseAD {
         SDKConfigModel sdkConfig = checkSdkConfig(sdk,context);
         GdtInfoModel gdt = new GdtInfoModel();
         try {
-            String gdtIds = sdkConfig.getList();
+            String gdtIds = sdkConfig.getSk();
             String gdtIds_json = MiiLocalStrEncrypt.deCodeStringToString(gdtIds, LocalKeyConstants.LOCAL_GDT);
             JSONObject object=new JSONObject(gdtIds_json);
             gdt.setAPPID(object.optString("a"));

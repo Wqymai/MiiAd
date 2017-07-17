@@ -35,6 +35,16 @@ public class AdModel implements Serializable,Cloneable {
     private String clickid;
     private String deeplink;
     private String sourceMark;
+    private int imgh;
+
+
+    public int getImgh() {
+        return imgh;
+    }
+
+    public void setImgh(int imgh) {
+        this.imgh = imgh;
+    }
 
     public String getSourceMark() {
         return sourceMark;

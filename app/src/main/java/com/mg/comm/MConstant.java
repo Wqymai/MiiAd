@@ -11,24 +11,29 @@ public final   class MConstant {
     public static final String CONFIG_FILE_NAME = "mConf";
     public static final String Dir_TEMP = Environment.getExternalStorageDirectory() + "/mmFolder/";
     public static final String Dir = "Apk";
-    public static final String MSDK_VERSION = "2002";
-    public static final int SUC_CODE = 1;
+    public static final String MSDK_VERSION = "2200";
+    public static final int SUC_CODE = 100;
     public static  boolean isBlack=false;
     //http://117.135.144.63:8081/index.php/GD/VSGD";
     public static final String VGD = "NEFCMTMxQThBMUM3RUUxNjA1NDcxNEQ0RDBCMzY3OENBOTQwMjU5QTM2NDg4RjQ3QTc1NDY3REFEMDc3QTg4NkM1MTY4NUI3MTE0RTBENENGOUY4QUEwRTMyODgxOUM0";
 
-    public static String APPID = "0B737AC7-DCE5-7058-FB3D-1CB82A588ABC";//4ED960BE-9E19-7DFE-A545-33B86B508C3D
+    public static String APPID = "82c91b5ae71c55110c370f8c6671fc79";//4ED960BE-9E19-7DFE-A545-33B86B508C3D
+    public static String LID = "ZaexwvBE";
     public static String GDT_AID;
     public static String GDT_SPID;
     public static String GDT_IPID;
     public static String GDT_BPID;
 
     public static String HOST;
+    public static String HOST_SDKEP;
     static {
         if(true){
             //测试服务器地址
             //http://vs.maimob.net";
-            HOST = "MzUwQkY1QzUwMkQ0QTZEQUZCMTU3REQ0MUY1OTBFOUYxNEQxNjNBMjU4NTQzQTkwODdEREUxM0VFQUJGQTlGNw==";
+            HOST_SDKEP = "MzUwQkY1QzUwMkQ0QTZEQUZCMTU3REQ0MUY1OTBFOUYxNEQxNjNBMjU4NTQzQTkwODdEREUxM0VFQUJGQTlGNw==";
+            //http://adtestf.maimob.net:8082
+            HOST ="NURDQTE4NUFDRUQ5RDlDOTUxRDA5RjdEQUExQkNGQ0M2NjVDOTY5MDFDNjlFMjQ1MkNCN0YwMDdFRjA1NTBCNA==";
+
             GDT_AID = "NjkxNTBBNDAzRDMyNDM3MjJEQjM1MzRDRTIzMDA1MzQ=";
             GDT_SPID = "QTEzOTYwOUJDMzIyNTUxQUE1QjREMkIwQ0I1QjgxOEVDM0IwQjkxOTc5OUVBN0Y2MzM3QzczNDBCNTFFRjg2OQ==";
             GDT_IPID = "NTkzMDA3OENFNEJCQUM4RUM5QzI2RjQ2NjFFQkZFNzQ0QUMyQTY1MjM3NEJCODBCMkRBODZEMzMxQTRBNkFENQ==";
@@ -37,7 +42,9 @@ public final   class MConstant {
         else{
             //正式服务器地址
             //http://s1.pagefarmer.net";
-            HOST = "QTBBMkRGQ0U0QzRCNUM4QTZDRDlGQTQ4NEY0MkIxRDE3NkVERTBBNERCMTk3RkIzQjdDMUM0QjQ4QUM2MDAzQg==";
+            HOST_SDKEP = "QTBBMkRGQ0U0QzRCNUM4QTZDRDlGQTQ4NEY0MkIxRDE3NkVERTBBNERCMTk3RkIzQjdDMUM0QjQ4QUM2MDAzQg==";
+            //http://sspapi.ilast.cc
+            HOST ="ODlBMEIyNkFENEJGRDNGQkZFMjcxMjlERjIzMEYwRjBBMjQ0NEQxNTkyRjhGQjQxRUU0OEFBNDg0NjUwNEMxNw==";
             GDT_AID = "NEY4NTUwNDA2MUJFREZFMUExQzAxQTU5NjRFQ0NEMzQ=";
             GDT_SPID = "QkE0OTA1NEZGRkNGQ0Q4OUJGMkZCM0FGQTJGNEVGMkUyRjIwMkNDMTVFM0JENEI5QkFBQjdFQ0E5MTMzRjkyNA==";
             GDT_IPID = "";
@@ -47,6 +54,9 @@ public final   class MConstant {
     public static String HB_HOST="";
     //"/index.php/VSAPI";
     public static String SUFFIX = "QjM5NzdCMEMzOTVBOTE3MDdENDdCN0FBQjAyRkU4ODM2RDQ3MUYyNzg5MDExNUU4MDkyQzA0QTVEOTg2NjkyNQ==";
+    //"/v"
+    public static String SUFFIX_HB = "NjYyMDc0MUIxODcyRTMwOTVCODREMkQxNDVFNzYzQTM=";
+    public static String SUFFIX_SRA = "NkU3RTQzMDU0NTdBNUIzRDAxNTNENjIyRkE2QTM4RkQ=";
     public static final String GET_KEY = "m=";
 
     public static final String PRODUCT_BRAND = "ro.product.brand";

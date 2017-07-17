@@ -116,7 +116,7 @@ public class MiiSplashAD extends MiiBaseAD{
          }
      };
 
-    public  MiiSplashAD(Activity activity, ViewGroup adContainer,View skipContainer ,String appid,MiiADListener adListener){
+    public  MiiSplashAD(Activity activity, ViewGroup adContainer,View skipContainer ,String appid,String lid,MiiADListener adListener){
       try{
             this.mActivity = activity;
 
@@ -138,6 +138,7 @@ public class MiiSplashAD extends MiiBaseAD{
             reqAsyncModel.listener = this.listener;
             reqAsyncModel.pt = 2;
             reqAsyncModel.appid = appid;
+            reqAsyncModel.lid = lid;
 
             if(Build.VERSION.SDK_INT >= M){
                 check23AbovePermission(mActivity,mainHandler);
@@ -393,7 +394,7 @@ public class MiiSplashAD extends MiiBaseAD{
 
          sdk = checkSdkConfig(sdk,mContext);
 
-         long time = sdk.getDisplayTime(2);
+         long time = sdk.getSplash_time();
 
          timer = new CountDownTimer((time+1)*1000,1000){
              @Override
@@ -424,7 +425,7 @@ public class MiiSplashAD extends MiiBaseAD{
 
       try{
 
-        SourceAssignModel saModel = checkADSource(mContext);
+        SourceAssignModel saModel = checkADSource(mContext,2);
 
         if (saModel == null){
 
