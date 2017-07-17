@@ -319,6 +319,7 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
         dlg.show();
     }
 
+
     /**
     弹出框无遮罩效果的
     */
@@ -337,12 +338,14 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
             int screenW = CommonUtils.getScreenW(mContext);
 
             boolean ishtml5 = bitmap != null ? false : true;
-            double H_W_P = ishtml5 ? 1.2 : bitmap.getWidth() / bitmap.getHeight();
+            double H_W_P = ishtml5 ? 1.2 : div(bitmap.getWidth(),bitmap.getHeight(),1);
+
 
 
             if (oren) {//竖屏
                 params1.width = (int) (screenW * W_P);
                 params1.height = (int) ((screenW * W_P) / H_W_P);
+
             } else {
                 params1.width = (int) (screenH * H_P);
                 params1.height = (int) (screenH * H_P / H_W_P);
@@ -406,7 +409,7 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
         int screenW = CommonUtils.getScreenW(mContext);
 
         boolean ishtml5 = bitmap!=null ? false:true;
-        double H_W_P = ishtml5 ? 1.2: bitmap.getWidth()/bitmap.getHeight();
+        double H_W_P = ishtml5 ? 1.2: div(bitmap.getWidth(),bitmap.getHeight(),1);
 
         if (oren){
           window.setLayout((int) (screenW * W_P),(int) ((screenW * W_P)/H_W_P));
