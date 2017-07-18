@@ -93,19 +93,19 @@ public abstract class MiiBaseAD {
         int sf_mg = 0 ;
         int sf_gdt = 0 ;
         if (pt == 1){//banner
-            sf_mg = 100;//sdk.getBsf_mg();
-            sf_gdt = 0;//sdk.getBsf_gdt();
+            sf_mg = sdk.getBsf_mg();
+            sf_gdt =sdk.getBsf_gdt();
         }
         else if (pt == 2){//开屏
-            sf_mg = 100;//sdk.getKsf_mg();
-            sf_gdt = 0;//sdk.getKsf_gdt();
+            sf_mg = sdk.getKsf_mg();
+            sf_gdt =sdk.getKsf_gdt();
         }
         else if (pt == 3){//插屏
-            sf_mg = 100;//sdk.getCsf_mg();
-            sf_gdt = 0;//sdk.getCsf_gdt();
+            sf_mg = sdk.getCsf_mg();
+            sf_gdt = sdk.getCsf_gdt();
         }else {//信息流
-            sf_mg =100;// sdk.getXsf_mg();
-            sf_gdt = 0;//sdk.getXsf_gdt();
+            sf_mg = sdk.getXsf_mg();
+            sf_gdt = sdk.getXsf_gdt();
         }
 
         int sum = sf_gdt + sf_mg;
