@@ -40,7 +40,6 @@ import com.mg.others.model.AdReport;
 import com.mg.others.model.SDKConfigModel;
 import com.mg.others.utils.CommonUtils;
 import com.mg.others.utils.SP;
-import com.qq.e.ads.interstitial.InterstitialAD;
 
 
 
@@ -64,7 +63,6 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
     boolean oren;
     private   double  H_P = 0.8;
     private    double W_P = 0.8;
-    private InterstitialAD iad;
     private boolean isShade;
     private ReqAsyncModel reqAsyncModel = new ReqAsyncModel();
 
@@ -290,7 +288,7 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
         }
         else {
             try {
-                if (adModel.getImage() == null || adModel.getImage().equals("")){
+                if (adModel.getImage() == null || adModel.getImage().equals("") || adModel.getImage().equals("null")){
 
                     listener.onMiiNoAD(3011);
 

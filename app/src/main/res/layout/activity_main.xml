@@ -35,23 +35,23 @@
         android:text="打开banner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
-    <Button
-        android:text="打开自由插屏1"
-        android:layout_below="@id/open_banner"
-        android:id="@+id/open_nativeinterstitial"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+    <!--<Button-->
+        <!--android:text="打开自由插屏1"-->
+        <!--android:layout_below="@id/open_banner"-->
+        <!--android:id="@+id/open_nativeinterstitial"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"/>-->
 
-    <Button
-        android:text="打开自由插屏2"
-        android:layout_below="@id/open_nativeinterstitial"
-        android:id="@+id/open_dialogAct"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+    <!--<Button-->
+        <!--android:text="打开自由插屏2"-->
+        <!--android:layout_below="@id/open_nativeinterstitial"-->
+        <!--android:id="@+id/open_dialogAct"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"/>-->
 
     <Button
         android:text="打开原生广告"
-        android:layout_below="@id/open_dialogAct"
+        android:layout_below="@id/open_banner"
         android:id="@+id/open_native"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>

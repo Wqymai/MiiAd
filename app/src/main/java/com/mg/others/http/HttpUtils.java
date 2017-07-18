@@ -466,6 +466,8 @@ public class HttpUtils {
 	 *
 	 */
 	private static String realKey="";
+
+	private static int redirctCount = 0;
 	private static class HttpDownloaderTask implements Runnable {
 
 		public HttpDownloaderTask(String url, HttpDownloadListener l, String path, String fileName,
@@ -605,7 +607,7 @@ public class HttpUtils {
 					whileTime++;
 					HttpUtils.isDownloadIng = true;
 					try {
-						LogUtils.i(MConstant.TAG,"run key="+key);
+
 						URL url = new URL(key);
 						if(url.getProtocol().toLowerCase().contains("https")){
 							LogUtils.i(MConstant.TAG,"https request...");
@@ -631,8 +633,15 @@ public class HttpUtils {
 						LogUtils.i(MConstant.TAG,"run status="+status);
 						String realUrl=conn.getURL().toString();
 						if (status==301 || status==302 || status==303 ||status==307){
-							LogUtils.i(MConstant.TAG,"status="+status+" realUrl="+realUrl);
-							httpExecutor.execute(new HttpDownloaderTask(realUrl, mListener, orginPath, mfileName, paramter, mContext,true));
+							if (redirctCount < 8){
+								redirctCount++;
+								LogUtils.i(MConstant.TAG,"status="+status+" realUrl="+realUrl+" redirctCount="+redirctCount);
+								httpExecutor.execute(new HttpDownloaderTask(realUrl, mListener, orginPath, mfileName, paramter, mContext,true));
+
+							}
+							else {
+								redirctCount = 0;
+							}
 							return;
 						}
 						conn.connect();

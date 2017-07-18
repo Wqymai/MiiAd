@@ -155,6 +155,7 @@ public class MiiSplashAD extends MiiBaseAD{
     private void  checkADType(final AdModel adModel){
 
       if (adModel.getType() == 4){
+
          try {
             webView = new WebView(mActivity);
             FrameLayout.LayoutParams params_webview = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
@@ -251,7 +252,7 @@ public class MiiSplashAD extends MiiBaseAD{
       }else {
           try {
 
-            if (adModel.getImage() == null || adModel.getImage().equals("")){
+            if (adModel.getImage() == null || adModel.getImage().equals("") || adModel.getImage().equals("null")){
 
                 listener.onMiiNoAD(3011);
 

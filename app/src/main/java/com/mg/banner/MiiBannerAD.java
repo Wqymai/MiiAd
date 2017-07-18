@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -54,6 +55,7 @@ public class MiiBannerAD extends MiiBaseAD {
     private WebView webView;
     private ImageView adImageView;
     private ReqAsyncModel reqAsyncModel = new ReqAsyncModel();
+    private boolean isJoinImg = false;
 
 
 
@@ -249,11 +251,16 @@ public class MiiBannerAD extends MiiBaseAD {
 //    }
     private void  checkADType(final AdModel adModel){
 
+        LogUtils.i(MConstant.TAG,"高度="+adModel.getImgh());
         if (adModel.getType() == 4){//h5广告
 
           try {
               webView = new WebView(mActivity);
-              FrameLayout.LayoutParams params_webview = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, (int) (CommonUtils.getScreenH(mContext) * 0.1));
+              int imgH = adModel.getImgh();
+              if (imgH == 0){
+                imgH = (int) (CommonUtils.getScreenH(mContext) * 0.1);
+              }
+              FrameLayout.LayoutParams params_webview = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, imgH);
 
               webView.setLayoutParams(params_webview);
               WebSettings settings = webView.getSettings();
@@ -306,13 +313,20 @@ public class MiiBannerAD extends MiiBaseAD {
         }else {
 
           try {
-              if (adModel.getImage()==null || adModel.getImage().equals("")){
+              if (adModel.getImage() == null || adModel.getImage().equals("") || adModel.getImage().equals("null")){
 
-                  listener.onMiiNoAD(3011);
+                  if (adModel.getIcon() == null || adModel.getIcon().equals("") || adModel.getIcon().equals("null")){
+
+                     listener.onMiiNoAD(3011);
+                  }
+                  else {
+                      isJoinImg = true;
+                      new ImageDownloadHelper(0).downloadShowImage(mContext,adModel.getIcon(),1,mainHandler);
+                  }
 
               }
               else {
-
+                  isJoinImg = false;
                   new ImageDownloadHelper(0).downloadShowImage(mContext,adModel.getImage(),1,mainHandler);
 
               }
@@ -326,17 +340,51 @@ public class MiiBannerAD extends MiiBaseAD {
         }
     }
 
+
+    /**
+     //     * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
+     //     */
+    public static int dip2px(Context context, float dpValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
+    }
     private void showBannerAD(final Bitmap bitmap){
         try {
-
-            int screenW = CommonUtils.getScreenW(mContext);
-            double value = div(bitmap.getWidth(),bitmap.getHeight(),1);
-
-            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(screenW, (int)(screenW/value));
-            adImageView = new ImageView(mActivity);
-            adImageView.setLayoutParams(layoutParams);
-            adImageView.setScaleType(ImageView.ScaleType.FIT_XY);
-            adContainer.addView(adImageView);
+            if (adModel == null){
+                listener.onMiiNoAD(3009);
+                return;
+            }
+            if (isJoinImg){
+                adContainer.setBackgroundColor(Color.parseColor("#E8E8E8"));
+                FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(dip2px(mContext,60),dip2px(mContext,60));
+                adImageView = new ImageView(mActivity);
+                adImageView.setLayoutParams(layoutParams);
+                adImageView.setScaleType(ImageView.ScaleType.FIT_XY);
+                adContainer.addView(adImageView);
+                //name
+                TextView name_tv = new TextView(mActivity);
+                FrameLayout.LayoutParams nameTvLayoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                nameTvLayoutParams.setMargins(dip2px(mContext,70),dip2px(mContext,5),0,0);
+                name_tv.setLayoutParams(nameTvLayoutParams);
+                name_tv.setText(adModel.getName());
+                adContainer.addView(name_tv);
+                //desc
+                TextView desc_tv = new TextView(mActivity);
+                FrameLayout.LayoutParams descTvLayoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                descTvLayoutParams.setMargins(dip2px(mContext,70),dip2px(mContext,25),0,0);
+                desc_tv.setLayoutParams(descTvLayoutParams);
+                desc_tv.setText(adModel.getDesc());
+                adContainer.addView(desc_tv);
+            }
+            else {
+                int screenW = CommonUtils.getScreenW(mContext);
+                double value = div(bitmap.getWidth(),bitmap.getHeight(),1);
+                FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(screenW, (int)(screenW/value));
+                adImageView = new ImageView(mActivity);
+                adImageView.setLayoutParams(layoutParams);
+                adImageView.setScaleType(ImageView.ScaleType.FIT_XY);
+                adContainer.addView(adImageView);
+            }
 
             TextView tv = tvADCreate(mActivity);
             adContainer.addView(tv);
@@ -354,6 +402,48 @@ public class MiiBannerAD extends MiiBaseAD {
             SP.setParam(SP.CONFIG, mContext, SP.FOT, show_num + 1);
 
 
+            if (isJoinImg){
+                adContainer.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        try {
+                            AdModel ad= (AdModel) adModel.clone();
+                            new ADClickHelper(mContext).AdClick(ad);
+
+                        }catch (Exception e){
+
+                            e.printStackTrace();
+
+                        }
+                        listener.onMiiADClicked();
+                    }
+                });
+                adContainer.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_DOWN:
+
+                                adModel.setDownx(String.valueOf(event.getX()));
+                                adModel.setDowny(String.valueOf(event.getY()));
+                                break;
+                            case MotionEvent.ACTION_UP:
+
+                                adModel.setUpx(String.valueOf(event.getX()));
+                                adModel.setUpy(String.valueOf(event.getY()));
+                                break;
+                            default:
+                                break;
+                        }
+                        listener.onMiiADTouched();
+                        return false;
+                    }
+                });
+
+                return;
+            }
+
+
             adImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -361,9 +451,6 @@ public class MiiBannerAD extends MiiBaseAD {
                   try {
                     AdModel ad= (AdModel) adModel.clone();
                     new ADClickHelper(mContext).AdClick(ad);
-//                    if (bitmap != null){
-//                        bitmap.recycle();
-//                    }
 
                   }catch (Exception e){
 
