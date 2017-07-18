@@ -329,7 +329,10 @@ public class MiiBannerAD extends MiiBaseAD {
     private void showBannerAD(final Bitmap bitmap){
         try {
 
-            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
+            int screenW = CommonUtils.getScreenW(mContext);
+            double value = div(bitmap.getWidth(),bitmap.getHeight(),1);
+
+            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(screenW, (int)(screenW/value));
             adImageView = new ImageView(mActivity);
             adImageView.setLayoutParams(layoutParams);
             adImageView.setScaleType(ImageView.ScaleType.FIT_XY);
@@ -358,9 +361,9 @@ public class MiiBannerAD extends MiiBaseAD {
                   try {
                     AdModel ad= (AdModel) adModel.clone();
                     new ADClickHelper(mContext).AdClick(ad);
-                    if (bitmap != null){
-                        bitmap.recycle();
-                    }
+//                    if (bitmap != null){
+//                        bitmap.recycle();
+//                    }
 
                   }catch (Exception e){
 

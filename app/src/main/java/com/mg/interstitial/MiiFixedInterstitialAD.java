@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
@@ -38,11 +37,10 @@ import com.mg.interf.MiiADListener;
 import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
+import com.mg.others.model.SDKConfigModel;
 import com.mg.others.utils.CommonUtils;
 import com.mg.others.utils.SP;
 import com.qq.e.ads.interstitial.InterstitialAD;
-
-import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
 
 
 
@@ -64,8 +62,8 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
     private AlertDialog dlg;
     private TextView tv;
     boolean oren;
-    final static double  H_P = 0.8;
-    final  static double W_P = 0.8;
+    private   double  H_P = 0.8;
+    private    double W_P = 0.8;
     private InterstitialAD iad;
     private boolean isShade;
     private ReqAsyncModel reqAsyncModel = new ReqAsyncModel();
@@ -328,7 +326,7 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
         try {
 
             //检查横竖屏
-            oren = checkOrientation();
+            oren = checkOrientation(mActivity);
 
             buildDialog();
 
@@ -337,9 +335,14 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
             int screenH = CommonUtils.getScreenH(mContext);
             int screenW = CommonUtils.getScreenW(mContext);
 
+
             boolean ishtml5 = bitmap != null ? false : true;
             double H_W_P = ishtml5 ? 1.2 : div(bitmap.getWidth(),bitmap.getHeight(),1);
 
+            SDKConfigModel sdk = checkSdkConfig(mContext);
+            if (sdk != null){
+                W_P = div(sdk.getCz(),100,1);
+            }
 
 
             if (oren) {//竖屏
@@ -399,7 +402,7 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
       try {
 
         //检查横竖屏
-        oren = checkOrientation();
+        oren = checkOrientation(mActivity);
 
         buildDialog();
 
@@ -410,6 +413,11 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
 
         boolean ishtml5 = bitmap!=null ? false:true;
         double H_W_P = ishtml5 ? 1.2: div(bitmap.getWidth(),bitmap.getHeight(),1);
+
+        SDKConfigModel sdk = checkSdkConfig(mContext);
+        if (sdk != null){
+          W_P = div(sdk.getCz(),100,1);
+        }
 
         if (oren){
           window.setLayout((int) (screenW * W_P),(int) ((screenW * W_P)/H_W_P));
@@ -472,9 +480,7 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
 
                   try {
                         mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-                        if (dlg != null){
-                           dlg.dismiss();
-                        }
+
                         if (bitmap != null){
                             bitmap.recycle();
                         }
@@ -499,6 +505,9 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
 
                             }
                         }
+                        if (dlg != null){
+                          dlg.dismiss();
+                        }
                   }
                   catch (Exception e){
 
@@ -518,14 +527,15 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
 
                   try {
                         mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+
                         AdModel ad= (AdModel) adModel.clone();
                         new ADClickHelper(mContext).AdClick(ad);
 
-                        if (dlg != null){
-                            dlg.dismiss();
-                        }
                         if (bitmap != null){
                             bitmap.recycle();
+                        }
+                        if (dlg != null){
+                            dlg.dismiss();
                         }
 
                   }
@@ -641,21 +651,21 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
 
     }
 
-    //true是竖屏 false是横屏
-    public boolean checkOrientation(){
-        Configuration mConfiguration = mActivity.getResources().getConfiguration(); //获取设置的配置信息
-        int ori = mConfiguration.orientation ; //获取屏幕方向
-        if (ori == mConfiguration.ORIENTATION_PORTRAIT) {
-
-            mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-            return true;
-        } else if (ori == mConfiguration.ORIENTATION_LANDSCAPE){
-
-            mActivity.setRequestedOrientation(SCREEN_ORIENTATION_LANDSCAPE);
-            return false;
-        }
-        return true;
-    }
+//    //true是竖屏 false是横屏
+//    public boolean checkOrientation(){
+//        Configuration mConfiguration = mActivity.getResources().getConfiguration(); //获取设置的配置信息
+//        int ori = mConfiguration.orientation ; //获取屏幕方向
+//        if (ori == mConfiguration.ORIENTATION_PORTRAIT) {
+//
+//            mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//            return true;
+//        } else if (ori == mConfiguration.ORIENTATION_LANDSCAPE){
+//
+//            mActivity.setRequestedOrientation(SCREEN_ORIENTATION_LANDSCAPE);
+//            return false;
+//        }
+//        return true;
+//    }
 
     @Override
     public void recycle() {}

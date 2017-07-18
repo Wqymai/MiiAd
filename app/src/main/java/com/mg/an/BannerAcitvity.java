@@ -37,7 +37,7 @@ public class BannerAcitvity extends Activity {
 
                     @Override
                     public void onMiiNoAD(int errCode) {
-                        LogUtils.i(MConstant.TAG,"错误码="+errCode);
+                        LogUtils.i(MConstant.TAG,"banner 错误码="+errCode);
                     }
 
                     @Override

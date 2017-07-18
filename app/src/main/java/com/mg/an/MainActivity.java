@@ -194,26 +194,26 @@ public class MainActivity extends Activity {
             }
         });
 
-        //自由插屏1
-        openNativeInterstitial= (Button) findViewById(R.id.open_nativeinterstitial);
-        openNativeInterstitial.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               startActivity(new Intent(MainActivity.this, AutoInterActivity.class));
-            }
-        });
-
-
-
-
-        //自由插屏2
-        openDialogAct = (Button) findViewById(R.id.open_dialogAct);
-        openDialogAct.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this,DialogActivity.class));
-            }
-        });
+//        //自由插屏1
+//        openNativeInterstitial= (Button) findViewById(R.id.open_nativeinterstitial);
+//        openNativeInterstitial.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//               startActivity(new Intent(MainActivity.this, AutoInterActivity.class));
+//            }
+//        });
+//
+//
+//
+//
+//        //自由插屏2
+//        openDialogAct = (Button) findViewById(R.id.open_dialogAct);
+//        openDialogAct.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startActivity(new Intent(MainActivity.this,DialogActivity.class));
+//            }
+//        });
 
         openNative = (Button) findViewById(R.id.open_native);
         openNative.setOnClickListener(new View.OnClickListener() {

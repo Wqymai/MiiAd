@@ -69,6 +69,13 @@ public abstract class MiiBaseAD {
         BigDecimal b2 = new BigDecimal(Double.toString(v2));
         return b1.divide(b2, scale, BigDecimal.ROUND_HALF_UP).doubleValue();
     }
+
+    protected  SDKConfigModel checkSdkConfig(Context mContext){
+        if (sdk == null){
+            sdk = CommonUtils.readParcel(mContext, MConstant.CONFIG_FILE_NAME);
+        }
+        return sdk;
+    }
     /**
     判断广告来源方式 1：广告源都关闭了 2：按比例展示其中一家 3：先哪家再哪家
     */
@@ -230,9 +237,9 @@ public abstract class MiiBaseAD {
         tv.setText("广告");
         tv.setTextSize(10);
         tv.setPadding(5,3,5,3);
-        tv.setBackgroundColor(Color.argb(50, 41, 36, 33));
+        tv.setBackgroundColor(Color.argb(10, 41, 36, 33));
         tv.setGravity(Gravity.CENTER);
-        tv.setTextColor(Color.parseColor("#FFF0F5"));
+        tv.setTextColor(Color.WHITE);
         FrameLayout.LayoutParams lp=new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         lp.gravity = Gravity.RIGHT|Gravity.BOTTOM;
         tv.setLayoutParams(lp);
@@ -241,6 +248,8 @@ public abstract class MiiBaseAD {
 
     //true是竖屏 false是横屏
     public boolean checkOrientation(Activity mActivity){
+      try {
+
         Configuration mConfiguration = mActivity.getResources().getConfiguration(); //获取设置的配置信息
 
         int ori = mConfiguration.orientation ; //获取屏幕方向
@@ -256,6 +265,10 @@ public abstract class MiiBaseAD {
             return false;
 
         }
+      }
+      catch (Exception e){
+          e.printStackTrace();
+      }
         return true;
     }
 

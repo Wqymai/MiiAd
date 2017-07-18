@@ -4,12 +4,26 @@
                 android:layout_height="match_parent">
 
 
-     <RelativeLayout
-         android:visibility="gone"
+     <FrameLayout
          android:id="@+id/native_interstitial_adcontainer"
          android:layout_width="match_parent"
-         android:layout_height="300dp">
-     </RelativeLayout>
+         android:layout_height="wrap_content">
+     </FrameLayout>
+
+     <TextView
+         android:visibility="gone"
+         android:id="@+id/inters_skip_view"
+         android:layout_width="96dp"
+         android:layout_height="wrap_content"
+         android:layout_alignParentRight="true"
+         android:layout_alignParentTop="true"
+         android:layout_margin="16dp"
+         android:background="@drawable/background_circle"
+         android:gravity="center"
+         android:text="@string/click_to_skip"
+         android:textColor="@android:color/white"
+         android:textSize="14sp"/>
+
 
      <LinearLayout
          android:layout_below="@id/native_interstitial_adcontainer"
@@ -18,12 +32,12 @@
          android:layout_height="wrap_content">
      <Button
          android:text="打开广告"
-         android:id="@+id/open_native"
+         android:id="@+id/open_ad"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"/>
      <Button
          android:text="关闭广告"
-         android:id="@+id/close_native"
+         android:id="@+id/close_ad"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"/>
      </LinearLayout>
