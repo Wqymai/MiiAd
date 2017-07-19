@@ -43,6 +43,16 @@ public class DeviceInfo implements Serializable {
 
     private String lon;//经度
     private String lat;//纬度
+    private String ip;
+
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
 
     public String getBssid() {
         return bssid;

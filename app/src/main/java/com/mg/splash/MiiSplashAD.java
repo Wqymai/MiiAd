@@ -27,13 +27,11 @@ import com.mg.asyn.RaReturn;
 import com.mg.asyn.ReqAsyncModel;
 import com.mg.comm.ADClickHelper;
 import com.mg.comm.ImageDownloadHelper;
-import com.mg.comm.MConstant;
 import com.mg.comm.MiiBaseAD;
 import com.mg.interf.MiiADListener;
 import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
-import com.mg.others.utils.LogUtils;
 import com.mg.others.utils.SP;
 
 import static android.os.Build.VERSION_CODES.M;
@@ -80,7 +78,6 @@ public class MiiSplashAD extends MiiBaseAD{
                     }
                     break;
                  case 300:
-                     LogUtils.i(MConstant.TAG,"收到bitmap");
                      try {
                          Bitmap bitmap = (Bitmap) msg.obj;
                          if (bitmap == null){

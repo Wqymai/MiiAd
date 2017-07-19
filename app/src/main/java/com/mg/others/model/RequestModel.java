@@ -429,6 +429,7 @@ public class RequestModel {
                     + currTime+"1"+deviceInfo.getImei() + deviceInfo.getScreenWidth() + deviceInfo.getScreenHeight()));
             params.put("lid",lid);
             params.put("orientation",String.valueOf(getOri(mContext)));
+
         }
         catch (Exception e){
             e.printStackTrace();

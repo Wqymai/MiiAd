@@ -30,14 +30,12 @@ import com.mg.asyn.RaReturn;
 import com.mg.asyn.ReqAsyncModel;
 import com.mg.comm.ADClickHelper;
 import com.mg.comm.ImageDownloadHelper;
-import com.mg.comm.MConstant;
 import com.mg.comm.MiiBaseAD;
 import com.mg.interf.MiiADListener;
 import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
 import com.mg.others.utils.CommonUtils;
-import com.mg.others.utils.LogUtils;
 import com.mg.others.utils.SP;
 
 
@@ -251,7 +249,6 @@ public class MiiBannerAD extends MiiBaseAD {
 //    }
     private void  checkADType(final AdModel adModel){
 
-        LogUtils.i(MConstant.TAG,"高度="+adModel.getImgh());
         if (adModel.getType() == 4){//h5广告
 
           try {
@@ -387,6 +384,9 @@ public class MiiBannerAD extends MiiBaseAD {
             }
 
             TextView tv = tvADCreate(mActivity);
+            if (adModel.getSourceMark()!= null && !adModel.getSourceMark().equals("")){
+                tv.setText(adModel.getSourceMark()+"|广告");
+            }
             adContainer.addView(tv);
 
             adImageView.setImageBitmap(bitmap);
@@ -494,7 +494,7 @@ public class MiiBannerAD extends MiiBaseAD {
     @Override
     public void recycle() {
         try {
-            LogUtils.i(MConstant.TAG,"调用了banner的recycle()");
+
             mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
             if (adImageView != null){
                 Drawable drawable = adImageView.getDrawable();

@@ -627,6 +627,7 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
 
     private void buildOthersView(){
 
+      try {
         //添加关闭按钮
         cancel=new MiiCircleTextView(mActivity);
         cancel.setGravity(Gravity.CENTER);
@@ -645,7 +646,16 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
         tvlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         //添加"广告"字样
         tv = tvADCreate(mActivity);
+        if (adModel.getSourceMark()!= null && !adModel.getSourceMark().equals("")){
+            tv.setText(adModel.getSourceMark()+"|广告");
+        }
         relativeLayout.addView(tv,tvlp);
+      }catch (Exception e){
+
+          listener.onMiiNoAD(3009);
+          e.printStackTrace();
+
+      }
 
     }
 
