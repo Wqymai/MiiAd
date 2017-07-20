@@ -1,5 +1,7 @@
 package com.mg.others.utils.imager;
 
+import android.os.Handler;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -22,7 +24,7 @@ public class DownloadImgUtils
 	 * @param file
 	 * @return
 	 */
-	public static boolean downloadImgByUrl(String urlStr, File file)
+	public static boolean downloadImgByUrl(String urlStr, File file, Handler handler)
 	{
 		FileOutputStream fos = null;
 		InputStream is = null;
@@ -30,7 +32,8 @@ public class DownloadImgUtils
 		{
 			URL url = new URL(urlStr);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setConnectTimeout(3000);
+			conn.setConnectTimeout(5000);
+			conn.setReadTimeout(5000);
 			is = conn.getInputStream();
 			fos = new FileOutputStream(file);
 			byte[] buf = new byte[512];
@@ -44,6 +47,7 @@ public class DownloadImgUtils
 
 		} catch (Exception e)
 		{
+			handler.sendEmptyMessage(700);
 			e.printStackTrace();
 
 		} finally
@@ -53,7 +57,7 @@ public class DownloadImgUtils
 				if (is != null) is.close();
 			} catch (IOException e)
 			{
-
+				handler.sendEmptyMessage(700);
 			}
 
 			try
@@ -61,7 +65,7 @@ public class DownloadImgUtils
 				if (fos != null) fos.close();
 			} catch (IOException e)
 			{
-
+				handler.sendEmptyMessage(700);
 			}
 		}
 

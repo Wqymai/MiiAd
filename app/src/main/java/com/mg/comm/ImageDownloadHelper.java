@@ -45,7 +45,7 @@ public class ImageDownloadHelper {
             Runnable runnable = new Runnable() {
                 @Override
                 public void run() {
-                    boolean downloadState = DownloadImgUtils.downloadImgByUrl(url, file);
+                    boolean downloadState = DownloadImgUtils.downloadImgByUrl(url, file,mainHandler);
                     if (downloadState)// 如果下载成功
                     {
                         LogUtils.i(MConstant.TAG,"图片下载成功");

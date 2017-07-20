@@ -274,14 +274,18 @@ public class MiiBannerAD extends MiiBaseAD {
 
                   @Override
                   public boolean shouldOverrideUrlLoading(WebView view, String url) {
+
+
+                      //广告点击回调
+                      listener.onMiiADClicked();
+
                       view.stopLoading();
                       view.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
 
                       //点击上报
                       HttpManager.reportEvent(adModel, AdReport.EVENT_CLICK, mContext);
 
-                      //广告点击回调
-                      listener.onMiiADClicked();
+
 
                       return true;
                   }
@@ -407,6 +411,8 @@ public class MiiBannerAD extends MiiBaseAD {
                     @Override
                     public void onClick(View v) {
                         try {
+                            listener.onMiiADClicked();
+
                             AdModel ad= (AdModel) adModel.clone();
                             new ADClickHelper(mContext).AdClick(ad);
 
@@ -415,7 +421,7 @@ public class MiiBannerAD extends MiiBaseAD {
                             e.printStackTrace();
 
                         }
-                        listener.onMiiADClicked();
+
                     }
                 });
                 adContainer.setOnTouchListener(new View.OnTouchListener() {
@@ -449,6 +455,9 @@ public class MiiBannerAD extends MiiBaseAD {
                 public void onClick(View v) {
 
                   try {
+
+                    listener.onMiiADClicked();
+
                     AdModel ad= (AdModel) adModel.clone();
                     new ADClickHelper(mContext).AdClick(ad);
 
@@ -457,7 +466,7 @@ public class MiiBannerAD extends MiiBaseAD {
                       e.printStackTrace();
 
                   }
-                  listener.onMiiADClicked();
+
 
                 }
             });

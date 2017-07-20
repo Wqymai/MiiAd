@@ -82,7 +82,6 @@ public abstract class MiiBaseAD {
     protected SourceAssignModel checkADSource(Context mContext,int pt){
 
 
-
       SourceAssignModel saModel=new SourceAssignModel();
       try {
         sdk = CommonUtils.readParcel(mContext, MConstant.CONFIG_FILE_NAME);
