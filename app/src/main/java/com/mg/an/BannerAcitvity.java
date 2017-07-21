@@ -28,45 +28,45 @@ public class BannerAcitvity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_banner);
         bannerContainer = (ViewGroup) this.findViewById(R.id.bannerContainer);
+        bannerAD = new MiiBannerAD(BannerAcitvity.this, bannerContainer,MConstant.APPID,MConstant.BID,new MiiADListener() {
+
+            @Override
+            public void onMiiNoAD(int errCode) {
+                LogUtils.i(MConstant.TAG,"banner onMiiNoAD="+errCode);
+            }
+
+            @Override
+            public void onMiiADDismissed() {
+                LogUtils.i(MConstant.TAG,"banner onMiiADDismissed");
+            }
+
+            @Override
+            public void onMiiADPresent() {
+                LogUtils.i(MConstant.TAG,"banner onMiiADPresent");
+                bannerContainer.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onMiiADClicked() {
+                LogUtils.i(MConstant.TAG,"banner onMiiADClicked");
+            }
+
+            @Override
+            public void onMiiADTouched() {
+                //不会调
+            }
+
+            @Override
+            public void onMiiADTick(long millisUntilFinished) {
+                //不会调
+            }
+        });
 
         refresh= (Button) findViewById(R.id.refreshBanner);
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               bannerAD = new MiiBannerAD(BannerAcitvity.this, bannerContainer,MConstant.APPID,MConstant.BID,new MiiADListener() {
-
-                    @Override
-                    public void onMiiNoAD(int errCode) {
-                        LogUtils.i(MConstant.TAG,"banner 错误码="+errCode);
-                    }
-
-                    @Override
-                    public void onMiiADDismissed() {
-                        LogUtils.i(MConstant.TAG,"onMiiADDismissed");
-                    }
-
-                    @Override
-                    public void onMiiADPresent() {
-                        LogUtils.i(MConstant.TAG,"onMiiADPresent");
-                        bannerContainer.setVisibility(View.VISIBLE);
-                    }
-
-                    @Override
-                    public void onMiiADClicked() {
-                        LogUtils.i(MConstant.TAG,"onMiiADClicked");
-                    }
-
-                   @Override
-                   public void onMiiADTouched() {
-
-                   }
-
-                   @Override
-                    public void onMiiADTick(long millisUntilFinished) {
-
-                    }
-                });
-
+               bannerAD.loadBannerAD();
             }
         });
         close= (Button) findViewById(R.id.closeBanner);

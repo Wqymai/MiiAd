@@ -6,9 +6,7 @@ import android.util.DisplayMetrics;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 
-import com.mg.comm.MConstant;
 import com.mg.others.utils.CommonUtils;
-import com.mg.others.utils.LogUtils;
 
 import java.lang.reflect.Field;
 
@@ -31,12 +29,12 @@ public class ImageSizeUtil
 		int height = options.outHeight;
 
 		int inSampleSize = 1;
-		LogUtils.i(MConstant.TAG,"width="+width+" height="+height);
+//		LogUtils.i(MConstant.TAG,"width="+width+" height="+height);
 
 		int reqWidth= CommonUtils.getScreenW(context);
 		int reqHeight=CommonUtils.getScreenH(context);
 
-		LogUtils.i(MConstant.TAG,"reqWidth="+reqWidth+" reqHeight="+reqHeight);
+//		LogUtils.i(MConstant.TAG,"reqWidth="+reqWidth+" reqHeight="+reqHeight);
 
 		if (width > reqWidth || height > reqHeight)
 		{
@@ -53,7 +51,7 @@ public class ImageSizeUtil
 			}
 
 		}
-		LogUtils.i(MConstant.TAG,"inSampleSize="+inSampleSize);
+//		LogUtils.i(MConstant.TAG,"inSampleSize="+inSampleSize);
 		return inSampleSize;
 	}
 

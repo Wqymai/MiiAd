@@ -103,9 +103,6 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
                         e.printStackTrace();
                     }
                     break;
-//                case 400:
-//                    openGDTAD(true);
-//                    break;
                 case 500:
                     listener.onMiiNoAD(1000);
                     break;
@@ -150,77 +147,6 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
       }
     }
 
-//    private void openGDTAD(final boolean shouldReturn){
-//
-//
-//        new HbNoReturn(reqAsyncModel).fetchMGAD();
-//
-//        String AID = "";
-//        String IPID = "";
-//        try {
-//            GdtInfoModel model = getGdtIds(mContext);
-//            AID = model.getAPPID();
-//            IPID = model.getInterteristalPosID();
-//        }catch (Exception e){
-//
-//            listener.onMiiNoAD(3007);
-//            e.printStackTrace();
-//
-//        }
-//
-//        //记录开始请求广点通时间戳
-//        SP.setParam(SP.CONFIG, mContext, SP.GDT_ST, System.currentTimeMillis());
-//
-//        iad = new InterstitialAD(mActivity, AID, IPID);
-//        iad.setADListener(new AbstractInterstitialADListener() {
-//            @Override
-//            public void onADReceive() {
-//
-//                //广点通请求广告成功上报
-//                HttpManager.reportGdtEvent(1,3,null,mContext);
-//
-//                if (isShade){
-//                    iad.show();
-//
-//                }else {
-//                    iad.showAsPopupWindow();
-//                }
-//
-//                listener.onMiiADPresent();
-//            }
-//
-//            @Override
-//            public void onNoAD(int i) {
-//
-//                //广点通请求广告失败上报
-//                HttpManager.reportGdtEvent(0,3,String.valueOf(i),mContext);
-//
-//                if (!shouldReturn){
-//
-//                    new RaReturn(reqAsyncModel).fetchMGAD();
-//
-//                    return;
-//                }
-//            }
-//
-//            @Override
-//            public void onADClicked() {
-//
-//                //广点通请求广告成功上报
-//                HttpManager.reportGdtEvent(2,3,null,mContext);
-//
-//                listener.onMiiADClicked();
-//            }
-//
-//            @Override
-//            public void onADClosed() {
-//
-//                listener.onMiiADDismissed();
-//            }
-//        });
-//        iad.loadAD();
-//    }
-
 
     private void checkOpenAD(){
 
@@ -238,29 +164,7 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
                 return;
             }
             new RaReturn(reqAsyncModel).fetchMGAD();
-//            else if (saModel.type == 2){
-//
-//                if (saModel.firstChoose == 1){
-//
-//                    new RaReturn(reqAsyncModel).fetchMGAD();
-//                }
-//                else {
-//
-//                    openGDTAD(true);
-//
-//                }
-//            }
-//            else if (saModel.type == 3){
-//
-//                if (saModel.firstChoose == 1){
-//
-//                    new RaNoReturn(reqAsyncModel).fetchMGAD();
-//
-//                }
-//                else {
-//                    openGDTAD(false);
-//                }
-//            }
+
         }
         catch (Exception e){
 
@@ -662,21 +566,7 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
 
     }
 
-//    //true是竖屏 false是横屏
-//    public boolean checkOrientation(){
-//        Configuration mConfiguration = mActivity.getResources().getConfiguration(); //获取设置的配置信息
-//        int ori = mConfiguration.orientation ; //获取屏幕方向
-//        if (ori == mConfiguration.ORIENTATION_PORTRAIT) {
-//
-//            mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-//            return true;
-//        } else if (ori == mConfiguration.ORIENTATION_LANDSCAPE){
-//
-//            mActivity.setRequestedOrientation(SCREEN_ORIENTATION_LANDSCAPE);
-//            return false;
-//        }
-//        return true;
-//    }
+
 
     @Override
     public void recycle() {}

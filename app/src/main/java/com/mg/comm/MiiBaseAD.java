@@ -215,7 +215,7 @@ public abstract class MiiBaseAD {
                         }
                         else {
 
-                            mainHandler.sendEmptyMessage(600);
+//                            mainHandler.sendEmptyMessage(600);
                         }
                     }
                 },5000);
@@ -223,11 +223,13 @@ public abstract class MiiBaseAD {
             }
             else {
 
-                mainHandler.sendEmptyMessage(600);
+//                mainHandler.sendEmptyMessage(600);
             }
         }catch (Exception e){
+
             mainHandler.sendEmptyMessage(500);
             e.printStackTrace();
+
         }
     }
     //"广告"提示
