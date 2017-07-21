@@ -22,17 +22,16 @@ import java.security.NoSuchAlgorithmException;
 
 public class ImageDownloadHelper {
 
-    int isPortrait;
-    public ImageDownloadHelper(int isPortrait){
-        this.isPortrait = isPortrait;
-    }
+
+//    public ImageDownloadHelper(){
+//    }
 
 
-    public  void downloadShowImage(final Context context, final String url, final int adType, final Handler mainHandler){
+    public  void downloadShowImage(final Context context, final String url, final Handler mainHandler){
         final File file = getDiskCacheDir(context, md5(url));
         if (file.exists())
         {
-            LogUtils.i(MConstant.TAG,"加载缓存图片");
+            LogUtils.i(MConstant.TAG,"load cache img");
             Bitmap bm;
             bm = loadImageFromLocal(file.getAbsolutePath(),context);
             Message msg = new Message();
@@ -48,7 +47,7 @@ public class ImageDownloadHelper {
                     boolean downloadState = DownloadImgUtils.downloadImgByUrl(url, file,mainHandler);
                     if (downloadState)// 如果下载成功
                     {
-                        LogUtils.i(MConstant.TAG,"图片下载成功");
+                        LogUtils.i(MConstant.TAG,"img download suc");
                         Bitmap bm = loadImageFromLocal(file.getAbsolutePath(),context);
                         Message msg = new Message();
                         msg.obj = bm;

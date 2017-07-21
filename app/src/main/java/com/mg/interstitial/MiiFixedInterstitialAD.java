@@ -294,7 +294,7 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
 
                 }else {
 
-                     new ImageDownloadHelper(0).downloadShowImage(mContext,adModel.getImage(),3,mainHandler);
+                     new ImageDownloadHelper().downloadShowImage(mContext,adModel.getImage(),mainHandler);
 
                 }
             }

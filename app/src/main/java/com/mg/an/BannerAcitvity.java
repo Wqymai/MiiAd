@@ -42,7 +42,7 @@ public class BannerAcitvity extends Activity {
 
                     @Override
                     public void onMiiADDismissed() {
-                        LogUtils.i(MConstant.TAG,"onMiiADDismissed=");
+                        LogUtils.i(MConstant.TAG,"onMiiADDismissed");
                     }
 
                     @Override

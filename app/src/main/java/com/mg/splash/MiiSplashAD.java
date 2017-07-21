@@ -22,9 +22,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.mg.asyn.HbNoReturn;
 import com.mg.asyn.HbReturn;
-import com.mg.asyn.RaNoReturn;
 import com.mg.asyn.RaReturn;
 import com.mg.asyn.ReqAsyncModel;
 import com.mg.comm.ADClickHelper;
@@ -34,10 +32,7 @@ import com.mg.interf.MiiADListener;
 import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
-import com.mg.others.model.GdtInfoModel;
 import com.mg.others.utils.SP;
-import com.qq.e.ads.splash.SplashAD;
-import com.qq.e.ads.splash.SplashADListener;
 
 import static android.os.Build.VERSION_CODES.M;
 
@@ -96,9 +91,9 @@ public class MiiSplashAD extends MiiBaseAD{
                          e.printStackTrace();
                      }
                      break;
-                 case 400:
-                     openGDTAD(true);
-                     break;
+//                 case 400:
+//                     openGDTAD(true);
+//                     break;
                  case 500:
                      listener.onMiiNoAD(1000);
                      break;
@@ -261,7 +256,7 @@ public class MiiSplashAD extends MiiBaseAD{
             }
             else {
 
-              new ImageDownloadHelper(0).downloadShowImage(mContext,adModel.getImage(),2,mainHandler);
+              new ImageDownloadHelper().downloadShowImage(mContext,adModel.getImage(),mainHandler);
 
             }
 
@@ -333,8 +328,6 @@ public class MiiSplashAD extends MiiBaseAD{
                  @Override
                  public void onClick(View v) {
 
-
-
                     try {
                         listener.onMiiADClicked();
                         listener.onMiiADDismissed();
@@ -354,27 +347,20 @@ public class MiiSplashAD extends MiiBaseAD{
 
                     }
 
-
-
                  }
              });
             adImageView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
-
                             adModel.setDownx(String.valueOf(event.getX()));
                             adModel.setDowny(String.valueOf(event.getY()));
                             break;
-
                         case MotionEvent.ACTION_UP:
-
                             adModel.setUpx(String.valueOf(event.getX()));
                             adModel.setUpy(String.valueOf(event.getY()));
                             break;
-
                         default:
                             break;
                     }
@@ -445,24 +431,25 @@ public class MiiSplashAD extends MiiBaseAD{
             return;
 
         }
-        else if (type == 2){
-
-            if (firstChoose == 1){
-                new RaReturn(reqAsyncModel).fetchMGAD();
-            }
-            else {
-                openGDTAD(true);
-            }
-        }
-        else if (type ==3){
-
-            if (firstChoose == 1){
-                new RaNoReturn(reqAsyncModel).fetchMGAD();
-            }
-            else {
-                openGDTAD(false);
-            }
-        }
+        new RaReturn(reqAsyncModel).fetchMGAD();
+//        else if (type == 2){
+//
+//            if (firstChoose == 1){
+//                new RaReturn(reqAsyncModel).fetchMGAD();
+//            }
+//            else {
+//                openGDTAD(true);
+//            }
+//        }
+//        else if (type ==3){
+//
+//            if (firstChoose == 1){
+//                new RaNoReturn(reqAsyncModel).fetchMGAD();
+//            }
+//            else {
+//                openGDTAD(false);
+//            }
+//        }
       }catch (Exception e){
 
           listener.onMiiNoAD(3012);
@@ -471,71 +458,71 @@ public class MiiSplashAD extends MiiBaseAD{
       }
     }
 
-    private void openGDTAD(final boolean shouldReturn){
-
-        new HbNoReturn(reqAsyncModel).fetchMGAD();
-
-        String AID = "";
-        String SPID = "";
-        try {
-
-           GdtInfoModel model = getGdtIds(mContext);
-           AID = model.getAPPID();
-           SPID = model.getSplashPosID();
-
-        }catch (Exception e){
-
-           listener.onMiiNoAD(3007);
-           e.printStackTrace();
-
-        }
-
-        //记录开始请求广点通时间戳
-        SP.setParam(SP.CONFIG, mContext, SP.GDT_ST, System.currentTimeMillis());
-
-        new SplashAD(mActivity, adContainer, skipContainer, AID,SPID, new SplashADListener() {
-            @Override
-            public void onADDismissed() {
-
-                listener.onMiiADDismissed();
-
-            }
-
-            @Override
-            public void onNoAD(int i) {
-                //广点通请求广告失败上报
-                HttpManager.reportGdtEvent(0,2,String.valueOf(i),mContext);
-
-                if (!shouldReturn){
-                    new RaReturn(reqAsyncModel).fetchMGAD();
-                    return;
-                }
-                listener.onMiiNoAD(i);
-            }
-
-            @Override
-            public void onADPresent() {
-                //广点通请求广告成功上报
-                HttpManager.reportGdtEvent(1,2,null,mContext);
-                listener.onMiiADPresent();
-            }
-
-            @Override
-            public void onADClicked() {
-                //广点通请求广告成功上报
-                HttpManager.reportGdtEvent(2,2,null,mContext);
-                //广点通点击上报
-                listener.onMiiADClicked();
-
-            }
-
-            @Override
-            public void onADTick(long l) {
-
-                listener.onMiiADTick(l);
-            }
-        }, 0);
-    }
+//    private void openGDTAD(final boolean shouldReturn){
+//
+//        new HbNoReturn(reqAsyncModel).fetchMGAD();
+//
+//        String AID = "";
+//        String SPID = "";
+//        try {
+//
+//           GdtInfoModel model = getGdtIds(mContext);
+//           AID = model.getAPPID();
+//           SPID = model.getSplashPosID();
+//
+//        }catch (Exception e){
+//
+//           listener.onMiiNoAD(3007);
+//           e.printStackTrace();
+//
+//        }
+//
+//        //记录开始请求广点通时间戳
+//        SP.setParam(SP.CONFIG, mContext, SP.GDT_ST, System.currentTimeMillis());
+//
+//        new SplashAD(mActivity, adContainer, skipContainer, AID,SPID, new SplashADListener() {
+//            @Override
+//            public void onADDismissed() {
+//
+//                listener.onMiiADDismissed();
+//
+//            }
+//
+//            @Override
+//            public void onNoAD(int i) {
+//                //广点通请求广告失败上报
+//                HttpManager.reportGdtEvent(0,2,String.valueOf(i),mContext);
+//
+//                if (!shouldReturn){
+//                    new RaReturn(reqAsyncModel).fetchMGAD();
+//                    return;
+//                }
+//                listener.onMiiNoAD(i);
+//            }
+//
+//            @Override
+//            public void onADPresent() {
+//                //广点通请求广告成功上报
+//                HttpManager.reportGdtEvent(1,2,null,mContext);
+//                listener.onMiiADPresent();
+//            }
+//
+//            @Override
+//            public void onADClicked() {
+//                //广点通请求广告成功上报
+//                HttpManager.reportGdtEvent(2,2,null,mContext);
+//                //广点通点击上报
+//                listener.onMiiADClicked();
+//
+//            }
+//
+//            @Override
+//            public void onADTick(long l) {
+//
+//                listener.onMiiADTick(l);
+//            }
+//        }, 0);
+//    }
 
     @Override
     public void recycle() {

@@ -39,7 +39,7 @@ public class MNativeActivity extends Activity {
         setContentView(R.layout.dialog2);
         final MiiNativeADDataRef ref = (MiiNativeADDataRef) getIntent().getSerializableExtra("AdData");
 
-        LogUtils.i(MConstant.TAG, "imgurl="+ref.getImg()+" type="+ref.getType());
+
 
         imageView = (ImageView) findViewById(R.id.img);
 
@@ -56,12 +56,12 @@ public class MNativeActivity extends Activity {
                         HttpURLConnection conn = null;
                         URL mURL = new URL(imgurl);
                         conn = (HttpURLConnection) mURL.openConnection();
-                        conn.setRequestMethod("GET"); //设置请求方法
-                        conn.setConnectTimeout(10000); //设置连接服务器超时时间
-                        conn.setReadTimeout(5000);  //设置读取数据超时时间
-                        conn.connect(); //开始连接
+                        conn.setRequestMethod("GET");
+                        conn.setConnectTimeout(5000);
+                        conn.setReadTimeout(5000);
+                        conn.connect();
                         if(conn.getResponseCode() == 200){
-                            LogUtils.i(MConstant.TAG, "图片下载成功");
+                            LogUtils.i(MConstant.TAG, "原生广告图片下载成功");
                             InputStream inputStream = conn.getInputStream();
                             final Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                             runOnUiThread(new Runnable() {
@@ -74,6 +74,7 @@ public class MNativeActivity extends Activity {
                         }
                     }
                     catch (Exception e){
+                        LogUtils.i(MConstant.TAG, "原生广告图片下载失败");
                         e.printStackTrace();
                     }
                 }
@@ -101,7 +102,6 @@ public class MNativeActivity extends Activity {
         else {
             page=ref.getPage();
             Log.i(MConstant.TAG,"h5广告" + page);
-
             imageView.setVisibility(View.GONE);
             webView.loadDataWithBaseURL("",page , "text/html", "utf-8", "");
             ref.onExposured(MNativeActivity.this);

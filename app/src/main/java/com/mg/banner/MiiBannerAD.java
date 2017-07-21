@@ -128,11 +128,13 @@ public class MiiBannerAD extends MiiBaseAD {
         reqAsyncModel.appid = appid;
         reqAsyncModel.lid = lid;
 
+        recycle();
+        adContainer.removeAllViews();
+
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             check23AbovePermission(mActivity,mainHandler);
             return;
         }
-
 
         new HbReturn(reqAsyncModel).fetchMGAD();
 
@@ -322,13 +324,13 @@ public class MiiBannerAD extends MiiBaseAD {
                   }
                   else {
                       isJoinImg = true;
-                      new ImageDownloadHelper(0).downloadShowImage(mContext,adModel.getIcon(),1,mainHandler);
+                      new ImageDownloadHelper().downloadShowImage(mContext,adModel.getIcon(),mainHandler);
                   }
 
               }
               else {
                   isJoinImg = false;
-                  new ImageDownloadHelper(0).downloadShowImage(mContext,adModel.getImage(),1,mainHandler);
+                  new ImageDownloadHelper().downloadShowImage(mContext,adModel.getImage(),mainHandler);
 
               }
 
@@ -343,8 +345,8 @@ public class MiiBannerAD extends MiiBaseAD {
 
 
     /**
-     //     * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
-     //     */
+    * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
+    */
     public static int dip2px(Context context, float dpValue) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);

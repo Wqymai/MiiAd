@@ -15,7 +15,6 @@ import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
 import com.mg.others.utils.CommonUtils;
-import com.mg.others.utils.LogUtils;
 
 import org.json.JSONObject;
 
@@ -144,11 +143,14 @@ public class ADClickHelper {
     }
 
     private String getPName(String dstlink){
+
         String pn = null;
+        if (dstlink==null || dstlink.equals("")){
+            return pn;
+        }
         Pattern p = Pattern.compile("fsname=(.*?)_");
         Matcher m = p.matcher(dstlink);
         if (m.find()){
-            LogUtils.i(MConstant.TAG,m.group(1));
             pn=m.group(1);
         }
         return pn;
@@ -168,14 +170,14 @@ public class ADClickHelper {
         else {
             String installedList = CommonUtils.getInstalledSafeWare(mContext);
             if (installedList.contains(ad.getPkName())){ //如果存在已安装应用，直接打开不用下载了
-                LogUtils.i(MConstant.TAG,"already installed");
+
                 PackageManager packageManager = mContext.getPackageManager();
                 Intent it= packageManager.getLaunchIntentForPackage(pn);
                 it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 mContext.startActivity(it);
             }
             else {
-                LogUtils.i(MConstant.TAG,"need download");
+
                 //开始下载上报
                 HttpManager.reportEvent(ad, AdReport.EVENT_DOWNLOAD_START, mContext);
                 ApkDownloadManager manager = ApkDownloadManager.getIntance(mContext);
@@ -187,6 +189,9 @@ public class ADClickHelper {
 
     private String replaceAdUrl(AdModel adModel){
         String originUrl = adModel.getUrl();
+        if (originUrl == null){
+            return originUrl;
+        }
         if (originUrl.contains("%%DOWNX%%")){
             originUrl = originUrl.replace("%%DOWNX%%",adModel.getDownx());
         }
