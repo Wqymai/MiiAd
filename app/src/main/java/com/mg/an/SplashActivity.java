@@ -21,12 +21,17 @@ import com.mg.splash.MiiSplashAD;
 
 public class  SplashActivity extends Activity implements MiiADListener {
 
+    public static final String APPID = "1101152570";
+    public static final String SplashPosID = "8863364436303842593";
     private String TAG = "AD_DEMO";
     private MiiSplashAD splashAD;
     private ViewGroup container;
     private TextView skipView;
     private ImageView splashHolder;
     private static final String SKIP_TEXT = "点击跳过 %d";
+
+
+    public boolean canJump = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +40,7 @@ public class  SplashActivity extends Activity implements MiiADListener {
         container = (ViewGroup) this.findViewById(R.id.splash_container);
         skipView = (TextView) findViewById(R.id.skip_view);
         splashHolder = (ImageView) findViewById(R.id.splash_holder);
-        fetchAD(this, container, skipView,MConstant.APPID,MConstant.KID,this);
+        fetchAD(this, container, skipView, MConstant.APPID,MConstant.KID,this);
     }
 
     /**
@@ -47,7 +52,10 @@ public class  SplashActivity extends Activity implements MiiADListener {
      */
     private void fetchAD(SplashActivity activity, ViewGroup container, View skipView,String appid,String lid,MiiADListener listener) {
         splashAD = new MiiSplashAD(activity,container,skipView,appid,lid,listener);
+
     }
+
+
 
     @Override
     public void onMiiNoAD(int errCode) {
@@ -57,8 +65,7 @@ public class  SplashActivity extends Activity implements MiiADListener {
     @Override
     public void onMiiADDismissed() {
         Log.i(TAG, "SplashADDismissed");
-        startActivity(new Intent(SplashActivity.this,BannerAcitvity.class));
-        finish();
+        next();
     }
 
     @Override
@@ -86,5 +93,32 @@ public class  SplashActivity extends Activity implements MiiADListener {
     public void onMiiADTick(long millisUntilFinished) {
         Log.i(TAG, "SplashADTick " + millisUntilFinished+ "ms");
         skipView.setText(String.format(SKIP_TEXT, (Math.round(millisUntilFinished / 1000f))));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        canJump = false;
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (canJump) {
+            next();
+        }
+        canJump = true;
+
+    }
+
+    private void next() {
+        if (canJump) {
+            this.startActivity(new Intent(this, BannerAcitvity.class));
+            this.finish();
+        } else {
+            canJump = true;
+        }
     }
 }
