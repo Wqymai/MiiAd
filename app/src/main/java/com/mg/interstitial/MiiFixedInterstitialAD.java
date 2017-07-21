@@ -32,6 +32,7 @@ import com.mg.asyn.RaReturn;
 import com.mg.asyn.ReqAsyncModel;
 import com.mg.comm.ADClickHelper;
 import com.mg.comm.ImageDownloadHelper;
+import com.mg.comm.MConstant;
 import com.mg.comm.MiiBaseAD;
 import com.mg.interf.MiiADListener;
 import com.mg.others.manager.HttpManager;
@@ -39,6 +40,7 @@ import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
 import com.mg.others.model.SDKConfigModel;
 import com.mg.others.utils.CommonUtils;
+import com.mg.others.utils.LogUtils;
 import com.mg.others.utils.SP;
 
 
@@ -106,9 +108,9 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
                 case 500:
                     listener.onMiiNoAD(1000);
                     break;
-//                case 600:
-//                    new HbReturn(reqAsyncModel).fetchMGAD();
-//                    break;
+                case 600:
+                    new HbReturn(reqAsyncModel).fetchMGAD();
+                    break;
                 case 700:
                     listener.onMiiNoAD(3011);
                     break;
@@ -137,7 +139,7 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
               check23AbovePermission(mActivity, mainHandler);
               return;
           }
-
+          new HbReturn(reqAsyncModel).fetchMGAD();
 
       }
       catch (Exception e){
@@ -146,12 +148,6 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
           e.printStackTrace();
       }
     }
-
-
-    public void loadInterstitialAD(){
-        new HbReturn(reqAsyncModel).fetchMGAD();
-    }
-
 
     private void checkOpenAD(){
 
@@ -219,11 +215,11 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
     }
 
     private void buildDialog(){
-        if (dlg == null){
-            dlg = new AlertDialog.Builder(mActivity).create();
-            dlg.setCanceledOnTouchOutside(false);
-            dlg.show();
-        }
+
+        dlg = new AlertDialog.Builder(mActivity).create();
+        dlg.setCanceledOnTouchOutside(false);
+        dlg.show();
+
     }
 
 
@@ -273,6 +269,7 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
 
 
             if (ishtml5) {
+                LogUtils.i(MConstant.TAG,"h5广告。。。");
                 buildWebView(html);
             } else {
                 buildImageView(bitmap);
@@ -491,21 +488,18 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
 
 
     private void buildImageView(Bitmap bitmap){
-        if (imageView == null){
-            imageView=new MiiImageView(mActivity);
-            RelativeLayout.LayoutParams ivParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            imageView.setLayoutParams(ivParam);
-            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-            relativeLayout.addView(imageView);
-        }
+
+        imageView=new MiiImageView(mActivity);
+        RelativeLayout.LayoutParams ivParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        imageView.setLayoutParams(ivParam);
+        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+        relativeLayout.addView(imageView);
         imageView.setImageBitmap(bitmap);
     }
     private void buildWebView(String html){
 
         try{
-            if (webView == null){
-                webView = new WebView(mActivity);
-            }
+            webView = new WebView(mActivity);
             RelativeLayout.LayoutParams params_webview = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
             webView.setLayoutParams(params_webview);
             WebSettings settings = webView.getSettings();
@@ -546,31 +540,30 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
     private void buildOthersView(){
 
       try {
-        if (cancel == null){
-            //添加关闭按钮
-            cancel=new MiiCircleTextView(mActivity);
-            cancel.setGravity(Gravity.CENTER);
-            cancel.setText("X");
-            cancel.setWidth(60);
-            cancel.setHeight(60);
-            cancel.setBackgroundColor(Color.argb(10, 41, 36, 33));
-            cancel.setTextColor(Color.WHITE);
-            RelativeLayout.LayoutParams lp=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            lp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-            relativeLayout.addView(cancel, lp);
+        
+        //添加关闭按钮
+        cancel=new MiiCircleTextView(mActivity);
+        cancel.setGravity(Gravity.CENTER);
+        cancel.setText("X");
+        cancel.setWidth(60);
+        cancel.setHeight(60);
+        cancel.setBackgroundColor(Color.argb(10, 41, 36, 33));
+        cancel.setTextColor(Color.WHITE);
+        RelativeLayout.LayoutParams lp=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        lp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+        relativeLayout.addView(cancel, lp);
+
+        RelativeLayout.LayoutParams tvlp=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        tvlp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        tvlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        //添加"广告"字样
+        tv = tvADCreate(mActivity);
+        if (adModel.getSourceMark()!= null && !adModel.getSourceMark().equals("")){
+            tv.setText(adModel.getSourceMark()+"|广告");
         }
-        if (tv == null){
-            RelativeLayout.LayoutParams tvlp=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            tvlp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            tvlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-            //添加"广告"字样
-            tv = tvADCreate(mActivity);
-            if (adModel.getSourceMark()!= null && !adModel.getSourceMark().equals("")){
-                tv.setText(adModel.getSourceMark()+"|广告");
-            }
-            relativeLayout.addView(tv,tvlp);
-        }
+        relativeLayout.addView(tv,tvlp);
+
       }catch (Exception e){
 
           listener.onMiiNoAD(3009);
