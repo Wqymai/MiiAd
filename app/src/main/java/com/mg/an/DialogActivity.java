@@ -13,7 +13,7 @@
 //
 //import com.android.others.R;
 //import com.mg.comm.MConstant;
-//import com.mg.interf.MiiADListener;
+//import com.mg.interf.MiiAbsADListener;
 //import com.mg.interstitial.MiiAutoInterstitialAD;
 //
 ///**
@@ -31,7 +31,7 @@
 //        setContentView(R.layout.dialog);
 //        viewGroup = (ViewGroup) findViewById(R.id.adContainer);
 //        adHolder = (ImageView) findViewById(R.id.ad_holder);
-//        miiAutoInterstitialAD =  new MiiAutoInterstitialAD(DialogActivity.this, viewGroup, MConstant.APPID,MConstant.IID,new MiiADListener() {
+//        miiAutoInterstitialAD =  new MiiAutoInterstitialAD(DialogActivity.this, viewGroup, MConstant.APPID,MConstant.IID,new MiiAbsADListener() {
 //            @Override
 //            public void onMiiNoAD(int errCode) {
 //                Log.i(Constants.TAG,"自由插屏  onMiiNoAD  "+errCode);

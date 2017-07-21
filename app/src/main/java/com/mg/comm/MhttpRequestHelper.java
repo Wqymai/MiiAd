@@ -6,7 +6,7 @@
 //import android.util.Base64;
 //
 //
-//import com.mg.interf.MiiADListener;
+//import com.mg.interf.MiiAbsADListener;
 //import com.mg.others.http.HttpListener;
 //import com.mg.others.http.HttpResponse;
 //import com.mg.others.http.HttpUtils;
@@ -41,9 +41,9 @@
 //    private Handler mainHandler;
 //    private Context mContext;
 //    private HttpManager httpManager=null;
-//    private MiiADListener listener=null;
+//    private MiiAbsADListener listener=null;
 //    private int pt;
-//    public MhttpRequestHelper(Context context, Handler handler, int pt, MiiADListener listener){
+//    public MhttpRequestHelper(Context context, Handler handler, int pt, MiiAbsADListener listener){
 //        this.mainHandler=handler;
 //        this.mContext=context;
 //        this.listener=listener;

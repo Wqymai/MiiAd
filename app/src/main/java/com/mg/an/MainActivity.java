@@ -135,10 +135,6 @@ public class MainActivity extends Activity {
                         Log.i(Constants.TAG,"固定插屏 noShade onMiiADTouched");
                     }
 
-                    @Override
-                    public void onMiiADTick(long millisUntilFinished) {
-                        //不回调
-                    }
             });
             }
         });
@@ -175,10 +171,6 @@ public class MainActivity extends Activity {
                         Log.i(Constants.TAG,"固定插屏 Shade onMiiADTouched ");
                     }
 
-                    @Override
-                    public void onMiiADTick(long millisUntilFinished) {
-                       //不回调
-                    }
                 });
             }
         });

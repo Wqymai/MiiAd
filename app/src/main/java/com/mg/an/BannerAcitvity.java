@@ -53,13 +53,9 @@ public class BannerAcitvity extends Activity {
 
             @Override
             public void onMiiADTouched() {
-                //不会调
+
             }
 
-            @Override
-            public void onMiiADTick(long millisUntilFinished) {
-                //不会调
-            }
         });
 
         refresh= (Button) findViewById(R.id.refreshBanner);
@@ -73,7 +69,9 @@ public class BannerAcitvity extends Activity {
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bannerAD.recycle();
+                if (bannerAD!=null){
+                 bannerAD.recycle();
+                }
                 bannerContainer.removeAllViews();
                 bannerContainer.setVisibility(View.GONE);
             }

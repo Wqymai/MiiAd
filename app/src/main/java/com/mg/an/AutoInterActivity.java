@@ -11,7 +11,7 @@
 //
 //import com.android.others.R;
 //import com.mg.comm.MConstant;
-//import com.mg.interf.MiiADListener;
+//import com.mg.interf.MiiAbsADListener;
 //import com.mg.interstitial.MiiAutoInterstitialAD;
 //
 ///**
@@ -47,7 +47,7 @@
 //        btnOpen.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
-//                miiAutoInterstitialAD =  new MiiAutoInterstitialAD(AutoInterActivity.this, viewGroup, MConstant.APPID,MConstant.IID, new MiiADListener() {
+//                miiAutoInterstitialAD =  new MiiAutoInterstitialAD(AutoInterActivity.this, viewGroup, MConstant.APPID,MConstant.IID, new MiiAbsADListener() {
 //                    @Override
 //                    public void onMiiNoAD(int errCode) {
 //

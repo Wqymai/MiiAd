@@ -30,7 +30,7 @@
 //import com.mg.comm.ImageDownloadHelper;
 //import com.mg.comm.MConstant;
 //import com.mg.comm.MiiBaseAD;
-//import com.mg.interf.MiiADListener;
+//import com.mg.interf.MiiAbsADListener;
 //import com.mg.others.manager.HttpManager;
 //import com.mg.others.model.AdModel;
 //import com.mg.others.model.AdReport;
@@ -48,7 +48,7 @@
 //    private Activity mActivity;
 //    private Context mContext;
 //    private ViewGroup adContainer;
-//    private MiiADListener listener;
+//    private MiiAbsADListener listener;
 //    private AdModel adModel;
 //    private WebView webView;
 //    private ImageView adImageView;
@@ -111,7 +111,7 @@
 //        }
 //    };
 //
-//    public MiiAutoInterstitialAD(Activity activity, ViewGroup adContainer,String appid,String lid, MiiADListener listener){
+//    public MiiAutoInterstitialAD(Activity activity, ViewGroup adContainer,String appid,String lid, MiiAbsADListener listener){
 //
 //      try {
 //

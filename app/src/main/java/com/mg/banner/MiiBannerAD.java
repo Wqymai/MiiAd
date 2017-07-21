@@ -209,7 +209,6 @@ public class MiiBannerAD extends MiiBaseAD {
                   @Override
                   public boolean shouldOverrideUrlLoading(WebView view, String url) {
 
-
                       //广告点击回调
                       listener.onMiiADClicked();
 
@@ -218,8 +217,6 @@ public class MiiBannerAD extends MiiBaseAD {
 
                       //点击上报
                       HttpManager.reportEvent(adModel, AdReport.EVENT_CLICK, mContext);
-
-
 
                       return true;
                   }
@@ -291,42 +288,49 @@ public class MiiBannerAD extends MiiBaseAD {
             }
             if (isJoinImg){
                 adContainer.setBackgroundColor(Color.parseColor("#E8E8E8"));
-                FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(dip2px(mContext,60),dip2px(mContext,60));
                 if (adImageView == null){
                     adImageView = new ImageView(mActivity);
                     adImageView.setScaleType(ImageView.ScaleType.FIT_XY);
                     adContainer.addView(adImageView);
                 }
+                FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(dip2px(mContext,60),dip2px(mContext,60));
                 adImageView.setLayoutParams(layoutParams);
-
                 //name
-                name_tv = new TextView(mActivity);
                 if (name_tv == null){
+                    name_tv = new TextView(mActivity);
                     FrameLayout.LayoutParams nameTvLayoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     nameTvLayoutParams.setMargins(dip2px(mContext,70),dip2px(mContext,5),0,0);
                     name_tv.setLayoutParams(nameTvLayoutParams);
-                    name_tv.setText(adModel.getName());
                     adContainer.addView(name_tv);
                 }
+                name_tv.setText(adModel.getName());
                 //desc
                 if (desc_tv == null){
                     desc_tv = new TextView(mActivity);
                     FrameLayout.LayoutParams descTvLayoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     descTvLayoutParams.setMargins(dip2px(mContext,70),dip2px(mContext,25),0,0);
                     desc_tv.setLayoutParams(descTvLayoutParams);
-                    desc_tv.setText(adModel.getDesc());
                     adContainer.addView(desc_tv);
                 }
+                desc_tv.setText(adModel.getDesc());
             }
             else {
-                int screenW = CommonUtils.getScreenW(mContext);
-                double value = div(bitmap.getWidth(),bitmap.getHeight(),1);
-                FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(screenW, (int)(screenW/value));
+                if (name_tv != null){
+                    name_tv.setText(null);
+                }
+                name_tv = null;
+                if (desc_tv != null){
+                    desc_tv.setText(null);
+                }
+                desc_tv = null;
                 if (adImageView == null){
                     adImageView = new ImageView(mActivity);
                     adImageView.setScaleType(ImageView.ScaleType.FIT_XY);
                     adContainer.addView(adImageView);
                 }
+                int screenW = CommonUtils.getScreenW(mContext);
+                double value = div(bitmap.getWidth(),bitmap.getHeight(),1);
+                FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(screenW, (int)(screenW/value));
                 adImageView.setLayoutParams(layoutParams);
             }
 
