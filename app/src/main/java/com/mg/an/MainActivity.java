@@ -42,6 +42,7 @@ public class MainActivity extends Activity {
     ImageView showIv;
     Button openNative;
     private MiiNativeADDataRef adDataRef;
+    Button openTuiaAd;
 
 //    @Override
 //    public boolean onTouchEvent(MotionEvent event) {
@@ -244,6 +245,14 @@ public class MainActivity extends Activity {
                 bundle.putSerializable("AdData", adDataRef);
                 intent.putExtras(bundle);
                 startActivity(intent);
+            }
+        });
+
+        openTuiaAd = (Button) findViewById(R.id.open_tuia_customad);
+        openTuiaAd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,TuiaCustomActivity.class));
             }
         });
 

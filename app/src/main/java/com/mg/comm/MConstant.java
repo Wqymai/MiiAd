@@ -39,7 +39,7 @@ public final   class MConstant {
     public static String HOST;
     public static String HOST_SDKEP;
     static {
-        if(true){
+        if(false){
             //测试服务器地址
             //http://vs.maimob.net";
             HOST_SDKEP = "MzUwQkY1QzUwMkQ0QTZEQUZCMTU3REQ0MUY1OTBFOUYxNEQxNjNBMjU4NTQzQTkwODdEREUxM0VFQUJGQTlGNw==";
