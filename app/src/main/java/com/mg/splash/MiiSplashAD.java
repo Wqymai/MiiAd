@@ -462,8 +462,8 @@ public class MiiSplashAD extends MiiBaseAD{
 
       }
     }
-    public static final String APPID = "1101152570";
-    public static final String SplashPosID = "8863364436303842593";
+//    public static final String APPID = "1101152570";
+//    public static final String SplashPosID = "8863364436303842593";
 
 
     private void openGDTAD(final boolean shouldReturn){
@@ -488,7 +488,7 @@ public class MiiSplashAD extends MiiBaseAD{
         //记录开始请求广点通时间戳
         SP.setParam(SP.CONFIG, mContext, SP.GDT_ST, System.currentTimeMillis());
 
-        new SplashAD(mActivity, adContainer, skipContainer, APPID,SplashPosID, new SplashADListener() {
+        new SplashAD(mActivity, adContainer, skipContainer, AID,SPID, new SplashADListener() {
             @Override
             public void onADDismissed() {
 
