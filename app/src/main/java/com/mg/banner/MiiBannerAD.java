@@ -185,6 +185,7 @@ public class MiiBannerAD extends MiiBaseAD {
           try {
               if (webView == null){
                 webView = new WebView(mActivity);
+                adContainer.addView(webView);
               }
 
               int imgH = adModel.getImgh();
@@ -223,7 +224,7 @@ public class MiiBannerAD extends MiiBaseAD {
               });
 
               webView.loadDataWithBaseURL("", adModel.getPage(), "text/html", "utf-8", "");
-              adContainer.addView(webView);
+
 
               //展示上报
               HttpManager.reportEvent(adModel, AdReport.EVENT_SHOW, mContext);
@@ -334,12 +335,12 @@ public class MiiBannerAD extends MiiBaseAD {
                 adImageView.setLayoutParams(layoutParams);
             }
 
-            if (adTxt_tv == null){
-                adTxt_tv = tvADCreate(mActivity);
-                if (adModel.getSourceMark()!= null && !adModel.getSourceMark().equals("")){
-                    adTxt_tv.setText(adModel.getSourceMark()+"|广告");
-                }
-                adContainer.addView(adTxt_tv);
+            if(adTxt_tv == null){
+               adTxt_tv = tvADCreate(mActivity);
+               adContainer.addView(adTxt_tv);
+            }
+            if (adModel.getSourceMark()!= null && !adModel.getSourceMark().equals("")){
+                adTxt_tv.setText(adModel.getSourceMark()+"|广告");
             }
 
             adImageView.setImageBitmap(bitmap);

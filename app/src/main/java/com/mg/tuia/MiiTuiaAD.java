@@ -14,8 +14,11 @@ public class MiiTuiaAD {
     private NonStandardTm mNonStandardTm;
     private MiiCustomAdListener listener;
 
+
     public void loadAd(Context context,int id){
-        mNonStandardTm = new NonStandardTm(context);
+        if (mNonStandardTm == null){
+            mNonStandardTm = new NonStandardTm(context);
+        }
         mNonStandardTm.loadAd(id);
         mNonStandardTm.setAdListener(new NsTmListener() {
             @Override
