@@ -413,16 +413,11 @@ public class MiiSplashAD extends MiiBaseAD{
         SourceAssignModel saModel = checkADSource(mContext,2);
 
         if (saModel == null){
-
             new HbReturn(reqAsyncModel).fetchMGAD();
             return;
         }
 
-
-        int type = saModel.type;
-        int firstChoose = saModel.firstChoose;
-
-        if (type == 1){
+        if (saModel.type == 1){
 
             listener.onMiiNoAD(3005);
             return;

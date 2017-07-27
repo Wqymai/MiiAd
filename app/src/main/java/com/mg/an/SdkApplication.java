@@ -1,4 +1,4 @@
-package com.mg.tuia;
+package com.mg.an;
 
 import android.app.Application;
 
