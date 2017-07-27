@@ -376,7 +376,6 @@ public class CommonUtils {
             return false;
         }
         LogUtils.i(MConstant.TAG,"last loc="+filePath);
-
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
                 i.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);

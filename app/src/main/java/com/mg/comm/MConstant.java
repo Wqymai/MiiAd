@@ -24,11 +24,11 @@ public final   class MConstant {
 //    public static String NID = "E5PVS8MP";
 
 
-    public static String APPID = "4bd140d6c9befb0062c6d6dc26c69af1";
+    public static String APPID = "c5d1ee8878833b5a13163fc15029a41d";
     public static String KID = "hg7o0CYa";
     public static String BID = "k1sgYLCN";
     public static String IID = "BwUZRokI";
-    public static String NID = "CLCifKnq";
+    public static String NID = "s2mBXN1E";
 
 
     public static String GDT_AID;

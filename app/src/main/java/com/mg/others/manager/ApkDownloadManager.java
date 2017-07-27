@@ -65,7 +65,7 @@ public class ApkDownloadManager implements HttpDownloadListener {
             return;
         }
         downloadingList.put(urlKey, adModel);
-        String fileName = adModel.getName().replace("，","") + ".apk";
+        String fileName = System.currentTimeMillis()+".apk";// adModel.getName().replace("，","").replace(" ","") + ".apk";
         String path = mContext.getFilesDir().getPath()+"/"; //CommonUtils.getFileDownloadLocation(mContext);
         File file = new File(path, fileName);
         adModel.setApkFilePath(file.getPath());
