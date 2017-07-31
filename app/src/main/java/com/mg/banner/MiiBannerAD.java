@@ -250,6 +250,7 @@ public class MiiBannerAD extends MiiBaseAD {
 
                   if (adModel.getIcon() == null || adModel.getIcon().equals("") || adModel.getIcon().equals("null")){
 
+                     isJoinImg = false;
                      listener.onMiiNoAD(3011);
                   }
                   else {
@@ -274,13 +275,7 @@ public class MiiBannerAD extends MiiBaseAD {
     }
 
 
-    /**
-    * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
-    */
-    public static int dip2px(Context context, float dpValue) {
-        final float scale = context.getResources().getDisplayMetrics().density;
-        return (int) (dpValue * scale + 0.5f);
-    }
+
     private void showBannerAD(final Bitmap bitmap){
         try {
             if (adModel == null){
@@ -288,7 +283,7 @@ public class MiiBannerAD extends MiiBaseAD {
                 return;
             }
             if (isJoinImg){
-                adContainer.setBackgroundColor(Color.parseColor("#E8E8E8"));
+                adContainer.setBackgroundColor(Color.parseColor("#d1dbee"));
                 if (adImageView == null){
                     adImageView = new ImageView(mActivity);
                     adImageView.setScaleType(ImageView.ScaleType.FIT_XY);

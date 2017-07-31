@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
@@ -20,6 +21,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mg.asyn.HbReturn;
@@ -27,11 +29,13 @@ import com.mg.asyn.RaReturn;
 import com.mg.asyn.ReqAsyncModel;
 import com.mg.comm.ADClickHelper;
 import com.mg.comm.ImageDownloadHelper;
+
 import com.mg.comm.MiiBaseAD;
 import com.mg.interf.MiiSplashADListener;
 import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
+
 import com.mg.others.utils.SP;
 
 import static android.os.Build.VERSION_CODES.M;
@@ -52,6 +56,7 @@ public class MiiSplashAD extends MiiBaseAD{
      private ImageView adImageView;
      private WebView webView;
      private CountDownTimer timer;
+     private boolean isJoinImg = false;
 
      private ReqAsyncModel reqAsyncModel = new ReqAsyncModel();
 
@@ -248,11 +253,19 @@ public class MiiSplashAD extends MiiBaseAD{
 
             if (adModel.getImage() == null || adModel.getImage().equals("") || adModel.getImage().equals("null")){
 
-                listener.onMiiNoAD(3011);
+                if (adModel.getIcon() == null || adModel.getIcon().equals("") || adModel.getIcon().equals("null")){
+
+                  isJoinImg = false;
+                  listener.onMiiNoAD(3011);
+                }
+                else {
+                    isJoinImg = true;
+                    new ImageDownloadHelper().downloadShowImage(mContext,adModel.getIcon(),mainHandler);
+                }
 
             }
             else {
-
+              isJoinImg = false;
               new ImageDownloadHelper().downloadShowImage(mContext,adModel.getImage(),mainHandler);
 
             }
@@ -266,9 +279,157 @@ public class MiiSplashAD extends MiiBaseAD{
 
     }
 
+
+    //拼图
+    private void JoinImg(final Bitmap bitmap){
+      try {
+
+        RelativeLayout relativeLayout = new RelativeLayout(mActivity);
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout
+                .LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+        relativeLayout.setBackgroundColor(Color.parseColor("#d1dbee"));
+        relativeLayout.setLayoutParams(layoutParams);
+
+
+        RelativeLayout.LayoutParams layoutParams1 = new RelativeLayout.LayoutParams(dip2px(mContext,80), dip2px(mContext,80));
+        adImageView = new ImageView(mActivity);
+        layoutParams1.setMargins(0,300,0,50);
+        layoutParams1.addRule(RelativeLayout.CENTER_HORIZONTAL,RelativeLayout.TRUE);
+        adImageView.setId(100);
+        adImageView.setScaleType(ImageView.ScaleType.FIT_XY);
+
+
+        TextView nameTxt= new TextView(mActivity);
+        RelativeLayout.LayoutParams params1= new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        params1.addRule(RelativeLayout.CENTER_HORIZONTAL,RelativeLayout.TRUE);
+        params1.addRule(RelativeLayout.BELOW,100);
+        params1.setMargins(100,0,100,0);
+        nameTxt.setId(200);
+        nameTxt.setTextSize(20);
+        nameTxt.setTextColor(Color.parseColor("#8B7D6B"));
+        if (adModel.getName() != null && ! adModel.getName().equals("null")){
+          nameTxt.setText(adModel.getName());
+        }
+
+        TextView descTxt= new TextView(mActivity);
+        RelativeLayout.LayoutParams params2= new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        params2.addRule(RelativeLayout.CENTER_HORIZONTAL,RelativeLayout.TRUE);
+        params2.setMargins(100,50,100,0);
+        params2.addRule(RelativeLayout.BELOW,200);
+        descTxt.setTextColor(Color.parseColor("#8B7D6B"));
+        descTxt.setTextSize(20);
+        if (adModel.getDesc() != null && ! adModel.getDesc().equals("null")){
+          descTxt.setText(adModel.getDesc());
+        }
+
+        relativeLayout.addView(nameTxt,params1);
+        relativeLayout.addView(descTxt,params2);
+        relativeLayout.addView(adImageView,layoutParams1);
+        adContainer.addView(relativeLayout);
+
+        TextView tv = tvADCreate(mActivity);
+        if (adModel.getSourceMark()!= null && !adModel.getSourceMark().equals("")){
+            tv.setText(adModel.getSourceMark()+"|广告");
+        }
+        adContainer.addView(tv);
+
+        adImageView.setImageBitmap(bitmap);
+
+        //广告成功展示
+        listener.onMiiADPresent();
+
+        //展示上报
+        HttpManager.reportEvent(adModel, AdReport.EVENT_SHOW, mContext);
+
+        //倒计时开始
+        adCountDownTimer();
+
+        //记录展示次数
+        int show_num = (int) SP.getParam(SP.CONFIG, mContext, SP.FOT, 0);
+        SP.setParam(SP.CONFIG, mContext, SP.FOT, show_num + 1);
+
+        skipContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                try {
+
+                    if (bitmap != null){
+                        bitmap.recycle();
+                    }
+                    if(timer != null){
+                        timer.cancel();
+                    }
+
+                }
+                catch (Exception e){
+
+                    e.printStackTrace();
+
+                }
+
+                listener.onMiiADDismissed();
+
+            }
+        });
+
+        relativeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                try {
+                    listener.onMiiADClicked();
+                    listener.onMiiADDismissed();
+
+                    AdModel ad= (AdModel) adModel.clone();
+                    new ADClickHelper(mContext).AdClick(ad);
+                    if (bitmap != null){
+                        bitmap.recycle();
+                    }
+                    if (timer != null){
+                        timer.cancel();
+                    }
+
+                }catch (Exception e){
+
+                    e.printStackTrace();
+
+                }
+
+            }
+        });
+        relativeLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        adModel.setDownx(String.valueOf(event.getX()));
+                        adModel.setDowny(String.valueOf(event.getY()));
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        adModel.setUpx(String.valueOf(event.getX()));
+                        adModel.setUpy(String.valueOf(event.getY()));
+                        break;
+                    default:
+                        break;
+                }
+                listener.onMiiADTouched();
+                return false;
+            }
+        });
+      }catch (Exception e){
+          listener.onMiiNoAD(3009);
+          e.printStackTrace();
+      }
+    }
+
      private void showSplashAD(final Bitmap bitmap){
 
        try {
+             if (isJoinImg){
+                 JoinImg(bitmap);
+                 return;
+             }
 
              FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
              adImageView = new ImageView(mActivity);

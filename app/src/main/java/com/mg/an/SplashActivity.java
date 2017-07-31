@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.android.others.R;
 import com.mg.comm.MConstant;
-
 import com.mg.interf.MiiSplashADListener;
 import com.mg.others.utils.LogUtils;
 import com.mg.splash.MiiSplashAD;

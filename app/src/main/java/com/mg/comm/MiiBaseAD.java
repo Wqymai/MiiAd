@@ -76,6 +76,14 @@ public abstract class MiiBaseAD {
         }
         return sdk;
     }
+
+    /**
+     * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
+     */
+    protected   int dip2px(Context context, float dpValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
+    }
     /**
     判断广告来源方式 1：广告源都关闭了 2：按比例展示其中一家 3：先哪家再哪家
     */

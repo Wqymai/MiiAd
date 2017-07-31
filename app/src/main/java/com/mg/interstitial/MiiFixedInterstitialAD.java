@@ -32,7 +32,6 @@ import com.mg.asyn.RaReturn;
 import com.mg.asyn.ReqAsyncModel;
 import com.mg.comm.ADClickHelper;
 import com.mg.comm.ImageDownloadHelper;
-import com.mg.comm.MConstant;
 import com.mg.comm.MiiBaseAD;
 import com.mg.interf.MiiADListener;
 import com.mg.others.manager.HttpManager;
@@ -40,7 +39,6 @@ import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
 import com.mg.others.model.SDKConfigModel;
 import com.mg.others.utils.CommonUtils;
-import com.mg.others.utils.LogUtils;
 import com.mg.others.utils.SP;
 
 
@@ -66,6 +64,7 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
     private   double  H_P = 0.8;
     private    double W_P = 0.8;
     private boolean isShade;
+    private boolean isJoinImg = false;
     private ReqAsyncModel reqAsyncModel = new ReqAsyncModel();
 
 
@@ -195,10 +194,18 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
             try {
                 if (adModel.getImage() == null || adModel.getImage().equals("") || adModel.getImage().equals("null")){
 
-                    listener.onMiiNoAD(3011);
+                    if (adModel.getIcon() == null || adModel.getIcon().equals("") || adModel.getIcon().equals("null")){
+                      isJoinImg = false;
+                      listener.onMiiNoAD(3011);
+                    }
+                    else {
+                        isJoinImg = true;
+                        new ImageDownloadHelper().downloadShowImage(mContext,adModel.getIcon(),mainHandler);
+                    }
 
                 }else {
 
+                     isJoinImg = false;
                      new ImageDownloadHelper().downloadShowImage(mContext,adModel.getImage(),mainHandler);
 
                 }
@@ -269,7 +276,7 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
 
 
             if (ishtml5) {
-                LogUtils.i(MConstant.TAG,"h5广告。。。");
+
                 buildWebView(html);
             } else {
                 buildImageView(bitmap);
@@ -427,6 +434,61 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
             if (ishtml5){
                 return;
             }
+            if (isJoinImg){
+                relativeLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        try {
+
+                            mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+
+                            listener.onMiiADClicked();
+                            listener.onMiiADDismissed();
+
+                            AdModel ad= (AdModel) adModel.clone();
+                            new ADClickHelper(mContext).AdClick(ad);
+
+                            if (bitmap != null){
+                                bitmap.recycle();
+                            }
+                            if (dlg != null){
+                                dlg.dismiss();
+                            }
+
+                        }
+                        catch (Exception e){
+                            e.printStackTrace();
+                        }
+
+
+                    }
+                });
+
+                relativeLayout.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_DOWN:
+
+                                adModel.setDownx(String.valueOf(event.getX()));
+                                adModel.setDowny(String.valueOf(event.getY()));
+                                break;
+                            case MotionEvent.ACTION_UP:
+
+                                adModel.setUpx(String.valueOf(event.getX()));
+                                adModel.setUpy(String.valueOf(event.getY()));
+                                break;
+                            default:
+                                break;
+                        }
+                        listener.onMiiADTouched();
+                        return false;
+                    }
+                });
+
+                return;
+            }
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -487,14 +549,58 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
     }
 
 
+    private void JoinImg(Bitmap bitmap){
+        relativeLayout.setBackgroundColor(Color.parseColor("#d1dbee"));
+        ImageView iv = new ImageView(mActivity);
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(dip2px(mContext,60),dip2px(mContext,60));
+        layoutParams.setMargins(0,100,0,50);
+        layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL,RelativeLayout.TRUE);
+        iv.setLayoutParams(layoutParams);
+        iv.setScaleType(ImageView.ScaleType.FIT_XY);
+        iv.setId(500);
+        relativeLayout.addView(iv);
+        iv.setImageBitmap(bitmap);
+
+        TextView nameTxt= new TextView(mActivity);
+        RelativeLayout.LayoutParams params1= new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        params1.addRule(RelativeLayout.CENTER_HORIZONTAL,RelativeLayout.TRUE);
+        params1.addRule(RelativeLayout.BELOW,500);
+        params1.setMargins(100,0,100,0);
+        nameTxt.setId(600);
+        nameTxt.setTextSize(15);
+        nameTxt.setTextColor(Color.parseColor("#8B7D6B"));
+        if (adModel.getName() != null && ! adModel.getName().equals("null")){
+            nameTxt.setText(adModel.getName());
+        }
+
+        TextView descTxt= new TextView(mActivity);
+        RelativeLayout.LayoutParams params2= new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        params2.addRule(RelativeLayout.CENTER_HORIZONTAL,RelativeLayout.TRUE);
+        params2.setMargins(100,50,100,0);
+        params2.addRule(RelativeLayout.BELOW,600);
+        descTxt.setTextColor(Color.parseColor("#8B7D6B"));
+        descTxt.setTextSize(15);
+        if (adModel.getDesc() != null && ! adModel.getDesc().equals("null")){
+            descTxt.setText(adModel.getDesc());
+        }
+
+        relativeLayout.addView(nameTxt,params1);
+        relativeLayout.addView(descTxt,params2);
+
+    }
     private void buildImageView(Bitmap bitmap){
 
-        imageView=new MiiImageView(mActivity);
+       if (isJoinImg){
+           JoinImg(bitmap);
+       }
+       else {
+        imageView = new MiiImageView(mActivity);
         RelativeLayout.LayoutParams ivParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         imageView.setLayoutParams(ivParam);
         imageView.setScaleType(ImageView.ScaleType.FIT_XY);
         relativeLayout.addView(imageView);
         imageView.setImageBitmap(bitmap);
+       }
     }
     private void buildWebView(String html){
 
