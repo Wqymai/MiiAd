@@ -5,8 +5,8 @@ import android.content.Context;
 import android.view.ViewGroup;
 
 import com.mg.interf.MiiADListener;
-import com.mg.d.c.DynamicModel;
-import com.mg.d.utils.MethodDynamicLoad;
+import com.mg.c.c.DynamicModel;
+import com.mg.c.utils.MethodDynamicLoad;
 
 /**
  * Created by wuqiyan on 17/7/6.
@@ -16,12 +16,16 @@ public class MgBannerAD {
 
     private DynamicModel model;
     private Context mContext;
-    public MgBannerAD(Activity activity, ViewGroup adContainer,String appid, MiiADListener listener){
+    public MgBannerAD(Activity activity, ViewGroup adContainer,String appid,String lid, MiiADListener listener){
         this.mContext = activity.getApplicationContext();
-       model = MethodDynamicLoad.getInstance(mContext).loadBannerADMethod(activity,adContainer,appid,listener);
+       model = MethodDynamicLoad.getInstance(mContext).loadBannerADMethod(activity,adContainer,appid,lid,listener);
     }
 
     public void recycle(){
        MethodDynamicLoad.getInstance(mContext).loadRecycleMethod(model);
+    }
+
+    public void loadBannerAD(){
+        MethodDynamicLoad.getInstance(mContext).loadBanner(model);
     }
 }

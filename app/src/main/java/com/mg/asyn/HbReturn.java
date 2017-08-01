@@ -110,7 +110,7 @@ public class HbReturn extends RequestAsync  {
                 listener.onMiiNoAD(3001);
                 return;
             }
-            sdkConfigModel = ConfigParser.parseConfig(data);
+            sdkConfigModel = ConfigParser.parseConfig(data,mContext);
 
             if (sdkConfigModel == null){
 

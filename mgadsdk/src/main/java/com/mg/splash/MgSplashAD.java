@@ -5,9 +5,9 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.mg.d.c.DynamicModel;
-import com.mg.d.utils.MethodDynamicLoad;
-import com.mg.interf.MiiADListener;
+import com.mg.c.c.DynamicModel;
+import com.mg.c.utils.MethodDynamicLoad;
+import com.mg.interf.MiiSplashADListener;
 
 /**
  * Created by wuqiyan on 17/7/5.
@@ -17,9 +17,9 @@ public class MgSplashAD {
 
     private DynamicModel model;
     private Context mContext;
-    public MgSplashAD(Activity activity, ViewGroup adContainer, View skipContainer,String appid, MiiADListener adListener){
+    public MgSplashAD(Activity activity, ViewGroup adContainer, View skipContainer,String appid,String lid, MiiSplashADListener adListener){
         this.mContext = activity.getApplicationContext();
-        model = MethodDynamicLoad.getInstance(activity.getApplicationContext()).loadSplashADMethod(activity,adContainer,skipContainer,appid,adListener);
+        model = MethodDynamicLoad.getInstance(activity.getApplicationContext()).loadSplashADMethod(activity,adContainer,skipContainer,appid,lid,adListener);
     }
 
     public void recycle(){

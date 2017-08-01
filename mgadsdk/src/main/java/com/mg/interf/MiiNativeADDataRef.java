@@ -12,7 +12,6 @@ import java.io.Serializable;
  */
 
 public interface MiiNativeADDataRef extends Serializable {
-    static final long serialVersionUID = -7060210544600464481L;
 
     String getImg();//图片地址
     int getType();//1.html5的 0.非html5的
@@ -22,7 +21,6 @@ public interface MiiNativeADDataRef extends Serializable {
     String getPage();//h5代码，当getType=1,有值
     String getIcon();//图标
     String getSourceMark();
-    String getDeepLink();
     void setNormalClick(Activity context, View view, MiiCpClickListener cpClickListener,
                         MiiCpTouchListener cpTouchListener);//针对可设置setOnclickListener的
     void onExposured(Context context);

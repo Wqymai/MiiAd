@@ -28,43 +28,41 @@ public class BannerActivity extends Activity {
         setContentView(R.layout.banner_layout);
         bannerContainer = (ViewGroup) this.findViewById(R.id.bannerContainer);
 
+        bannerAD = new MgBannerAD(BannerActivity.this, bannerContainer,Contants.APPID,Contants.BID, new MiiADListener() {
+
+            @Override
+            public void onMiiNoAD(int errCode) {
+                Log.i("ad_demo","错误码="+errCode);
+            }
+
+            @Override
+            public void onMiiADDismissed() {
+                Log.i("ad_demo","onMiiADDismissed=");
+            }
+
+            @Override
+            public void onMiiADPresent() {
+                Log.i("ad_demo","onMiiADPresent");
+                bannerContainer.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onMiiADClicked() {
+                Log.i("ad_demo","onMiiADClicked");
+            }
+
+            @Override
+            public void onMiiADTouched() {
+
+            }
+
+        });
+
         refresh= (Button) findViewById(R.id.refreshBanner);
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bannerAD = new MgBannerAD(BannerActivity.this, bannerContainer,Contants.APPID, new MiiADListener() {
-
-                    @Override
-                    public void onMiiNoAD(int errCode) {
-                        Log.i("ad_demo","错误码="+errCode);
-                    }
-
-                    @Override
-                    public void onMiiADDismissed() {
-                        Log.i("ad_demo","onMiiADDismissed=");
-                    }
-
-                    @Override
-                    public void onMiiADPresent() {
-                        Log.i("ad_demo","onMiiADPresent");
-                        bannerContainer.setVisibility(View.VISIBLE);
-                    }
-
-                    @Override
-                    public void onMiiADClicked() {
-                        Log.i("ad_demo","onMiiADClicked");
-                    }
-
-                    @Override
-                    public void onMiiADTouched() {
-
-                    }
-
-                    @Override
-                    public void onMiiADTick(long millisUntilFinished) {
-
-                    }
-                });
+                bannerAD.loadBannerAD();
 
             }
         });

@@ -366,7 +366,6 @@ public class MiiBannerAD extends MiiBaseAD {
                             e.printStackTrace();
 
                         }
-
                     }
                 });
                 adContainer.setOnTouchListener(new View.OnTouchListener() {

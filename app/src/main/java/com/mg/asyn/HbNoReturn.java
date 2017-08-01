@@ -90,7 +90,7 @@ public class HbNoReturn extends RequestAsync {
             if (data == null){
                 return;
             }
-            sdk = ConfigParser.parseConfig(data);
+            sdk = ConfigParser.parseConfig(data,mContext);
 
             if (sdk == null){
                 return;

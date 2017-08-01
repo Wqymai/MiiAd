@@ -6,5 +6,4 @@ package com.mg.interf;
 
 public abstract interface MiiAbsADListener {
     void onMiiNoAD(int errCode);
-
 }

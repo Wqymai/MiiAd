@@ -1,4 +1,4 @@
-package com.mg.d.utils;
+package com.mg.c.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 /**
  * SharePreference工具类
  */
-public class SP {
+public class SPUtil {
 	public static final String CONFIG = "CONFIG";				//FILE NAME
 
 	public static final String UPDATE="update";

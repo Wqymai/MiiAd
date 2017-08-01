@@ -637,7 +637,6 @@ public class HttpUtils {
 								redirctCount++;
 								LogUtils.i(MConstant.TAG,"status="+status+" realUrl="+realUrl+" redirctCount="+redirctCount);
 								httpExecutor.execute(new HttpDownloaderTask(realUrl, mListener, orginPath, mfileName, paramter, mContext,true));
-
 							}
 							else {
 								redirctCount = 0;
@@ -677,45 +676,65 @@ public class HttpUtils {
 					}
 					catch (Exception e)
 					{
+						if (mFile != null && mFile.exists()) {
+							mFile.delete();
+						}
+						if (mListener != null) {
+							mListener.onDownloadFailed(e);
+						}
 						e.printStackTrace();
-
-					}finally
-					{
-						if(in != null) in.close();
-						if(conn != null) conn.disconnect();
-						if(fileSize == 0 || whileTime > 6) isDownloadSuccess = true;
-
+					}
+					finally {
+						if(in != null) {
+							in.close();
+						}
+						if(conn != null) {
+							conn.disconnect();
+						}
+						if(fileSize == 0 || whileTime > 6) {
+							isDownloadSuccess = true;
+						}
 					}
 				}
 
 				if (mListener != null) {
+
 					LogUtils.i(MConstant.TAG,"download over++++++"+realKey);
 					mListener.onDownloadSuccess(realKey);
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+
 				if (mFile != null && mFile.exists()) {
 					mFile.delete();
 				}
 				if (mListener != null) {
 					mListener.onDownloadFailed(e);
 				}
+				e.printStackTrace();
+
 			} finally {
 
 				try {
 					if (in != null) {
 						in.close();
 					}
-				} catch (IOException e) {
+				} catch (Exception e) {
+
+					e.printStackTrace();
+
 				} finally {
 					try {
 						if (out != null) {
 							out.close();
 						}
-					} catch (IOException e) {
+					} catch (Exception e) {
+
+						e.printStackTrace();
+
 					} finally {
-						if (conn != null)
+						if (conn != null){
 							conn.disconnect();
+						}
 					}
 				}
 			}

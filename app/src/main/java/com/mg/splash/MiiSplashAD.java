@@ -30,6 +30,7 @@ import com.mg.asyn.ReqAsyncModel;
 import com.mg.comm.ADClickHelper;
 import com.mg.comm.ImageDownloadHelper;
 
+import com.mg.comm.MConstant;
 import com.mg.comm.MiiBaseAD;
 import com.mg.interf.MiiSplashADListener;
 import com.mg.others.manager.HttpManager;
@@ -295,16 +296,16 @@ public class MiiSplashAD extends MiiBaseAD{
         adImageView = new ImageView(mActivity);
         layoutParams1.setMargins(0,300,0,50);
         layoutParams1.addRule(RelativeLayout.CENTER_HORIZONTAL,RelativeLayout.TRUE);
-        adImageView.setId(100);
+        adImageView.setId(MConstant.id.kimgiv);
         adImageView.setScaleType(ImageView.ScaleType.FIT_XY);
 
 
         TextView nameTxt= new TextView(mActivity);
         RelativeLayout.LayoutParams params1= new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         params1.addRule(RelativeLayout.CENTER_HORIZONTAL,RelativeLayout.TRUE);
-        params1.addRule(RelativeLayout.BELOW,100);
+        params1.addRule(RelativeLayout.BELOW,MConstant.id.kimgiv);
         params1.setMargins(100,0,100,0);
-        nameTxt.setId(200);
+        nameTxt.setId(MConstant.id.knametv);
         nameTxt.setTextSize(20);
         nameTxt.setTextColor(Color.parseColor("#8B7D6B"));
         if (adModel.getName() != null && ! adModel.getName().equals("null")){
@@ -315,7 +316,7 @@ public class MiiSplashAD extends MiiBaseAD{
         RelativeLayout.LayoutParams params2= new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         params2.addRule(RelativeLayout.CENTER_HORIZONTAL,RelativeLayout.TRUE);
         params2.setMargins(100,50,100,0);
-        params2.addRule(RelativeLayout.BELOW,200);
+        params2.addRule(RelativeLayout.BELOW,MConstant.id.knametv);
         descTxt.setTextColor(Color.parseColor("#8B7D6B"));
         descTxt.setTextSize(20);
         if (adModel.getDesc() != null && ! adModel.getDesc().equals("null")){

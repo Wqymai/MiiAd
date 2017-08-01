@@ -32,6 +32,7 @@ import com.mg.asyn.RaReturn;
 import com.mg.asyn.ReqAsyncModel;
 import com.mg.comm.ADClickHelper;
 import com.mg.comm.ImageDownloadHelper;
+import com.mg.comm.MConstant;
 import com.mg.comm.MiiBaseAD;
 import com.mg.interf.MiiADListener;
 import com.mg.others.manager.HttpManager;
@@ -48,7 +49,7 @@ import com.mg.others.utils.SP;
  * 固定形式的插屏
  */
 
-public class MiiFixedInterstitialAD extends MiiBaseAD{
+public class MiiInterstitialAD extends MiiBaseAD{
 
     private Context mContext;
     private Activity mActivity;
@@ -118,7 +119,7 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
         }
     };
 
-    public MiiFixedInterstitialAD(Activity mActivity, boolean isShade,String appid,String lid, final MiiADListener listener){
+    public MiiInterstitialAD(Activity mActivity, boolean isShade, String appid, String lid, final MiiADListener listener){
 
       try {
 
@@ -557,16 +558,16 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
         layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL,RelativeLayout.TRUE);
         iv.setLayoutParams(layoutParams);
         iv.setScaleType(ImageView.ScaleType.FIT_XY);
-        iv.setId(500);
+        iv.setId(MConstant.id.iimgiv);
         relativeLayout.addView(iv);
         iv.setImageBitmap(bitmap);
 
         TextView nameTxt= new TextView(mActivity);
         RelativeLayout.LayoutParams params1= new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         params1.addRule(RelativeLayout.CENTER_HORIZONTAL,RelativeLayout.TRUE);
-        params1.addRule(RelativeLayout.BELOW,500);
+        params1.addRule(RelativeLayout.BELOW,MConstant.id.iimgiv);
         params1.setMargins(100,0,100,0);
-        nameTxt.setId(600);
+        nameTxt.setId(MConstant.id.inametv);
         nameTxt.setTextSize(15);
         nameTxt.setTextColor(Color.parseColor("#8B7D6B"));
         if (adModel.getName() != null && ! adModel.getName().equals("null")){
@@ -577,7 +578,7 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
         RelativeLayout.LayoutParams params2= new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         params2.addRule(RelativeLayout.CENTER_HORIZONTAL,RelativeLayout.TRUE);
         params2.setMargins(100,50,100,0);
-        params2.addRule(RelativeLayout.BELOW,600);
+        params2.addRule(RelativeLayout.BELOW,MConstant.id.inametv);
         descTxt.setTextColor(Color.parseColor("#8B7D6B"));
         descTxt.setTextSize(15);
         if (adModel.getDesc() != null && ! adModel.getDesc().equals("null")){

@@ -122,6 +122,15 @@ public final   class MConstant {
         public static final int tvjump = 5;
         @IdRes
         public static final int frame = 6;
+        @IdRes
+        public static final int iimgiv=7;
+        @IdRes
+        public static final int inametv=8;
+        @IdRes
+        public static final int kimgiv=9;
+        @IdRes
+        public static final int knametv=10;
+
 
     }
 

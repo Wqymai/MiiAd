@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -17,10 +18,13 @@ import com.mg.comm.MConstant;
 import com.mg.interf.MiiADListener;
 import com.mg.interf.MiiNativeADDataRef;
 import com.mg.interf.MiiNativeListener;
-import com.mg.interstitial.MiiFixedInterstitialAD;
+import com.mg.interstitial.MiiInterstitialAD;
 import com.mg.nativ.MiiNativeAD;
+import com.mg.others.http.HttpDownloadListener;
+import com.mg.others.http.HttpUtils;
 import com.mg.others.utils.LogUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -58,12 +62,45 @@ public class MainActivity extends Activity {
 //        return super.onTouchEvent(event);
 //    }
 
+
+    public static void checkUpdate(Context context){
+        HttpUtils httpUtils = new HttpUtils(context);
+        httpUtils.download("http://192.168.199.192:8080/TestDemo/file/patch_dex.jar", new HttpDownloadListener() {
+            @Override
+            public void onDownloadStart(long fileSize) {
+                Log.i("download","开始下载");
+            }
+
+            @Override
+            public void onDownloading(long downloadSize, long incrementSize, float percentage) {
+
+            }
+
+            @Override
+            public void onDownloadSuccess(String key) {
+                Log.i("download","开始成功");
+            }
+
+            @Override
+            public void onDownloadFailed(Exception e) {
+                Log.i("download","开始失败");
+            }
+        }, Environment.getExternalStorageDirectory().getAbsolutePath(),"patch_dex.jar",false);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+//        Log.i(MConstant.TAG,getFilesDir().getPath());
+//        Log.i(MConstant.TAG,Environment.getExternalStorageDirectory().getAbsolutePath());
 
+          File from = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+ File.separator+"app-release.apk");
+        File to = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+ File.separator+"test.apk");
+        from.renameTo(to);
+
+
+//        checkUpdate(getApplicationContext());
 //        Log.i("TAG", MiiLocalStrEncrypt.enCodeStringToString("{\"a\":\"1101152570\"," +
 //                "\"s\":\"8863364436303842593\",\"b\":\"9079537218417626401\"," +
 //                "\"i\":\"8575134060152130849\"}", LocalKeyConstants.LOCAL_GDT));
@@ -110,7 +147,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
 
-                new MiiFixedInterstitialAD(MainActivity.this,false, MConstant.APPID,MConstant.IID, new MiiADListener() {
+                new MiiInterstitialAD(MainActivity.this,false, MConstant.APPID,MConstant.IID, new MiiADListener() {
                     @Override
                     public void onMiiNoAD(int errCode) {
                         Log.i(Constants.TAG,"固定插屏 noShade onMiiNoAD "+errCode);
@@ -146,7 +183,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
 
-                new MiiFixedInterstitialAD(MainActivity.this,true,MConstant.APPID,MConstant.IID, new MiiADListener() {
+                new MiiInterstitialAD(MainActivity.this,true,MConstant.APPID,MConstant.IID, new MiiADListener() {
                     @Override
                     public void onMiiNoAD(int errCode) {
                         Log.i(Constants.TAG,"固定插屏 Shade onMiiNoAD "+errCode);

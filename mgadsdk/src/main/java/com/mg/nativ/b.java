@@ -12,9 +12,9 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.mg.d.c.a;
-import com.mg.d.utils.MethodDynamicLoad;
-import com.mg.d.utils.SP;
+import com.mg.c.c.a;
+import com.mg.c.utils.MethodDynamicLoad;
+import com.mg.c.utils.SPUtil;
 import com.mg.interf.MiiCpClickListener;
 import com.mg.interf.MiiCpTouchListener;
 import com.mg.interf.MiiNativeADDataRef;
@@ -35,54 +35,48 @@ public class b implements MiiNativeADDataRef {
 
     @Override
     public String getImg() {
-        return adModel.h();
+        return adModel.i();
     }
 
 
     @Override
     public int getType() {
-        return adModel.j() == 4? 1 : 0;
+        return adModel.k() == 4? 1 : 0;
     }
 
     @Override
     public String getName() {
-        return adModel.e();
-    }
-
-    @Override
-    public String getTitle() {
         return adModel.f();
     }
 
     @Override
-    public String getDesc() {
+    public String getTitle() {
         return adModel.g();
     }
 
     @Override
+    public String getDesc() {
+        return adModel.h();
+    }
+
+    @Override
     public String getPage() {
-        return adModel.n();
+        return adModel.o();
     }
 
     @Override
     public String getIcon() {
-        return  adModel.k();
+        return  adModel.l();
     }
     public final String getSourceMark()
-    {
-        return adModel.a();
-    }
-
-    public final String getDeepLink()
     {
         return adModel.b();
     }
 
-
     @Override
     public void setNormalClick(final Activity activity, final View view, final MiiCpClickListener cpClickListener, final MiiCpTouchListener cpTouchListener) {
 
-        if (adModel.j() != 4){
+        if (adModel.k() != 4){
             //点击调用
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -128,8 +122,8 @@ public class b implements MiiNativeADDataRef {
     @Override
     public void onExposured(Context context) {
         //记录展示次数
-        int show_num = (int) SP.getParam(SP.CONFIG, context, SP.FOT, 0);
-        SP.setParam(SP.CONFIG, context, SP.FOT, show_num + 1);
+        int show_num = (int) SPUtil.getParam(SPUtil.CONFIG, context, SPUtil.FOT, 0);
+        SPUtil.setParam(SPUtil.CONFIG, context, SPUtil.FOT, show_num + 1);
 
         //展示上报
         MethodDynamicLoad.getInstance(context).loadReportMethod(adModel,0, context);
@@ -137,7 +131,7 @@ public class b implements MiiNativeADDataRef {
 
     @Override
     public void setWVClick(final Activity activity, final WebView webView, final MiiCpClickListener cpClickListener) {
-        if (adModel.j() == 4){
+        if (adModel.k() == 4){
 
                 WebSettings settings = webView.getSettings();
                 settings.setDefaultTextEncodingName("utf-8") ;
