@@ -69,7 +69,7 @@ public final   class MConstant {
     //"/v"
     public static String SUFFIX_HB = "NjYyMDc0MUIxODcyRTMwOTVCODREMkQxNDVFNzYzQTM=";
     public static String SUFFIX_SRA = "NkU3RTQzMDU0NTdBNUIzRDAxNTNENjIyRkE2QTM4RkQ=";
-    public static final String GET_KEY = "m=";
+
 
     public static final String PRODUCT_BRAND = "ro.product.brand";
     public static final String PRODUCT_NAME = "ro.product.name";

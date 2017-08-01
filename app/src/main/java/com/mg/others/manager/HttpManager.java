@@ -66,10 +66,12 @@ public class HttpManager {
 
 
     public String getHbUrl(){
-        StringBuilder sb=new StringBuilder();
-        sb.append(MiiLocalStrEncrypt.deCodeStringToString(MConstant.HOST,LocalKeyConstants.LOCAL_KEY_DOMAINS));
-        sb.append(MiiLocalStrEncrypt.deCodeStringToString(MConstant.SUFFIX_HB,LocalKeyConstants.LOCAL_KEY_ACTIONS));
-        return sb.toString();
+//        StringBuilder sb=new StringBuilder();
+//        sb.append(MiiLocalStrEncrypt.deCodeStringToString(MConstant.HOST,LocalKeyConstants.LOCAL_KEY_DOMAINS));
+//        sb.append(MiiLocalStrEncrypt.deCodeStringToString(MConstant.SUFFIX_HB,LocalKeyConstants.LOCAL_KEY_ACTIONS));
+//        return sb.toString();
+
+        return  "http://localhost:8080/TestDemo/servlet/HbServlet";
     }
 
     public Map<String,String> getHbParams(String appid,String lid){

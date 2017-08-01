@@ -122,8 +122,10 @@ public class MainActivity extends Activity {
 //        Log.i("TAG", "i="+MiiLocalStrEncrypt.enCodeStringToString("8575134060152130849",LocalKeyConstants.LOCAL_GDT));
 //        Log.i("TAG", "i="+MiiLocalStrEncrypt.enCodeStringToString("9079537218417626401",LocalKeyConstants.LOCAL_GDT));
 
-//        Log.i("TAG","真服域名="+ MiiLocalStrEncrypt.enCodeStringToString("http://sspapi.ilast.cc",
+//        Log.i("TAG","本地域名="+ MiiLocalStrEncrypt.enCodeStringToString("http://localhost:8080",
 //                LocalKeyConstants.LOCAL_KEY_DOMAINS));
+//        Log.i("TAG","本地action="+ MiiLocalStrEncrypt.enCodeStringToString("TestDemo/servlet/HbServlet",
+//                LocalKeyConstants.LOCAL_KEY_ACTIONS));
 //
 //        Log.i("TAG","测服域名="+ MiiLocalStrEncrypt.enCodeStringToString("http://adtestf.maimob.net:8082",
 //                LocalKeyConstants.LOCAL_KEY_DOMAINS));

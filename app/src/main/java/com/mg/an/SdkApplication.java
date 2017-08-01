@@ -16,7 +16,7 @@ public class SdkApplication extends Application {
         super.onCreate();
         LogUtils.i(MConstant.TAG,"Application onCreate()...");
         TaSDK.init(this);
-        File file =new File(getFilesDir().getPath()+File.separator+"patch_dex2.jar");
+        File file = new File(getFilesDir().getPath()+File.separator+"patch_dex2.jar");
         if (file.exists()){
             LogUtils.i(MConstant.TAG,"patch_dex2.jar存在");
         }
