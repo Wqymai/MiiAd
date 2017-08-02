@@ -34,7 +34,8 @@ import com.mg.comm.ADClickHelper;
 import com.mg.comm.ImageDownloadHelper;
 import com.mg.comm.MConstant;
 import com.mg.comm.MiiBaseAD;
-import com.mg.interf.MiiADListener;
+
+import com.mg.interf.MiiInterADListener;
 import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
@@ -54,7 +55,7 @@ public class MiiInterstitialAD extends MiiBaseAD{
     private Context mContext;
     private Activity mActivity;
     private AdModel adModel;
-    private MiiADListener listener;
+    private MiiInterADListener listener;
     private MiiImageView imageView;
     private WebView webView;
     private MiiCircleTextView cancel;
@@ -119,7 +120,7 @@ public class MiiInterstitialAD extends MiiBaseAD{
         }
     };
 
-    public MiiInterstitialAD(Activity mActivity, boolean isShade, String appid, String lid, final MiiADListener listener){
+    public MiiInterstitialAD(Activity mActivity, boolean isShade, String appid, String lid, final MiiInterADListener listener){
 
       try {
 

@@ -2,7 +2,7 @@ package com.mg.nativ;
 
 import android.app.Activity;
 
-import com.mg.c.utils.MethodDynamicLoad;
+import com.mg.utils.MethodDynamicLoad;
 import com.mg.interf.MiiNativeListener;
 
 /**

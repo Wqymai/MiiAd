@@ -5,8 +5,8 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.mg.c.c.DynamicModel;
-import com.mg.c.utils.MethodDynamicLoad;
+import com.mg.others.model.DynamicModel;
+import com.mg.utils.MethodDynamicLoad;
 import com.mg.interf.MiiSplashADListener;
 
 /**

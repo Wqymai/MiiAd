@@ -1,4 +1,4 @@
-package com.mg.c.utils;
+package com.mg.utils;
 
 import android.content.Context;
 import android.content.res.AssetManager;

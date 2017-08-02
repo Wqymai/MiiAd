@@ -41,19 +41,20 @@ public class SplashActivity extends Activity{
             @Override
             public void onMiiADDismissed() {
                 Log.i("ad_demo", "SplashADDismissed");
-                splashAD.recycle();
+//
             }
 
             @Override
             public void onMiiADPresent() {
                 Log.i("ad_demo",  "SplashADPresent");
                 splashHolder.setVisibility(View.INVISIBLE);
-
+//                skipView.setText(String.format(SKIP_TEXT, (Math.round(millisUntilFinished / 1000f))));
             }
 
             @Override
             public void onMiiADClicked() {
                 Log.i("ad_demo",  "SplashADClicked");
+//                splashAD.recycle();
             }
 
             @Override
@@ -64,7 +65,7 @@ public class SplashActivity extends Activity{
             @Override
             public void onMiiADTick(long millisUntilFinished) {
                 Log.i("ad_demo",  "SplashADTick " + millisUntilFinished+ "ms");
-                skipView.setText(String.format(SKIP_TEXT, (Math.round(millisUntilFinished / 1000f))));
+//                skipView.setText(String.format(SKIP_TEXT, (Math.round(millisUntilFinished / 1000f))));
             }
 
             @Override
@@ -72,6 +73,8 @@ public class SplashActivity extends Activity{
                 Log.i("ad_demo", "SplashNoAD "+errCode);
             }
         });
+
+
 
     }
 

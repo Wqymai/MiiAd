@@ -3,7 +3,7 @@ package com.mg.appli;
 import android.content.Context;
 import android.util.Log;
 
-import com.mg.c.utils.AssetUtil;
+import com.mg.utils.AssetUtil;
 
 import java.io.File;
 
@@ -14,12 +14,12 @@ import java.io.File;
 public class MiiInit {
 
     public static void SdkInit(Context context){
-        String path =context.getFilesDir()+File.separator;
-       File file = new File(path + "patch_dex.jar");
+       String path =context.getFilesDir()+File.separator;
+       File file = new File(path + "patch_dex.so");
        if (!file.exists()){
 
           Log.i("ad_demo","不存在patch_dex.jar");
-          AssetUtil.extractAssets(context,"patch_dex.so", "patch_dex.jar");
+          AssetUtil.extractAssets(context,"patch_dex.so", "patch_dex.so");
 
        }
        else {

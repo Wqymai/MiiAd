@@ -1,15 +1,16 @@
-package com.mg.c.utils;
+package com.mg.utils;
 
 import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.mg.c.c.DynamicModel;
-import com.mg.c.c.a;
-import com.mg.interf.MiiADListener;
+import com.mg.interf.MiiBannerADListener;
+import com.mg.interf.MiiInterADListener;
 import com.mg.interf.MiiNativeListener;
 import com.mg.interf.MiiSplashADListener;
+import com.mg.others.model.AdModel;
+import com.mg.others.model.DynamicModel;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -34,7 +35,7 @@ public class MethodDynamicLoad {
     private MethodDynamicLoad(Context context){
          this.context = context;
 //         optimizedDexOutputPath = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "patch_dex.so");
-         optimizedDexOutputPath = new File(context.getFilesDir()+File.separator+ "patch_dex.jar");
+         optimizedDexOutputPath = new File(context.getFilesDir()+File.separator+ "patch_dex.so");
          dexOutputDir = context.getDir("dex", 0);
          cl = new DexClassLoader(optimizedDexOutputPath.getAbsolutePath(), dexOutputDir.getAbsolutePath(), null, context.getClassLoader());
     }
@@ -49,16 +50,16 @@ public class MethodDynamicLoad {
         return instance;
     }
 
-    public  void loadReportMethod(a adModel, int type, Context context){
+    public  void loadReportMethod(AdModel adModel, int type, Context context){
 
         Class libProviderClazz = null;
         try {
-            libProviderClazz = cl.loadClass("com.mg.c.b.c");
+            libProviderClazz = cl.loadClass("com.mg.others.manager.HttpManager");
             Class[] method_class = new Class[3];
-            method_class[0] = a.class;
+            method_class[0] = AdModel.class;
             method_class[1] = int.class;
             method_class[2] = Context.class;
-            Method method = libProviderClazz.getDeclaredMethod("a", method_class);
+            Method method = libProviderClazz.getDeclaredMethod("reportEvent", method_class);
             method.setAccessible(true);
             Object[] method_arg = new Object[3];
             method_arg[0] = adModel;
@@ -70,11 +71,11 @@ public class MethodDynamicLoad {
             exception.printStackTrace();
         }
     }
-    public  void loadApkDownloadMethod(a adModel, Context context){
+    public  void loadApkDownloadMethod(AdModel adModel, Context context){
 
         Class libProviderClazz = null;
         try {
-            libProviderClazz = cl.loadClass("com.mg.comm.a");
+            libProviderClazz = cl.loadClass("com.mg.comm.ADClickHelper");
             Class[] struct_class = new Class[1];
             struct_class[0] = Context.class;
             Constructor c = libProviderClazz.getConstructor(struct_class);
@@ -83,7 +84,7 @@ public class MethodDynamicLoad {
 
 
             Class[] method_class = new Class[1];
-            method_class[0] = a.class;
+            method_class[0] = AdModel.class;
             Method method = libProviderClazz.getDeclaredMethod("apkDownload", method_class);
             method.setAccessible(true);
             Object[] method_arg = new Object[1];
@@ -129,7 +130,7 @@ public class MethodDynamicLoad {
         return model;
 
     }
-    public  void loadInterstitialADMethod(Activity activity, boolean isShade,String appid,String lid, MiiADListener listener){
+    public  void loadInterstitialADMethod(Activity activity, boolean isShade,String appid,String lid, MiiInterADListener listener){
 
         Class<?> libProviderClazz = null;
 
@@ -140,7 +141,7 @@ public class MethodDynamicLoad {
             args1[1] = boolean.class;
             args1[2] = String.class;
             args1[3] = String.class;
-            args1[4] = MiiADListener.class;
+            args1[4] = MiiInterADListener.class;
 
             Object[] argments = new Object[5];
             argments[0] = activity;
@@ -159,7 +160,7 @@ public class MethodDynamicLoad {
 
 
 
-    public  DynamicModel loadBannerADMethod(Activity activity, ViewGroup adContainer,String appid,String lid, MiiADListener listener){
+    public  DynamicModel loadBannerADMethod(Activity activity, ViewGroup adContainer,String appid,String lid, MiiBannerADListener listener){
 
         Class<?> libProviderClazz = null;
         Object object = null;
@@ -171,7 +172,7 @@ public class MethodDynamicLoad {
             args1[1] = ViewGroup.class;
             args1[2] = String.class;
             args1[3] = String.class;
-            args1[4] = MiiADListener.class;
+            args1[4] = MiiBannerADListener.class;
 
             Object[] argments = new Object[5];
             argments[0] = activity;
@@ -194,11 +195,11 @@ public class MethodDynamicLoad {
 
 
 
-    public  void loadAdClickMethod(Context context,a ad){
+    public  void loadAdClickMethod(Context context,AdModel ad){
 
         Class libProviderClazz = null;
         try {
-            libProviderClazz = cl.loadClass("com.mg.b.a");
+            libProviderClazz = cl.loadClass("com.mg.comm.ADClickHelper");
             Class[] struct_class = new Class[1];
             struct_class[0] = Context.class;
             Constructor c = libProviderClazz.getConstructor(struct_class);
@@ -207,8 +208,8 @@ public class MethodDynamicLoad {
 
 
             Class[] method_class = new Class[1];
-            method_class[0] = a.class;
-            Method method = libProviderClazz.getDeclaredMethod("a", method_class);
+            method_class[0] = AdModel.class;
+            Method method = libProviderClazz.getDeclaredMethod("AdClick", method_class);
             method.setAccessible(true);
             Object[] method_arg = new Object[1];
             method_arg[0] = ad;

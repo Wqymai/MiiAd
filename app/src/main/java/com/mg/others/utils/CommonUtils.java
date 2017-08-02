@@ -523,13 +523,13 @@ public class CommonUtils {
         return null;
     }
 
-	public static void writeADToSP(Context context, AdModel ad){
+	public static boolean writeADToSP(Context context, AdModel ad){
         if (context == null){
-            return;
+            return false;
         }
 
         if (ad == null){
-            return;
+            return false;
         }
 		SharedPreferences sp = context.getSharedPreferences(SP.CONFIG, Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sp.edit();
@@ -539,16 +539,18 @@ public class CommonUtils {
 			oos = new ObjectOutputStream(baos);
 			oos.writeObject(ad);
 			String base64Config = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
-			editor.putString(ad.getPkName(),base64Config);
+			editor.putString("AD_MODEL",base64Config);
 			editor.commit();
 		} catch (IOException e) {
-			e.printStackTrace();
+            e.printStackTrace();
+            return  false;
 		}
+		return true;
 	}
 
-	public static AdModel readADFromSP(Context context, String key){
+	public static AdModel readADFromSP(Context context){
 		SharedPreferences sp = context.getSharedPreferences(SP.CONFIG, Context.MODE_PRIVATE);
-		String base64Config = sp.getString(key,"");
+		String base64Config = sp.getString("AD_MODEL","");
 		AdModel ad = null;
 		if (!base64Config.equals("")){
 			byte[] bytes = Base64.decode(base64Config, Base64.DEFAULT);

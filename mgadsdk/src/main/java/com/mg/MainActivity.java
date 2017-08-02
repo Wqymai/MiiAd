@@ -3,12 +3,11 @@ package com.mg;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.mg.interf.MiiADListener;
+import com.mg.interf.MiiInterADListener;
 import com.mg.interf.MiiNativeADDataRef;
 import com.mg.interf.MiiNativeListener;
 import com.mg.interstitial.MgInterstitialAD;
@@ -46,7 +45,7 @@ public class MainActivity extends Activity {
         openInter_noshade.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new MgInterstitialAD(MainActivity.this, false,Contants.APPID,Contants.IID, new MiiADListener() {
+                new MgInterstitialAD(MainActivity.this, false,Contants.APPID,Contants.IID, new MiiInterADListener() {
                     @Override
                     public void onMiiADDismissed() {
                         Log.i("ad_demo", "插屏 ADDismissed");
@@ -69,7 +68,7 @@ public class MainActivity extends Activity {
 
                     @Override
                     public void onMiiNoAD(int errCode) {
-                        Log.i("ad_demo", "插屏 NoAD");
+                        Log.i("ad_demo", "插屏 NoAD " + errCode);
                     }
                 });
             }
@@ -79,15 +78,15 @@ public class MainActivity extends Activity {
         openInter_shade.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new MgInterstitialAD(MainActivity.this, true, Contants.APPID,Contants.IID,new MiiADListener() {
+                new MgInterstitialAD(MainActivity.this, true, Contants.APPID,Contants.IID,new MiiInterADListener() {
                     @Override
                     public void onMiiADDismissed() {
-
+                        Log.i("ad_demo", "插屏 ADDismissed");
                     }
 
                     @Override
                     public void onMiiADPresent() {
-
+                        Log.i("ad_demo", "插屏 ADPresent");
                     }
 
                     @Override
@@ -102,7 +101,7 @@ public class MainActivity extends Activity {
 
                     @Override
                     public void onMiiNoAD(int errCode) {
-
+                        Log.i("ad_demo", "插屏 NoAD " + errCode);
                     }
                 });
             }
@@ -116,7 +115,6 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 new MgNativeAD(MainActivity.this, Contants.APPID, Contants.NID, new MiiNativeListener() {
-
 
                     @Override
                     public void onADLoaded(MiiNativeADDataRef dataRef) {

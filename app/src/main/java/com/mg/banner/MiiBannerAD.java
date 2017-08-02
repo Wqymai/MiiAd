@@ -31,7 +31,7 @@ import com.mg.asyn.ReqAsyncModel;
 import com.mg.comm.ADClickHelper;
 import com.mg.comm.ImageDownloadHelper;
 import com.mg.comm.MiiBaseAD;
-import com.mg.interf.MiiADListener;
+import com.mg.interf.MiiBannerADListener;
 import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
@@ -48,7 +48,7 @@ public class MiiBannerAD extends MiiBaseAD {
     private Context mContext;
     private Activity mActivity;
     private ViewGroup adContainer;
-    private MiiADListener listener;
+    private MiiBannerADListener listener;
     private AdModel adModel;
     private WebView webView;
     private ImageView adImageView;
@@ -109,7 +109,7 @@ public class MiiBannerAD extends MiiBaseAD {
     };
 
 
-    public MiiBannerAD(Activity activity, ViewGroup adContainer,String appid,String lid, MiiADListener listener){
+    public MiiBannerAD(Activity activity, ViewGroup adContainer,String appid,String lid, MiiBannerADListener listener){
 
       try{
         this.mContext = activity.getApplicationContext();

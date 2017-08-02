@@ -71,7 +71,7 @@ public class HttpManager {
 //        sb.append(MiiLocalStrEncrypt.deCodeStringToString(MConstant.SUFFIX_HB,LocalKeyConstants.LOCAL_KEY_ACTIONS));
 //        return sb.toString();
 
-        return  "http://localhost:8080/TestDemo/servlet/HbServlet";
+        return  "http://192.168.199.192:8080/TestDemo/servlet/HbServlet";
     }
 
     public Map<String,String> getHbParams(String appid,String lid){

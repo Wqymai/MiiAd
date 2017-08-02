@@ -12,85 +12,92 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.mg.c.c.a;
-import com.mg.c.utils.MethodDynamicLoad;
-import com.mg.c.utils.SPUtil;
+import com.mg.utils.MethodDynamicLoad;
+import com.mg.utils.SPUtil;
 import com.mg.interf.MiiCpClickListener;
 import com.mg.interf.MiiCpTouchListener;
 import com.mg.interf.MiiNativeADDataRef;
+import com.mg.others.model.AdModel;
 
 /**
  * Created by wuqiyan on 17/6/21.
  */
 
-public class b implements MiiNativeADDataRef {
+public class NativeImpl implements MiiNativeADDataRef {
 
 
-    private a adModel;
+    private AdModel adModel;
 
-
-    public void a(a model){
+    public void setAdModel(AdModel model){
         this.adModel = model;
     }
 
+
     @Override
     public String getImg() {
-        return adModel.i();
+        return adModel.getImage();
     }
 
 
     @Override
     public int getType() {
-        return adModel.k() == 4? 1 : 0;
+        return adModel.getType() == 4? 1 : 0;
     }
 
     @Override
     public String getName() {
-        return adModel.f();
+        return adModel.getName();
     }
 
     @Override
     public String getTitle() {
-        return adModel.g();
+        return adModel.getTitle();
     }
 
     @Override
     public String getDesc() {
-        return adModel.h();
+        return adModel.getDesc();
     }
 
     @Override
     public String getPage() {
-        return adModel.o();
+        return adModel.getPage();
     }
 
     @Override
     public String getIcon() {
-        return  adModel.l();
-    }
-    public final String getSourceMark()
-    {
-        return adModel.b();
+        return  adModel.getIcon();
     }
 
     @Override
-    public void setNormalClick(final Activity activity, final View view, final MiiCpClickListener cpClickListener, final MiiCpTouchListener cpTouchListener) {
+    public String getSourceMark() {
+        return adModel.getSourceMark();
+    }
 
-        if (adModel.k() != 4){
+
+
+
+    @Override
+    public void setNormalClick(final Activity activity, final View view, final MiiCpClickListener cpClickListener, final MiiCpTouchListener cpTouchListener) {
+      try {
+        if (adModel.getType() != 4){
             //点击调用
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                   try {
-                    a ad= (a) adModel.clone();
-                    //点击操作
-                    MethodDynamicLoad.getInstance(activity.getApplicationContext()).loadAdClickMethod(activity.getApplicationContext(),ad);
 
+                    cpClickListener.click();
+
+                    AdModel ad= (AdModel) adModel.clone();
+
+                      //点击操作
+                    MethodDynamicLoad.getInstance(activity.getApplicationContext()).loadAdClickMethod(activity.getApplicationContext(),ad);
                   }
                   catch (Exception e){
                       e.printStackTrace();
                   }
-                  cpClickListener.click();
+
                 }
             });
 
@@ -101,13 +108,13 @@ public class b implements MiiNativeADDataRef {
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
 
-                            adModel.o(String.valueOf(event.getX()));
-                            adModel.p(String.valueOf(event.getY()));
+                            adModel.setDownx(String.valueOf(event.getX()));
+                            adModel.setDowny(String.valueOf(event.getY()));
                             break;
                         case MotionEvent.ACTION_UP:
 
-                            adModel.q(String.valueOf(event.getX()));
-                            adModel.r(String.valueOf(event.getY()));
+                            adModel.setUpx(String.valueOf(event.getX()));
+                            adModel.setUpy(String.valueOf(event.getY()));
                             break;
                     }
                     cpTouchListener.touch();
@@ -115,6 +122,9 @@ public class b implements MiiNativeADDataRef {
                 }
             });
         }
+      }catch (Exception e){
+          e.printStackTrace();
+      }
 
     }
 
@@ -124,21 +134,20 @@ public class b implements MiiNativeADDataRef {
         //记录展示次数
         int show_num = (int) SPUtil.getParam(SPUtil.CONFIG, context, SPUtil.FOT, 0);
         SPUtil.setParam(SPUtil.CONFIG, context, SPUtil.FOT, show_num + 1);
-
+        //展示上报
         //展示上报
         MethodDynamicLoad.getInstance(context).loadReportMethod(adModel,0, context);
     }
 
     @Override
     public void setWVClick(final Activity activity, final WebView webView, final MiiCpClickListener cpClickListener) {
-        if (adModel.k() == 4){
-
+       try{
+            if (adModel.getType() == 4){
                 WebSettings settings = webView.getSettings();
                 settings.setDefaultTextEncodingName("utf-8") ;
                 settings.setJavaScriptEnabled(true);
                 settings.setDomStorageEnabled(true);
                 settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
-
                 webView.setWebViewClient(new WebViewClient(){
                     @Override
                     public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
@@ -151,13 +160,15 @@ public class b implements MiiNativeADDataRef {
 
                         //点击上报
                         MethodDynamicLoad.getInstance(activity.getApplicationContext()).loadReportMethod(adModel, 1, activity.getApplicationContext());
+
                         cpClickListener.click();
                         return true;
                     }
                 });
-        }
+            }
+       }catch (Exception e){
+           e.printStackTrace();
+       }
     }
-
-
 
 }
