@@ -139,6 +139,8 @@ public class NativeImpl implements MiiNativeADDataRef {
         MethodDynamicLoad.getInstance(context).loadReportMethod(adModel,0, context);
     }
 
+
+
     @Override
     public void setWVClick(final Activity activity, final WebView webView, final MiiCpClickListener cpClickListener) {
        try{

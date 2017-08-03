@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.mg.interf.MiiSplashADListener;
+import com.mg.interf.MiiADListener;
 import com.mg.splash.MgSplashAD;
 
 
@@ -35,13 +35,13 @@ public class SplashActivity extends Activity{
     }
 
     private void fetchAD(SplashActivity mainActivity, ViewGroup container, final TextView skipView) {
-        splashAD = new MgSplashAD(mainActivity, container, skipView, Contants.APPID, Contants.KID,new MiiSplashADListener() {
+        splashAD = new MgSplashAD(mainActivity, container, skipView, Contants.APPID, Contants.KID,new MiiADListener() {
 
 
             @Override
             public void onMiiADDismissed() {
                 Log.i("ad_demo", "SplashADDismissed");
-//
+                splashAD.recycle();
             }
 
             @Override
@@ -65,7 +65,7 @@ public class SplashActivity extends Activity{
             @Override
             public void onMiiADTick(long millisUntilFinished) {
                 Log.i("ad_demo",  "SplashADTick " + millisUntilFinished+ "ms");
-//                skipView.setText(String.format(SKIP_TEXT, (Math.round(millisUntilFinished / 1000f))));
+                skipView.setText(String.format(SKIP_TEXT, (Math.round(millisUntilFinished / 1000f))));
             }
 
             @Override

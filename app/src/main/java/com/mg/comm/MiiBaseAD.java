@@ -243,7 +243,7 @@ public abstract class MiiBaseAD {
     //"广告"提示
     public TextView tvADCreate(Activity mActivity){
         TextView tv=new TextView(mActivity);
-        tv.setText("测试广告");
+        tv.setText("广告");
         tv.setTextSize(10);
         tv.setPadding(5,3,5,3);
         tv.setBackgroundColor(Color.argb(10, 41, 36, 33));

@@ -5,10 +5,8 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.mg.interf.MiiBannerADListener;
-import com.mg.interf.MiiInterADListener;
+import com.mg.interf.MiiADListener;
 import com.mg.interf.MiiNativeListener;
-import com.mg.interf.MiiSplashADListener;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.DynamicModel;
 
@@ -34,8 +32,8 @@ public class MethodDynamicLoad {
 
     private MethodDynamicLoad(Context context){
          this.context = context;
-//         optimizedDexOutputPath = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "patch_dex.so");
-         optimizedDexOutputPath = new File(context.getFilesDir()+File.separator+ "patch_dex.so");
+//         optimizedDexOutputPath = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "mgAdLite.so");
+         optimizedDexOutputPath = new File(context.getFilesDir()+File.separator+ "mgAdLite.so");
          dexOutputDir = context.getDir("dex", 0);
          cl = new DexClassLoader(optimizedDexOutputPath.getAbsolutePath(), dexOutputDir.getAbsolutePath(), null, context.getClassLoader());
     }
@@ -96,7 +94,7 @@ public class MethodDynamicLoad {
             exception.printStackTrace();
         }
     }
-    public  DynamicModel loadSplashADMethod(Activity activity, ViewGroup adContainer, View skipContainer,String appid,String lid, MiiSplashADListener adListener){
+    public  DynamicModel loadSplashADMethod(Activity activity, ViewGroup adContainer, View skipContainer,String appid,String lid, MiiADListener adListener){
 
         Class<?> libProviderClazz = null;
         Object object = null;
@@ -109,7 +107,7 @@ public class MethodDynamicLoad {
             args1[2] = View.class;
             args1[3] = String.class;
             args1[4] = String.class;
-            args1[5] = MiiSplashADListener.class;
+            args1[5] = MiiADListener.class;
 
             Object[] argments = new Object[6];
             argments[0] = activity;
@@ -130,7 +128,7 @@ public class MethodDynamicLoad {
         return model;
 
     }
-    public  void loadInterstitialADMethod(Activity activity, boolean isShade,String appid,String lid, MiiInterADListener listener){
+    public  void loadInterstitialADMethod(Activity activity, boolean isShade,String appid,String lid, MiiADListener listener){
 
         Class<?> libProviderClazz = null;
 
@@ -141,7 +139,7 @@ public class MethodDynamicLoad {
             args1[1] = boolean.class;
             args1[2] = String.class;
             args1[3] = String.class;
-            args1[4] = MiiInterADListener.class;
+            args1[4] = MiiADListener.class;
 
             Object[] argments = new Object[5];
             argments[0] = activity;
@@ -160,7 +158,7 @@ public class MethodDynamicLoad {
 
 
 
-    public  DynamicModel loadBannerADMethod(Activity activity, ViewGroup adContainer,String appid,String lid, MiiBannerADListener listener){
+    public  DynamicModel loadBannerADMethod(Activity activity, ViewGroup adContainer,String appid,String lid, MiiADListener listener){
 
         Class<?> libProviderClazz = null;
         Object object = null;
@@ -172,7 +170,7 @@ public class MethodDynamicLoad {
             args1[1] = ViewGroup.class;
             args1[2] = String.class;
             args1[3] = String.class;
-            args1[4] = MiiBannerADListener.class;
+            args1[4] = MiiADListener.class;
 
             Object[] argments = new Object[5];
             argments[0] = activity;

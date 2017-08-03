@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.mg.banner.MgBannerAD;
-import com.mg.interf.MiiBannerADListener;
+import com.mg.interf.MiiADListener;
 
 /**
  * Created by wuqiyan on 17/7/7.
@@ -28,7 +28,7 @@ public class BannerActivity extends Activity {
         setContentView(R.layout.banner_layout);
         bannerContainer = (ViewGroup) this.findViewById(R.id.bannerContainer);
 
-        bannerAD = new MgBannerAD(BannerActivity.this, bannerContainer,Contants.APPID,Contants.BID, new MiiBannerADListener() {
+        bannerAD = new MgBannerAD(BannerActivity.this, bannerContainer,Contants.APPID,Contants.BID, new MiiADListener() {
 
             @Override
             public void onMiiNoAD(int errCode) {
@@ -53,6 +53,11 @@ public class BannerActivity extends Activity {
 
             @Override
             public void onMiiADTouched() {
+
+            }
+
+            @Override
+            public void onMiiADTick(long millisUntilFinished) {
 
             }
 

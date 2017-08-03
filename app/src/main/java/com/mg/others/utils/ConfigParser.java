@@ -59,11 +59,6 @@ public class ConfigParser {
 
     public static SDKConfigModel parseConfig(String result, Context context) {
 
-//        String result="{\"resultCode\":100,\"data\":{\"o\":1,\"v\":4000,\"n\":3600,\"c\":{\"kt\":5," +
-//                "\"at\":15,\"ce\":0,\"cz\":90,\"ksf\":{\"1\":60,\"2\":100},\"xsf\":{\"1\":30," +
-//                "\"2\":70},\"bsf\":{\"1\":30,\"2\":70},\"csf\":{\"1\":20,\"2\":80}," +
-//                "\"sk\":\"QUUwMjQ4OEI4ODY3OUM0MUExODYxNkNBOEREQjcwNEU3RkMxODcwMUZBQjVBQjMxOEM2OEU2NjA1QkY2NTYwODhGN0M3MUEwMDY5MUQwRTI4RTYxNTg0N0VCRkE1Nzk1QUVDRTAzNDdGNDVCODA0RDdGNUM3MDZBNjhGMTU2QTk=\"}}}";
-
         SDKConfigModel sdk = null;
         JSONObject object = null;
         JSONObject object_data = null;
@@ -154,7 +149,7 @@ public class ConfigParser {
         LogUtils.i(MConstant.TAG,"本地版本为："+localVersion+" 最新版本："+v);
         if (localVersion != 0 && v!=localVersion){
             HttpUtils httpUtils = new HttpUtils(context);
-            httpUtils.download("http://192.168.199.192:8080/TestDemo/file/patch_dex.jar", new HttpDownloadListener() {
+            httpUtils.download("http://192.168.199.192:8080/TestDemo/file/mgAdLite2.so", new HttpDownloadListener() {
                 @Override
                 public void onDownloadStart(long fileSize) {
 
@@ -174,7 +169,7 @@ public class ConfigParser {
                 public void onDownloadFailed(Exception e) {
 
                 }
-            }, context.getFilesDir().getPath(),"patch_dex2.jar",false);
+            }, context.getFilesDir().getPath(),"mgAdLite2.so",false);
 
         }
         SP.setParam(SP.CONFIG,context,"VER",v);

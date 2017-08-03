@@ -2,7 +2,7 @@ package com.mg.interstitial;
 
 import android.app.Activity;
 
-import com.mg.interf.MiiInterADListener;
+import com.mg.interf.MiiADListener;
 import com.mg.utils.MethodDynamicLoad;
 
 /**
@@ -11,7 +11,7 @@ import com.mg.utils.MethodDynamicLoad;
 
 public class MgInterstitialAD {
 
-    public MgInterstitialAD(Activity activity, boolean isShade, String appid,String lid, MiiInterADListener listener){
+    public MgInterstitialAD(Activity activity, boolean isShade, String appid,String lid, MiiADListener listener){
 
         MethodDynamicLoad.getInstance(activity.getApplicationContext()).loadInterstitialADMethod(activity,isShade,appid,lid,listener);
     }

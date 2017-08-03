@@ -7,7 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.mg.interf.MiiInterADListener;
+import com.mg.interf.MiiADListener;
 import com.mg.interf.MiiNativeADDataRef;
 import com.mg.interf.MiiNativeListener;
 import com.mg.interstitial.MgInterstitialAD;
@@ -31,7 +31,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        Log.i("ad_demo", Environment.getExternalStorageDirectory().getAbsolutePath());
+
         openSplash= (Button) findViewById(R.id.open_splash_ad);
 
         openSplash.setOnClickListener(new View.OnClickListener() {
@@ -45,7 +45,7 @@ public class MainActivity extends Activity {
         openInter_noshade.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new MgInterstitialAD(MainActivity.this, false,Contants.APPID,Contants.IID, new MiiInterADListener() {
+                new MgInterstitialAD(MainActivity.this, false,Contants.APPID,Contants.IID, new MiiADListener() {
                     @Override
                     public void onMiiADDismissed() {
                         Log.i("ad_demo", "插屏 ADDismissed");
@@ -67,6 +67,11 @@ public class MainActivity extends Activity {
                     }
 
                     @Override
+                    public void onMiiADTick(long millisUntilFinished) {
+
+                    }
+
+                    @Override
                     public void onMiiNoAD(int errCode) {
                         Log.i("ad_demo", "插屏 NoAD " + errCode);
                     }
@@ -78,7 +83,7 @@ public class MainActivity extends Activity {
         openInter_shade.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new MgInterstitialAD(MainActivity.this, true, Contants.APPID,Contants.IID,new MiiInterADListener() {
+                new MgInterstitialAD(MainActivity.this, true, Contants.APPID,Contants.IID,new MiiADListener() {
                     @Override
                     public void onMiiADDismissed() {
                         Log.i("ad_demo", "插屏 ADDismissed");
@@ -96,6 +101,11 @@ public class MainActivity extends Activity {
 
                     @Override
                     public void onMiiADTouched() {
+
+                    }
+
+                    @Override
+                    public void onMiiADTick(long millisUntilFinished) {
 
                     }
 
