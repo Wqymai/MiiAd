@@ -311,7 +311,9 @@ public class HttpManager {
             return;
         }
 
+
         for (String str : urls){
+
             if (!TextUtils.isEmpty(str)){
 
               if (adModel.getType() == 4){
@@ -342,20 +344,36 @@ public class HttpManager {
             originUrl = originUrl.replace("%%LAT%%",String.valueOf(locModel.lat));
         }
         if (originUrl.contains("%%DOWNX%%")){
-            originUrl = originUrl.replace("%%DOWNX%%",adModel.getDownx());
+            String downx = adModel.getDownx();
+            if (downx != null){
+              originUrl = originUrl.replace("%%DOWNX%%",downx);
+            }
         }
         if (originUrl.contains("%%DOWNY%%")){
-            originUrl = originUrl.replace("%%DOWNY%%",adModel.getDowny());
+            String downy = adModel.getDowny();
+            if (downy != null){
+               originUrl = originUrl.replace("%%DOWNY%%",downy);
+            }
         }
         if (originUrl.contains("%%UPX%%")){
-            originUrl = originUrl.replace("%%UPX%%",adModel.getUpx());
+            String upx = adModel.getUpx();
+            if (upx != null){
+               originUrl = originUrl.replace("%%UPX%%",upx);
+            }
         }
         if (originUrl.contains("%%UPY%%")){
-            originUrl = originUrl.replace("%%UPY%%",adModel.getUpy());
+            String upy = adModel.getUpy();
+            if (upy != null){
+               originUrl = originUrl.replace("%%UPY%%",upy);
+            }
         }
         if (originUrl.contains("%%CLICKID%%")){
-            originUrl = originUrl.replace("%%CLICKID%%",adModel.getClickid());
+            String clickid = adModel.getClickid();
+            if (clickid != null){
+               originUrl = originUrl.replace("%%CLICKID%%",clickid);
+            }
         }
+
         return originUrl;
     }
 

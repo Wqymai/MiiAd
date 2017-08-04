@@ -17,6 +17,8 @@ public class LoactionHelper {
     }
     public static LocModel GetUserLocation(Context context){
        LocModel model = new LocModel();
+       model.lat=0.0;
+        model.lon=0.0;
        try {
 
         //获取地理位置管理器

@@ -383,7 +383,8 @@ public class HttpUtils {
 	private static class HttpGet implements Runnable {
 
 		public HttpGet(String address, HttpListener l, HttpParameter parameter, Context mContext) {
-			this.mURL = address;
+
+			this.mURL = urlEncording(address);
 			this.mListener = l;
 			this.parameter = parameter;
 			this.mContext = mContext;
