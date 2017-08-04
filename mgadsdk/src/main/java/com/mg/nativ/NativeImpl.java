@@ -12,7 +12,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.mg.utils.MethodDynamicLoad;
+import com.mg.utils.MethodLoad;
 import com.mg.utils.SPUtil;
 import com.mg.interf.MiiCpClickListener;
 import com.mg.interf.MiiCpTouchListener;
@@ -92,7 +92,7 @@ public class NativeImpl implements MiiNativeADDataRef {
                     AdModel ad= (AdModel) adModel.clone();
 
                       //点击操作
-                    MethodDynamicLoad.getInstance(activity.getApplicationContext()).loadAdClickMethod(activity.getApplicationContext(),ad);
+                    MethodLoad.getInstance(activity.getApplicationContext()).loadAdClickMethod(activity.getApplicationContext(),ad);
                   }
                   catch (Exception e){
                       e.printStackTrace();
@@ -136,7 +136,7 @@ public class NativeImpl implements MiiNativeADDataRef {
         SPUtil.setParam(SPUtil.CONFIG, context, SPUtil.FOT, show_num + 1);
         //展示上报
         //展示上报
-        MethodDynamicLoad.getInstance(context).loadReportMethod(adModel,0, context);
+        MethodLoad.getInstance(context).loadReportMethod(adModel,0, context);
     }
 
 
@@ -161,7 +161,7 @@ public class NativeImpl implements MiiNativeADDataRef {
                         view.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
 
                         //点击上报
-                        MethodDynamicLoad.getInstance(activity.getApplicationContext()).loadReportMethod(adModel, 1, activity.getApplicationContext());
+                        MethodLoad.getInstance(activity.getApplicationContext()).loadReportMethod(adModel, 1, activity.getApplicationContext());
 
                         cpClickListener.click();
                         return true;

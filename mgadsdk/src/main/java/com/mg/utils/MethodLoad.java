@@ -20,28 +20,28 @@ import dalvik.system.DexClassLoader;
  * Created by wuqiyan on 17/7/6.
  */
 
-public class MethodDynamicLoad {
+public class MethodLoad {
 
 
 
-    private static volatile MethodDynamicLoad instance = null;
+    private static volatile MethodLoad instance = null;
     Context context;
     File optimizedDexOutputPath;
     File dexOutputDir;
     DexClassLoader cl;
 
-    private MethodDynamicLoad(Context context){
+    private MethodLoad(Context context){
          this.context = context;
 //         optimizedDexOutputPath = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "mgAdLite.so");
          optimizedDexOutputPath = new File(context.getFilesDir()+File.separator+ "mgAdLite.so");
          dexOutputDir = context.getDir("dex", 0);
          cl = new DexClassLoader(optimizedDexOutputPath.getAbsolutePath(), dexOutputDir.getAbsolutePath(), null, context.getClassLoader());
     }
-    public static MethodDynamicLoad getInstance(Context context) {
+    public static MethodLoad getInstance(Context context) {
         if (instance == null) {
-            synchronized (MethodDynamicLoad.class) {
+            synchronized (MethodLoad.class) {
                 if (instance == null) {
-                    instance = new MethodDynamicLoad(context);
+                    instance = new MethodLoad(context);
                 }
             }
         }

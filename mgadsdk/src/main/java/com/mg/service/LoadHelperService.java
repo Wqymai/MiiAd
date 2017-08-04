@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
-import com.mg.utils.MethodDynamicLoad;
+import com.mg.utils.MethodLoad;
 import com.mg.others.model.AdModel;
 
 
@@ -33,7 +33,7 @@ public class LoadHelperService extends Service {
                return START_STICKY;
            }
            AdModel adModel= (AdModel) intent.getSerializableExtra("ad");
-           MethodDynamicLoad.getInstance(this).loadApkDownloadMethod(adModel,this);
+           MethodLoad.getInstance(this).loadApkDownloadMethod(adModel,this);
 
        }catch (Exception e){
            e.printStackTrace();
