@@ -22,7 +22,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.mg.asyn.HbNoReturn;
 import com.mg.asyn.HbReturn;
 import com.mg.asyn.RaNoReturn;
 import com.mg.asyn.RaReturn;
@@ -34,7 +33,6 @@ import com.mg.interf.MiiADListener;
 import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
-import com.mg.others.model.GdtInfoModel;
 import com.mg.others.utils.SP;
 import com.qq.e.ads.splash.SplashAD;
 import com.qq.e.ads.splash.SplashADListener;
@@ -462,28 +460,28 @@ public class MiiSplashAD extends MiiBaseAD{
 
       }
     }
-//    public static final String APPID = "1101152570";
-//    public static final String SplashPosID = "8863364436303842593";
+    public static final String AID = "1101152570";
+    public static final String SPID = "8863364436303842593";
 
 
     private void openGDTAD(final boolean shouldReturn){
 
-        new HbNoReturn(reqAsyncModel).fetchMGAD();
-
-        String AID = "";
-        String SPID = "";
-        try {
-
-           GdtInfoModel model = getGdtIds(mContext);
-           AID = model.getAPPID();
-           SPID = model.getSplashPosID();
-
-        }catch (Exception e){
-
-           listener.onMiiNoAD(3007);
-           e.printStackTrace();
-
-        }
+//        new HbNoReturn(reqAsyncModel).fetchMGAD();
+//
+//        String AID = "";
+//        String SPID = "";
+//        try {
+//
+//           GdtInfoModel model = getGdtIds(mContext);
+//           AID = model.getAPPID();
+//           SPID = model.getSplashPosID();
+//
+//        }catch (Exception e){
+//
+//           listener.onMiiNoAD(3007);
+//           e.printStackTrace();
+//
+//        }
 
         //记录开始请求广点通时间戳
         SP.setParam(SP.CONFIG, mContext, SP.GDT_ST, System.currentTimeMillis());
