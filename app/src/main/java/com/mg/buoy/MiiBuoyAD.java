@@ -20,6 +20,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.mg.asyn.HbReturn;
 import com.mg.asyn.RaReturn;
@@ -55,6 +56,7 @@ public class MiiBuoyAD extends MiiBaseAD {
     private RelativeLayout relativeLayout;
     private ReqAsyncModel reqAsyncModel;
     private WindowManager mWindowManager;
+    private MiiCircleTextView close;
     private WindowManager.LayoutParams wmparams;
 
     Handler mainHandler = new Handler(){
@@ -95,90 +97,50 @@ public class MiiBuoyAD extends MiiBaseAD {
                 case 500:
                     mListener.onMiiNoAD(1000);
                     break;
-                case 600:
-                    new HbReturn(reqAsyncModel).fetchMGAD();
+                case 700:
+                    mListener.onMiiNoAD(3011);
                     break;
             }
         }
     };
 
-    private void showBuoyAD(Bitmap bitmap) {
-      try {
 
+    public MiiBuoyAD(Activity activity, String appid, String lid, MiiADListener listener){
+        try{
+            this.mActivity = activity;
+            this.mContext = activity.getApplicationContext();
+            this.mAppid = appid;
+            this.mLid = lid;
+            this.mListener = listener;
+            reqAsyncModel = new ReqAsyncModel();
+            reqAsyncModel.context = mContext;
+            reqAsyncModel.handler = mainHandler;
+            reqAsyncModel.listener = listener;
+            reqAsyncModel.pt = 0;
+            reqAsyncModel.appid = appid;
+            reqAsyncModel.lid = lid;
 
-        createWindowManager();
-
-        MiiCircleTextView close = new MiiCircleTextView(mContext);
-        close.setGravity(Gravity.CENTER);
-        close.setText("X");
-        close.setWidth(60);
-        close.setHeight(60);
-        close.setBackgroundColor(Color.argb(20, 41, 36, 33));
-        close.setTextColor(Color.WHITE);
-        RelativeLayout.LayoutParams closeParam = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        closeParam.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        closeParam.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-        closeParam.setMargins(0,0,10,0);
-        close.setLayoutParams(closeParam);
-        relativeLayout.addView(close);
-
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        relativeLayout = new RelativeLayout(mContext);
-        relativeLayout.setLayoutParams(layoutParams);
-
-        RelativeLayout.LayoutParams ivParam = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        ivParam.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        ivParam.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-        ivParam.setMargins(0,50,50,0);
-        if (adModel.getImage().contains("gif")){
-            GifView gifView = new GifView(mContext);
-            String path = mContext.getCacheDir().getPath()+ File.separator+md5(adModel.getImage());
-            gifView.setGifImage(new FileInputStream(path));
-            gifView.setLayoutParams(ivParam);
-            relativeLayout.addView(gifView);
-            gifView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                }
-            });
-        }
-        else{
-            ImageView iv = new ImageView(mContext);
-            iv.setLayoutParams(ivParam);
-            iv.setImageBitmap(bitmap);
-            relativeLayout.addView(iv);
-            iv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                }
-            });
-        }
-
-
-        mWindowManager.addView(relativeLayout,wmparams);
-
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                recycle();
-                mListener.onMiiADDismissed();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                check23AbovePermission(activity, mainHandler);
+                return;
             }
-        });
-      }
-      catch (Exception e){
 
-          mListener.onMiiNoAD(3009);
-          e.printStackTrace();
 
-      }
 
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
+
+    public void loadBuoyAD(){
+
+        new HbReturn(reqAsyncModel).fetchMGAD();
+    }
+
 
     private void checkADType(AdModel model) {
 
-        if (true){//H5广告
+        if (model.getType() == 4){//H5广告
             try {
 
                 openH5Ad(model);
@@ -191,7 +153,7 @@ public class MiiBuoyAD extends MiiBaseAD {
             }
         }
         else {
-            model.setImage("https://yun.tuia.cn/tuia-media/img/uu2p7758jn.gif");
+            model.setImage("https://yun.tuia.cn/tuia-media/img/9r9fjq3v6g.gif");
             try {
                 if (adModel.getImage() == null || adModel.getImage().equals("") || adModel.getImage().equals("null")){
 
@@ -220,36 +182,6 @@ public class MiiBuoyAD extends MiiBaseAD {
         }
     }
 
-
-
-    private void createWindowManager(){
-
-      try {
-
-        mWindowManager=(WindowManager)mContext.getSystemService(Context.WINDOW_SERVICE);
-        wmparams = new WindowManager.LayoutParams();
-        wmparams.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        wmparams.width = WindowManager.LayoutParams.WRAP_CONTENT;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            wmparams.type = WindowManager.LayoutParams.TYPE_TOAST;
-        } else {
-            wmparams.type = WindowManager.LayoutParams.TYPE_PHONE;
-        }
-        wmparams.format = PixelFormat.TRANSLUCENT;
-        wmparams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-                | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-                | WindowManager.LayoutParams.FLAG_FULLSCREEN
-                | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
-
-        wmparams.gravity = Gravity.RIGHT | Gravity.CENTER_VERTICAL;
-      }
-      catch (Exception e){
-          mListener.onMiiNoAD(3009);
-          e.printStackTrace();
-      }
-    }
-
     private void openH5Ad(final AdModel admodel){
 
         String h5 ="<!DOCTYPE html><html><head><meta name='viewport' content='width=device-width," +
@@ -260,40 +192,22 @@ public class MiiBuoyAD extends MiiBaseAD {
                 "style=\"height: 100%;width: 100%;\"><a href=\"http://www.baidu.com\"><img " +
                 "src=\"http://192.168.199.192:8080/TestDemo/image/hb.png\" height=\"100%\" " +
                 "width=\"100%\" /></a></body></body></html>";
+
         createWindowManager();
 
+        relativeLayout = buildWrapRelativeLayout();
+        mWindowManager.addView(relativeLayout,wmparams);
 
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        relativeLayout = new RelativeLayout(mContext);
-        relativeLayout.setLayoutParams(layoutParams);
-
-
-        MiiCircleTextView close = new MiiCircleTextView(mContext);
-        close.setGravity(Gravity.CENTER);
-        close.setText("X");
-        close.setWidth(60);
-        close.setHeight(60);
-        close.setBackgroundColor(Color.argb(20, 41, 36, 33));
-        close.setTextColor(Color.WHITE);
-        RelativeLayout.LayoutParams closeParam = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        closeParam.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        closeParam.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-        closeParam.setMargins(0,0,10,0);
-        close.setLayoutParams(closeParam);
-
-        RelativeLayout.LayoutParams params_webview = new RelativeLayout.LayoutParams(dip2px(mContext,50),dip2px(mContext,50));
+        RelativeLayout.LayoutParams params_webview = new RelativeLayout.LayoutParams(dip2px(mContext, 50), dip2px(mContext, 50));
         webView = new WebView(mContext);
         params_webview.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         params_webview.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-        params_webview.setMargins(0,50,50,0);
+        params_webview.setMargins(0, 50, 50, 0);
         webView.setLayoutParams(params_webview);
-
-
-
         relativeLayout.addView(webView);
-        relativeLayout.addView(close);
-        mWindowManager.addView(relativeLayout,wmparams);
 
+        close = (MiiCircleTextView) buildCloseTv();
+        relativeLayout.addView(close);
 
         WebSettings settings = webView.getSettings();
         settings.setDefaultTextEncodingName("utf-8");
@@ -325,7 +239,6 @@ public class MiiBuoyAD extends MiiBaseAD {
 
         webView.loadDataWithBaseURL("", h5, "text/html", "utf-8", "");
 
-
         //展示上报
         HttpManager.reportEvent(admodel, AdReport.EVENT_SHOW, mContext);
 
@@ -344,6 +257,132 @@ public class MiiBuoyAD extends MiiBaseAD {
         });
 
     }
+
+    private void showBuoyAD(Bitmap bitmap) {
+      try {
+
+        createWindowManager();
+
+        relativeLayout = buildWrapRelativeLayout();
+        mWindowManager.addView(relativeLayout,wmparams);
+
+        RelativeLayout.LayoutParams ivParam = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        ivParam.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        ivParam.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+        ivParam.setMargins(0,50,50,0);
+        if (adModel.getImage().contains("gif")){
+            GifView gifView = new GifView(mContext);
+            String path = mContext.getCacheDir().getPath()+ File.separator+md5(adModel.getImage());
+            gifView.setGifImage(new FileInputStream(path));
+            gifView.setLayoutParams(ivParam);
+            relativeLayout.addView(gifView);
+            gifView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+        }
+        else{
+            ImageView iv = new ImageView(mContext);
+            iv.setLayoutParams(ivParam);
+            iv.setImageBitmap(bitmap);
+            relativeLayout.addView(iv);
+            iv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+        }
+
+        close = (MiiCircleTextView) buildCloseTv();
+        relativeLayout.addView(close);
+
+        //展示上报
+        HttpManager.reportEvent(adModel, AdReport.EVENT_SHOW, mContext);
+
+        //广告成功展示
+        mListener.onMiiADPresent();
+
+        //记录展示次数
+        int show_num = (int) SP.getParam(SP.CONFIG, mContext, SP.FOT, 0);
+        SP.setParam(SP.CONFIG, mContext, SP.FOT, show_num + 1);
+
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recycle();
+                mListener.onMiiADDismissed();
+            }
+        });
+      }
+      catch (Exception e){
+
+          mListener.onMiiNoAD(3009);
+          e.printStackTrace();
+
+      }
+
+    }
+
+
+
+
+
+    private void createWindowManager(){
+
+      try {
+          if (mWindowManager == null) {
+              mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+              wmparams = new WindowManager.LayoutParams();
+              wmparams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+              wmparams.width = WindowManager.LayoutParams.WRAP_CONTENT;
+              if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                  wmparams.type = WindowManager.LayoutParams.TYPE_TOAST;
+              } else {
+                  wmparams.type = WindowManager.LayoutParams.TYPE_PHONE;
+              }
+              wmparams.format = PixelFormat.TRANSLUCENT;
+              wmparams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                      | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                      | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+                      | WindowManager.LayoutParams.FLAG_FULLSCREEN
+                      | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
+
+              wmparams.gravity = Gravity.RIGHT | Gravity.CENTER_VERTICAL;
+          }
+      }
+      catch (Exception e){
+          mListener.onMiiNoAD(3009);
+          e.printStackTrace();
+      }
+    }
+
+    private TextView buildCloseTv(){
+        MiiCircleTextView close = new MiiCircleTextView(mContext);
+        close.setGravity(Gravity.CENTER);
+        close.setText("X");
+        close.setWidth(60);
+        close.setHeight(60);
+        close.setBackgroundColor(Color.argb(20, 41, 36, 33));
+        close.setTextColor(Color.WHITE);
+        RelativeLayout.LayoutParams closeParam = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        closeParam.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        closeParam.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+        closeParam.setMargins(0,0,10,0);
+        close.setLayoutParams(closeParam);
+        return close;
+    }
+
+    private RelativeLayout buildWrapRelativeLayout(){
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        RelativeLayout layout = new RelativeLayout(mContext);
+        layout.setLayoutParams(layoutParams);
+//        layout.setBackgroundColor(Color.BLUE);
+        return layout;
+    }
+
 
     private void startupAD() {
         try {
@@ -368,39 +407,10 @@ public class MiiBuoyAD extends MiiBaseAD {
         }
     }
 
-    public MiiBuoyAD(Activity activity, String appid, String lid, MiiADListener listener){
-        try{
-            this.mActivity = activity;
-            this.mContext = activity.getApplicationContext();
-            this.mAppid = appid;
-            this.mLid = lid;
-            this.mListener = listener;
-            reqAsyncModel = new ReqAsyncModel();
-            reqAsyncModel.context = mContext;
-            reqAsyncModel.handler = mainHandler;
-            reqAsyncModel.listener = listener;
-            reqAsyncModel.pt = 0;
-            reqAsyncModel.appid = appid;
-            reqAsyncModel.lid = lid;
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                check23AbovePermission(activity, mainHandler);
-                return;
-            }
-
-            new HbReturn(reqAsyncModel).fetchMGAD();
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-
-
-
 
     @Override
     public void recycle() {
         mWindowManager.removeView(relativeLayout);
+        relativeLayout = null;
     }
 }

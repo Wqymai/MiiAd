@@ -288,37 +288,38 @@ public class MainActivity extends Activity {
 
 
         openBuoy = (Button) findViewById(R.id.open_buoy);
+        final MiiBuoyAD miiBuoyAD = new MiiBuoyAD(MainActivity.this, MConstant.APPID, MConstant.NID, new MiiADListener() {
+
+
+            @Override
+            public void onMiiADDismissed() {
+
+            }
+
+            @Override
+            public void onMiiADPresent() {
+
+            }
+
+            @Override
+            public void onMiiADClicked() {
+
+            }
+
+            @Override
+            public void onMiiADTouched() {
+
+            }
+
+            @Override
+            public void onMiiNoAD(int errCode) {
+
+            }
+        });
         openBuoy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new MiiBuoyAD(MainActivity.this, MConstant.APPID, MConstant.NID, new MiiADListener() {
-
-
-                    @Override
-                    public void onMiiADDismissed() {
-
-                    }
-
-                    @Override
-                    public void onMiiADPresent() {
-
-                    }
-
-                    @Override
-                    public void onMiiADClicked() {
-
-                    }
-
-                    @Override
-                    public void onMiiADTouched() {
-
-                    }
-
-                    @Override
-                    public void onMiiNoAD(int errCode) {
-
-                    }
-                });
+                miiBuoyAD.loadBuoyAD();
             }
         });
 
