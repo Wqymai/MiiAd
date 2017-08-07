@@ -940,20 +940,31 @@ public class HttpUtils {
 	}
 
 	private static String urlEncording(String url) {
+//		String resultUrl = url;
+////		try {
+//
+//		int lastSlash = url.lastIndexOf("/");
+//		String pureUrl = url.substring(0, lastSlash + 1);
+//		String what = url.substring(lastSlash + 1);
+////			String fileName = URLEncoder.encode(url.substring(lastSlash + 1), "UTF-8");
+//		String fileName = Uri.encode(url.substring(lastSlash + 1), "UTF-8");
+//		resultUrl = pureUrl + fileName;
+//
+////		}
+////		catch (UnsupportedEncodingException e) {
+////			e.printStackTrace();
+////		}
+
 		String resultUrl = url;
-//		try {
-
-		int lastSlash = url.lastIndexOf("/");
-		String pureUrl = url.substring(0, lastSlash + 1);
-		String what = url.substring(lastSlash + 1);
-//			String fileName = URLEncoder.encode(url.substring(lastSlash + 1), "UTF-8");
-		String fileName = Uri.encode(url.substring(lastSlash + 1), "UTF-8");
-		resultUrl = pureUrl + fileName;
-
-//		}
-//		catch (UnsupportedEncodingException e) {
-//			e.printStackTrace();
-//		}
+		try {
+			int i = url.indexOf("?");
+			String pureUrl = url.substring(0,i+1);
+			String what = Uri.encode(url.substring(i + 1),"UTF-8");
+			resultUrl = pureUrl + what;
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
 		return resultUrl;
 
 	}
