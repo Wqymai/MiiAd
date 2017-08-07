@@ -29,6 +29,7 @@ public class ImageDownloadHelper {
 
     public  void downloadShowImage(final Context context, final String url, final Handler mainHandler){
         final File file = getDiskCacheDir(context, md5(url));
+
         if (file.exists())
         {
             LogUtils.i(MConstant.TAG,"load cache img");
