@@ -13,7 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.android.others.R;
-import com.mg.buoy.MiiBuoyAD;
+import com.mg.dobber.MiiDobberAD;
 import com.mg.comm.MConstant;
 import com.mg.gif.GifView;
 import com.mg.interf.MiiADListener;
@@ -288,7 +288,7 @@ public class MainActivity extends Activity {
 
 
         openBuoy = (Button) findViewById(R.id.open_buoy);
-        final MiiBuoyAD miiBuoyAD = new MiiBuoyAD(MainActivity.this, MConstant.APPID, MConstant.NID, new MiiADListener() {
+        final MiiDobberAD miiBuoyAD = new MiiDobberAD(MainActivity.this, MConstant.APPID, MConstant.NID, new MiiADListener() {
 
 
             @Override
@@ -319,7 +319,7 @@ public class MainActivity extends Activity {
         openBuoy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                miiBuoyAD.loadBuoyAD();
+                miiBuoyAD.loadDobberAD();
             }
         });
 

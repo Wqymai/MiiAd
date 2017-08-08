@@ -1,4 +1,4 @@
-package com.mg.buoy;
+package com.mg.dobber;
 
 import android.app.Activity;
 import android.content.Context;
@@ -46,7 +46,7 @@ import static com.mg.comm.ImageDownloadHelper.md5;
  * Created by wuqiyan on 17/8/7.
  */
 
-public class MiiBuoyAD extends MiiBaseAD {
+public class MiiDobberAD extends MiiBaseAD {
 
     private Context mContext;
     private Activity mActivity;
@@ -91,7 +91,7 @@ public class MiiBuoyAD extends MiiBaseAD {
                             mListener.onMiiNoAD(3011);
                             return;
                         }
-                        showBuoyAD(bitmap);
+                        showDobberAD(bitmap);
                     }
                     catch (Exception e){
                         mListener.onMiiNoAD(3011);
@@ -109,7 +109,7 @@ public class MiiBuoyAD extends MiiBaseAD {
     };
 
 
-    public MiiBuoyAD(Activity activity, String appid, String lid, MiiADListener listener){
+    public MiiDobberAD(Activity activity, String appid, String lid, MiiADListener listener){
         try{
             this.mActivity = activity;
             this.mContext = activity.getApplicationContext();
@@ -136,7 +136,7 @@ public class MiiBuoyAD extends MiiBaseAD {
         }
     }
 
-    public void loadBuoyAD(){
+    public void loadDobberAD(){
 
         new HbReturn(reqAsyncModel).fetchMGAD();
     }
@@ -276,7 +276,7 @@ public class MiiBuoyAD extends MiiBaseAD {
 
     }
 
-    private void showBuoyAD(Bitmap bitmap) {
+    private void showDobberAD(Bitmap bitmap) {
       try {
 
         createWindowManager();
@@ -298,6 +298,7 @@ public class MiiBuoyAD extends MiiBaseAD {
                 relativeLayout.addView(gifView);
             }
             String path = mContext.getCacheDir().getPath()+ File.separator+md5(adModel.getImage());
+
             gifView.setGifImage(new FileInputStream(path));
             gifView.setLayoutParams(ivParam);
 
@@ -420,9 +421,6 @@ public class MiiBuoyAD extends MiiBaseAD {
     }
 
 
-
-
-
     private void createWindowManager(){
 
       try {
@@ -499,6 +497,5 @@ public class MiiBuoyAD extends MiiBaseAD {
     @Override
     public void recycle() {
         mWindowManager.removeView(relativeLayout);
-//        relativeLayout = null;
     }
 }
