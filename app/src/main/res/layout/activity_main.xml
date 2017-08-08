@@ -72,12 +72,18 @@
         android:id="@+id/open_buoy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
-    <com.mg.gif.GifView
-        android:id="@+id/gif"
+
+
+    <Button
+        android:id="@+id/open_notify"
+        android:text="打开通知栏广告"
         android:layout_below="@id/open_buoy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        ></com.mg.gif.GifView>
+        ></Button>
+
+
+
 
 
 

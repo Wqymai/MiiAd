@@ -1,20 +1,25 @@
 package com.mg.an;
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RemoteViews;
 
 import com.android.others.R;
-import com.mg.dobber.MiiDobberAD;
 import com.mg.comm.MConstant;
+import com.mg.dobber.MiiDobberAD;
 import com.mg.gif.GifView;
 import com.mg.interf.MiiADListener;
 import com.mg.interf.MiiNativeADDataRef;
@@ -25,6 +30,7 @@ import com.mg.others.utils.LogUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -47,6 +53,8 @@ public class MainActivity extends Activity {
     Button openTuiaAd;
     Button openBuoy;
     GifView gifView ;
+    Button openNotify;
+    int ID = 0x123;
 
 //    @Override
 //    public boolean onTouchEvent(MotionEvent event) {
@@ -332,8 +340,96 @@ public class MainActivity extends Activity {
 //        } catch (FileNotFoundException e) {
 //            e.printStackTrace();
 //        }
+
+
+        final NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        openNotify = (Button) findViewById(R.id.open_notify);
+        openNotify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+
+                NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+                String[] events = new String[10];
+                // Sets a title for the Inbox style big view
+                inboxStyle.setBigContentTitle("大视图内容:");
+                // Moves events into the big view
+                for (int i=0; i < events.length; i++) {
+                    inboxStyle.addLine("hello"+i);
+                }
+
+
+                NotificationCompat.BigPictureStyle pictureStyle = new NotificationCompat.BigPictureStyle();
+                pictureStyle.bigPicture(BitmapFactory.decodeResource(getResources(), R.drawable.xfzg));
+
+                pictureStyle.setSummaryText("总结文字");
+                pictureStyle.setBigContentTitle("bigtitle");
+
+
+                //先设定RemoteViews
+                RemoteViews view_custom = new RemoteViews(getPackageName(), R.layout.notify_layout);
+
+
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(MainActivity.this);
+                        builder
+
+                        .setAutoCancel(true)
+
+                        .setTicker("setTicker")
+                                .setSubText("setSubText")
+
+
+                        .setSmallIcon(R.mipmap.ic_launcher)
+//                                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.xfzg))
+
+//                        .setContentTitle("setContentTitle")
+
+//                        .setContentText("setContentTextsetContentTextsetContentText")
+//                                .setStyle(pictureStyle)
+
+
+                        .setDefaults(
+                                Notification.DEFAULT_LIGHTS
+                                        | Notification.DEFAULT_SOUND)
+
+                        .setWhen(System.currentTimeMillis())
+
+                        .setContentIntent(null);
+
+
+//              builder.setContent(view_custom);
+//                builder.setCustomBigContentView(view_custom);
+
+                Notification notification = builder.build();
+
+                if(Build.VERSION.SDK_INT >= 16){
+                    notification.bigContentView = view_custom;
+                    notification.contentView = view_custom;
+                }
+                manager.notify(ID, notification);
+            }
+        });
+
+//        LogUtils.i("youle",getStatusBarHeight(this)+"");
     }
 
+    public static int getStatusBarHeight(Context context){
+        Class<?> c = null;
+        Object obj = null;
+        Field field = null;
+        int x = 0, statusBarHeight = 0;
+        try {
+            c = Class.forName("com.android.internal.R$dimen");
+            obj = c.newInstance();
+            field = c.getField("status_bar_height");
+            x = Integer.parseInt(field.get(obj).toString());
+            statusBarHeight = context.getResources().getDimensionPixelSize(x);
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+        return statusBarHeight;
+    }
     public static Bitmap getHttpBitmap(String url) {
         URL myFileUrl = null;
         Bitmap bitmap = null;

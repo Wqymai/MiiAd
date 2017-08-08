@@ -157,8 +157,8 @@ public class MiiDobberAD extends MiiBaseAD {
             }
         }
         else {
-//            model.setImage("https://yun.tuia.cn/tuia-media/img/9r9fjq3v6g.gif");
-            model.setImage("https://yun.tuia.cn/tuia-media/img/yrmg4yzjw2.png");
+            model.setImage("https://yun.tuia.cn/tuia-media/img/9r9fjq3v6g.gif");
+//            model.setImage("https://yun.tuia.cn/tuia-media/img/yrmg4yzjw2.png");
             try {
                 if (adModel.getImage() == null || adModel.getImage().equals("") || adModel.getImage().equals("null")){
 
@@ -254,7 +254,7 @@ public class MiiDobberAD extends MiiBaseAD {
             }
         });
 
-        webView.loadDataWithBaseURL("", h5, "text/html", "utf-8", "");
+        webView.loadDataWithBaseURL("", admodel.getPage(), "text/html", "utf-8", "");
 
         //展示上报
         HttpManager.reportEvent(admodel, AdReport.EVENT_SHOW, mContext);
