@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.webkit.SslErrorHandler;
@@ -25,6 +26,7 @@ import android.widget.TextView;
 import com.mg.asyn.HbReturn;
 import com.mg.asyn.RaReturn;
 import com.mg.asyn.ReqAsyncModel;
+import com.mg.comm.ADClickHelper;
 import com.mg.comm.ImageDownloadHelper;
 import com.mg.comm.MiiBaseAD;
 import com.mg.gif.GifView;
@@ -57,6 +59,8 @@ public class MiiBuoyAD extends MiiBaseAD {
     private ReqAsyncModel reqAsyncModel;
     private WindowManager mWindowManager;
     private MiiCircleTextView close;
+    private GifView gifView;
+    private ImageView imageView;
     private WindowManager.LayoutParams wmparams;
 
     Handler mainHandler = new Handler(){
@@ -153,7 +157,8 @@ public class MiiBuoyAD extends MiiBaseAD {
             }
         }
         else {
-            model.setImage("https://yun.tuia.cn/tuia-media/img/9r9fjq3v6g.gif");
+//            model.setImage("https://yun.tuia.cn/tuia-media/img/9r9fjq3v6g.gif");
+            model.setImage("https://yun.tuia.cn/tuia-media/img/yrmg4yzjw2.png");
             try {
                 if (adModel.getImage() == null || adModel.getImage().equals("") || adModel.getImage().equals("null")){
 
@@ -188,26 +193,38 @@ public class MiiBuoyAD extends MiiBaseAD {
                 "initial-scale=1,maximum-scale=1,user-scalable=no'><meta " +
                 "charset='utf-8'><title>Insert title here</title><style " +
                 "type='text/css'>*{margin:0;padding:0}html,body{width:100%;height:100%;" +
-                "background-color:#FFF;overflow:hidden}img{border:0}</style></head><body " +
-                "style=\"height: 100%;width: 100%;\"><a href=\"http://www.baidu.com\"><img " +
-                "src=\"http://192.168.199.192:8080/TestDemo/image/hb.png\" height=\"100%\" " +
+                "background-color:#FFF;overflow:hidden}img{border:0}a:link{font-size:12px;" +
+                "color:#000;text-decoration:none}a:visited{font-size:12px;color:#000;" +
+                "text-decoration:none}a:hover{font-size:12px;color:#999;" +
+                "text-decoration:underline}*{-webkit-tap-highlight-color:rgba(0,0,0,0)" +
+                "}</style></head><body style=\"height: 100%;width: 100%;" +
+                "\"><a href=\"http://www.baidu.com\" onclick=\"\"><img " +
+                "src=\"http://192.168.199.196:8080/TestDemo/image/hb2.png\" height=\"100%\" " +
                 "width=\"100%\" /></a></body></body></html>";
 
         createWindowManager();
 
-        relativeLayout = buildWrapRelativeLayout();
+        if (relativeLayout == null){
+
+          relativeLayout = buildWrapRelativeLayout();
+        }
         mWindowManager.addView(relativeLayout,wmparams);
 
+
+        if (webView == null){
+            webView = new WebView(mContext);
+            relativeLayout.addView(webView);
+        }
         RelativeLayout.LayoutParams params_webview = new RelativeLayout.LayoutParams(dip2px(mContext, 50), dip2px(mContext, 50));
-        webView = new WebView(mContext);
         params_webview.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         params_webview.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         params_webview.setMargins(0, 50, 50, 0);
         webView.setLayoutParams(params_webview);
-        relativeLayout.addView(webView);
 
-        close = (MiiCircleTextView) buildCloseTv();
-        relativeLayout.addView(close);
+        if (close == null){
+            close = (MiiCircleTextView) buildCloseTv();
+            relativeLayout.addView(close);
+        }
 
         WebSettings settings = webView.getSettings();
         settings.setDefaultTextEncodingName("utf-8");
@@ -253,6 +270,7 @@ public class MiiBuoyAD extends MiiBaseAD {
             @Override
             public void onClick(View v) {
                 recycle();
+                mListener.onMiiADDismissed();
             }
         });
 
@@ -263,41 +281,116 @@ public class MiiBuoyAD extends MiiBaseAD {
 
         createWindowManager();
 
-        relativeLayout = buildWrapRelativeLayout();
+        if (relativeLayout == null){
+          relativeLayout = buildWrapRelativeLayout();
+        }
         mWindowManager.addView(relativeLayout,wmparams);
+
 
         RelativeLayout.LayoutParams ivParam = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         ivParam.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         ivParam.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         ivParam.setMargins(0,50,50,0);
-        if (adModel.getImage().contains("gif")){
-            GifView gifView = new GifView(mContext);
+
+        if (adModel.getImage().contains("gif")){//gif图片
+            if (gifView == null){
+                gifView= new GifView(mContext);
+                relativeLayout.addView(gifView);
+            }
             String path = mContext.getCacheDir().getPath()+ File.separator+md5(adModel.getImage());
             gifView.setGifImage(new FileInputStream(path));
             gifView.setLayoutParams(ivParam);
-            relativeLayout.addView(gifView);
+
             gifView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    try{
+                        mListener.onMiiADClicked();
+
+
+                        AdModel ad= (AdModel) adModel.clone();
+                        new ADClickHelper(mContext).AdClick(ad);
+
+
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
 
                 }
             });
+            gifView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+
+                            adModel.setDownx(String.valueOf(event.getX()));
+                            adModel.setDowny(String.valueOf(event.getY()));
+                            break;
+                        case MotionEvent.ACTION_UP:
+
+                            adModel.setUpx(String.valueOf(event.getX()));
+                            adModel.setUpy(String.valueOf(event.getY()));
+                            break;
+                        default:
+                            break;
+                    }
+                    mListener.onMiiADTouched();
+                    return false;
+                }
+            });
         }
-        else{
-            ImageView iv = new ImageView(mContext);
-            iv.setLayoutParams(ivParam);
-            iv.setImageBitmap(bitmap);
-            relativeLayout.addView(iv);
-            iv.setOnClickListener(new View.OnClickListener() {
+        else{//普通图片
+            if (imageView == null){
+              imageView = new ImageView(mContext);
+              relativeLayout.addView(imageView);
+            }
+            imageView.setLayoutParams(ivParam);
+            imageView.setImageBitmap(bitmap);
+            imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    try{
+                        mListener.onMiiADClicked();
 
+
+                        AdModel ad= (AdModel) adModel.clone();
+                        new ADClickHelper(mContext).AdClick(ad);
+
+
+
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            });
+            imageView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+
+                            adModel.setDownx(String.valueOf(event.getX()));
+                            adModel.setDowny(String.valueOf(event.getY()));
+                            break;
+                        case MotionEvent.ACTION_UP:
+
+                            adModel.setUpx(String.valueOf(event.getX()));
+                            adModel.setUpy(String.valueOf(event.getY()));
+                            break;
+                        default:
+                            break;
+                    }
+                    mListener.onMiiADTouched();
+                    return false;
                 }
             });
         }
 
-        close = (MiiCircleTextView) buildCloseTv();
-        relativeLayout.addView(close);
+        if (close == null){
+          close = (MiiCircleTextView) buildCloseTv();
+          relativeLayout.addView(close);
+        }
 
         //展示上报
         HttpManager.reportEvent(adModel, AdReport.EVENT_SHOW, mContext);
@@ -334,15 +427,11 @@ public class MiiBuoyAD extends MiiBaseAD {
 
       try {
           if (mWindowManager == null) {
-              mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+              mWindowManager = (WindowManager) mActivity.getSystemService(Context.WINDOW_SERVICE);
               wmparams = new WindowManager.LayoutParams();
               wmparams.height = WindowManager.LayoutParams.WRAP_CONTENT;
               wmparams.width = WindowManager.LayoutParams.WRAP_CONTENT;
-              if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                  wmparams.type = WindowManager.LayoutParams.TYPE_TOAST;
-              } else {
-                  wmparams.type = WindowManager.LayoutParams.TYPE_PHONE;
-              }
+              wmparams.type = WindowManager.LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG;
               wmparams.format = PixelFormat.TRANSLUCENT;
               wmparams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                       | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
@@ -379,7 +468,6 @@ public class MiiBuoyAD extends MiiBaseAD {
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         RelativeLayout layout = new RelativeLayout(mContext);
         layout.setLayoutParams(layoutParams);
-//        layout.setBackgroundColor(Color.BLUE);
         return layout;
     }
 
@@ -411,6 +499,6 @@ public class MiiBuoyAD extends MiiBaseAD {
     @Override
     public void recycle() {
         mWindowManager.removeView(relativeLayout);
-        relativeLayout = null;
+//        relativeLayout = null;
     }
 }
