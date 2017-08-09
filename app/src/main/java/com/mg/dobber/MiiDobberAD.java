@@ -23,8 +23,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.mg.asyn.HbReturn;
-import com.mg.asyn.RaReturn;
 import com.mg.asyn.ReqAsyncModel;
 import com.mg.comm.ADClickHelper;
 import com.mg.comm.ImageDownloadHelper;
@@ -48,15 +46,10 @@ import static com.mg.comm.ImageDownloadHelper.md5;
 
 public class MiiDobberAD extends MiiBaseAD {
 
-    private Context mContext;
-    private Activity mActivity;
-    private String mAppid;
-    private String mLid;
+    private MiiADListener mListener;
     private AdModel adModel;
     private WebView webView;
-    private MiiADListener mListener;
     private RelativeLayout relativeLayout;
-    private ReqAsyncModel reqAsyncModel;
     private WindowManager mWindowManager;
     private MiiCircleTextView close;
     private GifView gifView;
@@ -74,13 +67,13 @@ public class MiiDobberAD extends MiiBaseAD {
                     try {
                         adModel= (AdModel) msg.obj;
                         if (adModel == null){
-                            mListener.onMiiNoAD(3002);
+                            listener.onMiiNoAD(3002);
                             return;
                         }
-                        checkADType(adModel);
+                        checkADType();
                     }
                     catch (Exception e){
-                        mListener.onMiiNoAD(3002);
+                        listener.onMiiNoAD(3002);
                         e.printStackTrace();
                     }
                     break;
@@ -88,36 +81,37 @@ public class MiiDobberAD extends MiiBaseAD {
                     try {
                         Bitmap bitmap = (Bitmap) msg.obj;
                         if (bitmap == null){
-                            mListener.onMiiNoAD(3011);
+                            listener.onMiiNoAD(3011);
                             return;
                         }
                         showDobberAD(bitmap);
                     }
                     catch (Exception e){
-                        mListener.onMiiNoAD(3011);
+                        listener.onMiiNoAD(3011);
                         e.printStackTrace();
                     }
                     break;
                 case 500:
-                    mListener.onMiiNoAD(1000);
+                    listener.onMiiNoAD(1000);
                     break;
                 case 700:
-                    mListener.onMiiNoAD(3011);
+                    listener.onMiiNoAD(3011);
                     break;
             }
         }
     };
 
 
-    public MiiDobberAD(Activity activity, String appid, String lid, MiiADListener listener){
+    public MiiDobberAD(Activity activity, String appid, String lid, MiiADListener adListener){
         try{
-            this.mActivity = activity;
-            this.mContext = activity.getApplicationContext();
-            this.mAppid = appid;
-            this.mLid = lid;
-            this.mListener = listener;
-            reqAsyncModel = new ReqAsyncModel();
-            reqAsyncModel.context = mContext;
+
+            this.mListener = adListener;
+            super.listener = adListener;
+            super.activity = activity;
+            super.context = activity.getApplicationContext();
+            super.reqAsyncModel = new ReqAsyncModel();
+
+            reqAsyncModel.context = super.context;
             reqAsyncModel.handler = mainHandler;
             reqAsyncModel.listener = listener;
             reqAsyncModel.pt = 0;
@@ -129,65 +123,58 @@ public class MiiDobberAD extends MiiBaseAD {
                 return;
             }
 
-
-
         }catch (Exception e){
             e.printStackTrace();
         }
     }
 
-    public void loadDobberAD(){
 
-        new HbReturn(reqAsyncModel).fetchMGAD();
-    }
+    private void checkADType() {
 
-
-    private void checkADType(AdModel model) {
-
-        if (model.getType() == 4){//H5广告
+        if (adModel.getType() == 4){//H5广告
             try {
 
-                openH5Ad(model);
+                openH5Ad();
 
             }catch (Exception e){
 
-                mListener.onMiiNoAD(3010);
+                listener.onMiiNoAD(3010);
                 e.printStackTrace();
 
             }
         }
         else {
-            model.setImage("https://yun.tuia.cn/tuia-media/img/9r9fjq3v6g.gif");
+            adModel.setImage("https://yun.tuia.cn/tuia-media/img/9r9fjq3v6g.gif");
 //            model.setImage("https://yun.tuia.cn/tuia-media/img/yrmg4yzjw2.png");
             try {
                 if (adModel.getImage() == null || adModel.getImage().equals("") || adModel.getImage().equals("null")){
 
                     if (adModel.getIcon() == null || adModel.getIcon().equals("") || adModel.getIcon().equals("null")){
 
-                        mListener.onMiiNoAD(3011);
+                        listener.onMiiNoAD(3011);
                     }
                     else {
 
-                        new ImageDownloadHelper().downloadShowImage(mContext,adModel.getIcon(),mainHandler);
+                        new ImageDownloadHelper().downloadShowImage(context,adModel.getIcon(),mainHandler);
                     }
 
                 }
                 else {
 
-                    new ImageDownloadHelper().downloadShowImage(mContext,adModel.getImage(),mainHandler);
+                    new ImageDownloadHelper().downloadShowImage(context,adModel.getImage(),mainHandler);
 
                 }
 
             }catch (Exception e){
 
-                mListener.onMiiNoAD(3011);
+                listener.onMiiNoAD(3011);
                 e.printStackTrace();
 
             }
         }
     }
 
-    private void openH5Ad(final AdModel admodel){
+    private void openH5Ad(){
 
         String h5 ="<!DOCTYPE html><html><head><meta name='viewport' content='width=device-width," +
                 "initial-scale=1,maximum-scale=1,user-scalable=no'><meta " +
@@ -212,10 +199,10 @@ public class MiiDobberAD extends MiiBaseAD {
 
 
         if (webView == null){
-            webView = new WebView(mContext);
+            webView = new WebView(context);
             relativeLayout.addView(webView);
         }
-        RelativeLayout.LayoutParams params_webview = new RelativeLayout.LayoutParams(dip2px(mContext, 50), dip2px(mContext, 50));
+        RelativeLayout.LayoutParams params_webview = new RelativeLayout.LayoutParams(dip2px(context, 50), dip2px(context, 50));
         params_webview.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         params_webview.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         params_webview.setMargins(0, 50, 50, 0);
@@ -248,23 +235,23 @@ public class MiiDobberAD extends MiiBaseAD {
                 view.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
 
                 //点击上报
-                HttpManager.reportEvent(admodel, AdReport.EVENT_CLICK, mContext);
+                HttpManager.reportEvent(adModel, AdReport.EVENT_CLICK, context);
 
                 return true;
             }
         });
 
-        webView.loadDataWithBaseURL("", admodel.getPage(), "text/html", "utf-8", "");
+        webView.loadDataWithBaseURL("", adModel.getPage(), "text/html", "utf-8", "");
 
         //展示上报
-        HttpManager.reportEvent(admodel, AdReport.EVENT_SHOW, mContext);
+        HttpManager.reportEvent(adModel, AdReport.EVENT_SHOW, context);
 
         //广告成功展示
         mListener.onMiiADPresent();
 
         //记录展示次数
-        int show_num = (int) SP.getParam(SP.CONFIG, mContext, SP.FOT, 0);
-        SP.setParam(SP.CONFIG, mContext, SP.FOT, show_num + 1);
+        int show_num = (int) SP.getParam(SP.CONFIG, context, SP.FOT, 0);
+        SP.setParam(SP.CONFIG, context, SP.FOT, show_num + 1);
 
         close.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -294,10 +281,10 @@ public class MiiDobberAD extends MiiBaseAD {
 
         if (adModel.getImage().contains("gif")){//gif图片
             if (gifView == null){
-                gifView= new GifView(mContext);
+                gifView= new GifView(context);
                 relativeLayout.addView(gifView);
             }
-            String path = mContext.getCacheDir().getPath()+ File.separator+md5(adModel.getImage());
+            String path = context.getCacheDir().getPath()+ File.separator+md5(adModel.getImage());
 
             gifView.setGifImage(new FileInputStream(path));
             gifView.setLayoutParams(ivParam);
@@ -310,7 +297,7 @@ public class MiiDobberAD extends MiiBaseAD {
 
 
                         AdModel ad= (AdModel) adModel.clone();
-                        new ADClickHelper(mContext).AdClick(ad);
+                        new ADClickHelper(context).AdClick(ad);
 
 
                     }catch (Exception e){
@@ -343,7 +330,7 @@ public class MiiDobberAD extends MiiBaseAD {
         }
         else{//普通图片
             if (imageView == null){
-              imageView = new ImageView(mContext);
+              imageView = new ImageView(context);
               relativeLayout.addView(imageView);
             }
             imageView.setLayoutParams(ivParam);
@@ -356,7 +343,7 @@ public class MiiDobberAD extends MiiBaseAD {
 
 
                         AdModel ad= (AdModel) adModel.clone();
-                        new ADClickHelper(mContext).AdClick(ad);
+                        new ADClickHelper(context).AdClick(ad);
 
 
 
@@ -394,14 +381,14 @@ public class MiiDobberAD extends MiiBaseAD {
         }
 
         //展示上报
-        HttpManager.reportEvent(adModel, AdReport.EVENT_SHOW, mContext);
+        HttpManager.reportEvent(adModel, AdReport.EVENT_SHOW, context);
 
         //广告成功展示
         mListener.onMiiADPresent();
 
         //记录展示次数
-        int show_num = (int) SP.getParam(SP.CONFIG, mContext, SP.FOT, 0);
-        SP.setParam(SP.CONFIG, mContext, SP.FOT, show_num + 1);
+        int show_num = (int) SP.getParam(SP.CONFIG, context, SP.FOT, 0);
+        SP.setParam(SP.CONFIG, context, SP.FOT, show_num + 1);
 
         close.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -425,7 +412,7 @@ public class MiiDobberAD extends MiiBaseAD {
 
       try {
           if (mWindowManager == null) {
-              mWindowManager = (WindowManager) mActivity.getSystemService(Context.WINDOW_SERVICE);
+              mWindowManager = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
               wmparams = new WindowManager.LayoutParams();
               wmparams.height = WindowManager.LayoutParams.WRAP_CONTENT;
               wmparams.width = WindowManager.LayoutParams.WRAP_CONTENT;
@@ -447,7 +434,7 @@ public class MiiDobberAD extends MiiBaseAD {
     }
 
     private TextView buildCloseTv(){
-        MiiCircleTextView close = new MiiCircleTextView(mContext);
+        MiiCircleTextView close = new MiiCircleTextView(context);
         close.setGravity(Gravity.CENTER);
         close.setText("X");
         close.setWidth(60);
@@ -464,35 +451,10 @@ public class MiiDobberAD extends MiiBaseAD {
 
     private RelativeLayout buildWrapRelativeLayout(){
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        RelativeLayout layout = new RelativeLayout(mContext);
+        RelativeLayout layout = new RelativeLayout(context);
         layout.setLayoutParams(layoutParams);
         return layout;
     }
-
-
-    private void startupAD() {
-        try {
-
-            SourceAssignModel saModel = checkADSource(mContext,1);
-
-            if (saModel == null) {
-                new HbReturn(reqAsyncModel).fetchMGAD();
-                return;
-            }
-
-            if (saModel.type == 1) {
-
-                mListener.onMiiNoAD(3005);
-                return;
-
-            }
-            new RaReturn(reqAsyncModel).fetchMGAD();
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
 
     @Override
     public void recycle() {

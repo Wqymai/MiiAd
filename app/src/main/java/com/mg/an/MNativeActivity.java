@@ -11,7 +11,7 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import com.android.others.R;
+import com.mg.R;
 import com.mg.comm.MConstant;
 
 import com.mg.interf.MiiCpClickListener;

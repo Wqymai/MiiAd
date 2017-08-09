@@ -12,6 +12,10 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.mg.asyn.HbReturn;
+import com.mg.asyn.RaReturn;
+import com.mg.asyn.ReqAsyncModel;
+import com.mg.interf.MiiAbsADListener;
 import com.mg.mv4.ActivityCompat;
 import com.mg.mv4.ContextCompat;
 import com.mg.others.model.GdtInfoModel;
@@ -38,6 +42,10 @@ import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
 public abstract class MiiBaseAD {
 
     protected SDKConfigModel sdk;
+    protected Context context;
+    protected Activity activity;
+    protected MiiAbsADListener plistener;
+    protected ReqAsyncModel reqAsyncModel;
 
     protected boolean isFirstEnter(Context mContext){
         boolean isFirst= (boolean) SP.getParam(SP.CONFIG,mContext,SP.FIRSTHB,true);
@@ -47,11 +55,45 @@ public abstract class MiiBaseAD {
         }
         return false;
     }
+
     protected class SourceAssignModel{
         public int type;//分配类型
         public int firstChoose;//优先选择
 
     }
+
+    //
+    public   void loadAD(){
+        new HbReturn(reqAsyncModel).fetchMGAD();
+    }
+
+    protected void startupAD(){
+
+        try{
+
+            SourceAssignModel saModel = checkADSource(context,2);
+
+            if (saModel == null){
+                new HbReturn(reqAsyncModel).fetchMGAD();
+                return;
+            }
+
+            if (saModel.type == 1){
+
+                plistener.onMiiNoAD(3005);
+                return;
+
+            }
+            new RaReturn(reqAsyncModel).fetchMGAD();
+
+        }catch (Exception e){
+
+            plistener.onMiiNoAD(3012);
+            e.printStackTrace();
+
+        }
+    }
+
     /**
      * 提供（相对）精确的除法运算。当发生除不尽的情况时，由scale参数指
      * 定精度，以后的数字四舍五入。

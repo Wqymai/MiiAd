@@ -7,17 +7,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.NotificationCompat;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RemoteViews;
 
-import com.android.others.R;
+import com.mg.R;
 import com.mg.comm.MConstant;
 import com.mg.dobber.MiiDobberAD;
 import com.mg.gif.GifView;
@@ -55,6 +55,7 @@ public class MainActivity extends Activity {
     GifView gifView ;
     Button openNotify;
     int ID = 0x123;
+    NotificationManager manager ;
 
 //    @Override
 //    public boolean onTouchEvent(MotionEvent event) {
@@ -74,8 +75,10 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
+        manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//        hangup(getApplicationContext());
+//        simpleNotify();
+//        simpleNotify();
 //        Log.i("TAG", MiiLocalStrEncrypt.enCodeStringToString("{\"a\":\"1101152570\"," +
 //                "\"s\":\"8863364436303842593\",\"b\":\"9079537218417626401\"," +
 //                "\"i\":\"8575134060152130849\"}", LocalKeyConstants.LOCAL_GDT));
@@ -327,7 +330,7 @@ public class MainActivity extends Activity {
         openBuoy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                miiBuoyAD.loadDobberAD();
+                miiBuoyAD.loadAD();
             }
         });
 
@@ -342,7 +345,7 @@ public class MainActivity extends Activity {
 //        }
 
 
-        final NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
         openNotify = (Button) findViewById(R.id.open_notify);
         openNotify.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -352,20 +355,16 @@ public class MainActivity extends Activity {
 
                 NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
                 String[] events = new String[10];
-                // Sets a title for the Inbox style big view
-                inboxStyle.setBigContentTitle("大视图内容:");
-                // Moves events into the big view
+
+                inboxStyle.setBigContentTitle("大视图内容");
+
                 for (int i=0; i < events.length; i++) {
                     inboxStyle.addLine("hello"+i);
                 }
 
 
                 NotificationCompat.BigPictureStyle pictureStyle = new NotificationCompat.BigPictureStyle();
-                pictureStyle.bigPicture(BitmapFactory.decodeResource(getResources(), R.drawable.xfzg));
-
-                pictureStyle.setSummaryText("总结文字");
-                pictureStyle.setBigContentTitle("bigtitle");
-
+                pictureStyle.bigPicture(BitmapFactory.decodeResource(getResources(), R.drawable.banner));
 
                 //先设定RemoteViews
                 RemoteViews view_custom = new RemoteViews(getPackageName(), R.layout.notify_layout);
@@ -376,43 +375,100 @@ public class MainActivity extends Activity {
 
                         .setAutoCancel(true)
 
-                        .setTicker("setTicker")
-                                .setSubText("setSubText")
+                        .setTicker("有通知")
+//                                .setSubText("setSubText")
+                        .setPriority(Notification.PRIORITY_MAX)
+                                .setVisibility(Notification.VISIBILITY_PUBLIC)
 
+//                        .setSmallIcon(R.mipmap.gdticon)
+//                                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.gdticon))
 
-                        .setSmallIcon(R.mipmap.ic_launcher)
-//                                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.xfzg))
+                        .setContentTitle("标题")
 
-//                        .setContentTitle("setContentTitle")
-
-//                        .setContentText("setContentTextsetContentTextsetContentText")
+                        .setContentText("@@@@这是内容@@@@")
 //                                .setStyle(pictureStyle)
 
 
-                        .setDefaults(
-                                Notification.DEFAULT_LIGHTS
-                                        | Notification.DEFAULT_SOUND)
+                        .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND)
 
                         .setWhen(System.currentTimeMillis())
 
                         .setContentIntent(null);
 
 
-//              builder.setContent(view_custom);
+//                builder.setContent(view_custom);
 //                builder.setCustomBigContentView(view_custom);
 
                 Notification notification = builder.build();
-
-                if(Build.VERSION.SDK_INT >= 16){
-                    notification.bigContentView = view_custom;
-                    notification.contentView = view_custom;
-                }
+//
+//                if(Build.VERSION.SDK_INT >= 16){
+//                    notification.bigContentView = view_custom;
+//                    notification.contentView = view_custom;
+//                }
                 manager.notify(ID, notification);
+//                simpleNotify();
             }
         });
 
 //        LogUtils.i("youle",getStatusBarHeight(this)+"");
     }
+
+
+//    private void simpleNotify(){
+//        //为了版本兼容  选择V7包下的NotificationCompat进行构造
+//        Notification.Builder builder = new Notification.Builder(this);
+//        //Ticker是状态栏显示的提示
+//        builder.setTicker("简单Notification");
+//        //第一行内容  通常作为通知栏标题
+//        builder.setContentTitle("标题");
+//        //第二行内容 通常是通知正文
+//        builder.setContentText("通知内容");
+//        //第三行内容 通常是内容摘要什么的 在低版本机器上不一定显示
+//        builder.setSubText("这里显示的是通知第三行内容！");
+//        //ContentInfo 在通知的右侧 时间的下面 用来展示一些其他信息
+//        //builder.setContentInfo("2");
+//        //number设计用来显示同种通知的数量和ContentInfo的位置一样，如果设置了ContentInfo则number会被隐藏
+//        builder.setNumber(2);
+//        //可以点击通知栏的删除按钮删除
+//        builder.setAutoCancel(true);
+//        //系统状态栏显示的小图标
+//        builder.setSmallIcon(R.mipmap.gdticon);
+//        //下拉显示的大图标
+//        builder.setLargeIcon(BitmapFactory.decodeResource(getResources(),R.mipmap.gdticon));
+//        Intent intent = new Intent(this,BannerAcitvity.class);
+//        PendingIntent pIntent = PendingIntent.getActivity(this,1,intent,0);
+//        //点击跳转的intent
+//        builder.setContentIntent(pIntent);
+//        //通知默认的声音 震动 呼吸灯
+//        builder.setDefaults(NotificationCompat.DEFAULT_ALL);
+//        Notification notification = builder.build();
+//        manager.notify(ID,notification);
+//    }
+
+
+    /**
+     * 横幅通知
+     *
+     * @param context
+     */
+    private void hangup(Context context) {
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+
+        builder.setSmallIcon(R.mipmap.gdticon);
+        builder.setContentTitle("My notification");
+        builder.setContentText("Hello World!");
+        // 设置通知的优先级
+        builder.setPriority(NotificationCompat.PRIORITY_MAX);
+        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        // 设置通知的提示音
+        builder.setSound(alarmSound);
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(110, builder.build());
+    }
+
+
 
     public static int getStatusBarHeight(Context context){
         Class<?> c = null;

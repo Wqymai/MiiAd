@@ -1,7 +1,6 @@
 package com.mg.banner;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
@@ -25,8 +24,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.mg.asyn.HbReturn;
-import com.mg.asyn.RaReturn;
 import com.mg.asyn.ReqAsyncModel;
 import com.mg.comm.ADClickHelper;
 import com.mg.comm.ImageDownloadHelper;
@@ -45,14 +42,12 @@ import com.mg.others.utils.SP;
 
 public class MiiBannerAD extends MiiBaseAD {
 
-    private Context mContext;
-    private Activity mActivity;
+
     private ViewGroup adContainer;
-    private MiiADListener listener;
+    private MiiADListener clistener;
     private AdModel adModel;
     private WebView webView;
     private ImageView adImageView;
-    private ReqAsyncModel reqAsyncModel = new ReqAsyncModel();
     private boolean isJoinImg = false;
     private TextView name_tv;
     private TextView desc_tv;
@@ -71,13 +66,13 @@ public class MiiBannerAD extends MiiBaseAD {
                     try {
                         adModel= (AdModel) msg.obj;
                         if (adModel == null){
-                            listener.onMiiNoAD(3002);
+                            clistener.onMiiNoAD(3002);
                             return;
                         }
-                        checkADType(adModel);
+                        checkADType();
                     }
                     catch (Exception e){
-                        listener.onMiiNoAD(3002);
+                        clistener.onMiiNoAD(3002);
                         e.printStackTrace();
                     }
                     break;
@@ -85,23 +80,23 @@ public class MiiBannerAD extends MiiBaseAD {
                     try {
                         Bitmap bitmap = (Bitmap) msg.obj;
                         if (bitmap == null){
-                            listener.onMiiNoAD(3011);
+                            clistener.onMiiNoAD(3011);
                             return;
                         }
                         showBannerAD(bitmap);
                     }
                     catch (Exception e){
-                        listener.onMiiNoAD(3011);
+                        clistener.onMiiNoAD(3011);
                         e.printStackTrace();
                     }
                     break;
 
                 case 500:
-                    listener.onMiiNoAD(1000);
+                    clistener.onMiiNoAD(1000);
                     break;
 
                 case 700:
-                    listener.onMiiNoAD(3011);
+                    clistener.onMiiNoAD(3011);
                     break;
             }
 
@@ -109,88 +104,90 @@ public class MiiBannerAD extends MiiBaseAD {
     };
 
 
-    public MiiBannerAD(Activity activity, ViewGroup adContainer,String appid,String lid, MiiADListener listener){
+    public MiiBannerAD(Activity activity, ViewGroup adContainer,String appid,String lid, MiiADListener adListener){
 
       try{
-        this.mContext = activity.getApplicationContext();
-        this.mActivity = activity;
+        super.context = activity.getApplicationContext();
+        super.activity = activity;
         this.adContainer = adContainer;
-        this.listener = listener;
+        super.plistener = adListener;
+        this.clistener = adListener;
 
         if (activity == null || adContainer == null){
-            listener.onMiiNoAD(2000);
+            clistener.onMiiNoAD(2000);
             return;
         }
-        reqAsyncModel.context = this.mContext;
-        reqAsyncModel.handler = this.mainHandler;
-        reqAsyncModel.listener = this.listener;
+        super.reqAsyncModel = new ReqAsyncModel();
+        reqAsyncModel.context = super.context;
+        reqAsyncModel.handler = mainHandler;
+        reqAsyncModel.listener = adListener;
         reqAsyncModel.pt = 1;
         reqAsyncModel.appid = appid;
         reqAsyncModel.lid = lid;
 
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            check23AbovePermission(mActivity,mainHandler);
+            check23AbovePermission(activity,mainHandler);
             return;
         }
 
 
       }catch (Exception e){
 
-          listener.onMiiNoAD(2001);
+          adListener.onMiiNoAD(2001);
           e.printStackTrace();
 
       }
 
     }
 
-    public void loadBannerAD(){
-        new HbReturn(reqAsyncModel).fetchMGAD();
-    }
+//    public void loadBannerAD(){
+//        new HbReturn(reqAsyncModel).fetchMGAD();
+//    }
 
-    private void startupAD(){
+//    private void startupAD(){
+//
+//      try {
+//
+//
+//          SourceAssignModel saModel = checkADSource(mContext,1);
+//
+//          if (saModel == null) {
+//              new HbReturn(reqAsyncModel).fetchMGAD();
+//              return;
+//          }
+//
+//          if (saModel.type == 1) {
+//
+//              listener.onMiiNoAD(3005);
+//              return;
+//
+//          }
+//          new RaReturn(reqAsyncModel).fetchMGAD();
+//
+//      }catch (Exception e){
+//
+//          listener.onMiiNoAD(3012);
+//          e.printStackTrace();
+//
+//      }
+//
+//    }
 
-      try {
 
-
-          SourceAssignModel saModel = checkADSource(mContext,1);
-
-          if (saModel == null) {
-              new HbReturn(reqAsyncModel).fetchMGAD();
-              return;
-          }
-
-          if (saModel.type == 1) {
-
-              listener.onMiiNoAD(3005);
-              return;
-
-          }
-          new RaReturn(reqAsyncModel).fetchMGAD();
-
-      }catch (Exception e){
-
-          listener.onMiiNoAD(3012);
-          e.printStackTrace();
-
-      }
-
-    }
-
-
-    private void  checkADType(final AdModel adModel){
+    private void  checkADType(){
 
         if (adModel.getType() == 4){//h5广告
 
           try {
               if (webView == null){
-                webView = new WebView(mActivity);
+                webView = new WebView(activity);
                 adContainer.addView(webView);
               }
 
               int imgH = adModel.getImgh();
               if (imgH == 0){
-                imgH = (int) (CommonUtils.getScreenH(mContext) * 0.1);
+                imgH = (int) (CommonUtils.getScreenH(context) * 0.1);
               }
               FrameLayout.LayoutParams params_webview = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, imgH);
 
@@ -211,13 +208,13 @@ public class MiiBannerAD extends MiiBaseAD {
                   public boolean shouldOverrideUrlLoading(WebView view, String url) {
 
                       //广告点击回调
-                      listener.onMiiADClicked();
+                      clistener.onMiiADClicked();
 
                       view.stopLoading();
                       view.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
 
                       //点击上报
-                      HttpManager.reportEvent(adModel, AdReport.EVENT_CLICK, mContext);
+                      HttpManager.reportEvent(adModel, AdReport.EVENT_CLICK, context);
 
                       return true;
                   }
@@ -227,18 +224,18 @@ public class MiiBannerAD extends MiiBaseAD {
 
 
               //展示上报
-              HttpManager.reportEvent(adModel, AdReport.EVENT_SHOW, mContext);
+              HttpManager.reportEvent(adModel, AdReport.EVENT_SHOW, context);
 
               //广告成功展示
-              listener.onMiiADPresent();
+              clistener.onMiiADPresent();
 
               //记录展示次数
-              int show_num = (int) SP.getParam(SP.CONFIG, mContext, SP.FOT, 0);
-              SP.setParam(SP.CONFIG, mContext, SP.FOT, show_num + 1);
+              int show_num = (int) SP.getParam(SP.CONFIG, context, SP.FOT, 0);
+              SP.setParam(SP.CONFIG, context, SP.FOT, show_num + 1);
 
           }catch (Exception e){
 
-              listener.onMiiNoAD(3010);
+              clistener.onMiiNoAD(3010);
               e.printStackTrace();
 
           }
@@ -250,23 +247,23 @@ public class MiiBannerAD extends MiiBaseAD {
 
                   if (adModel.getIcon() == null || adModel.getIcon().equals("") || adModel.getIcon().equals("null")){
 
-                     listener.onMiiNoAD(3011);
+                     clistener.onMiiNoAD(3011);
                   }
                   else {
                       isJoinImg = true;
-                      new ImageDownloadHelper().downloadShowImage(mContext,adModel.getIcon(),mainHandler);
+                      new ImageDownloadHelper().downloadShowImage(context,adModel.getIcon(),mainHandler);
                   }
 
               }
               else {
                   isJoinImg = false;
-                  new ImageDownloadHelper().downloadShowImage(mContext,adModel.getImage(),mainHandler);
+                  new ImageDownloadHelper().downloadShowImage(context,adModel.getImage(),mainHandler);
 
               }
 
           }catch (Exception e){
 
-              listener.onMiiNoAD(3011);
+              clistener.onMiiNoAD(3011);
               e.printStackTrace();
 
           }
@@ -278,32 +275,32 @@ public class MiiBannerAD extends MiiBaseAD {
     private void showBannerAD(final Bitmap bitmap){
         try {
             if (adModel == null){
-                listener.onMiiNoAD(3009);
+                clistener.onMiiNoAD(3009);
                 return;
             }
             if (isJoinImg){
                 adContainer.setBackgroundColor(Color.parseColor("#E8E8E8"));
                 if (adImageView == null){
-                    adImageView = new ImageView(mActivity);
+                    adImageView = new ImageView(activity);
                     adImageView.setScaleType(ImageView.ScaleType.FIT_XY);
                     adContainer.addView(adImageView);
                 }
-                FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(dip2px(mContext,60),dip2px(mContext,60));
+                FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(dip2px(context,60),dip2px(context,60));
                 adImageView.setLayoutParams(layoutParams);
                 //name
                 if (name_tv == null){
-                    name_tv = new TextView(mActivity);
+                    name_tv = new TextView(activity);
                     FrameLayout.LayoutParams nameTvLayoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    nameTvLayoutParams.setMargins(dip2px(mContext,70),dip2px(mContext,5),0,0);
+                    nameTvLayoutParams.setMargins(dip2px(context,70),dip2px(context,5),0,0);
                     name_tv.setLayoutParams(nameTvLayoutParams);
                     adContainer.addView(name_tv);
                 }
                 name_tv.setText(adModel.getName());
                 //desc
                 if (desc_tv == null){
-                    desc_tv = new TextView(mActivity);
+                    desc_tv = new TextView(activity);
                     FrameLayout.LayoutParams descTvLayoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    descTvLayoutParams.setMargins(dip2px(mContext,70),dip2px(mContext,25),0,0);
+                    descTvLayoutParams.setMargins(dip2px(context,70),dip2px(context,25),0,0);
                     desc_tv.setLayoutParams(descTvLayoutParams);
                     adContainer.addView(desc_tv);
                 }
@@ -319,18 +316,18 @@ public class MiiBannerAD extends MiiBaseAD {
                 }
                 desc_tv = null;
                 if (adImageView == null){
-                    adImageView = new ImageView(mActivity);
+                    adImageView = new ImageView(activity);
                     adImageView.setScaleType(ImageView.ScaleType.FIT_XY);
                     adContainer.addView(adImageView);
                 }
-                int screenW = CommonUtils.getScreenW(mContext);
+                int screenW = CommonUtils.getScreenW(context);
                 double value = div(bitmap.getWidth(),bitmap.getHeight(),1);
                 FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(screenW, (int)(screenW/value));
                 adImageView.setLayoutParams(layoutParams);
             }
 
             if(adTxt_tv == null){
-               adTxt_tv = tvADCreate(mActivity);
+               adTxt_tv = tvADCreate(activity);
                adContainer.addView(adTxt_tv);
             }
             if (adModel.getSourceMark()!= null && !adModel.getSourceMark().equals("")){
@@ -340,14 +337,14 @@ public class MiiBannerAD extends MiiBaseAD {
             adImageView.setImageBitmap(bitmap);
 
             //展示上报
-            HttpManager.reportEvent(adModel, AdReport.EVENT_SHOW, mContext);
+            HttpManager.reportEvent(adModel, AdReport.EVENT_SHOW, context);
 
             //广告成功展示
-            listener.onMiiADPresent();
+            clistener.onMiiADPresent();
 
             //记录展示次数
-            int show_num = (int) SP.getParam(SP.CONFIG, mContext, SP.FOT, 0);
-            SP.setParam(SP.CONFIG, mContext, SP.FOT, show_num + 1);
+            int show_num = (int) SP.getParam(SP.CONFIG, context, SP.FOT, 0);
+            SP.setParam(SP.CONFIG, context, SP.FOT, show_num + 1);
 
 
             if (isJoinImg){
@@ -355,10 +352,10 @@ public class MiiBannerAD extends MiiBaseAD {
                     @Override
                     public void onClick(View v) {
                         try {
-                            listener.onMiiADClicked();
+                            clistener.onMiiADClicked();
 
                             AdModel ad= (AdModel) adModel.clone();
-                            new ADClickHelper(mContext).AdClick(ad);
+                            new ADClickHelper(context).AdClick(ad);
 
                         }catch (Exception e){
 
@@ -385,7 +382,7 @@ public class MiiBannerAD extends MiiBaseAD {
                             default:
                                 break;
                         }
-                        listener.onMiiADTouched();
+                        clistener.onMiiADTouched();
                         return false;
                     }
                 });
@@ -400,10 +397,10 @@ public class MiiBannerAD extends MiiBaseAD {
 
                   try {
 
-                    listener.onMiiADClicked();
+                    clistener.onMiiADClicked();
 
                     AdModel ad= (AdModel) adModel.clone();
-                    new ADClickHelper(mContext).AdClick(ad);
+                    new ADClickHelper(context).AdClick(ad);
 
                   }catch (Exception e){
 
@@ -431,12 +428,12 @@ public class MiiBannerAD extends MiiBaseAD {
                         default:
                             break;
                     }
-                    listener.onMiiADTouched();
+                    clistener.onMiiADTouched();
                     return false;
                 }
             });
         }catch (Exception e){
-            listener.onMiiNoAD(3009);
+            clistener.onMiiNoAD(3009);
             e.printStackTrace();
         }
     }
@@ -447,7 +444,7 @@ public class MiiBannerAD extends MiiBaseAD {
     public void recycle() {
         try {
 
-            mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
             if (adImageView != null){
                 Drawable drawable = adImageView.getDrawable();
                 if (drawable != null && drawable instanceof BitmapDrawable) {
@@ -479,7 +476,7 @@ public class MiiBannerAD extends MiiBaseAD {
                 webView = null;
             }
 
-            listener.onMiiADDismissed();
+            clistener.onMiiADDismissed();
         }
         catch (Exception e){
             e.printStackTrace();

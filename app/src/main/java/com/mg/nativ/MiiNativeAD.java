@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.mg.asyn.HbReturn;
-import com.mg.asyn.RaReturn;
 import com.mg.asyn.ReqAsyncModel;
 import com.mg.comm.MiiBaseAD;
 import com.mg.interf.MiiNativeListener;
@@ -22,9 +21,9 @@ public class MiiNativeAD extends MiiBaseAD {
     private NativeImpl ref = null;
     private Context mContext;
     private Activity mActivity;
-    private MiiNativeListener mListener;
+    private MiiNativeListener listener;
     private AdModel adModel;
-    private ReqAsyncModel reqAsyncModel = new ReqAsyncModel();
+    private ReqAsyncModel reqAsyncModel;
 
 
     Handler mainHandler = new Handler(){
@@ -41,13 +40,13 @@ public class MiiNativeAD extends MiiBaseAD {
                         setAdModel();
                     }
                     catch (Exception e){
-                        mListener.onMiiNoAD(3002);
+                        listener.onMiiNoAD(3002);
                         e.printStackTrace();
                     }
                     break;
 
                 case 500:
-                    mListener.onMiiNoAD(1000);
+                    listener.onMiiNoAD(1000);
                     break;
                 case 600:
                     new HbReturn(reqAsyncModel).fetchMGAD();
@@ -57,15 +56,18 @@ public class MiiNativeAD extends MiiBaseAD {
         }
     };
 
-    public MiiNativeAD(Activity activity,String appid,String lid, MiiNativeListener listener){
+    public MiiNativeAD(Activity activity,String appid,String lid, MiiNativeListener adListener){
       try {
-          this.mContext = activity.getApplicationContext();
-          this.mListener = listener;
-          this.mActivity = activity;
 
-          reqAsyncModel.context = this.mContext;
-          reqAsyncModel.handler = this.mainHandler;
-          reqAsyncModel.listener = this.mListener;
+          this.listener = adListener;
+          super.context = activity.getApplicationContext();
+          super.listener = adListener;
+          super.activity = activity;
+          super.reqAsyncModel = new ReqAsyncModel();
+
+          reqAsyncModel.context = super.context;
+          reqAsyncModel.handler = mainHandler;
+          reqAsyncModel.listener = adListener;
           reqAsyncModel.pt = 4;//信息流
           reqAsyncModel.appid = appid;
           reqAsyncModel.lid = lid;
@@ -77,40 +79,40 @@ public class MiiNativeAD extends MiiBaseAD {
           new HbReturn(reqAsyncModel).fetchMGAD();
 
       }catch (Exception e){
-          mListener.onMiiNoAD(2001);
+          listener.onMiiNoAD(2001);
           e.printStackTrace();
       }
     }
 
-    private void startupAD(){
-
-         try {
-
-            SourceAssignModel saModel = checkADSource(mContext,4);
-            if (saModel == null){
-                new HbReturn(reqAsyncModel).fetchMGAD();
-                return;
-            }
-            if (saModel.type == 1){
-                mListener.onMiiNoAD(3005);
-                return;
-            }
-            new RaReturn(reqAsyncModel).fetchMGAD();
-
-         }catch (Exception e){
-             mListener.onMiiNoAD(3012);
-             e.printStackTrace();
-         }
-
-    }
+//    private void startupAD(){
+//
+//         try {
+//
+//            SourceAssignModel saModel = checkADSource(mContext,4);
+//            if (saModel == null){
+//                new HbReturn(reqAsyncModel).fetchMGAD();
+//                return;
+//            }
+//            if (saModel.type == 1){
+//                mListener.onMiiNoAD(3005);
+//                return;
+//            }
+//            new RaReturn(reqAsyncModel).fetchMGAD();
+//
+//         }catch (Exception e){
+//             mListener.onMiiNoAD(3012);
+//             e.printStackTrace();
+//         }
+//
+//    }
     private  void setAdModel(){
         if (adModel == null){
-            mListener.onMiiNoAD(3006);
+            listener.onMiiNoAD(3006);
         }
         ref = new NativeImpl();
         ref.setAdModel(adModel);
         //回调
-        mListener.onADLoaded(ref);
+        listener.onADLoaded(ref);
     }
 
     @Override

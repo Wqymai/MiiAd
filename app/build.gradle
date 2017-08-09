@@ -4,7 +4,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
-        applicationId "com.android.others"
+        applicationId "com.mg"
         minSdkVersion 14
         targetSdkVersion 25
         versionCode 1
@@ -32,7 +32,6 @@ allprojects {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile files('libs/GDTUnionSDK.4.9.544.min.jar')
     compile(name: 'tuia-2.2.0', ext: 'aar')
     compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
 }

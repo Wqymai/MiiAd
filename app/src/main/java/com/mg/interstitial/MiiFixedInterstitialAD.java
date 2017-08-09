@@ -2,7 +2,6 @@ package com.mg.interstitial;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
@@ -28,7 +27,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mg.asyn.HbReturn;
-import com.mg.asyn.RaReturn;
 import com.mg.asyn.ReqAsyncModel;
 import com.mg.comm.ADClickHelper;
 import com.mg.comm.ImageDownloadHelper;
@@ -52,8 +50,7 @@ import com.mg.others.utils.SP;
 
 public class MiiFixedInterstitialAD extends MiiBaseAD{
 
-    private Context mContext;
-    private Activity mActivity;
+
     private AdModel adModel;
     private MiiADListener listener;
     private MiiImageView imageView;
@@ -66,7 +63,7 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
     private   double  H_P = 0.8;
     private    double W_P = 0.8;
     private boolean isShade;
-    private ReqAsyncModel reqAsyncModel = new ReqAsyncModel();
+
 
 
     Handler mainHandler = new Handler(){
@@ -75,7 +72,7 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
             super.handleMessage(msg);
             switch (msg.what){
                 case 100:
-                    checkOpenAD();
+                    startupAD();
                     break;
                 case 200:
                     try {
@@ -123,14 +120,17 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
 
       try {
 
-          this.mContext = mActivity.getApplicationContext();
-          this.mActivity = mActivity;
+          super.context = mActivity.getApplicationContext();
+          super.activity = mActivity;
+          super.listener = listener;
+
           this.listener = listener;
           this.isShade = isShade;
 
-          reqAsyncModel.context = this.mContext;
-          reqAsyncModel.handler = this.mainHandler;
-          reqAsyncModel.listener = this.listener;
+          super.reqAsyncModel = new ReqAsyncModel();
+          reqAsyncModel.context = context;
+          reqAsyncModel.handler = mainHandler;
+          reqAsyncModel.listener = listener;
           reqAsyncModel.pt = 3;
           reqAsyncModel.appid = appid;
           reqAsyncModel.lid = lid;
@@ -149,30 +149,30 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
       }
     }
 
-    private void checkOpenAD(){
-
-        try {
-
-            SourceAssignModel saModel = checkADSource(mContext,3);
-
-            if (saModel == null){
-                new HbReturn(reqAsyncModel).fetchMGAD();
-                return;
-            }
-
-            if (saModel.type == 1){
-                listener.onMiiNoAD(3005);
-                return;
-            }
-            new RaReturn(reqAsyncModel).fetchMGAD();
-
-        }
-        catch (Exception e){
-
-            listener.onMiiNoAD(3012);
-            e.printStackTrace();
-        }
-    }
+//    private void checkOpenAD(){
+//
+//        try {
+//
+//            SourceAssignModel saModel = checkADSource(mContext,3);
+//
+//            if (saModel == null){
+//                new HbReturn(reqAsyncModel).fetchMGAD();
+//                return;
+//            }
+//
+//            if (saModel.type == 1){
+//                listener.onMiiNoAD(3005);
+//                return;
+//            }
+//            new RaReturn(reqAsyncModel).fetchMGAD();
+//
+//        }
+//        catch (Exception e){
+//
+//            listener.onMiiNoAD(3012);
+//            e.printStackTrace();
+//        }
+//    }
 
     private void checkShade(Bitmap bitmap,String html){
         if (isShade){
@@ -199,7 +199,7 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
 
                 }else {
 
-                     new ImageDownloadHelper().downloadShowImage(mContext,adModel.getImage(),mainHandler);
+                     new ImageDownloadHelper().downloadShowImage(context,adModel.getImage(),mainHandler);
 
                 }
             }
@@ -216,7 +216,7 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
 
     private void buildDialog(){
 
-        dlg = new AlertDialog.Builder(mActivity).create();
+        dlg = new AlertDialog.Builder(activity).create();
         dlg.setCanceledOnTouchOutside(false);
         dlg.show();
 
@@ -231,20 +231,20 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
         try {
 
             //检查横竖屏
-            oren = checkOrientation(mActivity);
+            oren = checkOrientation(activity);
 
             buildDialog();
 
             Window window = dlg.getWindow();
             WindowManager.LayoutParams params1 = new WindowManager.LayoutParams();
-            int screenH = CommonUtils.getScreenH(mContext);
-            int screenW = CommonUtils.getScreenW(mContext);
+            int screenH = CommonUtils.getScreenH(context);
+            int screenW = CommonUtils.getScreenW(context);
 
 
             boolean ishtml5 = bitmap != null ? false : true;
             double H_W_P = ishtml5 ? 1.2 : div(bitmap.getWidth(),bitmap.getHeight(),1);
 
-            SDKConfigModel sdk = checkSdkConfig(mContext);
+            SDKConfigModel sdk = checkSdkConfig(context);
             if (sdk != null){
                 W_P = div(sdk.getCz(),100,1);
             }
@@ -263,7 +263,7 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
 
             RelativeLayout.LayoutParams pParams = new RelativeLayout.LayoutParams(ViewGroup
                     .LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            relativeLayout = new RelativeLayout(mActivity);
+            relativeLayout = new RelativeLayout(activity);
             relativeLayout.setLayoutParams(pParams);
             relativeLayout.setBackgroundColor(Color.TRANSPARENT);
 
@@ -283,11 +283,11 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
             listener.onMiiADPresent();
 
             //展示上报
-            HttpManager.reportEvent(adModel, AdReport.EVENT_SHOW, mContext);
+            HttpManager.reportEvent(adModel, AdReport.EVENT_SHOW, context);
 
             //记录展示次数
-            int show_num = (int) SP.getParam(SP.CONFIG, mContext, SP.FOT, 0);
-            SP.setParam(SP.CONFIG, mContext, SP.FOT, show_num + 1);
+            int show_num = (int) SP.getParam(SP.CONFIG, context, SP.FOT, 0);
+            SP.setParam(SP.CONFIG, context, SP.FOT, show_num + 1);
 
             setClick(ishtml5, bitmap);
         }
@@ -308,19 +308,19 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
       try {
 
         //检查横竖屏
-        oren = checkOrientation(mActivity);
+        oren = checkOrientation(activity);
 
         buildDialog();
 
         Window window = dlg.getWindow();
 
-        int screenH = CommonUtils.getScreenH(mContext);
-        int screenW = CommonUtils.getScreenW(mContext);
+        int screenH = CommonUtils.getScreenH(context);
+        int screenW = CommonUtils.getScreenW(context);
 
         boolean ishtml5 = bitmap!=null ? false:true;
         double H_W_P = ishtml5 ? 1.2: div(bitmap.getWidth(),bitmap.getHeight(),1);
 
-        SDKConfigModel sdk = checkSdkConfig(mContext);
+        SDKConfigModel sdk = checkSdkConfig(context);
         if (sdk != null){
           W_P = div(sdk.getCz(),100,1);
         }
@@ -336,7 +336,7 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup
                 .LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
-        relativeLayout = new RelativeLayout(mActivity);
+        relativeLayout = new RelativeLayout(activity);
         relativeLayout.setLayoutParams(layoutParams);
         relativeLayout.setBackgroundColor(Color.BLUE);
 
@@ -360,11 +360,11 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
         listener.onMiiADPresent();
 
         //展示上报
-        HttpManager.reportEvent(adModel, AdReport.EVENT_SHOW, mContext);
+        HttpManager.reportEvent(adModel, AdReport.EVENT_SHOW, context);
 
         //记录展示次数
-        int show_num = (int) SP.getParam(SP.CONFIG, mContext, SP.FOT, 0);
-        SP.setParam(SP.CONFIG, mContext, SP.FOT, show_num + 1);
+        int show_num = (int) SP.getParam(SP.CONFIG, context, SP.FOT, 0);
+        SP.setParam(SP.CONFIG, context, SP.FOT, show_num + 1);
 
         setClick(ishtml5,bitmap);
 
@@ -385,7 +385,7 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
                 public void onClick(View v) {
 
                   try {
-                        mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+                        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 
                         if (bitmap != null){
                             bitmap.recycle();
@@ -433,13 +433,13 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
 
                   try {
 
-                        mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+                        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 
                         listener.onMiiADClicked();
                         listener.onMiiADDismissed();
 
                         AdModel ad= (AdModel) adModel.clone();
-                        new ADClickHelper(mContext).AdClick(ad);
+                        new ADClickHelper(context).AdClick(ad);
 
                         if (bitmap != null){
                             bitmap.recycle();
@@ -489,7 +489,7 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
 
     private void buildImageView(Bitmap bitmap){
 
-        imageView=new MiiImageView(mActivity);
+        imageView=new MiiImageView(activity);
         RelativeLayout.LayoutParams ivParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         imageView.setLayoutParams(ivParam);
         imageView.setScaleType(ImageView.ScaleType.FIT_XY);
@@ -499,7 +499,7 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
     private void buildWebView(String html){
 
         try{
-            webView = new WebView(mActivity);
+            webView = new WebView(activity);
             RelativeLayout.LayoutParams params_webview = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
             webView.setLayoutParams(params_webview);
             WebSettings settings = webView.getSettings();
@@ -521,7 +521,7 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
                     view.stopLoading();
                     view.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
                     //点击上报
-                    HttpManager.reportEvent(adModel, AdReport.EVENT_CLICK, mContext);
+                    HttpManager.reportEvent(adModel, AdReport.EVENT_CLICK, context);
 
                     return true;
                 }
@@ -542,7 +542,7 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
       try {
         
         //添加关闭按钮
-        cancel=new MiiCircleTextView(mActivity);
+        cancel=new MiiCircleTextView(activity);
         cancel.setGravity(Gravity.CENTER);
         cancel.setText("X");
         cancel.setWidth(60);
@@ -558,7 +558,7 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
         tvlp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         tvlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         //添加"广告"字样
-        tv = tvADCreate(mActivity);
+        tv = tvADCreate(activity);
         if (adModel.getSourceMark()!= null && !adModel.getSourceMark().equals("")){
             tv.setText(adModel.getSourceMark()+"|广告");
         }

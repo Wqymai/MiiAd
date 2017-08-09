@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
-          package="com.android.others">
+          package="com.mg">
 
     <uses-permission android:name = "android.permission.CHANGE_WIFI_STATE"/>
     <uses-permission android:name = "android.permission.CHANGE_NETWORK_STATE"/>
@@ -17,6 +17,7 @@
 
 
     <!-- SDK 相关声明 -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"></uses-permission>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -52,12 +53,12 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
     <application
-
+        android:name="com.mg.an.SdkApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:name="com.mg.an.SdkApplication"
+        android:theme="@style/AppTheme">
         >
         <activity android:name="com.mg.an.MainActivity">
             <intent-filter>
@@ -78,19 +79,10 @@
             android:theme="@style/dialogstyle"
             ></activity>
         <!--<activity android:name="com.mg.an.TuiaCustomActivity"></activity>-->
-
-        <!-- 声明SDK所需要的组件 -->
-        <service
-            android:name="com.qq.e.comm.DownloadService"
-            android:exported="false"/>
-        <!-- 请开发者注意字母的大小写，ADActivity，而不是AdActivity -->
-        <activity
-            android:name="com.qq.e.ads.ADActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"/>
         <!--适配7.0以上-->
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.android.others.fileProvider"
+            android:authorities="com.mg.fileProvider"
             android:grantUriPermissions="true"
             android:exported="false">
             <meta-data

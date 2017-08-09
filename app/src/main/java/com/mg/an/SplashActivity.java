@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.others.R;
+import com.mg.R;
 import com.mg.comm.MConstant;
 
 import com.mg.interf.MiiSplashADListener;

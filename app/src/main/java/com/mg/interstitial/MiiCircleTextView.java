@@ -11,7 +11,7 @@ import android.widget.TextView;
  * Created by wuqiyan on 17/6/13.
  */
 
-public class MiiCircleTextView extends TextView{
+public class MiiCircleTextView extends TextView {
     private Paint mBgPaint = new Paint();
 
     PaintFlagsDrawFilter pfd = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
