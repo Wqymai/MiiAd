@@ -46,7 +46,7 @@ import static com.mg.comm.ImageDownloadHelper.md5;
 
 public class MiiDobberAD extends MiiBaseAD {
 
-    private MiiADListener mListener;
+    private MiiADListener clistener;
     private AdModel adModel;
     private WebView webView;
     private RelativeLayout relativeLayout;
@@ -67,13 +67,13 @@ public class MiiDobberAD extends MiiBaseAD {
                     try {
                         adModel= (AdModel) msg.obj;
                         if (adModel == null){
-                            listener.onMiiNoAD(3002);
+                            clistener.onMiiNoAD(3002);
                             return;
                         }
                         checkADType();
                     }
                     catch (Exception e){
-                        listener.onMiiNoAD(3002);
+                        clistener.onMiiNoAD(3002);
                         e.printStackTrace();
                     }
                     break;
@@ -81,21 +81,21 @@ public class MiiDobberAD extends MiiBaseAD {
                     try {
                         Bitmap bitmap = (Bitmap) msg.obj;
                         if (bitmap == null){
-                            listener.onMiiNoAD(3011);
+                            clistener.onMiiNoAD(3011);
                             return;
                         }
                         showDobberAD(bitmap);
                     }
                     catch (Exception e){
-                        listener.onMiiNoAD(3011);
+                        clistener.onMiiNoAD(3011);
                         e.printStackTrace();
                     }
                     break;
                 case 500:
-                    listener.onMiiNoAD(1000);
+                    clistener.onMiiNoAD(1000);
                     break;
                 case 700:
-                    listener.onMiiNoAD(3011);
+                    clistener.onMiiNoAD(3011);
                     break;
             }
         }
@@ -105,15 +105,15 @@ public class MiiDobberAD extends MiiBaseAD {
     public MiiDobberAD(Activity activity, String appid, String lid, MiiADListener adListener){
         try{
 
-            this.mListener = adListener;
-            super.listener = adListener;
+            this.clistener = adListener;
+            super.plistener = adListener;
             super.activity = activity;
             super.context = activity.getApplicationContext();
             super.reqAsyncModel = new ReqAsyncModel();
 
             reqAsyncModel.context = super.context;
             reqAsyncModel.handler = mainHandler;
-            reqAsyncModel.listener = listener;
+            reqAsyncModel.listener = adListener;
             reqAsyncModel.pt = 0;
             reqAsyncModel.appid = appid;
             reqAsyncModel.lid = lid;
@@ -124,6 +124,7 @@ public class MiiDobberAD extends MiiBaseAD {
             }
 
         }catch (Exception e){
+            adListener.onMiiNoAD(2001);
             e.printStackTrace();
         }
     }
@@ -138,7 +139,7 @@ public class MiiDobberAD extends MiiBaseAD {
 
             }catch (Exception e){
 
-                listener.onMiiNoAD(3010);
+                clistener.onMiiNoAD(3010);
                 e.printStackTrace();
 
             }
@@ -151,7 +152,7 @@ public class MiiDobberAD extends MiiBaseAD {
 
                     if (adModel.getIcon() == null || adModel.getIcon().equals("") || adModel.getIcon().equals("null")){
 
-                        listener.onMiiNoAD(3011);
+                        clistener.onMiiNoAD(3011);
                     }
                     else {
 
@@ -167,7 +168,7 @@ public class MiiDobberAD extends MiiBaseAD {
 
             }catch (Exception e){
 
-                listener.onMiiNoAD(3011);
+                clistener.onMiiNoAD(3011);
                 e.printStackTrace();
 
             }
@@ -229,7 +230,7 @@ public class MiiDobberAD extends MiiBaseAD {
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
 
                 //广告点击回调
-                mListener.onMiiADClicked();
+                clistener.onMiiADClicked();
 
                 view.stopLoading();
                 view.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
@@ -247,7 +248,7 @@ public class MiiDobberAD extends MiiBaseAD {
         HttpManager.reportEvent(adModel, AdReport.EVENT_SHOW, context);
 
         //广告成功展示
-        mListener.onMiiADPresent();
+        clistener.onMiiADPresent();
 
         //记录展示次数
         int show_num = (int) SP.getParam(SP.CONFIG, context, SP.FOT, 0);
@@ -257,7 +258,7 @@ public class MiiDobberAD extends MiiBaseAD {
             @Override
             public void onClick(View v) {
                 recycle();
-                mListener.onMiiADDismissed();
+                clistener.onMiiADDismissed();
             }
         });
 
@@ -293,7 +294,7 @@ public class MiiDobberAD extends MiiBaseAD {
                 @Override
                 public void onClick(View v) {
                     try{
-                        mListener.onMiiADClicked();
+                        clistener.onMiiADClicked();
 
 
                         AdModel ad= (AdModel) adModel.clone();
@@ -323,7 +324,7 @@ public class MiiDobberAD extends MiiBaseAD {
                         default:
                             break;
                     }
-                    mListener.onMiiADTouched();
+                    clistener.onMiiADTouched();
                     return false;
                 }
             });
@@ -339,7 +340,7 @@ public class MiiDobberAD extends MiiBaseAD {
                 @Override
                 public void onClick(View v) {
                     try{
-                        mListener.onMiiADClicked();
+                        clistener.onMiiADClicked();
 
 
                         AdModel ad= (AdModel) adModel.clone();
@@ -369,7 +370,7 @@ public class MiiDobberAD extends MiiBaseAD {
                         default:
                             break;
                     }
-                    mListener.onMiiADTouched();
+                    clistener.onMiiADTouched();
                     return false;
                 }
             });
@@ -384,7 +385,7 @@ public class MiiDobberAD extends MiiBaseAD {
         HttpManager.reportEvent(adModel, AdReport.EVENT_SHOW, context);
 
         //广告成功展示
-        mListener.onMiiADPresent();
+          clistener.onMiiADPresent();
 
         //记录展示次数
         int show_num = (int) SP.getParam(SP.CONFIG, context, SP.FOT, 0);
@@ -394,13 +395,13 @@ public class MiiDobberAD extends MiiBaseAD {
             @Override
             public void onClick(View v) {
                 recycle();
-                mListener.onMiiADDismissed();
+                clistener.onMiiADDismissed();
             }
         });
       }
       catch (Exception e){
 
-          mListener.onMiiNoAD(3009);
+          clistener.onMiiNoAD(3009);
           e.printStackTrace();
 
       }
@@ -428,7 +429,7 @@ public class MiiDobberAD extends MiiBaseAD {
           }
       }
       catch (Exception e){
-          mListener.onMiiNoAD(3009);
+          clistener.onMiiNoAD(3009);
           e.printStackTrace();
       }
     }

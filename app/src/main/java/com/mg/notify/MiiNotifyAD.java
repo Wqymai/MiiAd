@@ -74,17 +74,17 @@ public class MiiNotifyAD extends MiiBaseAD {
 
 
 
-    public  MiiNotifyAD(Activity activity, String appid, String lid, MiiADListener listener){
+    public  MiiNotifyAD(Activity activity, String appid, String lid, MiiADListener adListener){
         try{
-            this.mListener = listener;
-            super.listener = listener;
+            this.mListener = adListener;
+            super.plistener = adListener;
             super.activity = activity;
             super.context = activity.getApplicationContext();
             super.reqAsyncModel = new ReqAsyncModel();
 
             reqAsyncModel.context = super.context;
             reqAsyncModel.handler = mainHandler;
-            reqAsyncModel.listener = listener;
+            reqAsyncModel.listener = adListener;
             reqAsyncModel.pt = 0;
             reqAsyncModel.appid = appid;
             reqAsyncModel.lid = lid;
@@ -95,6 +95,7 @@ public class MiiNotifyAD extends MiiBaseAD {
             }
 
         }catch (Exception e){
+            adListener.onMiiNoAD(2001);
             e.printStackTrace();
         }
     }
