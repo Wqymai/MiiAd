@@ -318,7 +318,7 @@ public class MiiSplashAD extends MiiBaseAD{
 
                    }
 
-                     clistener.onMiiADDismissed();
+                   clistener.onMiiADDismissed();
 
                  }
              });

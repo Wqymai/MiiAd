@@ -1,7 +1,6 @@
 package com.mg.nativ;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
@@ -19,11 +18,8 @@ import com.mg.others.model.AdModel;
 public class MiiNativeAD extends MiiBaseAD {
 
     private NativeImpl ref = null;
-    private Context mContext;
-    private Activity mActivity;
-    private MiiNativeListener listener;
+    private MiiNativeListener clistener;
     private AdModel adModel;
-    private ReqAsyncModel reqAsyncModel;
 
 
     Handler mainHandler = new Handler(){
@@ -40,13 +36,13 @@ public class MiiNativeAD extends MiiBaseAD {
                         setAdModel();
                     }
                     catch (Exception e){
-                        listener.onMiiNoAD(3002);
+                        clistener.onMiiNoAD(3002);
                         e.printStackTrace();
                     }
                     break;
 
                 case 500:
-                    listener.onMiiNoAD(1000);
+                    clistener.onMiiNoAD(1000);
                     break;
                 case 600:
                     new HbReturn(reqAsyncModel).fetchMGAD();
@@ -59,9 +55,9 @@ public class MiiNativeAD extends MiiBaseAD {
     public MiiNativeAD(Activity activity,String appid,String lid, MiiNativeListener adListener){
       try {
 
-          this.listener = adListener;
+          this.clistener = adListener;
+          super.plistener = adListener;
           super.context = activity.getApplicationContext();
-          super.listener = adListener;
           super.activity = activity;
           super.reqAsyncModel = new ReqAsyncModel();
 
@@ -73,13 +69,13 @@ public class MiiNativeAD extends MiiBaseAD {
           reqAsyncModel.lid = lid;
 
           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-              check23AbovePermission(mActivity, mainHandler);
+              check23AbovePermission(activity, mainHandler);
               return;
           }
           new HbReturn(reqAsyncModel).fetchMGAD();
 
       }catch (Exception e){
-          listener.onMiiNoAD(2001);
+          adListener.onMiiNoAD(2001);
           e.printStackTrace();
       }
     }
@@ -107,12 +103,12 @@ public class MiiNativeAD extends MiiBaseAD {
 //    }
     private  void setAdModel(){
         if (adModel == null){
-            listener.onMiiNoAD(3006);
+            clistener.onMiiNoAD(3006);
         }
         ref = new NativeImpl();
         ref.setAdModel(adModel);
         //回调
-        listener.onADLoaded(ref);
+        clistener.onADLoaded(ref);
     }
 
     @Override
