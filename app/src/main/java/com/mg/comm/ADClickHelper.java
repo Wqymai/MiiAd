@@ -161,6 +161,7 @@ public class ADClickHelper {
             return;
         }
         String pn = ad.getPkName();
+
         if (pn== null || pn.equals("")){
             //开始下载上报
             HttpManager.reportEvent(ad, AdReport.EVENT_DOWNLOAD_START, mContext);

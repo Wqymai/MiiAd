@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
+import android.widget.Toast;
 
 import com.mg.comm.MConstant;
 import com.mg.others.http.HttpDownloadListener;
@@ -93,6 +94,7 @@ public class ApkDownloadManager implements HttpDownloadListener {
 
     @Override
     public void onDownloadStart(long fileSize) {
+        Toast.makeText(mContext,"准备开始下载...",Toast.LENGTH_SHORT).show();
     }
 
     @Override
