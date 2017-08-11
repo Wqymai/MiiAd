@@ -55,6 +55,7 @@ public class MiiDobberAD extends MiiBaseAD {
     private GifView gifView;
     private ImageView imageView;
     private WindowManager.LayoutParams wmparams;
+    private boolean isCloseWin = false;
 
     Handler mainHandler = new Handler(){
         @Override
@@ -145,7 +146,7 @@ public class MiiDobberAD extends MiiBaseAD {
             }
         }
         else {
-            adModel.setImage("https://yun.tuia.cn/tuia-media/img/9r9fjq3v6g.gif");
+//            adModel.setImage("https://yun.tuia.cn/tuia-media/img/9r9fjq3v6g.gif");
 //            model.setImage("https://yun.tuia.cn/tuia-media/img/yrmg4yzjw2.png");
             try {
                 if (adModel.getImage() == null || adModel.getImage().equals("") || adModel.getImage().equals("null")){
@@ -177,6 +178,9 @@ public class MiiDobberAD extends MiiBaseAD {
 
     private void openH5Ad(){
 
+      try {
+
+
         String h5 ="<!DOCTYPE html><html><head><meta name='viewport' content='width=device-width," +
                 "initial-scale=1,maximum-scale=1,user-scalable=no'><meta " +
                 "charset='utf-8'><title>Insert title here</title><style " +
@@ -190,6 +194,8 @@ public class MiiDobberAD extends MiiBaseAD {
                 "src=\"http://192.168.199.196:8080/TestDemo/image/hb2.png\" height=\"100%\" " +
                 "width=\"100%\" /></a></body></body></html>";
 
+        recycle();
+
         createWindowManager();
 
         if (relativeLayout == null){
@@ -197,6 +203,7 @@ public class MiiDobberAD extends MiiBaseAD {
           relativeLayout = buildWrapRelativeLayout();
         }
         mWindowManager.addView(relativeLayout,wmparams);
+        isCloseWin = false;
 
 
         if (webView == null){
@@ -261,11 +268,17 @@ public class MiiDobberAD extends MiiBaseAD {
                 clistener.onMiiADDismissed();
             }
         });
-
+      }
+      catch (Exception e){
+          clistener.onMiiNoAD(3010);
+          e.printStackTrace();
+      }
     }
 
     private void showDobberAD(Bitmap bitmap) {
       try {
+
+        recycle();
 
         createWindowManager();
 
@@ -459,6 +472,17 @@ public class MiiDobberAD extends MiiBaseAD {
 
     @Override
     public void recycle() {
-        mWindowManager.removeView(relativeLayout);
+      try {
+           if (!isCloseWin){
+            if (mWindowManager !=null){
+                if (relativeLayout!=null){
+                    mWindowManager.removeViewImmediate(relativeLayout);
+                }
+            }
+            isCloseWin = true;
+           }
+      }catch (Exception e){
+          e.printStackTrace();
+      }
     }
 }

@@ -54,8 +54,10 @@ public class MainActivity extends Activity {
     Button openBuoy;
     GifView gifView ;
     Button openNotify;
+    Button open_headup;
     int ID = 0x123;
     NotificationManager manager ;
+
 
 //    @Override
 //    public boolean onTouchEvent(MotionEvent event) {
@@ -324,7 +326,7 @@ public class MainActivity extends Activity {
 
             @Override
             public void onMiiNoAD(int errCode) {
-
+                LogUtils.i(MConstant.TAG,"浮标广告 "+errCode);
             }
         });
         openBuoy.setOnClickListener(new View.OnClickListener() {
@@ -411,6 +413,44 @@ public class MainActivity extends Activity {
         });
 
 //        LogUtils.i("youle",getStatusBarHeight(this)+"");
+
+//        final MiiNotifyAD notifyAD =  new MiiNotifyAD(this,false, MConstant.APPID, MConstant.BID, new MiiADListener() {
+//            @Override
+//            public void onMiiADDismissed() {
+//
+//            }
+//
+//            @Override
+//            public void onMiiADPresent() {
+//
+//            }
+//
+//            @Override
+//            public void onMiiADClicked() {
+//
+//            }
+//
+//            @Override
+//            public void onMiiADTouched() {
+//
+//            }
+//
+//            @Override
+//            public void onMiiNoAD(int errCode) {
+//                LogUtils.i(MConstant.TAG,"横幅广告 "+errCode);
+//            }
+//        });
+
+
+
+        open_headup = (Button) findViewById(R.id.open_headup);
+        open_headup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,ListActivity.class));
+//                notifyAD.loadAD();
+            }
+        });
     }
 
 

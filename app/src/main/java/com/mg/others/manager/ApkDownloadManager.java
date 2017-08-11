@@ -60,11 +60,11 @@ public class ApkDownloadManager implements HttpDownloadListener {
       try {
 
         String urlKey = checkUrl(adModel.getUrl());
-
         if (downloadingList.containsKey(urlKey)){
             LogUtils.i(MConstant.TAG,"exist same downloading ");
             return;
         }
+
         downloadingList.put(urlKey, adModel);
         String fileName = adModel.getName().replace("，","") + ".apk";
         String path = mContext.getFilesDir().getPath()+"/"; //CommonUtils.getFileDownloadLocation(mContext);
@@ -73,6 +73,7 @@ public class ApkDownloadManager implements HttpDownloadListener {
         if (file.exists()){
             file.delete();
         }
+        Toast.makeText(mContext,"准备开始下载...",Toast.LENGTH_SHORT).show();
         httpUtils.download(adModel.getUrl(),this, path,fileName,false);
       }
       catch (Exception e){
@@ -94,7 +95,8 @@ public class ApkDownloadManager implements HttpDownloadListener {
 
     @Override
     public void onDownloadStart(long fileSize) {
-        Toast.makeText(mContext,"准备开始下载...",Toast.LENGTH_SHORT).show();
+
+
     }
 
     @Override
