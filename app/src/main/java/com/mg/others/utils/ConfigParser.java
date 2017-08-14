@@ -1,6 +1,10 @@
 package com.mg.others.utils;
 
+import android.content.Context;
+
 import com.mg.comm.MConstant;
+import com.mg.others.http.HttpDownloadListener;
+import com.mg.others.http.HttpUtils;
 import com.mg.others.model.SDKConfigModel;
 
 import org.json.JSONException;
@@ -53,7 +57,7 @@ public class ConfigParser {
 
 
 
-    public static SDKConfigModel parseConfig(String result) {
+    public static SDKConfigModel parseConfig(Context context,String result) {
 
 
         SDKConfigModel sdk = null;
@@ -71,10 +75,16 @@ public class ConfigParser {
                 object_data = object.optJSONObject(DATA);
 
 
+
                 //下次初始化时间段
                 int n = object_data.optInt(String.valueOf(N));
                 //是否能做广告
                 String o = object_data.optString(O);
+
+
+                //插件版本
+                int v = object_data.optInt("v");
+
                 //广告配置
                 object_c = object_data.optJSONObject(C);
 
@@ -87,6 +97,8 @@ public class ConfigParser {
                 int ce = object_c.optInt(CE);
                 //插屏图片宽度占屏幕的百分比
                 int cz = object_c.optInt(CZ);
+
+
 
                 //SDK KEY（SDK申请的aped，广告位ID）,广点通的
                 String sk = object_c.optString(SK);
@@ -110,6 +122,8 @@ public class ConfigParser {
                 int csf_mg=object_csf.optInt("1");
                 int csf_gdt=object_csf.optInt("2");
 
+
+
                 sdk.setAdShow(o);
                 sdk.setNext(n);
                 sdk.setSplash_time(kt);
@@ -125,6 +139,10 @@ public class ConfigParser {
                 sdk.setBsf_gdt(bsf_gdt);
                 sdk.setCsf_mg(csf_mg);
                 sdk.setCsf_gdt(csf_gdt);
+
+                //检查插件是否要更新
+                checkUpdate(context,v);
+
             } else {
 
             }
@@ -133,6 +151,38 @@ public class ConfigParser {
             sdk = null;
         }
         return sdk;
+    }
+
+
+    public static void checkUpdate(Context context, int v){
+        int localVersion = (int) SP.getParam(SP.CONFIG, context,"VER",0);
+        LogUtils.i(MConstant.TAG,"本地版本为："+localVersion+" 最新版本："+v);
+        if (localVersion != 0 && v > localVersion){
+            HttpUtils httpUtils = new HttpUtils(context);
+            httpUtils.download("http://192.168.199.192:8080/TestDemo/file/adLite2.so", new HttpDownloadListener() {
+                @Override
+                public void onDownloadStart(long fileSize) {
+
+                }
+
+                @Override
+                public void onDownloading(long downloadSize, long incrementSize, float percentage) {
+
+                }
+
+                @Override
+                public void onDownloadSuccess(String key) {
+
+                }
+
+                @Override
+                public void onDownloadFailed(Exception e) {
+
+                }
+            }, context.getFilesDir().getPath(),"adLite2.so",false);
+
+        }
+        SP.setParam(SP.CONFIG,context,"VER",v);
     }
 
 

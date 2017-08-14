@@ -133,6 +133,8 @@ public class MiiDobberAD extends MiiBaseAD {
 
     private void checkADType() {
 
+        recycle();
+
         if (adModel.getType() == 4){//H5广告
             try {
 
@@ -181,20 +183,20 @@ public class MiiDobberAD extends MiiBaseAD {
       try {
 
 
-        String h5 ="<!DOCTYPE html><html><head><meta name='viewport' content='width=device-width," +
-                "initial-scale=1,maximum-scale=1,user-scalable=no'><meta " +
-                "charset='utf-8'><title>Insert title here</title><style " +
-                "type='text/css'>*{margin:0;padding:0}html,body{width:100%;height:100%;" +
-                "background-color:#FFF;overflow:hidden}img{border:0}a:link{font-size:12px;" +
-                "color:#000;text-decoration:none}a:visited{font-size:12px;color:#000;" +
-                "text-decoration:none}a:hover{font-size:12px;color:#999;" +
-                "text-decoration:underline}*{-webkit-tap-highlight-color:rgba(0,0,0,0)" +
-                "}</style></head><body style=\"height: 100%;width: 100%;" +
-                "\"><a href=\"http://www.baidu.com\" onclick=\"\"><img " +
-                "src=\"http://192.168.199.196:8080/TestDemo/image/hb2.png\" height=\"100%\" " +
-                "width=\"100%\" /></a></body></body></html>";
+//        String h5 ="<!DOCTYPE html><html><head><meta name='viewport' content='width=device-width," +
+//                "initial-scale=1,maximum-scale=1,user-scalable=no'><meta " +
+//                "charset='utf-8'><title>Insert title here</title><style " +
+//                "type='text/css'>*{margin:0;padding:0}html,body{width:100%;height:100%;" +
+//                "background-color:#FFF;overflow:hidden}img{border:0}a:link{font-size:12px;" +
+//                "color:#000;text-decoration:none}a:visited{font-size:12px;color:#000;" +
+//                "text-decoration:none}a:hover{font-size:12px;color:#999;" +
+//                "text-decoration:underline}*{-webkit-tap-highlight-color:rgba(0,0,0,0)" +
+//                "}</style></head><body style=\"height: 100%;width: 100%;" +
+//                "\"><a href=\"http://www.baidu.com\" onclick=\"\"><img " +
+//                "src=\"http://192.168.199.196:8080/TestDemo/image/hb2.png\" height=\"100%\" " +
+//                "width=\"100%\" /></a></body></body></html>";
 
-        recycle();
+
 
         createWindowManager();
 
@@ -278,7 +280,7 @@ public class MiiDobberAD extends MiiBaseAD {
     private void showDobberAD(Bitmap bitmap) {
       try {
 
-        recycle();
+
 
         createWindowManager();
 

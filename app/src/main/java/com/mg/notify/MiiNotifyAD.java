@@ -210,7 +210,7 @@ public class MiiNotifyAD extends MiiBaseAD {
     private void showNotifyAD(Bitmap bitmap){
       try {
 
-            recycle();
+
 
             double H_W_P = div(bitmap.getWidth(),bitmap.getHeight(),1);
             int h = (int)(CommonUtils.getScreenW(context)/H_W_P);
@@ -330,7 +330,7 @@ public class MiiNotifyAD extends MiiBaseAD {
     private void showH5Ad(){
         try {
 
-            recycle();
+
 
             int w = CommonUtils.getScreenW(context);
             int imgH = adModel.getImgh();
@@ -440,22 +440,23 @@ public class MiiNotifyAD extends MiiBaseAD {
 
     private void checkADType() {
 
-        if (false){
+        recycle();
+        if (adModel.getType() == 4){
 
-            String h5="<!DOCTYPE html><html><head><meta name='viewport' " +
-                    "content='width=device-width,initial-scale=1,maximum-scale=1," +
-                    "user-scalable=no'><meta charset='utf-8'><title>Insert title " +
-                    "here</title><style type='text/css'>*{margin:0;padding:0}html," +
-                    "body{width:100%;height:100%;background-color:#FFF;" +
-                    "overflow:hidden}img{border:0}a:link{font-size:12px;color:#000;" +
-                    "text-decoration:none}a:visited{font-size:12px;color:#000;" +
-                    "text-decoration:none}a:hover{font-size:12px;color:#999;" +
-                    "text-decoration:underline}*{-webkit-tap-highlight-color:rgba(0,0,0,0)" +
-                    "}</style></head><body style=\"height: 100%;width: 100%;" +
-                    "\"><a href=\"http://www.baidu.com\" onclick=\"\"><img " +
-                    "src=\"http://192.168.199.192:8080/TestDemo/image/banner.jpg\" " +
-                    "height=\"100%\" width=\"100%\" /></a></body></body></html>";
-            adModel.setPage(h5);
+//            String h5="<!DOCTYPE html><html><head><meta name='viewport' " +
+//                    "content='width=device-width,initial-scale=1,maximum-scale=1," +
+//                    "user-scalable=no'><meta charset='utf-8'><title>Insert title " +
+//                    "here</title><style type='text/css'>*{margin:0;padding:0}html," +
+//                    "body{width:100%;height:100%;background-color:#FFF;" +
+//                    "overflow:hidden}img{border:0}a:link{font-size:12px;color:#000;" +
+//                    "text-decoration:none}a:visited{font-size:12px;color:#000;" +
+//                    "text-decoration:none}a:hover{font-size:12px;color:#999;" +
+//                    "text-decoration:underline}*{-webkit-tap-highlight-color:rgba(0,0,0,0)" +
+//                    "}</style></head><body style=\"height: 100%;width: 100%;" +
+//                    "\"><a href=\"http://www.baidu.com\" onclick=\"\"><img " +
+//                    "src=\"http://192.168.199.192:8080/TestDemo/image/banner.jpg\" " +
+//                    "height=\"100%\" width=\"100%\" /></a></body></body></html>";
+//            adModel.setPage(h5);
             showH5Ad();
         }
         else {
