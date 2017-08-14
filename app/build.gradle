@@ -33,7 +33,7 @@ allprojects {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile(name: 'tuia-2.2.0', ext: 'aar')
-    compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
+    compile files('libs/android-support-v4.jar')
 }
 
 
@@ -42,7 +42,7 @@ task clearJar(type: Delete) {
     delete 'libs/MGUnionSDK.jar'
 }
 task makeJar(type:org.gradle.api.tasks.bundling.Jar) {
-    baseName 'MGUnionSDK_0726'
+    baseName 'MGUnionSDK_0814_formal'
     //从哪里打包class文件,可以指定文件和目录
     from('build/intermediates/classes/release/com')
     //打包到jar后的目录结构

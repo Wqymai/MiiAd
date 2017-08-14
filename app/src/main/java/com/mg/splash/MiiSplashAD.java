@@ -26,7 +26,7 @@ import com.mg.asyn.ReqAsyncModel;
 import com.mg.comm.ADClickHelper;
 import com.mg.comm.ImageDownloadHelper;
 import com.mg.comm.MiiBaseAD;
-import com.mg.interf.MiiSplashADListener;
+import com.mg.interf.MiiADListener;
 import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
@@ -44,7 +44,7 @@ public class MiiSplashAD extends MiiBaseAD{
 
      private ViewGroup adContainer;
      private View skipContainer;
-     private MiiSplashADListener clistener;
+     private MiiADListener clistener;
      private AdModel adModel;
      private ImageView adImageView;
      private WebView webView;
@@ -100,7 +100,7 @@ public class MiiSplashAD extends MiiBaseAD{
          }
      };
 
-    public  MiiSplashAD(Activity activity, ViewGroup adContainer,View skipContainer ,String appid,String lid,MiiSplashADListener adListener){
+    public  MiiSplashAD(Activity activity, ViewGroup adContainer,View skipContainer ,String appid,String lid,MiiADListener adListener){
       try{
             super.activity = activity;
 

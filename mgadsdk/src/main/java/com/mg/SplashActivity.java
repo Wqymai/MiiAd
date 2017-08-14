@@ -48,13 +48,11 @@ public class SplashActivity extends Activity{
             public void onMiiADPresent() {
                 Log.i("ad_demo",  "SplashADPresent");
                 splashHolder.setVisibility(View.INVISIBLE);
-//                skipView.setText(String.format(SKIP_TEXT, (Math.round(millisUntilFinished / 1000f))));
             }
 
             @Override
             public void onMiiADClicked() {
                 Log.i("ad_demo",  "SplashADClicked");
-//                splashAD.recycle();
             }
 
             @Override

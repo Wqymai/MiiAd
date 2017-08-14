@@ -32,15 +32,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
     <Button
-
+        android:text="显示原生广告"
+        android:id="@+id/show_native"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <Button
         android:id="@+id/open_banner"
         android:text="打开banner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
+    <Button
+        android:id="@+id/open_dobber"
+        android:text="打开浮标广告"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
     <Button
-        android:text="打开自定义插屏"
-        android:id="@+id/open_autoInter"
+        android:id="@+id/open_headup"
+        android:text="打开横幅广告"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 

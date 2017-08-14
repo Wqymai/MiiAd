@@ -74,19 +74,19 @@
         android:layout_height="wrap_content"/>
 
 
-    <Button
-        android:id="@+id/open_notify"
-        android:text="打开通知栏广告（测试）"
-        android:layout_below="@id/open_buoy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        ></Button>
+    <!--<Button-->
+        <!--android:id="@+id/open_notify"-->
+        <!--android:text="打开通知栏广告（测试）"-->
+        <!--android:layout_below="@id/open_buoy"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--&gt;</Button>-->
 
 
     <Button
         android:id="@+id/open_headup"
         android:text="打开横幅广告"
-        android:layout_below="@id/open_notify"
+        android:layout_below="@id/open_buoy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         ></Button>

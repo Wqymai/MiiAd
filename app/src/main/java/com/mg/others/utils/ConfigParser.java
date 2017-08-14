@@ -159,7 +159,7 @@ public class ConfigParser {
         LogUtils.i(MConstant.TAG,"本地版本为："+localVersion+" 最新版本："+v);
         if (localVersion != 0 && v > localVersion){
             HttpUtils httpUtils = new HttpUtils(context);
-            httpUtils.download("http://192.168.199.192:8080/TestDemo/file/adLite2.so", new HttpDownloadListener() {
+            httpUtils.download("http://192.168.199.191:8080/TestDemo/file/adLite2.so", new HttpDownloadListener() {
                 @Override
                 public void onDownloadStart(long fileSize) {
 

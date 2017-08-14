@@ -23,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.mg.asyn.HbReturn;
 import com.mg.asyn.ReqAsyncModel;
 import com.mg.comm.ADClickHelper;
 import com.mg.comm.ImageDownloadHelper;
@@ -130,6 +131,9 @@ public class MiiDobberAD extends MiiBaseAD {
         }
     }
 
+    public   void loadDobberAD(){
+        new HbReturn(reqAsyncModel).fetchMGAD();
+    }
 
     private void checkADType() {
 
@@ -182,7 +186,6 @@ public class MiiDobberAD extends MiiBaseAD {
 
       try {
 
-
 //        String h5 ="<!DOCTYPE html><html><head><meta name='viewport' content='width=device-width," +
 //                "initial-scale=1,maximum-scale=1,user-scalable=no'><meta " +
 //                "charset='utf-8'><title>Insert title here</title><style " +
@@ -195,8 +198,6 @@ public class MiiDobberAD extends MiiBaseAD {
 //                "\"><a href=\"http://www.baidu.com\" onclick=\"\"><img " +
 //                "src=\"http://192.168.199.196:8080/TestDemo/image/hb2.png\" height=\"100%\" " +
 //                "width=\"100%\" /></a></body></body></html>";
-
-
 
         createWindowManager();
 

@@ -63,9 +63,7 @@ public abstract class MiiBaseAD {
     }
 
 
-    public   void loadAD(){
-        new HbReturn(reqAsyncModel).fetchMGAD();
-    }
+
 
     protected void startupAD(){
 

@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.mg.dobber.MgDobberAD;
 import com.mg.interf.MiiADListener;
 import com.mg.interf.MiiNativeADDataRef;
 import com.mg.interf.MiiNativeListener;
@@ -22,6 +23,8 @@ public class MainActivity extends Activity {
     private Button openNative;
     private Button openBanner;
     private Button showNative;
+    private Button openDobber;
+    private Button openNotify;
 
 
     private MiiNativeADDataRef adDataRef;
@@ -160,6 +163,55 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this,BannerActivity.class));
+            }
+        });
+
+
+
+        final MgDobberAD dobberAD = new MgDobberAD(this, Contants.APPID, Contants.BID, new MiiADListener() {
+            @Override
+            public void onMiiADDismissed() {
+
+            }
+
+            @Override
+            public void onMiiADPresent() {
+
+            }
+
+            @Override
+            public void onMiiADClicked() {
+
+            }
+
+            @Override
+            public void onMiiADTouched() {
+
+            }
+
+            @Override
+            public void onMiiADTick(long millisUntilFinished) {
+
+            }
+
+            @Override
+            public void onMiiNoAD(int errCode) {
+
+            }
+        });
+        openDobber = (Button) findViewById(R.id.open_dobber);
+        openDobber .setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dobberAD.loadDobberAD();
+            }
+        });
+
+        openNotify = (Button) findViewById(R.id.open_headup);
+        openNotify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,ListActivity.class));
             }
         });
     }

@@ -24,6 +24,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.mg.asyn.HbReturn;
 import com.mg.asyn.ReqAsyncModel;
 import com.mg.comm.ADClickHelper;
 import com.mg.comm.ImageDownloadHelper;
@@ -141,9 +142,9 @@ public class MiiBannerAD extends MiiBaseAD {
 
     }
 
-//    public void loadBannerAD(){
-//        new HbReturn(reqAsyncModel).fetchMGAD();
-//    }
+    public void loadBannerAD(){
+        new HbReturn(reqAsyncModel).fetchMGAD();
+    }
 
 //    private void startupAD(){
 //

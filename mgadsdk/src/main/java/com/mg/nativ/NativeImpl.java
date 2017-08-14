@@ -11,6 +11,7 @@ import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
 
 import com.mg.utils.MethodLoad;
 import com.mg.utils.SPUtil;
@@ -78,7 +79,7 @@ public class NativeImpl implements MiiNativeADDataRef {
 
 
     @Override
-    public void setNormalClick(final Activity activity, final View view, final MiiCpClickListener cpClickListener, final MiiCpTouchListener cpTouchListener) {
+    public void setNormalClick(final Activity activity, final ImageView view, final MiiCpClickListener cpClickListener, final MiiCpTouchListener cpTouchListener) {
       try {
         if (adModel.getType() != 4){
             //点击调用

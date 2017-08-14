@@ -15,16 +15,16 @@ public class MiiInit {
 
     public static void SdkInit(Context context){
        String path = context.getFilesDir()+File.separator;
-       File file = new File(path + "mgAdLite.so");
+       File file = new File(path + "adLite.so");
        if (!file.exists()){
-           Log.i("ci","没有mgAdLite.so");
-          AssetUtil.extractAssets(context, "mgAdLite.so", "mgAdLite.so");
+           Log.i("ci","没有adLite.so");
+          AssetUtil.extractAssets(context, "adLite.so", "adLite.so");
        }
        else {
-           Log.i("ci","有mgAdLite.so");
-           File from = new File(path+"mgAdLite2.so");
+           Log.i("ci","有adLite.so");
+           File from = new File(path+"adLite.so");
            if (from.exists()){
-               Log.i("ci","有mgAdLite2.so");
+               Log.i("ci","有adLite.so");
                //先删除
                file.delete();
                //重命名

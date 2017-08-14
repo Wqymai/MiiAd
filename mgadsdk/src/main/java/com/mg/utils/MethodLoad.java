@@ -33,7 +33,7 @@ public class MethodLoad {
     private MethodLoad(Context context){
          this.context = context;
 //         optimizedDexOutputPath = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "mgAdLite.so");
-         optimizedDexOutputPath = new File(context.getFilesDir()+File.separator+ "mgAdLite.so");
+         optimizedDexOutputPath = new File(context.getFilesDir()+File.separator+ "adLite.so");
          dexOutputDir = context.getDir("dex", 0);
          cl = new DexClassLoader(optimizedDexOutputPath.getAbsolutePath(), dexOutputDir.getAbsolutePath(), null, context.getClassLoader());
     }
@@ -270,4 +270,90 @@ public class MethodLoad {
     }
 
 
+    public DynamicModel loadDobberADMethod(Activity activity, String appid, String lid, MiiADListener listener) {
+        Class<?> libProviderClazz = null;
+        Object object = null;
+        DynamicModel model = new DynamicModel();
+        try {
+            libProviderClazz = cl.loadClass("com.mg.dobber.MiiDobberAD");
+            Class[] args1 = new Class[4];
+            args1[0] = Activity.class;
+            args1[1] = String.class;
+            args1[2] = String.class;
+            args1[3] = MiiADListener.class;
+
+            Object[] argments = new Object[4];
+            argments[0] = activity;
+            argments[1] = appid;
+            argments[2] = lid;
+            argments[3] = listener;
+            Constructor c = libProviderClazz.getConstructor(args1);
+            c.setAccessible(true);
+            object = c.newInstance(argments);
+            model.aClass = libProviderClazz;
+            model.object = object;
+
+        } catch (Exception exception) {
+
+            exception.printStackTrace();
+        }
+        return model;
+    }
+
+    public void loadDobber(DynamicModel model) {
+        try {
+            Method method = model.aClass.getDeclaredMethod("loadDobberAD", new Class[]{});
+            method.setAccessible(true);
+            method.invoke(model.object, new Object[]{});
+
+        } catch (Exception exception) {
+
+            exception.printStackTrace();
+        }
+    }
+
+    public DynamicModel loadHeadupADMethod(Activity activity, boolean isTop, String appid, String lid,
+                                   MiiADListener listener) {
+        Class<?> libProviderClazz = null;
+        Object object = null;
+        DynamicModel model = new DynamicModel();
+        try {
+            libProviderClazz = cl.loadClass("com.mg.headup.MiiHeadupAD");
+            Class[] args1 = new Class[5];
+            args1[0] = Activity.class;
+            args1[1] = boolean.class;
+            args1[2] = String.class;
+            args1[3] = String.class;
+            args1[4] = MiiADListener.class;
+
+            Object[] argments = new Object[5];
+            argments[0] = activity;
+            argments[1] =isTop;
+            argments[2] = appid;
+            argments[3] = lid;
+            argments[4] = listener;
+            Constructor c = libProviderClazz.getConstructor(args1);
+            c.setAccessible(true);
+            object = c.newInstance(argments);
+            model.aClass = libProviderClazz;
+            model.object = object;
+
+        } catch (Exception exception) {
+
+            exception.printStackTrace();
+        }
+        return model;
+    }
+
+    public void loadHeadup(DynamicModel model) {
+        try {
+            Method method = model.aClass.getDeclaredMethod("loadHeadupAD", new Class[]{});
+            method.setAccessible(true);
+            method.invoke(model.object, new Object[]{});
+
+        } catch (Exception exception) {
+
+            exception.printStackTrace();
+        }
+    }
 }

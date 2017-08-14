@@ -1,4 +1,4 @@
-package com.mg.notify;
+package com.mg.headup;
 
 import android.app.Activity;
 import android.content.Context;
@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.mg.asyn.HbReturn;
 import com.mg.asyn.ReqAsyncModel;
 import com.mg.comm.ADClickHelper;
 import com.mg.comm.ImageDownloadHelper;
@@ -42,7 +43,7 @@ import static android.os.Build.VERSION_CODES.M;
  * Created by wuqiyan on 17/8/8.
  */
 
-public class MiiNotifyAD extends MiiBaseAD {
+public class MiiHeadupAD extends MiiBaseAD {
 
 
 
@@ -109,7 +110,7 @@ public class MiiNotifyAD extends MiiBaseAD {
 
 
 
-    public  MiiNotifyAD(Activity activity,boolean isTop, String appid, String lid, MiiADListener adListener){
+    public MiiHeadupAD(Activity activity, boolean isTop, String appid, String lid, MiiADListener adListener){
         try{
             this.isTop = isTop;
             this.cListener = adListener;
@@ -136,6 +137,9 @@ public class MiiNotifyAD extends MiiBaseAD {
         }
     }
 
+    public   void loadHeadupAD(){
+        new HbReturn(reqAsyncModel).fetchMGAD();
+    }
 
     private void createWindowManager(int w,int h){
 
@@ -209,8 +213,6 @@ public class MiiNotifyAD extends MiiBaseAD {
 
     private void showNotifyAD(Bitmap bitmap){
       try {
-
-
 
             double H_W_P = div(bitmap.getWidth(),bitmap.getHeight(),1);
             int h = (int)(CommonUtils.getScreenW(context)/H_W_P);
