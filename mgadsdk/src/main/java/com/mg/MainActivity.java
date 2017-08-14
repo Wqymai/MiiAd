@@ -171,32 +171,32 @@ public class MainActivity extends Activity {
         final MgDobberAD dobberAD = new MgDobberAD(this, Contants.APPID, Contants.BID, new MiiADListener() {
             @Override
             public void onMiiADDismissed() {
-
+                Log.i("ad_demo","浮标广告 onMiiADDismissed");
             }
 
             @Override
             public void onMiiADPresent() {
-
+                Log.i("ad_demo","浮标广告 onMiiADPresent");
             }
 
             @Override
             public void onMiiADClicked() {
-
+                Log.i("ad_demo","浮标广告 onMiiADClicked");
             }
 
             @Override
             public void onMiiADTouched() {
-
+                Log.i("ad_demo","浮标广告 onMiiADTouched");
             }
 
             @Override
             public void onMiiADTick(long millisUntilFinished) {
-
+                //不回调
             }
 
             @Override
             public void onMiiNoAD(int errCode) {
-
+                Log.i("ad_demo","浮标广告 "+errCode);
             }
         });
         openDobber = (Button) findViewById(R.id.open_dobber);
@@ -211,7 +211,7 @@ public class MainActivity extends Activity {
         openNotify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this,ListActivity.class));
+                startActivity(new Intent(MainActivity.this,MListActivity.class));
             }
         });
     }

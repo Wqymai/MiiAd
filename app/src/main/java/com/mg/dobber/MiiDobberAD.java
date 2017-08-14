@@ -139,6 +139,8 @@ public class MiiDobberAD extends MiiBaseAD {
 
         recycle();
 
+        isCloseWin = false;
+
         if (adModel.getType() == 4){//H5广告
             try {
 
@@ -475,17 +477,18 @@ public class MiiDobberAD extends MiiBaseAD {
 
     @Override
     public void recycle() {
-      try {
-           if (!isCloseWin){
-            if (mWindowManager !=null){
-                if (relativeLayout!=null){
-                    mWindowManager.removeViewImmediate(relativeLayout);
+        try {
+            if (!isCloseWin) {
+                if (mWindowManager != null) {
+                    if (relativeLayout != null) {
+                        mWindowManager.removeViewImmediate(relativeLayout);
+                    }
                 }
+                isCloseWin = true;
             }
-            isCloseWin = true;
-           }
-      }catch (Exception e){
-          e.printStackTrace();
-      }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

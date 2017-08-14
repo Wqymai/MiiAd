@@ -53,7 +53,6 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
     <application
-        android:name="com.mg.an.SdkApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -75,10 +74,11 @@
         <service android:name="com.mg.comm.LoadHelperService"></service>
         <activity android:name="com.mg.an.BannerAcitvity"></activity>
 
-        <activity android:name=".an.ListActivity"></activity>
+        <activity android:name=".an.MListActivity"></activity>
         <activity android:name="com.mg.an.MNativeActivity"
             android:theme="@style/dialogstyle"
             ></activity>
+
         <!--<activity android:name="com.mg.an.TuiaCustomActivity"></activity>-->
         <!--适配7.0以上-->
         <provider

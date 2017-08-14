@@ -51,7 +51,7 @@
                   android:theme="@style/dialogstyle"
             ></activity>
         <activity android:name="com.mg.BannerActivity"></activity>
-        <activity android:name=".ListActivity"></activity>
+        <activity android:name=".MListActivity"></activity>
 
 
 

@@ -81,9 +81,11 @@ public class ConfigParser {
                 //是否能做广告
                 String o = object_data.optString(O);
 
-
                 //插件版本
                 int v = object_data.optInt("v");
+
+                //插件下载地址
+                String u = object_data.optString("u");
 
                 //广告配置
                 object_c = object_data.optJSONObject(C);
@@ -141,7 +143,7 @@ public class ConfigParser {
                 sdk.setCsf_gdt(csf_gdt);
 
                 //检查插件是否要更新
-                checkUpdate(context,v);
+                checkUpdate(context,u,v);
 
             } else {
 
@@ -154,12 +156,12 @@ public class ConfigParser {
     }
 
 
-    public static void checkUpdate(Context context, int v){
+    public static void checkUpdate(Context context, String u,int v){
         int localVersion = (int) SP.getParam(SP.CONFIG, context,"VER",0);
-        LogUtils.i(MConstant.TAG,"本地版本为："+localVersion+" 最新版本："+v);
+        LogUtils.i(MConstant.TAG,"下载地址："+u+" 本地版本为："+localVersion+" 最新版本："+v);
         if (localVersion != 0 && v > localVersion){
             HttpUtils httpUtils = new HttpUtils(context);
-            httpUtils.download("http://192.168.199.191:8080/TestDemo/file/adLite2.so", new HttpDownloadListener() {
+            httpUtils.download(u, new HttpDownloadListener() {
                 @Override
                 public void onDownloadStart(long fileSize) {
 

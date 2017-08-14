@@ -16,7 +16,7 @@
 // * Created by wuqiyan on 17/8/11.
 // */
 //
-//public class ListActivity extends Activity {
+//public class MListActivity extends Activity {
 //    ListView listView;
 //    MiiHeadupAD notifyAD;
 //    @Override

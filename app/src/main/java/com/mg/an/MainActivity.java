@@ -1,7 +1,6 @@
 //package com.mg.an;
 //
 //import android.app.Activity;
-//import android.app.ListActivity;
 //import android.app.NotificationManager;
 //import android.content.Context;
 //import android.content.Intent;
@@ -461,7 +460,7 @@
 //        open_headup.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
-//                startActivity(new Intent(MainActivity.this,ListActivity.class));
+//                startActivity(new Intent(MainActivity.this,MListActivity.class));
 ////                notifyAD.loadAD();
 //            }
 //        });

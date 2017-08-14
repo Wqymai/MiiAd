@@ -225,7 +225,7 @@ public class MiiHeadupAD extends MiiBaseAD {
             }
 
             mWindowManager.addView(relativeLayout,wmparams);
-            isCloseWin = false;
+
 
 
             if (imageView == null){
@@ -347,7 +347,7 @@ public class MiiHeadupAD extends MiiBaseAD {
             }
 
             mWindowManager.addView(relativeLayout,wmparams);
-            isCloseWin = false;
+
 
             if (webView == null){
                 webView = new WebView(context);
@@ -443,6 +443,8 @@ public class MiiHeadupAD extends MiiBaseAD {
     private void checkADType() {
 
         recycle();
+        isCloseWin = false;
+
         if (adModel.getType() == 4){
 
 //            String h5="<!DOCTYPE html><html><head><meta name='viewport' " +
