@@ -2,7 +2,7 @@ package com.mg.nativ;
 
 import android.app.Activity;
 
-import com.mg.d.utils.MethodDynamicLoad;
+import com.mg.utils.MethodLoad;
 import com.mg.interf.MiiNativeListener;
 
 /**
@@ -11,8 +11,8 @@ import com.mg.interf.MiiNativeListener;
 
 public class MgNativeAD {
 
-    public MgNativeAD(Activity activity,String appid, MiiNativeListener listener){
+    public MgNativeAD(Activity activity,String appid,String lid, MiiNativeListener listener){
 
-        MethodDynamicLoad.getInstance(activity.getApplicationContext()).loadNativeADMethod(activity,appid,listener);
+        MethodLoad.getInstance(activity.getApplicationContext()).loadNativeADMethod(activity,appid,lid,listener);
     }
 }

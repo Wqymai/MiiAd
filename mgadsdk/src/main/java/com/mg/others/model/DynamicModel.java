@@ -1,4 +1,4 @@
-package com.mg.d.c;
+package com.mg.others.model;
 
 /**
  * Created by wuqiyan on 17/7/7.

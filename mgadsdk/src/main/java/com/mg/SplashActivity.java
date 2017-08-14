@@ -35,7 +35,7 @@ public class SplashActivity extends Activity{
     }
 
     private void fetchAD(SplashActivity mainActivity, ViewGroup container, final TextView skipView) {
-        splashAD = new MgSplashAD(mainActivity, container, skipView, Contants.APPID, new MiiADListener() {
+        splashAD = new MgSplashAD(mainActivity, container, skipView, Contants.APPID, Contants.KID,new MiiADListener() {
 
 
             @Override
@@ -48,12 +48,13 @@ public class SplashActivity extends Activity{
             public void onMiiADPresent() {
                 Log.i("ad_demo",  "SplashADPresent");
                 splashHolder.setVisibility(View.INVISIBLE);
-
+//                skipView.setText(String.format(SKIP_TEXT, (Math.round(millisUntilFinished / 1000f))));
             }
 
             @Override
             public void onMiiADClicked() {
                 Log.i("ad_demo",  "SplashADClicked");
+//                splashAD.recycle();
             }
 
             @Override
@@ -72,6 +73,8 @@ public class SplashActivity extends Activity{
                 Log.i("ad_demo", "SplashNoAD "+errCode);
             }
         });
+
+
 
     }
 

@@ -1,4 +1,4 @@
-package com.mg.d.utils;
+package com.mg.utils;
 
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -13,7 +13,7 @@ import java.io.InputStream;
  * Created by wuqiyan on 17/7/7.
  */
 
-public class Uhelper {
+public class AssetUtil {
     public static void extractAssets(Context context, String sourceName, String newFileName) {
         AssetManager am = context.getAssets();
         InputStream is = null;

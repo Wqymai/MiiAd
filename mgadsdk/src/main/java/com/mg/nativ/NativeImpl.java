@@ -12,91 +12,92 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.mg.d.c.a;
-import com.mg.d.utils.MethodDynamicLoad;
-import com.mg.d.utils.SP;
+import com.mg.utils.MethodLoad;
+import com.mg.utils.SPUtil;
 import com.mg.interf.MiiCpClickListener;
 import com.mg.interf.MiiCpTouchListener;
 import com.mg.interf.MiiNativeADDataRef;
+import com.mg.others.model.AdModel;
 
 /**
  * Created by wuqiyan on 17/6/21.
  */
 
-public class b implements MiiNativeADDataRef {
+public class NativeImpl implements MiiNativeADDataRef {
 
 
-    private a adModel;
+    private AdModel adModel;
 
-
-    public void a(a model){
+    public void setAdModel(AdModel model){
         this.adModel = model;
     }
 
+
     @Override
     public String getImg() {
-        return adModel.h();
+        return adModel.getImage();
     }
 
 
     @Override
     public int getType() {
-        return adModel.j() == 4? 1 : 0;
+        return adModel.getType() == 4? 1 : 0;
     }
 
     @Override
     public String getName() {
-        return adModel.e();
+        return adModel.getName();
     }
 
     @Override
     public String getTitle() {
-        return adModel.f();
+        return adModel.getTitle();
     }
 
     @Override
     public String getDesc() {
-        return adModel.g();
+        return adModel.getDesc();
     }
 
     @Override
     public String getPage() {
-        return adModel.n();
+        return adModel.getPage();
     }
 
     @Override
     public String getIcon() {
-        return  adModel.k();
-    }
-    public final String getSourceMark()
-    {
-        return adModel.a();
+        return  adModel.getIcon();
     }
 
-    public final String getDeepLink()
-    {
-        return adModel.b();
+    @Override
+    public String getSourceMark() {
+        return adModel.getSourceMark();
     }
+
+
 
 
     @Override
     public void setNormalClick(final Activity activity, final View view, final MiiCpClickListener cpClickListener, final MiiCpTouchListener cpTouchListener) {
-
-        if (adModel.j() != 4){
+      try {
+        if (adModel.getType() != 4){
             //点击调用
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                   try {
-                    a ad= (a) adModel.clone();
-                    //点击操作
-                    MethodDynamicLoad.getInstance(activity.getApplicationContext()).loadAdClickMethod(activity.getApplicationContext(),ad);
 
+                    cpClickListener.click();
+
+                    AdModel ad= (AdModel) adModel.clone();
+
+                      //点击操作
+                    MethodLoad.getInstance(activity.getApplicationContext()).loadAdClickMethod(activity.getApplicationContext(),ad);
                   }
                   catch (Exception e){
                       e.printStackTrace();
                   }
-                  cpClickListener.click();
+
                 }
             });
 
@@ -107,13 +108,13 @@ public class b implements MiiNativeADDataRef {
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
 
-                            adModel.o(String.valueOf(event.getX()));
-                            adModel.p(String.valueOf(event.getY()));
+                            adModel.setDownx(String.valueOf(event.getX()));
+                            adModel.setDowny(String.valueOf(event.getY()));
                             break;
                         case MotionEvent.ACTION_UP:
 
-                            adModel.q(String.valueOf(event.getX()));
-                            adModel.r(String.valueOf(event.getY()));
+                            adModel.setUpx(String.valueOf(event.getX()));
+                            adModel.setUpy(String.valueOf(event.getY()));
                             break;
                     }
                     cpTouchListener.touch();
@@ -121,6 +122,9 @@ public class b implements MiiNativeADDataRef {
                 }
             });
         }
+      }catch (Exception e){
+          e.printStackTrace();
+      }
 
     }
 
@@ -128,23 +132,24 @@ public class b implements MiiNativeADDataRef {
     @Override
     public void onExposured(Context context) {
         //记录展示次数
-        int show_num = (int) SP.getParam(SP.CONFIG, context, SP.FOT, 0);
-        SP.setParam(SP.CONFIG, context, SP.FOT, show_num + 1);
-
+        int show_num = (int) SPUtil.getParam(SPUtil.CONFIG, context, SPUtil.FOT, 0);
+        SPUtil.setParam(SPUtil.CONFIG, context, SPUtil.FOT, show_num + 1);
         //展示上报
-        MethodDynamicLoad.getInstance(context).loadReportMethod(adModel,0, context);
+        //展示上报
+        MethodLoad.getInstance(context).loadReportMethod(adModel,0, context);
     }
+
+
 
     @Override
     public void setWVClick(final Activity activity, final WebView webView, final MiiCpClickListener cpClickListener) {
-        if (adModel.j() == 4){
-
+       try{
+            if (adModel.getType() == 4){
                 WebSettings settings = webView.getSettings();
                 settings.setDefaultTextEncodingName("utf-8") ;
                 settings.setJavaScriptEnabled(true);
                 settings.setDomStorageEnabled(true);
                 settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
-
                 webView.setWebViewClient(new WebViewClient(){
                     @Override
                     public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
@@ -156,14 +161,16 @@ public class b implements MiiNativeADDataRef {
                         view.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
 
                         //点击上报
-                        MethodDynamicLoad.getInstance(activity.getApplicationContext()).loadReportMethod(adModel, 1, activity.getApplicationContext());
+                        MethodLoad.getInstance(activity.getApplicationContext()).loadReportMethod(adModel, 1, activity.getApplicationContext());
+
                         cpClickListener.click();
                         return true;
                     }
                 });
-        }
+            }
+       }catch (Exception e){
+           e.printStackTrace();
+       }
     }
-
-
 
 }
