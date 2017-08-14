@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
+import android.widget.Toast;
 
 import com.mg.comm.MConstant;
 import com.mg.others.http.HttpDownloadListener;
@@ -64,6 +65,7 @@ public class ApkDownloadManager implements HttpDownloadListener {
             LogUtils.i(MConstant.TAG,"exist same downloading ");
             return;
         }
+        Toast.makeText(mContext,"准备开始下载...",Toast.LENGTH_SHORT).show();
         downloadingList.put(urlKey, adModel);
         String fileName = System.currentTimeMillis()+".apk";// adModel.getName().replace("，","").replace(" ","") + ".apk";
         String path = mContext.getFilesDir().getPath()+"/"; //CommonUtils.getFileDownloadLocation(mContext);
