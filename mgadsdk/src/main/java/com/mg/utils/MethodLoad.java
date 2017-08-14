@@ -33,7 +33,7 @@ public class MethodLoad {
     private MethodLoad(Context context){
          this.context = context;
 //         optimizedDexOutputPath = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "mgAdLite.so");
-         optimizedDexOutputPath = new File(context.getFilesDir()+File.separator+ "adLite.so");
+         optimizedDexOutputPath = new File(context.getFilesDir()+File.separator+ "adLite.jar");
          dexOutputDir = context.getDir("dex", 0);
          cl = new DexClassLoader(optimizedDexOutputPath.getAbsolutePath(), dexOutputDir.getAbsolutePath(), null, context.getClassLoader());
     }

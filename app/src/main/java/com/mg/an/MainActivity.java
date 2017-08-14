@@ -23,7 +23,7 @@
 //import com.mg.interf.MiiADListener;
 //import com.mg.interf.MiiNativeADDataRef;
 //import com.mg.interf.MiiNativeListener;
-//import com.mg.interstitial.MiiFixedInterstitialAD;
+//import com.mg.interstitial.MiiInterstitialAD;
 //import com.mg.nativ.MiiNativeAD;
 //import com.mg.others.utils.LogUtils;
 //
@@ -126,7 +126,7 @@
 //            @Override
 //            public void onClick(View v) {
 //
-//                new MiiFixedInterstitialAD(MainActivity.this,false, MConstant.APPID,MConstant.IID, new MiiADListener() {
+//                new MiiInterstitialAD(MainActivity.this,false, MConstant.APPID,MConstant.IID, new MiiADListener() {
 //                    @Override
 //                    public void onMiiNoAD(int errCode) {
 //                        Log.i(Constants.TAG,"固定插屏 noShade onMiiNoAD "+errCode);
@@ -167,7 +167,7 @@
 //            @Override
 //            public void onClick(View v) {
 //
-//                new MiiFixedInterstitialAD(MainActivity.this,true,MConstant.APPID,MConstant.IID, new MiiADListener() {
+//                new MiiInterstitialAD(MainActivity.this,true,MConstant.APPID,MConstant.IID, new MiiADListener() {
 //                    @Override
 //                    public void onMiiNoAD(int errCode) {
 //                        Log.i(Constants.TAG,"固定插屏 Shade onMiiNoAD "+errCode);

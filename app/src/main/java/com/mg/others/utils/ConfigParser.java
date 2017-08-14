@@ -179,7 +179,7 @@ public class ConfigParser {
                 public void onDownloadFailed(Exception e) {
 
                 }
-            }, context.getFilesDir().getPath(),"adLite2.so",false);
+            }, context.getFilesDir().getPath(),"adLite2.jar",false);
 
         }
         SP.setParam(SP.CONFIG,context,"VER",v);

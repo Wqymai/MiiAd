@@ -48,7 +48,7 @@ import com.mg.others.utils.SP;
  * 固定形式的插屏
  */
 
-public class MiiFixedInterstitialAD extends MiiBaseAD{
+public class MiiInterstitialAD extends MiiBaseAD{
 
 
     private AdModel adModel;
@@ -116,7 +116,7 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
         }
     };
 
-    public MiiFixedInterstitialAD(Activity mActivity, boolean isShade,String appid,String lid, final MiiADListener adListener){
+    public MiiInterstitialAD(Activity mActivity, boolean isShade, String appid, String lid, final MiiADListener adListener){
 
       try {
 
