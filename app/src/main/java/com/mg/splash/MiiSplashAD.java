@@ -22,6 +22,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.mg.asyn.HbNoReturn;
 import com.mg.asyn.HbReturn;
 import com.mg.asyn.RaNoReturn;
 import com.mg.asyn.RaReturn;
@@ -33,6 +34,7 @@ import com.mg.interf.MiiADListener;
 import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
+import com.mg.others.model.GdtInfoModel;
 import com.mg.others.utils.SP;
 import com.qq.e.ads.splash.SplashAD;
 import com.qq.e.ads.splash.SplashADListener;
@@ -416,43 +418,66 @@ public class MiiSplashAD extends MiiBaseAD{
 
       try{
 
-        SourceAssignModel saModel = checkADSource(mContext,2);
+        sdk = checkSdkConfig(sdk,mContext);
+        int k = sdk.getK();
+        int ksf_mg = sdk.getKsf_mg();
+        int ksf_gdt = sdk.getKsf_gdt();
+        if (k == 1){//按比例
+            if (ksf_mg > ksf_gdt){
 
-        if (saModel == null){
-
-            new HbReturn(reqAsyncModel).fetchMGAD();
-            return;
-        }
-
-
-        int type = saModel.type;
-        int firstChoose = saModel.firstChoose;
-
-        if (type == 1){
-
-            listener.onMiiNoAD(3005);
-            return;
-
-        }
-
-        else if (type == 2){
-
-            if (firstChoose == 1){
                 new RaReturn(reqAsyncModel).fetchMGAD();
-            }
-            else {
+
+            }else {
                 openGDTAD(true);
             }
-        }
-        else if (type ==3){
 
-            if (firstChoose == 1){
+        }else {//按权重
+            if (ksf_mg > ksf_gdt){
+
                 new RaNoReturn(reqAsyncModel).fetchMGAD();
             }
             else {
                 openGDTAD(false);
             }
+
         }
+
+//        SourceAssignModel saModel = checkADSource(mContext,2);
+//
+//        if (saModel == null){
+//
+//            new HbReturn(reqAsyncModel).fetchMGAD();
+//            return;
+//        }
+//
+//
+//        int type = saModel.type;
+//        int firstChoose = saModel.firstChoose;
+//
+//        if (type == 1){
+//
+//            listener.onMiiNoAD(3005);
+//            return;
+//
+//        }
+//        else if (type == 2){
+//
+//            if (firstChoose == 1){
+//                new RaReturn(reqAsyncModel).fetchMGAD();
+//            }
+//            else {
+//                openGDTAD(true);
+//            }
+//        }
+//        else if (type ==3){
+//
+//            if (firstChoose == 1){
+//                new RaNoReturn(reqAsyncModel).fetchMGAD();
+//            }
+//            else {
+//                openGDTAD(false);
+//            }
+//        }
       }catch (Exception e){
 
           listener.onMiiNoAD(3012);
@@ -460,28 +485,28 @@ public class MiiSplashAD extends MiiBaseAD{
 
       }
     }
-    public static final String AID = "1101152570";
-    public static final String SPID = "8863364436303842593";
+//    public static final String AID = "1101152570";
+//    public static final String SPID = "8863364436303842593";
 
 
     private void openGDTAD(final boolean shouldReturn){
 
-//        new HbNoReturn(reqAsyncModel).fetchMGAD();
-//
-//        String AID = "";
-//        String SPID = "";
-//        try {
-//
-//           GdtInfoModel model = getGdtIds(mContext);
-//           AID = model.getAPPID();
-//           SPID = model.getSplashPosID();
-//
-//        }catch (Exception e){
-//
-//           listener.onMiiNoAD(3007);
-//           e.printStackTrace();
-//
-//        }
+        new HbNoReturn(reqAsyncModel).fetchMGAD();
+
+        String AID = "";
+        String SPID = "";
+        try {
+
+           GdtInfoModel model = getGdtIds(mContext);
+           AID = model.getAPPID();
+           SPID = model.getSplashPosID();
+
+        }catch (Exception e){
+
+           listener.onMiiNoAD(3007);
+           e.printStackTrace();
+
+        }
 
         //记录开始请求广点通时间戳
         SP.setParam(SP.CONFIG, mContext, SP.GDT_ST, System.currentTimeMillis());

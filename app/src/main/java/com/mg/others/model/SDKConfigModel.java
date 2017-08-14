@@ -15,14 +15,90 @@ public class SDKConfigModel implements Serializable {
     private int cz;
     private String sk;
 
+    private int k;
     private int ksf_mg;
     private int ksf_gdt;
+    private int ksf_tt;
+
+    private int x;
     private int xsf_mg;
     private int xsf_gdt;
+    private int xsf_tt;
+
+    private int b;
     private int bsf_mg;
     private int bsf_gdt;
+    private int bsf_tt;
+
+    private int c;
     private int csf_mg;
     private int csf_gdt;
+    private int csf_tt;
+
+
+    public int getK() {
+        return k;
+    }
+
+    public void setK(int k) {
+        this.k = k;
+    }
+
+    public int getKsf_tt() {
+        return ksf_tt;
+    }
+
+    public void setKsf_tt(int ksf_tt) {
+        this.ksf_tt = ksf_tt;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getXsf_tt() {
+        return xsf_tt;
+    }
+
+    public void setXsf_tt(int xsf_tt) {
+        this.xsf_tt = xsf_tt;
+    }
+
+    public int getB() {
+        return b;
+    }
+
+    public void setB(int b) {
+        this.b = b;
+    }
+
+    public int getBsf_tt() {
+        return bsf_tt;
+    }
+
+    public void setBsf_tt(int bsf_tt) {
+        this.bsf_tt = bsf_tt;
+    }
+
+    public int getC() {
+        return c;
+    }
+
+    public void setC(int c) {
+        this.c = c;
+    }
+
+    public int getCsf_tt() {
+        return csf_tt;
+    }
+
+    public void setCsf_tt(int csf_tt) {
+        this.csf_tt = csf_tt;
+    }
 
     public int getCz() {
         return cz;

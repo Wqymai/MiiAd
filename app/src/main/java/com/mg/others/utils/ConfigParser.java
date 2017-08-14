@@ -97,18 +97,29 @@ public class ConfigParser {
                 object_bsf = object_c.optJSONObject(BSF);
                 object_csf = object_c.optJSONObject(CSF);
 
+                int k = object_c.optInt("k");
+                int x = object_c.optInt("x");
+                int b = object_c.optInt("b");
+                int c = object_c.optInt("c");
+
+
+
                 //开屏SDK来源配置
                 int ksf_mg=object_ksf.optInt("1");
                 int ksf_gdt=object_ksf.optInt("2");
+                int ksf_tt = object_ksf.optInt("3");
                 //信息流SDK来源配置
                 int xsf_mg=object_xsf.optInt("1");
                 int xsf_gdt=object_xsf.optInt("2");
+                int xsf_tt = object_ksf.optInt("3");
                 //bannerSDK来源配置
                 int bsf_mg=object_bsf.optInt("1");
                 int bsf_gdt=object_bsf.optInt("2");
+                int bsf_tt = object_ksf.optInt("3");
                 //插屏SDK来源配置
                 int csf_mg=object_csf.optInt("1");
                 int csf_gdt=object_csf.optInt("2");
+                int csf_tt = object_ksf.optInt("3");
 
                 sdk.setAdShow(o);
                 sdk.setNext(n);
@@ -117,15 +128,27 @@ public class ConfigParser {
                 sdk.setCe(ce);
                 sdk.setCz(cz);
                 sdk.setSk(sk);
+
+                sdk.setK(k);
                 sdk.setKsf_mg(ksf_mg);
                 sdk.setKsf_gdt(ksf_gdt);
+                sdk.setKsf_tt(ksf_tt);
+
+
+                sdk.setX(x);
                 sdk.setXsf_mg(xsf_mg);
                 sdk.setXsf_gdt(xsf_gdt);
+                sdk.setXsf_tt(xsf_tt);
+
+                sdk.setB(b);
                 sdk.setBsf_mg(bsf_mg);
                 sdk.setBsf_gdt(bsf_gdt);
+                sdk.setBsf_tt(bsf_tt);
+
+                sdk.setC(c);
                 sdk.setCsf_mg(csf_mg);
                 sdk.setCsf_gdt(csf_gdt);
-            } else {
+                sdk.setCsf_tt(csf_tt);
 
             }
         } catch (JSONException e) {
