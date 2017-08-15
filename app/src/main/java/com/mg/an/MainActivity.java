@@ -246,6 +246,13 @@ public class MainActivity extends Activity {
 
                             final String imgurl = dataRef.getImg();
                             LogUtils.i(MConstant.TAG,"图片地址："+imgurl);
+                            LogUtils.i(MConstant.TAG,"图片name："+dataRef.getName());
+                            LogUtils.i(MConstant.TAG,"图片title："+dataRef.getTitle());
+                            LogUtils.i(MConstant.TAG,"图片desc："+dataRef.getDesc());
+                            LogUtils.i(MConstant.TAG,"图片type："+dataRef.getType());
+                            LogUtils.i(MConstant.TAG,"图片icon："+dataRef.getIcon());
+                            LogUtils.i(MConstant.TAG,"图片page："+dataRef.getPage());
+                            LogUtils.i(MConstant.TAG,"图片source："+dataRef.getSourceMark());
 
                             new Thread(new Runnable() {
                                 @Override

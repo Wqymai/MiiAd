@@ -140,8 +140,8 @@ public class MiiNativeAD extends MiiBaseAD {
 
     }
 
-    String AID ="5000549";
-    String NPID ="900549595";
+    String AID ="5000547";
+    String NPID ="900547144";
     private void openTTAD(final boolean shouldReturn) {
 //        String AID = "";
 //        String NPID = "";

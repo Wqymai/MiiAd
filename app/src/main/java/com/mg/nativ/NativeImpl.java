@@ -44,7 +44,10 @@ public class NativeImpl implements MiiNativeADDataRef {
         if (model.isTt()){
             isTt = true;
             ttFeedAd = model.getTtFeedAd();
+        }else {
+            isTt = false;
         }
+
     }
 
     @Override
@@ -87,9 +90,6 @@ public class NativeImpl implements MiiNativeADDataRef {
     public String getSourceMark() {
         return isTt ? ttFeedAd.getSource() : adModel.getSourceMark();
     }
-
-
-
 
     @Override
     public void setNormalClick(final Activity activity, final ImageView view, final MiiCpClickListener cpClickListener, final MiiCpTouchListener cpTouchListener) {
@@ -213,6 +213,9 @@ public class NativeImpl implements MiiNativeADDataRef {
     @Override
     public void setWVClick(final Activity activity, final WebView webView, final MiiCpClickListener cpClickListener) {
        try{
+            if(isTt){
+                return;
+            }
             if (adModel.getType() == 4){
                 WebSettings settings = webView.getSettings();
                 settings.setDefaultTextEncodingName("utf-8") ;
