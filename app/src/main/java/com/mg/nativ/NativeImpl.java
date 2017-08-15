@@ -7,11 +7,15 @@ import android.net.Uri;
 import android.net.http.SslError;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
 
+import com.bytedance.sdk.openadsdk.TTAppDownloadListener;
+import com.bytedance.sdk.openadsdk.TTFeedAd;
 import com.mg.comm.ADClickHelper;
 import com.mg.interf.MiiCpClickListener;
 import com.mg.interf.MiiCpTouchListener;
@@ -21,6 +25,9 @@ import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
 import com.mg.others.utils.SP;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by wuqiyan on 17/6/21.
  */
@@ -29,59 +36,121 @@ public class NativeImpl implements MiiNativeADDataRef {
 
 
     private AdModel adModel;
+    private TTFeedAd ttFeedAd;
+    boolean isTt = false;
 
     public void setAdModel(AdModel model){
         this.adModel = model;
+        if (model.isTt()){
+            isTt = true;
+            ttFeedAd = model.getTtFeedAd();
+        }
     }
-
 
     @Override
     public String getImg() {
-        return adModel.getImage();
+        return isTt ? ttFeedAd.getImageList().get(0).getImageUrl():adModel.getImage();
     }
 
 
     @Override
     public int getType() {
-        return adModel.getType() == 4? 1 : 0;
+        return isTt ? 0:(adModel.getType() == 4? 1 : 0);
     }
 
     @Override
     public String getName() {
-        return adModel.getName();
+        return isTt ? ttFeedAd.getTitle() : adModel.getName();
     }
 
     @Override
     public String getTitle() {
-        return adModel.getTitle();
+        return isTt ? ttFeedAd.getTitle() : adModel.getTitle();
     }
 
     @Override
     public String getDesc() {
-        return adModel.getDesc();
+        return isTt ? ttFeedAd.getDescription() : adModel.getDesc();
     }
 
     @Override
     public String getPage() {
-        return adModel.getPage();
+        return isTt ? "" : adModel.getPage();
     }
 
     @Override
     public String getIcon() {
-        return  adModel.getIcon();
+        return  isTt ? String.valueOf(ttFeedAd.getIcon()) : adModel.getIcon();
     }
 
     @Override
     public String getSourceMark() {
-        return adModel.getSourceMark();
+        return isTt ? ttFeedAd.getSource() : adModel.getSourceMark();
     }
 
 
 
 
     @Override
-    public void setNormalClick(final Activity activity, final View view, final MiiCpClickListener cpClickListener, final MiiCpTouchListener cpTouchListener) {
+    public void setNormalClick(final Activity activity, final ImageView view, final MiiCpClickListener cpClickListener, final MiiCpTouchListener cpTouchListener) {
       try {
+
+        if (adModel.isTt()){//头条广告
+            List<View> views = new ArrayList<>();
+            views.add(view);
+            ttFeedAd.registerViewForInteraction((ViewGroup) view.getParent(), views, views, new TTFeedAd.AdInteractionListener() {
+
+                @Override
+                public void onAdClicked(View view, TTFeedAd ttFeedAd) {
+
+                }
+
+                @Override
+                public void onAdCreativeClick(View view, TTFeedAd ttFeedAd) {
+
+                    cpClickListener.click();
+                }
+
+                @Override
+                public void onAdShow(TTFeedAd ttFeedAd) {
+
+                }
+            });
+            TTAppDownloadListener downloadListener = new TTAppDownloadListener() {
+                @Override
+                public void onIdle() {
+                }
+
+                @Override
+                public void onDownloadActive(long totalBytes, long currBytes, String fileName) {
+
+                }
+
+                @Override
+                public void onDownloadPaused(long totalBytes, long currBytes, String fileName) {
+
+                }
+
+                @Override
+                public void onDownloadFailed(long totalBytes, long currBytes, String fileName) {
+
+                }
+
+                @Override
+                public void onInstalled(String fileName) {
+
+                }
+
+                @Override
+                public void onDownloadFinished(long totalBytes, String fileName) {
+
+                }
+
+            };
+            ttFeedAd.setDownloadListener(downloadListener); // 注册下载监听器
+            return;
+        }
+
         if (adModel.getType() != 4){
             //点击调用
             view.setOnClickListener(new View.OnClickListener() {
@@ -131,6 +200,9 @@ public class NativeImpl implements MiiNativeADDataRef {
 
     @Override
     public void onExposured(Context context) {
+        if (isTt){
+            return;
+        }
         //记录展示次数
         int show_num = (int) SP.getParam(SP.CONFIG, context, SP.FOT, 0);
         SP.setParam(SP.CONFIG, context, SP.FOT, show_num + 1);

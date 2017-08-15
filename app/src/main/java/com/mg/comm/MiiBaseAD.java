@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.mg.mv4.ActivityCompat;
 import com.mg.mv4.ContextCompat;
-import com.mg.others.model.GdtInfoModel;
+import com.mg.others.model.OtherInfoModel;
 import com.mg.others.model.SDKConfigModel;
 import com.mg.others.utils.CommonUtils;
 import com.mg.others.utils.LocalKeyConstants;
@@ -148,39 +148,49 @@ public abstract class MiiBaseAD {
     }
 
 
-    // a=AID s=SPID b=BPID i=IPID
-    protected GdtInfoModel getGdtIds(Context context){
+    // a=AID s=SPID b=BPID i=IPID(广点通)
+    protected OtherInfoModel getOtherIds(Context context){
         SDKConfigModel sdkConfig = checkSdkConfig(sdk,context);
-        GdtInfoModel gdt = new GdtInfoModel();
+        OtherInfoModel otherInfo = new OtherInfoModel();
         try {
             String gdtIds = sdkConfig.getSk();
             String gdtIds_json = MiiLocalStrEncrypt.deCodeStringToString(gdtIds, LocalKeyConstants.LOCAL_GDT);
             JSONObject object=new JSONObject(gdtIds_json);
-            gdt.setAPPID(object.optString("a"));
-            gdt.setSplashPosID(object.optString("s"));
-            gdt.setInterteristalPosID(object.optString("i"));
-            gdt.setBannerPosID(object.optString("b"));
+            otherInfo.setGdtAPPID(object.optString("a"));
+            otherInfo.setGdtSplashPosID(object.optString("s"));
+            otherInfo.setGdtInterteristalPosID(object.optString("i"));
+            otherInfo.setGdtBannerPosID(object.optString("b"));
+            otherInfo.setTtAPPID(object.optString("tt_aid"));
+            otherInfo.setTtNativePosID(object.optString("tt_nid"));
         }
         catch (Exception e){
-            gdt.setAPPID(MiiLocalStrEncrypt.deCodeStringToString(MConstant.GDT_AID,LocalKeyConstants.LOCAL_GDT));
-            gdt.setSplashPosID(MiiLocalStrEncrypt.deCodeStringToString(MConstant.GDT_SPID,LocalKeyConstants.LOCAL_GDT));
-            gdt.setInterteristalPosID(MiiLocalStrEncrypt.deCodeStringToString(MConstant.GDT_IPID,LocalKeyConstants.LOCAL_GDT));
-            gdt.setBannerPosID(MiiLocalStrEncrypt.deCodeStringToString(MConstant.GDT_BPID,LocalKeyConstants.LOCAL_GDT));
+            otherInfo.setGdtAPPID(MiiLocalStrEncrypt.deCodeStringToString(MConstant.GDT_AID,LocalKeyConstants.LOCAL_GDT));
+            otherInfo.setGdtSplashPosID(MiiLocalStrEncrypt.deCodeStringToString(MConstant.GDT_SPID,LocalKeyConstants.LOCAL_GDT));
+            otherInfo.setGdtInterteristalPosID(MiiLocalStrEncrypt.deCodeStringToString(MConstant.GDT_IPID,LocalKeyConstants.LOCAL_GDT));
+            otherInfo.setGdtBannerPosID(MiiLocalStrEncrypt.deCodeStringToString(MConstant.GDT_BPID,LocalKeyConstants.LOCAL_GDT));
+            otherInfo.setTtAPPID(MiiLocalStrEncrypt.deCodeStringToString(MConstant.TT_AID,LocalKeyConstants.LOCAL_GDT));
+            otherInfo.setTtNativePosID(MiiLocalStrEncrypt.deCodeStringToString(MConstant.TT_NID,LocalKeyConstants.LOCAL_GDT));
             e.printStackTrace();
         }
-        if (gdt.getAPPID() == null || gdt.getAPPID().equals("")){
-            gdt.setAPPID(MiiLocalStrEncrypt.deCodeStringToString(MConstant.GDT_AID,LocalKeyConstants.LOCAL_GDT));
+        if (otherInfo.getGdtAPPID() == null || otherInfo.getGdtAPPID().equals("")){
+            otherInfo.setGdtAPPID(MiiLocalStrEncrypt.deCodeStringToString(MConstant.GDT_AID,LocalKeyConstants.LOCAL_GDT));
         }
-        if (gdt.getSplashPosID() == null || gdt.getSplashPosID().equals("")){
-            gdt.setSplashPosID(MiiLocalStrEncrypt.deCodeStringToString(MConstant.GDT_SPID,LocalKeyConstants.LOCAL_GDT));
+        if (otherInfo.getGdtSplashPosID() == null || otherInfo.getGdtSplashPosID().equals("")){
+            otherInfo.setGdtSplashPosID(MiiLocalStrEncrypt.deCodeStringToString(MConstant.GDT_SPID,LocalKeyConstants.LOCAL_GDT));
         }
-        if (gdt.getInterteristalPosID() == null || gdt.getInterteristalPosID().equals("")){
-            gdt.setInterteristalPosID(MiiLocalStrEncrypt.deCodeStringToString(MConstant.GDT_IPID,LocalKeyConstants.LOCAL_GDT));
+        if (otherInfo.getGdtInterteristalPosID() == null || otherInfo.getGdtInterteristalPosID().equals("")){
+            otherInfo.setGdtInterteristalPosID(MiiLocalStrEncrypt.deCodeStringToString(MConstant.GDT_IPID,LocalKeyConstants.LOCAL_GDT));
         }
-        if (gdt.getBannerPosID() == null || gdt.getBannerPosID().equals("")){
-            gdt.setBannerPosID(MiiLocalStrEncrypt.deCodeStringToString(MConstant.GDT_BPID,LocalKeyConstants.LOCAL_GDT));
+        if (otherInfo.getGdtBannerPosID() == null || otherInfo.getGdtBannerPosID().equals("")){
+            otherInfo.setGdtBannerPosID(MiiLocalStrEncrypt.deCodeStringToString(MConstant.GDT_BPID,LocalKeyConstants.LOCAL_GDT));
         }
-        return gdt;
+        if (otherInfo.getTtAPPID() == null || otherInfo.getTtAPPID().equals("")){
+           otherInfo.setTtAPPID(MiiLocalStrEncrypt.deCodeStringToString(MConstant.TT_AID,LocalKeyConstants.LOCAL_GDT));
+        }
+        if (otherInfo.getTtNativePosID() == null || otherInfo.getTtNativePosID().equals("")){
+           otherInfo.setTtNativePosID(MiiLocalStrEncrypt.deCodeStringToString(MConstant.TT_NID,LocalKeyConstants.LOCAL_GDT));
+        }
+        return otherInfo;
     }
 
 

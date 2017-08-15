@@ -205,7 +205,7 @@ public class MiiBannerAD extends MiiBaseAD {
 //        String BPID = "";
 //        try {
 //
-//            GdtInfoModel model = getGdtIds(mContext);
+//            OtherInfoModel model = getGdtIds(mContext);
 //            AID = model.getAPPID();
 //            BPID = model.getBannerPosID();
 //

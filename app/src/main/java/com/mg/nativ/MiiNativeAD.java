@@ -6,12 +6,18 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 
+import com.bytedance.sdk.openadsdk.AdSlot;
+import com.bytedance.sdk.openadsdk.TTAdManager;
+import com.bytedance.sdk.openadsdk.TTAdNative;
+import com.bytedance.sdk.openadsdk.TTFeedAd;
 import com.mg.asyn.HbReturn;
 import com.mg.asyn.RaReturn;
 import com.mg.asyn.ReqAsyncModel;
 import com.mg.comm.MiiBaseAD;
 import com.mg.interf.MiiNativeListener;
 import com.mg.others.model.AdModel;
+
+import java.util.List;
 
 /**
  * Created by wuqiyan on 17/6/21.
@@ -24,7 +30,9 @@ public class MiiNativeAD extends MiiBaseAD {
     private Activity mActivity;
     private MiiNativeListener mListener;
     private AdModel adModel;
-    private ReqAsyncModel reqAsyncModel = new ReqAsyncModel();
+    private TTAdNative mTTAdNative;
+    private ReqAsyncModel reqAsyncModel;
+    TTAdManager ttAdManager;
 
 
     Handler mainHandler = new Handler(){
@@ -45,7 +53,9 @@ public class MiiNativeAD extends MiiBaseAD {
                         e.printStackTrace();
                     }
                     break;
-
+                case 400:
+                    openTTAD(true);
+                    break;
                 case 500:
                     mListener.onMiiNoAD(1000);
                     break;
@@ -63,6 +73,7 @@ public class MiiNativeAD extends MiiBaseAD {
           this.mListener = listener;
           this.mActivity = activity;
 
+          reqAsyncModel = new ReqAsyncModel();
           reqAsyncModel.context = this.mContext;
           reqAsyncModel.handler = this.mainHandler;
           reqAsyncModel.listener = this.mListener;
@@ -86,16 +97,41 @@ public class MiiNativeAD extends MiiBaseAD {
 
          try {
 
-            SourceAssignModel saModel = checkADSource(mContext,4);
-            if (saModel == null){
-                new HbReturn(reqAsyncModel).fetchMGAD();
-                return;
-            }
-            if (saModel.type == 1){
-                mListener.onMiiNoAD(3005);
-                return;
-            }
-            new RaReturn(reqAsyncModel).fetchMGAD();
+//            SourceAssignModel saModel = checkADSource(mContext,4);
+//            if (saModel == null){
+//                new HbReturn(reqAsyncModel).fetchMGAD();
+//                return;
+//            }
+//            if (saModel.type == 1){
+//                mListener.onMiiNoAD(3005);
+//                return;
+//            }
+//            new RaReturn(reqAsyncModel).fetchMGAD();
+
+             sdk = checkSdkConfig(sdk,mContext);
+             int x = sdk.getX();
+             int xsf_mg = sdk.getXsf_mg();
+             int xsf_tt = sdk.getXsf_tt();
+//             if (x == 1){//按比例
+//                 if (xsf_mg > xsf_tt){
+//
+//                     new RaReturn(reqAsyncModel).fetchMGAD();
+//
+//                 }else {
+                     openTTAD(true);
+//                 }
+//
+//             }else {//按权重
+//                 if (xsf_mg > xsf_tt){
+//
+//                     new RaNoReturn(reqAsyncModel).fetchMGAD();
+//                 }
+//                 else {
+//                     openTTAD(false);
+//                 }
+//
+//             }
+             
 
          }catch (Exception e){
              mListener.onMiiNoAD(3012);
@@ -103,11 +139,71 @@ public class MiiNativeAD extends MiiBaseAD {
          }
 
     }
+
+    String AID ="5000549";
+    String NPID ="900549595";
+    private void openTTAD(final boolean shouldReturn) {
+//        String AID = "";
+//        String NPID = "";
+//        try {
+//            OtherInfoModel model = getOtherIds(mContext);
+//            AID = model.getTtAPPID();
+//            NPID = model.getTtNativePosID();
+//
+//        }catch (Exception e){
+//
+//            mListener.onMiiNoAD(3007);
+//            e.printStackTrace();
+//
+//        }
+
+        TTAdManager ttAdManager = TTAdManagerHolder.getInstance(mActivity,AID);
+        mTTAdNative = ttAdManager.createAdNative(mActivity);
+        AdSlot adSlot = new AdSlot.Builder()
+                .setCodeId(NPID)
+                .setSupportDeepLink(true)
+                .setImageAcceptedSize(640, 320)
+                .setAdCount(1)
+                .build();
+
+        mTTAdNative.loadFeedAd(adSlot, new TTAdNative.FeedAdListener() {
+            @Override
+            public void onError(int i, String s) {
+                if (shouldReturn){
+                    mListener.onMiiNoAD(i);
+                }else {
+                    new RaReturn(reqAsyncModel).fetchMGAD();
+                }
+
+            }
+
+            @Override
+            public void onFeedAdLoad(List<TTFeedAd> list) {
+                if (list == null ){
+                   if (shouldReturn){
+                      mListener.onMiiNoAD(3006);
+                   }
+                   else {
+                      new RaReturn(reqAsyncModel).fetchMGAD();
+                   }
+                }else {
+                    ref = new NativeImpl();
+                    adModel = new AdModel();
+                    adModel.setTt(true);
+                    adModel.setTtFeedAd(list.get(0));
+                    ref.setAdModel(adModel);
+                    mListener.onADLoaded(ref);
+                }
+            }
+        });
+    }
+
     private  void setAdModel(){
         if (adModel == null){
             mListener.onMiiNoAD(3006);
         }
         ref = new NativeImpl();
+        adModel.setTt(false);
         ref.setAdModel(adModel);
         //回调
         mListener.onADLoaded(ref);

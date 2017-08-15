@@ -7,12 +7,18 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 
 import com.android.others.R;
+import com.mg.comm.MConstant;
+import com.mg.interf.MiiCpClickListener;
+import com.mg.interf.MiiCpTouchListener;
 import com.mg.interf.MiiNativeADDataRef;
+import com.mg.interf.MiiNativeListener;
+import com.mg.nativ.MiiNativeAD;
 import com.mg.others.utils.LogUtils;
 
 import java.io.IOException;
@@ -36,6 +42,7 @@ public class MainActivity extends Activity {
     ImageView showIv;
     Button openNative;
     private MiiNativeADDataRef adDataRef;
+    ImageView show_native;
 
 
     private WindowManager mWindowManager;
@@ -73,9 +80,19 @@ public class MainActivity extends Activity {
 //                "\"s\":\"3020822156957219\",\"b\":\"\"," +
 //                "\"i\":\"\"}", LocalKeyConstants.LOCAL_GDT));
 
-        //正式的黑白名单
+        //正式的黑白名单(只有广点通)
         //QUUwMjQ4OEI4ODY3OUM0MUExODYxNkNBOEREQjcwNEU3RkMxODcwMUZBQjVBQjMxOEM2OEU2NjA1QkY2NTYwODhGN0M3MUEwMDY5MUQwRTI4RTYxNTg0N0VCRkE1Nzk1QUVDRTAzNDdGNDVCODA0RDdGNUM3MDZBNjhGMTU2QTk=
-//        Log.i("wqy", MiiLocalStrEncrypt.deCodeStringToString("QUUwMjQ4OEI4ODY3OUM0MUExODYxNkNBOEREQjcwNEU3RkMxODcwMUZBQjVBQjMxOEM2OEU2NjA1QkY2NTYwODhGN0M3MUEwMDY5MUQwRTI4RTYxNTg0N0VCRkE1Nzk1QUVDRTAzNDdGNDVCODA0RDdGNUM3MDZBNjhGMTU2QTk=", LocalKeyConstants.LOCAL_GDT));
+        //Log.i("wqy", MiiLocalStrEncrypt.deCodeStringToString("QUUwMjQ4OEI4ODY3OUM0MUExODYxNkNBOEREQjcwNEU3RkMxODcwMUZBQjVBQjMxOEM2OEU2NjA1QkY2NTYwODhGN0M3MUEwMDY5MUQwRTI4RTYxNTg0N0VCRkE1Nzk1QUVDRTAzNDdGNDVCODA0RDdGNUM3MDZBNjhGMTU2QTk=", LocalKeyConstants.LOCAL_GDT));
+
+
+        //广点通和头条
+        //QUUwMjQ4OEI4ODY3OUM0MUExODYxNkNBOEREQjcwNEU3RkMxODcwMUZBQjVBQjMxOEM2OEU2NjA1QkY2NTYwODhGN0M3MUEwMDY5MUQwRTI4RTYxNTg0N0VCRkE1Nzk1RUE3NUM4NjVCN0ZFQTUwMTdERTFFRkI0RDNEQTUzQTVFQ0UxOUE0QUQ1QkU3QjExRUFFNEY3MjYzNTEwREUzNDNDQUY4MTM3QkMzN0I2OTk2NzQ3MDQyODAzQjU1RDYy
+        //Log.i("wqy",MiiLocalStrEncrypt.deCodeStringToString("QUUwMjQ4OEI4ODY3OUM0MUExODYxNkNBOEREQjcwNEU3RkMxODcwMUZBQjVBQjMxOEM2OEU2NjA1QkY2NTYwODhGN0M3MUEwMDY5MUQwRTI4RTYxNTg0N0VCRkE1Nzk1RUE3NUM4NjVCN0ZFQTUwMTdERTFFRkI0RDNEQTUzQTVFQ0UxOUE0QUQ1QkU3QjExRUFFNEY3MjYzNTEwREUzNDNDQUY4MTM3QkMzN0I2OTk2NzQ3MDQyODAzQjU1RDYy",LocalKeyConstants.LOCAL_GDT));
+
+        //Log.i("wqy", "TT_AID="+MiiLocalStrEncrypt.enCodeStringToString("5000834", LocalKeyConstants.LOCAL_GDT));
+        //Log.i("wqy", "TT_NID="+MiiLocalStrEncrypt.enCodeStringToString("900834967", LocalKeyConstants.LOCAL_GDT));
+
+
 
 //        Log.i("TAG","a="+MiiLocalStrEncrypt.enCodeStringToString("1101152570", LocalKeyConstants.LOCAL_GDT));
 //        Log.i("TAG", "s="+MiiLocalStrEncrypt.enCodeStringToString("8863364436303842593",LocalKeyConstants.LOCAL_GDT));
@@ -213,45 +230,92 @@ public class MainActivity extends Activity {
 ////            }
 ////        });
 //
-//        openNative = (Button) findViewById(R.id.open_native);
-//        openNative.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                //原生
-//                new MiiNativeAD(MainActivity.this,MConstant.APPID,MConstant.NID, new MiiNativeListener() {
-//                    @Override
-//                    public void onADLoaded(MiiNativeADDataRef dataRef) {
-//                        if (dataRef != null){
-//                            LogUtils.i(MConstant.TAG,"原生广告加载成功");
+        show_native = (ImageView) findViewById(R.id.show_native);
+        openNative = (Button) findViewById(R.id.open_native);
+        openNative.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //原生
+                new MiiNativeAD(MainActivity.this, MConstant.APPID,MConstant.NID, new MiiNativeListener() {
+                    @Override
+                    public void onADLoaded(final MiiNativeADDataRef dataRef) {
+                        if (dataRef != null){
+                            LogUtils.i(MConstant.TAG,"原生广告加载成功");
 //                            openDialogAct2.setEnabled(true);
 //                            adDataRef = dataRef;
-//                        }
-//                    }
-//
-//
-//                    @Override
-//                    public void onMiiNoAD(int errCode) {
-//                        LogUtils.i(MConstant.TAG,"原生广告加载失败 "+errCode);
-//                    }
-//                });
-//            }
-//        });
-//
-//
-//
-//        openDialogAct2 = (Button) findViewById(R.id.open_dialogAct2);
-//        openDialogAct2.setEnabled(false);
-//        openDialogAct2.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                Intent intent=new Intent(MainActivity.this,MNativeActivity.class);
-//                Bundle bundle=new Bundle();
-//                bundle.putSerializable("AdData", adDataRef);
-//                intent.putExtras(bundle);
-//                startActivity(intent);
-//            }
-//        });
+
+                            final String imgurl = dataRef.getImg();
+                            LogUtils.i(MConstant.TAG,"图片地址："+imgurl);
+
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        HttpURLConnection conn = null;
+                                        URL mURL = new URL(imgurl);
+                                        conn = (HttpURLConnection) mURL.openConnection();
+                                        conn.setRequestMethod("GET");
+                                        conn.setConnectTimeout(5000);
+                                        conn.setReadTimeout(5000);
+                                        conn.connect();
+                                        if(conn.getResponseCode() == 200){
+                                            LogUtils.i(MConstant.TAG, "原生广告图片下载成功");
+                                            InputStream inputStream = conn.getInputStream();
+                                            final Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    dataRef.onExposured(MainActivity.this);
+                                                    show_native.setImageBitmap(bitmap);
+                                                }
+                                            });
+                                        }
+                                    }
+                                    catch (Exception e){
+                                        LogUtils.i(MConstant.TAG, "原生广告图片下载失败");
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }).start();
+                            dataRef.setNormalClick(MainActivity.this, show_native, new MiiCpClickListener() {
+
+                                @Override
+                                public void click() {
+                                    LogUtils.i(MConstant.TAG,"cp的点击");
+                                }
+                            }, new MiiCpTouchListener() {
+                                @Override
+                                public void touch() {
+
+                                }
+                            });
+                        }
+                    }
+
+
+                    @Override
+                    public void onMiiNoAD(int errCode) {
+                        LogUtils.i(MConstant.TAG,"原生广告加载失败 "+errCode);
+                    }
+                });
+            }
+        });
+
+
+
+        openDialogAct2 = (Button) findViewById(R.id.open_dialogAct2);
+        openDialogAct2.setEnabled(false);
+        openDialogAct2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent=new Intent(MainActivity.this,MNativeActivity.class);
+                Bundle bundle=new Bundle();
+                bundle.putSerializable("AdData", adDataRef);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
 //
 //
 //
@@ -314,14 +378,14 @@ public class MainActivity extends Activity {
 //
 //        relativeLayout.addView(iv);
 //        mWindowManager.addView(relativeLayout,params);
-        String url="http://adtestf.maimob.net:8082/index.php/v/ep?m=dXJsS2V5PTIwODM5OSZwbGF5ZXJJZD0yNSZjYW1wYWlnblBvc1R5cGVJZD00NyZ0eXBlPTEmYXBwQWRQb3NUeXBlSWQ9MjU=";
-
-        int i = url.indexOf("?");
-        String pureUrl = url.substring(0,i+1);
-        String what = Uri.encode(url.substring(i + 1),"UTF-8");
-        LogUtils.i("youle",pureUrl);
-        LogUtils.i("youle",what);
-        LogUtils.i("youle",pureUrl+what);
+//        String url="http://adtestf.maimob.net:8082/index.php/v/ep?m=dXJsS2V5PTIwODM5OSZwbGF5ZXJJZD0yNSZjYW1wYWlnblBvc1R5cGVJZD00NyZ0eXBlPTEmYXBwQWRQb3NUeXBlSWQ9MjU=";
+//
+//        int i = url.indexOf("?");
+//        String pureUrl = url.substring(0,i+1);
+//        String what = Uri.encode(url.substring(i + 1),"UTF-8");
+//        LogUtils.i("youle",pureUrl);
+//        LogUtils.i("youle",what);
+//        LogUtils.i("youle",pureUrl+what);
 
     }
 

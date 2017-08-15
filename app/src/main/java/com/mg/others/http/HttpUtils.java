@@ -398,7 +398,7 @@ public class HttpUtils {
 
 		public HttpGet(String address, HttpListener l, HttpParameter parameter, Context mContext) {
 
-			this.mURL = urlEncording(address);
+			this.mURL = address;
 			this.mListener = l;
 			this.parameter = parameter;
 			this.mContext = mContext;

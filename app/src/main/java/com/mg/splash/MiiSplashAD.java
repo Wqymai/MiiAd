@@ -34,7 +34,7 @@ import com.mg.interf.MiiADListener;
 import com.mg.others.manager.HttpManager;
 import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
-import com.mg.others.model.GdtInfoModel;
+import com.mg.others.model.OtherInfoModel;
 import com.mg.others.utils.SP;
 import com.qq.e.ads.splash.SplashAD;
 import com.qq.e.ads.splash.SplashADListener;
@@ -497,9 +497,9 @@ public class MiiSplashAD extends MiiBaseAD{
         String SPID = "";
         try {
 
-           GdtInfoModel model = getGdtIds(mContext);
-           AID = model.getAPPID();
-           SPID = model.getSplashPosID();
+           OtherInfoModel model = getOtherIds(mContext);
+           AID = model.getGdtAPPID();
+           SPID = model.getGdtSplashPosID();
 
         }catch (Exception e){
 

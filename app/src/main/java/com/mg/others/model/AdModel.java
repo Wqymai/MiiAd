@@ -1,5 +1,7 @@
 package com.mg.others.model;
 
+import com.bytedance.sdk.openadsdk.TTFeedAd;
+
 import java.io.Serializable;
 
 
@@ -36,7 +38,24 @@ public class AdModel implements Serializable,Cloneable {
     private String deeplink;
     private String sourceMark;
     private int imgh;
+    private boolean isTt;
+    private TTFeedAd ttFeedAd;
 
+    public TTFeedAd getTtFeedAd() {
+        return ttFeedAd;
+    }
+
+    public void setTtFeedAd(TTFeedAd ttFeedAd) {
+        this.ttFeedAd = ttFeedAd;
+    }
+
+    public boolean isTt() {
+        return isTt;
+    }
+
+    public void setTt(boolean tt) {
+        isTt = tt;
+    }
 
     public int getImgh() {
         return imgh;

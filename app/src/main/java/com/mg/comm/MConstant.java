@@ -35,11 +35,13 @@ public final   class MConstant {
     public static String GDT_SPID;
     public static String GDT_IPID;
     public static String GDT_BPID;
+    public static String TT_AID;
+    public static String TT_NID;
 
     public static String HOST;
     public static String HOST_SDKEP;
     static {
-        if(true){
+        if(false){
             //测试服务器地址
             //http://vs.maimob.net";
             HOST_SDKEP = "MzUwQkY1QzUwMkQ0QTZEQUZCMTU3REQ0MUY1OTBFOUYxNEQxNjNBMjU4NTQzQTkwODdEREUxM0VFQUJGQTlGNw==";
@@ -61,6 +63,8 @@ public final   class MConstant {
             GDT_SPID = "QkE0OTA1NEZGRkNGQ0Q4OUJGMkZCM0FGQTJGNEVGMkUyRjIwMkNDMTVFM0JENEI5QkFBQjdFQ0E5MTMzRjkyNA==";
             GDT_IPID = "";
             GDT_BPID = "";
+            TT_AID = "MUVDRjREQzY0MThEMDVFNDQ3MzE1Q0FENkFEQzhDNEE=";
+            TT_NID = "OUIxRjFFODM0MDdDNjRBNUUwMkE0RUY2OEVENDg2Mzc=";
         }
     }
     public static String HB_HOST="";

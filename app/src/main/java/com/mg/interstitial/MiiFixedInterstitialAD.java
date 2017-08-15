@@ -158,7 +158,7 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
 //        String AID = "";
 //        String IPID = "";
 //        try {
-//            GdtInfoModel model = getGdtIds(mContext);
+//            OtherInfoModel model = getGdtIds(mContext);
 //            AID = model.getAPPID();
 //            IPID = model.getInterteristalPosID();
 //        }catch (Exception e){

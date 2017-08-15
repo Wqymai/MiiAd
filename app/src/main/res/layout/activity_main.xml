@@ -62,6 +62,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
+    <ImageView
+        android:layout_below="@id/open_dialogAct2"
+        android:id="@+id/show_native"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
 
     <!--<com.mg.Interstitial.MiiImageView-->
         <!--android:src="@mipmap/splash_holder"-->
