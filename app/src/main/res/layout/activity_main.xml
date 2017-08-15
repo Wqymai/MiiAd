@@ -59,16 +59,16 @@
         android:id="@+id/open_dialogAct2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
-    <Button
-        android:text="打开推啊自定义广告"
-        android:layout_below="@id/open_dialogAct2"
-        android:id="@+id/open_tuia_customad"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+    <!--<Button-->
+        <!--android:text="打开推啊自定义广告"-->
+        <!--android:layout_below="@id/open_dialogAct2"-->
+        <!--android:id="@+id/open_tuia_customad"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"/>-->
 
     <Button
         android:text="打开浮标广告"
-        android:layout_below="@id/open_tuia_customad"
+        android:layout_below="@id/open_dialogAct2"
         android:id="@+id/open_buoy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>

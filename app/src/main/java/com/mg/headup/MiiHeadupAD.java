@@ -201,7 +201,7 @@ public class MiiHeadupAD extends MiiBaseAD {
         MiiCircleTextView close = new MiiCircleTextView(context);
         close.setGravity(Gravity.CENTER);
         close.setText("X");
-        close.setBackgroundColor(Color.argb(20, 41, 36, 33));
+        close.setBackgroundColor(Color.argb(40, 41, 36, 33));
         close.setTextColor(Color.WHITE);
         RelativeLayout.LayoutParams closeParam = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         closeParam.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);

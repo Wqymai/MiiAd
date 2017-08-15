@@ -543,9 +543,7 @@ public class MiiInterstitialAD extends MiiBaseAD{
         cancel=new MiiCircleTextView(activity);
         cancel.setGravity(Gravity.CENTER);
         cancel.setText("X");
-        cancel.setWidth(60);
-        cancel.setHeight(60);
-        cancel.setBackgroundColor(Color.argb(10, 41, 36, 33));
+        cancel.setBackgroundColor(Color.argb(40, 41, 36, 33));
         cancel.setTextColor(Color.WHITE);
         RelativeLayout.LayoutParams lp=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
