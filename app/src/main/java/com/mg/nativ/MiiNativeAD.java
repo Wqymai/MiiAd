@@ -115,10 +115,10 @@ public class MiiNativeAD extends MiiBaseAD {
 //             if (x == 1){//按比例
 //                 if (xsf_mg > xsf_tt){
 //
-//                     new RaReturn(reqAsyncModel).fetchMGAD();
+                     new RaReturn(reqAsyncModel).fetchMGAD();
 //
 //                 }else {
-                     openTTAD(true);
+//                     openTTAD(true);
 //                 }
 //
 //             }else {//按权重

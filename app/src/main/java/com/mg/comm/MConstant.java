@@ -17,18 +17,18 @@ public final   class MConstant {
     //http://117.135.144.63:8081/index.php/GD/VSGD";
     public static final String VGD = "NEFCMTMxQThBMUM3RUUxNjA1NDcxNEQ0RDBCMzY3OENBOTQwMjU5QTM2NDg4RjQ3QTc1NDY3REFEMDc3QTg4NkM1MTY4NUI3MTE0RTBENENGOUY4QUEwRTMyODgxOUM0";
 
-    public static String APPID = "82c91b5ae71c55110c370f8c6671fc79";
-    public static String KID = "ZaexwvBE";
-    public static String BID = "uyasA5Lo";
-    public static String IID = "tDF9HggD";
-    public static String NID = "E5PVS8MP";
+//    public static String APPID = "82c91b5ae71c55110c370f8c6671fc79";
+//    public static String KID = "ZaexwvBE";
+//    public static String BID = "uyasA5Lo";
+//    public static String IID = "tDF9HggD";
+//    public static String NID = "E5PVS8MP";
 
 
-//    public static String APPID = "c5d1ee8878833b5a13163fc15029a41d";
-//    public static String KID = "hg7o0CYa";
-//    public static String BID = "k1sgYLCN";
-//    public static String IID = "BwUZRokI";
-//    public static String NID = "s2mBXN1E";
+    public static String APPID = "4bd140d6c9befb0062c6d6dc26c69af1";
+    public static String KID = "hg7o0CYa";
+    public static String BID = "k1sgYLCN";
+    public static String IID = "BwUZRokI";
+    public static String NID = "CLCifKnq";
 
 
     public static String GDT_AID;
@@ -72,7 +72,7 @@ public final   class MConstant {
     public static String SUFFIX = "QjM5NzdCMEMzOTVBOTE3MDdENDdCN0FBQjAyRkU4ODM2RDQ3MUYyNzg5MDExNUU4MDkyQzA0QTVEOTg2NjkyNQ==";
     //"/v"
     public static String SUFFIX_HB = "NjYyMDc0MUIxODcyRTMwOTVCODREMkQxNDVFNzYzQTM=";
-    public static String SUFFIX_SRA = "NkU3RTQzMDU0NTdBNUIzRDAxNTNENjIyRkE2QTM4RkQ=";
+    public static String SUFFIX_TRA = "OTg2NDFEMTQ1NUVEOUM2NzFFODM5MkVCRkYxQzc4NjI=";
     public static final String GET_KEY = "m=";
 
     public static final String PRODUCT_BRAND = "ro.product.brand";

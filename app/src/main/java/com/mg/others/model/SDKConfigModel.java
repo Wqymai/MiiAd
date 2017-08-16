@@ -16,25 +16,61 @@ public class SDKConfigModel implements Serializable {
     private String sk;
 
     private int k;
+    private int kc;
     private int ksf_mg;
     private int ksf_gdt;
     private int ksf_tt;
 
     private int x;
+    private int xc;
     private int xsf_mg;
     private int xsf_gdt;
     private int xsf_tt;
 
     private int b;
+    private int bc;
     private int bsf_mg;
     private int bsf_gdt;
     private int bsf_tt;
 
     private int c;
+    private int cc;
     private int csf_mg;
     private int csf_gdt;
     private int csf_tt;
 
+
+    public int getKc() {
+        return kc;
+    }
+
+    public void setKc(int kc) {
+        this.kc = kc;
+    }
+
+    public int getXc() {
+        return xc;
+    }
+
+    public void setXc(int xc) {
+        this.xc = xc;
+    }
+
+    public int getBc() {
+        return bc;
+    }
+
+    public void setBc(int bc) {
+        this.bc = bc;
+    }
+
+    public int getCc() {
+        return cc;
+    }
+
+    public void setCc(int cc) {
+        this.cc = cc;
+    }
 
     public int getK() {
         return k;

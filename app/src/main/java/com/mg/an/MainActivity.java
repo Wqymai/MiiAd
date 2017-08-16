@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -19,7 +20,9 @@ import com.mg.interf.MiiCpTouchListener;
 import com.mg.interf.MiiNativeADDataRef;
 import com.mg.interf.MiiNativeListener;
 import com.mg.nativ.MiiNativeAD;
+import com.mg.others.utils.LocalKeyConstants;
 import com.mg.others.utils.LogUtils;
+import com.mg.others.utils.MiiLocalStrEncrypt;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -99,8 +102,8 @@ public class MainActivity extends Activity {
 //        Log.i("TAG", "i="+MiiLocalStrEncrypt.enCodeStringToString("8575134060152130849",LocalKeyConstants.LOCAL_GDT));
 //        Log.i("TAG", "i="+MiiLocalStrEncrypt.enCodeStringToString("9079537218417626401",LocalKeyConstants.LOCAL_GDT));
 
-//        Log.i("TAG","真服域名="+ MiiLocalStrEncrypt.enCodeStringToString("http://sspapi.ilast.cc",
-//                LocalKeyConstants.LOCAL_KEY_DOMAINS));
+        Log.i("TAG","真服域名="+ MiiLocalStrEncrypt.enCodeStringToString("/v/tra",
+                LocalKeyConstants.LOCAL_KEY_ACTIONS));
 //
 //        Log.i("TAG","测服域名="+ MiiLocalStrEncrypt.enCodeStringToString("http://adtestf.maimob.net:8082",
 //                LocalKeyConstants.LOCAL_KEY_DOMAINS));

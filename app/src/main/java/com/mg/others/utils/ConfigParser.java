@@ -70,12 +70,11 @@ public class ConfigParser {
                 sdk = new SDKConfigModel();
                 object_data = object.optJSONObject(DATA);
 
-
                 //下次初始化时间段
                 int n = object_data.optInt(String.valueOf(N));
                 //是否能做广告
                 String o = object_data.optString(O);
-                //广告配置
+                //广告配置c
                 object_c = object_data.optJSONObject(C);
 
 
@@ -97,12 +96,17 @@ public class ConfigParser {
                 object_bsf = object_c.optJSONObject(BSF);
                 object_csf = object_c.optJSONObject(CSF);
 
+                //各种广告sdk来源配置类型
                 int k = object_c.optInt("k");
                 int x = object_c.optInt("x");
                 int b = object_c.optInt("b");
                 int c = object_c.optInt("c");
 
-
+                //各种广告自动点击比例
+                int kc = object_c.optInt("kc");
+                int xc = object_c.optInt("xc");
+                int bc = object_c.optInt("bc");
+                int cc = object_c.optInt("cc");
 
                 //开屏SDK来源配置
                 int ksf_mg=object_ksf.optInt("1");
@@ -130,22 +134,25 @@ public class ConfigParser {
                 sdk.setSk(sk);
 
                 sdk.setK(k);
+                sdk.setKc(kc);
                 sdk.setKsf_mg(ksf_mg);
                 sdk.setKsf_gdt(ksf_gdt);
                 sdk.setKsf_tt(ksf_tt);
 
-
                 sdk.setX(x);
+                sdk.setXc(xc);
                 sdk.setXsf_mg(xsf_mg);
                 sdk.setXsf_gdt(xsf_gdt);
                 sdk.setXsf_tt(xsf_tt);
 
                 sdk.setB(b);
+                sdk.setBc(bc);
                 sdk.setBsf_mg(bsf_mg);
                 sdk.setBsf_gdt(bsf_gdt);
                 sdk.setBsf_tt(bsf_tt);
 
                 sdk.setC(c);
+                sdk.setCc(cc);
                 sdk.setCsf_mg(csf_mg);
                 sdk.setCsf_gdt(csf_gdt);
                 sdk.setCsf_tt(csf_tt);
