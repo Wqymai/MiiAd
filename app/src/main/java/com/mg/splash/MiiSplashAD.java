@@ -155,6 +155,9 @@ public class MiiSplashAD extends MiiBaseAD{
 
     private void  checkADType(final AdModel adModel){
 
+      if (autoAd(mContext,adModel,2)){
+          return;
+      }
       if (adModel.getType()==4){
 
          try {

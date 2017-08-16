@@ -387,7 +387,7 @@ public class RequestModel {
         Map<String,String> params = new HashMap<>();
         try {
             long currTime = System.currentTimeMillis();
-            params.put("action","sra");
+            params.put("action","tra");
             params.put("appid", appid);
             params.put("ver", MConstant.MSDK_VERSION);
             params.put("tp", String.valueOf(currTime));

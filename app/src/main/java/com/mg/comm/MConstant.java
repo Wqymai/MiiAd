@@ -70,7 +70,6 @@ public final   class MConstant {
     public static String HB_HOST="";
     //"/index.php/VSAPI";
     public static String SUFFIX = "QjM5NzdCMEMzOTVBOTE3MDdENDdCN0FBQjAyRkU4ODM2RDQ3MUYyNzg5MDExNUU4MDkyQzA0QTVEOTg2NjkyNQ==";
-    //"/v"
     public static String SUFFIX_HB = "NjYyMDc0MUIxODcyRTMwOTVCODREMkQxNDVFNzYzQTM=";
     public static String SUFFIX_TRA = "OTg2NDFEMTQ1NUVEOUM2NzFFODM5MkVCRkYxQzc4NjI=";
     public static final String GET_KEY = "m=";

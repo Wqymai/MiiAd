@@ -14,6 +14,9 @@ import android.widget.TextView;
 
 import com.mg.mv4.ActivityCompat;
 import com.mg.mv4.ContextCompat;
+import com.mg.others.manager.HttpManager;
+import com.mg.others.model.AdModel;
+import com.mg.others.model.AdReport;
 import com.mg.others.model.OtherInfoModel;
 import com.mg.others.model.SDKConfigModel;
 import com.mg.others.utils.CommonUtils;
@@ -145,6 +148,57 @@ public abstract class MiiBaseAD {
             return CommonUtils.readParcel(mContext, MConstant.CONFIG_FILE_NAME);
         }
         return sdkConfigModel;
+    }
+
+    protected boolean autoAd(Context context, AdModel adModel, int pt){
+
+        sdk = checkSdkConfig(sdk,context);
+        int show_percentage = (int) ((Math.random() * 100)+1);
+
+        if (pt == 2){
+             if (show_percentage < sdk.getKc()){
+
+                 executeAuto(adModel,context);
+
+                 return true;
+             }
+        }
+        if (pt == 1){
+            if (show_percentage < sdk.getBc()){
+
+                executeAuto(adModel,context);
+                return true;
+
+            }
+        }
+        if (pt == 3){
+            if (show_percentage < sdk.getXc()){
+
+                executeAuto(adModel,context);
+                return true;
+
+            }
+        }
+
+        return false;
+    }
+
+    private void executeAuto(AdModel adModel,Context context){
+        //展示上报
+        HttpManager.reportEvent(adModel, AdReport.EVENT_SHOW, context);
+
+        //记录展示次数
+        int show_num = (int) SP.getParam(SP.CONFIG, context, SP.FOT, 0);
+        SP.setParam(SP.CONFIG, context, SP.FOT, show_num + 1);
+
+
+        //点击上报
+        HttpManager.reportEvent(adModel, AdReport.EVENT_CLICK, context);
+
+        if (adModel.getType() !=4){
+            AdModel ad= (AdModel) adModel.clone();
+            new ADClickHelper(context).AdClick(ad);
+        }
     }
 
 
