@@ -154,8 +154,7 @@ public class MiiDobberAD extends MiiBaseAD {
             }
         }
         else {
-//            adModel.setImage("https://yun.tuia.cn/tuia-media/img/9r9fjq3v6g.gif");
-//            model.setImage("https://yun.tuia.cn/tuia-media/img/yrmg4yzjw2.png");
+
             try {
                 if (adModel.getImage() == null || adModel.getImage().equals("") || adModel.getImage().equals("null")){
 

@@ -103,7 +103,7 @@ public class HttpManager {
         else {
             sb.append(MConstant.HB_HOST);
         }
-        sb.append(MiiLocalStrEncrypt.deCodeStringToString(MConstant.SUFFIX_SRA,LocalKeyConstants.LOCAL_KEY_ACTIONS));
+        sb.append(MiiLocalStrEncrypt.deCodeStringToString(MConstant.SUFFIX_TRA,LocalKeyConstants.LOCAL_KEY_ACTIONS));
         return sb.toString();
     }
 

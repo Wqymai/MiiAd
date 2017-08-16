@@ -250,7 +250,7 @@ public class MiiHeadupAD extends MiiBaseAD {
                 adTxt_tv.setText("广告");
                 adTxt_tv.setTextSize(10);
                 adTxt_tv.setPadding(5,3,5,3);
-                adTxt_tv.setBackgroundColor(Color.argb(10, 41, 36, 33));
+                adTxt_tv.setBackgroundColor(Color.argb(30, 41, 36, 33));
                 adTxt_tv.setGravity(Gravity.CENTER);
                 adTxt_tv.setTextColor(Color.WHITE);
                 RelativeLayout.LayoutParams tvParams =new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);

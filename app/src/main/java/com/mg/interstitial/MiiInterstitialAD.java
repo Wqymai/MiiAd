@@ -30,7 +30,6 @@ import com.mg.asyn.HbReturn;
 import com.mg.asyn.ReqAsyncModel;
 import com.mg.comm.ADClickHelper;
 import com.mg.comm.ImageDownloadHelper;
-import com.mg.comm.MConstant;
 import com.mg.comm.MiiBaseAD;
 import com.mg.interf.MiiADListener;
 import com.mg.others.manager.HttpManager;
@@ -38,7 +37,6 @@ import com.mg.others.model.AdModel;
 import com.mg.others.model.AdReport;
 import com.mg.others.model.SDKConfigModel;
 import com.mg.others.utils.CommonUtils;
-import com.mg.others.utils.LogUtils;
 import com.mg.others.utils.SP;
 
 
@@ -267,7 +265,6 @@ public class MiiInterstitialAD extends MiiBaseAD{
 
 
             if (ishtml5) {
-                LogUtils.i(MConstant.TAG,"h5广告。。。");
                 buildWebView(html);
             } else {
                 buildImageView(bitmap);
@@ -336,7 +333,7 @@ public class MiiInterstitialAD extends MiiBaseAD{
 
         relativeLayout = new RelativeLayout(activity);
         relativeLayout.setLayoutParams(layoutParams);
-        relativeLayout.setBackgroundColor(Color.BLUE);
+        relativeLayout.setBackgroundColor(Color.TRANSPARENT);
 
 
         if (ishtml5){
@@ -494,9 +491,11 @@ public class MiiInterstitialAD extends MiiBaseAD{
         relativeLayout.addView(imageView);
         imageView.setImageBitmap(bitmap);
     }
+
     private void buildWebView(String html){
 
         try{
+
             webView = new WebView(activity);
             RelativeLayout.LayoutParams params_webview = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
             webView.setLayoutParams(params_webview);
@@ -526,6 +525,7 @@ public class MiiInterstitialAD extends MiiBaseAD{
             });
 
             webView.loadDataWithBaseURL("",html , "text/html", "utf-8", "");
+            relativeLayout.addView(webView);
 
         }catch (Exception e){
 

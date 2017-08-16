@@ -285,7 +285,7 @@ public abstract class MiiBaseAD {
         tv.setText("广告");
         tv.setTextSize(10);
         tv.setPadding(5,3,5,3);
-        tv.setBackgroundColor(Color.argb(10, 41, 36, 33));
+        tv.setBackgroundColor(Color.argb(30, 41, 36, 33));
         tv.setGravity(Gravity.CENTER);
         tv.setTextColor(Color.WHITE);
         FrameLayout.LayoutParams lp=new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);

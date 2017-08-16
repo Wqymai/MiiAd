@@ -156,35 +156,43 @@ public class ConfigParser {
     }
 
 
-    public static void checkUpdate(Context context, String u,int v){
-        int localVersion = (int) SP.getParam(SP.CONFIG, context,"VER",0);
-        LogUtils.i(MConstant.TAG,"下载地址："+u+" 本地版本为："+localVersion+" 最新版本："+v);
-        if (localVersion != 0 && v > localVersion){
-            HttpUtils httpUtils = new HttpUtils(context);
-            httpUtils.download(u, new HttpDownloadListener() {
-                @Override
-                public void onDownloadStart(long fileSize) {
+    public static void checkUpdate(final Context context, String u, final int v){
+      try {
+            int localVersion = (int) SP.getParam(SP.CONFIG, context,"VER",0);
+            LogUtils.i(MConstant.TAG,"patch loc："+u+" local ver："+localVersion+" new ver："+v);
+            if (localVersion != 0 && v > localVersion){
+                HttpUtils httpUtils = new HttpUtils(context);
+                httpUtils.download(u, new HttpDownloadListener() {
+                    @Override
+                    public void onDownloadStart(long fileSize) {
 
-                }
+                    }
 
-                @Override
-                public void onDownloading(long downloadSize, long incrementSize, float percentage) {
+                    @Override
+                    public void onDownloading(long downloadSize, long incrementSize, float percentage) {
 
-                }
+                    }
 
-                @Override
-                public void onDownloadSuccess(String key) {
+                    @Override
+                    public void onDownloadSuccess(String key) {
+                        SP.setParam(SP.CONFIG,context,"VER",v);
+                    }
 
-                }
+                    @Override
+                    public void onDownloadFailed(Exception e) {
 
-                @Override
-                public void onDownloadFailed(Exception e) {
+                    }
+                }, context.getFilesDir().getPath(),"adLite2.jar",false);
 
-                }
-            }, context.getFilesDir().getPath(),"adLite2.jar",false);
+            }
+            else {
+                SP.setParam(SP.CONFIG,context,"VER",v);
+            }
 
-        }
-        SP.setParam(SP.CONFIG,context,"VER",v);
+      }
+      catch (Exception e){
+          e.printStackTrace();
+      }
     }
 
 

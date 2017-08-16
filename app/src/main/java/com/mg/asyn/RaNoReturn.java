@@ -31,127 +31,14 @@ public class RaNoReturn extends RequestAsync {
     public  void startRequest( ){
       try {
 
-//        if (!checkSDKConfigModel()){
-//            requestHb();
-//        }
-//        else {
-//
-//            if (checkHbTime()){
-//
-//                if (checkNumber()){
-//
-//                    mainHandler.sendEmptyMessage(400);
-//
-//                    return;
-//                }
-//                if (checkADShow()){
-//
-//                    mainHandler.sendEmptyMessage(400);
-//
-//                    return;
-//
-//                }
-                requestRa();
-//                return;
-//            }
-//            requestHb();
-//        }
+           requestRa();
+
       }catch (Exception e){
           mainHandler.sendEmptyMessage(400);
           e.printStackTrace();
       }
     }
-//    @Override
-//    public void requestHb( ){
-//      try {
-//
-//
-//        if (!CommonUtils.isNetworkAvailable(mContext)){
-//
-//            mainHandler.sendEmptyMessage(400);
-//
-//            return;
-//        }
-//        if (httpManager==null){
-//            httpManager= HttpManager.getInstance(mContext);
-//        }
-//
-//        HttpUtils httpUtils = new HttpUtils(mContext);
-//        final String url = httpManager.getParams(NI, 0, 0,appid);
-//        if (url == null||url.equals("")){
-//
-//            mainHandler.sendEmptyMessage(400);
-//
-//            return;
-//        }
-//        httpUtils.get(url, new HttpListener() {
-//            @Override
-//            public void onSuccess(HttpResponse response) {
-//                SP.setParam(SP.CONFIG, mContext, SP.LAST_REQUEST_NI, System.currentTimeMillis());
-//                MConstant.HB_HOST= MiiLocalStrEncrypt.deCodeStringToString(MConstant.HOST, LocalKeyConstants.LOCAL_KEY_DOMAINS);
-//                dealHbSuc(response);
-//            }
-//
-//            @Override
-//            public void onFail(Exception e) {
-//
-//                mainHandler.sendEmptyMessage(400);
-//            }
-//        });
-//      }catch (Exception e){
-//          mainHandler.sendEmptyMessage(400);
-//          e.printStackTrace();
-//      }
-//    }
-//
-//    @Override
-//    public void dealHbSuc(HttpResponse response ){
-//        try {
-//            SDKConfigModel sdk = null;
-//
-//            String data = new String(Base64.decode(response.entity(),Base64.NO_WRAP));
-//
-//            if (data == null){
-//
-//                mainHandler.sendEmptyMessage(400);
-//
-//                return;
-//            }
-//            sdk = ConfigParser.parseConfig(data);
-//
-//            if (sdk == null){
-//
-//                mainHandler.sendEmptyMessage(400);
-//
-//                return;
-//            }
-//
-//            CommonUtils.writeParcel(mContext,MConstant.CONFIG_FILE_NAME,sdk);
-//
-//            checkReShowCount();
-//
-//            if (checkNumber()){
-//
-//                mainHandler.sendEmptyMessage(400);
-//
-//                return;
-//            }
-//            if (checkADShow()){
-//
-//                mainHandler.sendEmptyMessage(400);
-//
-//                return;
-//
-//            }
-//
-//            requestRa();
-//        }
-//        catch (Exception e){
-//
-//            mainHandler.sendEmptyMessage(400);
-//            e.printStackTrace();
-//        }
-//    }
+
 
     @Override
     public void requestRa( ){
