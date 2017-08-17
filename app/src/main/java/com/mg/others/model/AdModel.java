@@ -40,6 +40,15 @@ public class AdModel implements Serializable,Cloneable {
     private int imgh;
     private boolean isTt;
     private TTFeedAd ttFeedAd;
+    private int autoRatio;
+
+    public int getAutoRatio() {
+        return autoRatio;
+    }
+
+    public void setAutoRatio(int autoRatio) {
+        this.autoRatio = autoRatio;
+    }
 
     public TTFeedAd getTtFeedAd() {
         return ttFeedAd;

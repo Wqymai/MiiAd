@@ -92,6 +92,11 @@ public class NativeImpl implements MiiNativeADDataRef {
     }
 
     @Override
+    public int getAutoRatio() {
+        return isTt ? 0 : adModel.getAutoRatio();
+    }
+
+    @Override
     public void setNormalClick(final Activity activity, final ImageView view, final MiiCpClickListener cpClickListener, final MiiCpTouchListener cpTouchListener) {
       try {
 

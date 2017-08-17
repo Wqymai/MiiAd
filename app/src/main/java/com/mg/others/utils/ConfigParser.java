@@ -112,18 +112,29 @@ public class ConfigParser {
                 int ksf_mg=object_ksf.optInt("1");
                 int ksf_gdt=object_ksf.optInt("2");
                 int ksf_tt = object_ksf.optInt("3");
+
+
+
                 //信息流SDK来源配置
                 int xsf_mg=object_xsf.optInt("1");
                 int xsf_gdt=object_xsf.optInt("2");
-                int xsf_tt = object_ksf.optInt("3");
+                int xsf_tt = object_xsf.optInt("3");
+
+
+
                 //bannerSDK来源配置
                 int bsf_mg=object_bsf.optInt("1");
                 int bsf_gdt=object_bsf.optInt("2");
-                int bsf_tt = object_ksf.optInt("3");
+                int bsf_tt = object_bsf.optInt("3");
+
+
+
                 //插屏SDK来源配置
                 int csf_mg=object_csf.optInt("1");
                 int csf_gdt=object_csf.optInt("2");
-                int csf_tt = object_ksf.optInt("3");
+                int csf_tt = object_csf.optInt("3");
+
+
 
                 sdk.setAdShow(o);
                 sdk.setNext(n);

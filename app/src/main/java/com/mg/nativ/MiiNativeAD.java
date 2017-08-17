@@ -11,6 +11,7 @@ import com.bytedance.sdk.openadsdk.TTAdManager;
 import com.bytedance.sdk.openadsdk.TTAdNative;
 import com.bytedance.sdk.openadsdk.TTFeedAd;
 import com.mg.asyn.HbReturn;
+import com.mg.asyn.RaNoReturn;
 import com.mg.asyn.RaReturn;
 import com.mg.asyn.ReqAsyncModel;
 import com.mg.comm.MiiBaseAD;
@@ -32,9 +33,7 @@ public class MiiNativeAD extends MiiBaseAD {
     private AdModel adModel;
     private TTAdNative mTTAdNative;
     private ReqAsyncModel reqAsyncModel;
-    TTAdManager ttAdManager;
-
-
+    
     Handler mainHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -112,25 +111,26 @@ public class MiiNativeAD extends MiiBaseAD {
              int x = sdk.getX();
              int xsf_mg = sdk.getXsf_mg();
              int xsf_tt = sdk.getXsf_tt();
-//             if (x == 1){//按比例
-//                 if (xsf_mg > xsf_tt){
-//
+
+             if (x == 1){//按比例
+                 if (xsf_mg > xsf_tt){
+
                      new RaReturn(reqAsyncModel).fetchMGAD();
-//
-//                 }else {
-//                     openTTAD(true);
-//                 }
-//
-//             }else {//按权重
-//                 if (xsf_mg > xsf_tt){
-//
-//                     new RaNoReturn(reqAsyncModel).fetchMGAD();
-//                 }
-//                 else {
-//                     openTTAD(false);
-//                 }
-//
-//             }
+
+                 }else {
+                     openTTAD(true);
+                 }
+
+             }else {//按权重
+                 if (xsf_mg > xsf_tt){
+
+                     new RaNoReturn(reqAsyncModel).fetchMGAD();
+                 }
+                 else {
+                     openTTAD(false);
+                 }
+
+             }
              
 
          }catch (Exception e){
@@ -140,8 +140,8 @@ public class MiiNativeAD extends MiiBaseAD {
 
     }
 
-    String AID ="5000547";
-    String NPID ="900547144";
+    String AID ="5000834";
+    String NPID ="900834967";
     private void openTTAD(final boolean shouldReturn) {
 //        String AID = "";
 //        String NPID = "";
@@ -202,8 +202,11 @@ public class MiiNativeAD extends MiiBaseAD {
         if (adModel == null){
             mListener.onMiiNoAD(3006);
         }
+        sdk = checkSdkConfig(sdk,mContext);
+
         ref = new NativeImpl();
         adModel.setTt(false);
+        adModel.setAutoRatio(sdk.getXc());
         ref.setAdModel(adModel);
         //回调
         mListener.onADLoaded(ref);

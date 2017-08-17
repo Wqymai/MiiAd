@@ -11,29 +11,32 @@
     tools:context="com.mg.an.SplashActivity">
 
     <Button
-
+        android:background="@android:color/holo_green_light"
         android:text="打开splash广告"
         android:id="@+id/open_splash_ad"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <Button
+        android:background="@android:color/holo_blue_light"
         android:layout_below="@id/open_splash_ad"
         android:id="@+id/open_interstitial_ad1"
         android:text="打开插屏广告 没有遮罩"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <Button
+        android:background="@android:color/holo_orange_light"
         android:layout_below="@id/open_interstitial_ad1"
         android:id="@+id/open_interstitial_ad2"
         android:text="打开插屏广告 有遮罩"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <Button
+        android:background="@android:color/holo_purple"
         android:layout_below="@id/open_interstitial_ad2"
         android:id="@+id/open_banner"
         android:text="打开banner"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <!--<Button-->
         <!--android:text="打开自由插屏1"-->
@@ -50,16 +53,17 @@
         <!--android:layout_height="wrap_content"/>-->
 
     <Button
+        android:background="@android:color/holo_red_light"
         android:text="打开原生广告"
         android:layout_below="@id/open_banner"
         android:id="@+id/open_native"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <Button
         android:text="展示原生广告"
         android:layout_below="@id/open_native"
         android:id="@+id/open_dialogAct2"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <ImageView

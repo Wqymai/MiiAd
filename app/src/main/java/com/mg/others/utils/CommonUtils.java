@@ -380,6 +380,7 @@ public class CommonUtils {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
                 i.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 Uri contentUri = FileProvider.getUriForFile(context, context.getPackageName()+ ".fileProvider", file);
+//                Uri contentUri = FileProvider.getUriForFile(context, "com.bytedance.sdk.openadsdk.fileprovider", file);
                 i.setDataAndType(contentUri, "application/vnd.android.package-archive");
             }
             else {

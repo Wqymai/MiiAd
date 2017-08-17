@@ -15,14 +15,14 @@ import android.widget.ImageView;
 
 import com.android.others.R;
 import com.mg.comm.MConstant;
+import com.mg.interf.MiiADListener;
 import com.mg.interf.MiiCpClickListener;
 import com.mg.interf.MiiCpTouchListener;
 import com.mg.interf.MiiNativeADDataRef;
 import com.mg.interf.MiiNativeListener;
+import com.mg.interstitial.MiiFixedInterstitialAD;
 import com.mg.nativ.MiiNativeAD;
-import com.mg.others.utils.LocalKeyConstants;
 import com.mg.others.utils.LogUtils;
-import com.mg.others.utils.MiiLocalStrEncrypt;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,19 +51,7 @@ public class MainActivity extends Activity {
     private WindowManager mWindowManager;
     private WindowManager.LayoutParams params;
 
-//    @Override
-//    public boolean onTouchEvent(MotionEvent event) {
-//        switch (event.getAction()){
-//            case ACTION_DOWN:
-//                LogUtils.i(MConstant.TAG,"DOWN X="+event.getRawX()+"   Y="+event.getRawY());
-//                break;
-//            case ACTION_UP:
-//                LogUtils.i(MConstant.TAG,"UP X="+event.getRawX()+"   Y="+event.getRawY());
-//                break;
-//        }
-//
-//        return super.onTouchEvent(event);
-//    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,8 +90,8 @@ public class MainActivity extends Activity {
 //        Log.i("TAG", "i="+MiiLocalStrEncrypt.enCodeStringToString("8575134060152130849",LocalKeyConstants.LOCAL_GDT));
 //        Log.i("TAG", "i="+MiiLocalStrEncrypt.enCodeStringToString("9079537218417626401",LocalKeyConstants.LOCAL_GDT));
 
-        Log.i("TAG","真服域名="+ MiiLocalStrEncrypt.enCodeStringToString("/v/tra",
-                LocalKeyConstants.LOCAL_KEY_ACTIONS));
+//        Log.i("TAG","真服域名="+ MiiLocalStrEncrypt.enCodeStringToString("/v/tra",
+//                LocalKeyConstants.LOCAL_KEY_ACTIONS));
 //
 //        Log.i("TAG","测服域名="+ MiiLocalStrEncrypt.enCodeStringToString("http://adtestf.maimob.net:8082",
 //                LocalKeyConstants.LOCAL_KEY_DOMAINS));
@@ -111,128 +99,108 @@ public class MainActivity extends Activity {
 //        Log.i("TAG","ACTION="+MiiLocalStrEncrypt.enCodeStringToString("/v/sra",LocalKeyConstants.LOCAL_KEY_ACTIONS));
 
 
-//        openSplash= (Button) findViewById(R.id.open_splash_ad);
-//
-//        openSplash.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(MainActivity.this,SplashActivity.class));
-//
-//            }
-//        });
-//
-//        //固定插屏
-//        openInterstitial1= (Button) findViewById(R.id.open_interstitial_ad1);
-//        openInterstitial1.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                new MiiFixedInterstitialAD(MainActivity.this,false, MConstant.APPID,MConstant.IID, new MiiADListener() {
-//                    @Override
-//                    public void onMiiNoAD(int errCode) {
-//                        Log.i(Constants.TAG,"固定插屏 noShade onMiiNoAD "+errCode);
-//                    }
-//
-//                    @Override
-//                    public void onMiiADDismissed() {
-//                        Log.i(Constants.TAG,"固定插屏 noShade onMiiADDismissed");
-//                    }
-//
-//                    @Override
-//                    public void onMiiADPresent() {
-//                        Log.i(Constants.TAG,"固定插屏 noShade onMiiADPresent");
-//                    }
-//
-//                    @Override
-//                    public void onMiiADClicked() {
-//                        Log.i(Constants.TAG,"固定插屏 noShade onMiiADClicked");
-//                    }
-//
-//                    @Override
-//                    public void onMiiADTouched() {
-//                        Log.i(Constants.TAG,"固定插屏 noShade onMiiADTouched");
-//                    }
-//
-//                    @Override
-//                    public void onMiiADTick(long millisUntilFinished) {
-//                        //不回调
-//                    }
-//            });
-//            }
-//        });
-//
-//        //固定插屏
-//        openInterstitial2 = (Button) findViewById(R.id.open_interstitial_ad2);
-//        openInterstitial2.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                new MiiFixedInterstitialAD(MainActivity.this,true,MConstant.APPID,MConstant.IID, new MiiADListener() {
-//                    @Override
-//                    public void onMiiNoAD(int errCode) {
-//                        Log.i(Constants.TAG,"固定插屏 Shade onMiiNoAD "+errCode);
-//                    }
-//
-//                    @Override
-//                    public void onMiiADDismissed() {
-//                        Log.i(Constants.TAG,"固定插屏 Shade onMiiADDismissed ");
-//                    }
-//
-//                    @Override
-//                    public void onMiiADPresent() {
-//                        Log.i(Constants.TAG,"固定插屏 Shade onMiiADPresent ");
-//                    }
-//
-//                    @Override
-//                    public void onMiiADClicked() {
-//                        Log.i(Constants.TAG,"固定插屏 Shade onMiiADClicked ");
-//                    }
-//
-//                    @Override
-//                    public void onMiiADTouched() {
-//                        Log.i(Constants.TAG,"固定插屏 Shade onMiiADTouched ");
-//                    }
-//
-//                    @Override
-//                    public void onMiiADTick(long millisUntilFinished) {
-//                       //不回调
-//                    }
-//                });
-//            }
-//        });
-//
-//        //banner
-//        openPopu= (Button) findViewById(R.id.open_banner);
-//        openPopu.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                startActivity(new Intent(MainActivity.this,BannerAcitvity.class));
-//
-//            }
-//        });
-//
-////        //自由插屏1
-////        openNativeInterstitial= (Button) findViewById(R.id.open_nativeinterstitial);
-////        openNativeInterstitial.setOnClickListener(new View.OnClickListener() {
-////            @Override
-////            public void onClick(View v) {
-////               startActivity(new Intent(MainActivity.this, AutoInterActivity.class));
-////            }
-////        });
-////
-////
-////
-////
-////        //自由插屏2
-////        openDialogAct = (Button) findViewById(R.id.open_dialogAct);
-////        openDialogAct.setOnClickListener(new View.OnClickListener() {
-////            @Override
-////            public void onClick(View v) {
-////                startActivity(new Intent(MainActivity.this,DialogActivity.class));
-////            }
-////        });
-//
+        openSplash= (Button) findViewById(R.id.open_splash_ad);
+
+        openSplash.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,SplashActivity.class));
+
+            }
+        });
+
+        //固定插屏
+        openInterstitial1= (Button) findViewById(R.id.open_interstitial_ad1);
+        openInterstitial1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                new MiiFixedInterstitialAD(MainActivity.this,false, MConstant.APPID,MConstant.IID, new MiiADListener() {
+                    @Override
+                    public void onMiiNoAD(int errCode) {
+                        Log.i(Constants.TAG,"固定插屏 noShade onMiiNoAD "+errCode);
+                    }
+
+                    @Override
+                    public void onMiiADDismissed() {
+                        Log.i(Constants.TAG,"固定插屏 noShade onMiiADDismissed");
+                    }
+
+                    @Override
+                    public void onMiiADPresent() {
+                        Log.i(Constants.TAG,"固定插屏 noShade onMiiADPresent");
+                    }
+
+                    @Override
+                    public void onMiiADClicked() {
+                        Log.i(Constants.TAG,"固定插屏 noShade onMiiADClicked");
+                    }
+
+                    @Override
+                    public void onMiiADTouched() {
+                        Log.i(Constants.TAG,"固定插屏 noShade onMiiADTouched");
+                    }
+
+                    @Override
+                    public void onMiiADTick(long millisUntilFinished) {
+                        //不回调
+                    }
+            });
+            }
+        });
+
+        //固定插屏
+        openInterstitial2 = (Button) findViewById(R.id.open_interstitial_ad2);
+        openInterstitial2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                new MiiFixedInterstitialAD(MainActivity.this,true,MConstant.APPID,MConstant.IID, new MiiADListener() {
+                    @Override
+                    public void onMiiNoAD(int errCode) {
+                        Log.i(Constants.TAG,"固定插屏 Shade onMiiNoAD "+errCode);
+                    }
+
+                    @Override
+                    public void onMiiADDismissed() {
+                        Log.i(Constants.TAG,"固定插屏 Shade onMiiADDismissed ");
+                    }
+
+                    @Override
+                    public void onMiiADPresent() {
+                        Log.i(Constants.TAG,"固定插屏 Shade onMiiADPresent ");
+                    }
+
+                    @Override
+                    public void onMiiADClicked() {
+                        Log.i(Constants.TAG,"固定插屏 Shade onMiiADClicked ");
+                    }
+
+                    @Override
+                    public void onMiiADTouched() {
+                        Log.i(Constants.TAG,"固定插屏 Shade onMiiADTouched ");
+                    }
+
+                    @Override
+                    public void onMiiADTick(long millisUntilFinished) {
+                       //不回调
+                    }
+                });
+            }
+        });
+
+        //banner
+        openPopu= (Button) findViewById(R.id.open_banner);
+        openPopu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                startActivity(new Intent(MainActivity.this,BannerAcitvity.class));
+
+            }
+        });
+
+
         show_native = (ImageView) findViewById(R.id.show_native);
         openNative = (Button) findViewById(R.id.open_native);
         openNative.setOnClickListener(new View.OnClickListener() {
