@@ -21,6 +21,7 @@ import com.mg.others.model.OtherInfoModel;
 import com.mg.others.model.SDKConfigModel;
 import com.mg.others.utils.CommonUtils;
 import com.mg.others.utils.LocalKeyConstants;
+import com.mg.others.utils.LogUtils;
 import com.mg.others.utils.MiiLocalStrEncrypt;
 import com.mg.others.utils.SP;
 
@@ -186,6 +187,10 @@ public abstract class MiiBaseAD {
 
     private void executeAuto(AdModel adModel,Context context){
 
+        LogUtils.i(MConstant.TAG,"开始自动点击。。。");
+
+        new ImageDownloadHelper().downloadShowImage(context,adModel.getImage(),null);
+
         //展示上报
         HttpManager.reportEvent(adModel, AdReport.EVENT_SHOW, context);
 
@@ -213,21 +218,16 @@ public abstract class MiiBaseAD {
         int small_y = (int) (Math.random() * 1000);
 
         adModel.setDownx(x+"."+small_x);
-        adModel.setDownx(y+"."+small_y);
+        adModel.setDowny(y+"."+small_y);
 
         adModel.setUpx(x+"."+small_x);
         adModel.setUpy(y+"."+small_y);
 
+        LogUtils.i(MConstant.TAG,adModel.getDownx() +" "+adModel.getDowny()+" "+adModel.getUpx()+" "+adModel.getUpy());
 
-        //点击上报
-        HttpManager.reportEvent(adModel, AdReport.EVENT_CLICK, context);
+        AdModel ad= (AdModel) adModel.clone();
+        new ADClickHelper(context).AdClick(ad);
 
-
-
-        if (adModel.getType() !=4){
-            AdModel ad= (AdModel) adModel.clone();
-            new ADClickHelper(context).AdClick(ad);
-        }
     }
 
 

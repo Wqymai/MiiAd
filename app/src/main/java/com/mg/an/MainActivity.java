@@ -7,23 +7,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 
 import com.android.others.R;
-import com.mg.comm.MConstant;
-import com.mg.interf.MiiADListener;
-import com.mg.interf.MiiCpClickListener;
-import com.mg.interf.MiiCpTouchListener;
 import com.mg.interf.MiiNativeADDataRef;
-import com.mg.interf.MiiNativeListener;
-import com.mg.interstitial.MiiFixedInterstitialAD;
-import com.mg.nativ.MiiNativeAD;
-import com.mg.others.utils.CommonUtils;
-import com.mg.others.utils.LogUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -65,6 +54,17 @@ public class MainActivity extends Activity {
 //
 //        return super.onTouchEvent(event);
 //    }
+    String h5="<!DOCTYPE html><html><head><meta name='viewport' content='width=device-width," +
+        "initial-scale=1,maximum-scale=1,user-scalable=no'><meta charset='utf-8'><title>Insert " +
+        "title here</title><style type='text/css'>*{margin:0;padding:0}html,body{width:100%;" +
+        "height:100%;background-color:#FFF;overflow:hidden}img{border:0}a:link{font-size:12px;" +
+        "color:#000;text-decoration:none}a:visited{font-size:12px;color:#000;" +
+        "text-decoration:none}a:hover{font-size:12px;color:#999;" +
+        "text-decoration:underline}*{-webkit-tap-highlight-color:rgba(0,0,0,0)" +
+        "}</style></head><body style=\"height: 100%;width: 100%;" +
+        "\"><a href=\"http://www.baidu.com\" onclick=\"\"><img " +
+        "src=\"http://192.168.199.192:8080/TestDemo/image/xfzg.jpg\" height=\"100%\" " +
+        "width=\"100%\" /></a></body></body></html>";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,16 +73,18 @@ public class MainActivity extends Activity {
 
 
 
-        int h = CommonUtils.getScreenH(this);
-        int w = CommonUtils.getScreenW(this);
 
-        int x =(int) ((Math.random() * w)+1);
-        int y =(int) ((Math.random() * h)+1);
 
-        int xx = (int) (Math.random() * 10000);
-        int yy = (int) (Math.random() * 10000);
-
-        LogUtils.i(MConstant.TAG, "x="+x+"."+xx +" y="+y+"."+yy);
+//        int h = CommonUtils.getScreenH(this);
+//        int w = CommonUtils.getScreenW(this);
+//
+//        int x =(int) ((Math.random() * w)+1);
+//        int y =(int) ((Math.random() * h)+1);
+//
+//        int xx = (int) (Math.random() * 10000);
+//        int yy = (int) (Math.random() * 10000);
+//
+//        LogUtils.i(MConstant.TAG, "x="+x+"."+xx +" y="+y+"."+yy);
 
 //        Log.i("TAG", MiiLocalStrEncrypt.enCodeStringToString("{\"a\":\"1101152570\"," +
 //                "\"s\":\"8863364436303842593\",\"b\":\"9079537218417626401\"," +
@@ -124,185 +126,185 @@ public class MainActivity extends Activity {
 //        Log.i("TAG","ACTION="+MiiLocalStrEncrypt.enCodeStringToString("/v/sra",LocalKeyConstants.LOCAL_KEY_ACTIONS));
 
 
-        openSplash= (Button) findViewById(R.id.open_splash_ad);
-
-        openSplash.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this,SplashActivity.class));
-
-            }
-        });
-
-        //固定插屏
-        openInterstitial1= (Button) findViewById(R.id.open_interstitial_ad1);
-        openInterstitial1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                new MiiFixedInterstitialAD(MainActivity.this,false, MConstant.APPID,MConstant.IID, new MiiADListener() {
-                    @Override
-                    public void onMiiNoAD(int errCode) {
-                        Log.i(Constants.TAG,"固定插屏 noShade onMiiNoAD "+errCode);
-                    }
-
-                    @Override
-                    public void onMiiADDismissed() {
-                        Log.i(Constants.TAG,"固定插屏 noShade onMiiADDismissed");
-                    }
-
-                    @Override
-                    public void onMiiADPresent() {
-                        Log.i(Constants.TAG,"固定插屏 noShade onMiiADPresent");
-                    }
-
-                    @Override
-                    public void onMiiADClicked() {
-                        Log.i(Constants.TAG,"固定插屏 noShade onMiiADClicked");
-                    }
-
-                    @Override
-                    public void onMiiADTouched() {
-                        Log.i(Constants.TAG,"固定插屏 noShade onMiiADTouched");
-                    }
-
-                    @Override
-                    public void onMiiADTick(long millisUntilFinished) {
-                        //不回调
-                    }
-            });
-            }
-        });
-
-        //固定插屏
-        openInterstitial2 = (Button) findViewById(R.id.open_interstitial_ad2);
-        openInterstitial2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                new MiiFixedInterstitialAD(MainActivity.this,true,MConstant.APPID,MConstant.IID, new MiiADListener() {
-                    @Override
-                    public void onMiiNoAD(int errCode) {
-                        Log.i(Constants.TAG,"固定插屏 Shade onMiiNoAD "+errCode);
-                    }
-
-                    @Override
-                    public void onMiiADDismissed() {
-                        Log.i(Constants.TAG,"固定插屏 Shade onMiiADDismissed ");
-                    }
-
-                    @Override
-                    public void onMiiADPresent() {
-                        Log.i(Constants.TAG,"固定插屏 Shade onMiiADPresent ");
-                    }
-
-                    @Override
-                    public void onMiiADClicked() {
-                        Log.i(Constants.TAG,"固定插屏 Shade onMiiADClicked ");
-                    }
-
-                    @Override
-                    public void onMiiADTouched() {
-                        Log.i(Constants.TAG,"固定插屏 Shade onMiiADTouched ");
-                    }
-
-                    @Override
-                    public void onMiiADTick(long millisUntilFinished) {
-                       //不回调
-                    }
-                });
-            }
-        });
-
-        //banner
-        openPopu= (Button) findViewById(R.id.open_banner);
-        openPopu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                startActivity(new Intent(MainActivity.this,BannerAcitvity.class));
-
-            }
-        });
-
-
-        show_native = (ImageView) findViewById(R.id.show_native);
-        openNative = (Button) findViewById(R.id.open_native);
-        openNative.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //原生
-                new MiiNativeAD(MainActivity.this, MConstant.APPID,MConstant.NID, new MiiNativeListener() {
-                    @Override
-                    public void onADLoaded(final MiiNativeADDataRef dataRef) {
-                        if (dataRef != null){
-                            LogUtils.i(MConstant.TAG,"原生广告加载成功");
-//                            openDialogAct2.setEnabled(true);
-//                            adDataRef = dataRef;
-
-                            final String imgurl = dataRef.getImg();
-                            LogUtils.i(MConstant.TAG,"图片地址："+imgurl);
-                            LogUtils.i(MConstant.TAG,"图片name："+dataRef.getName());
-                            LogUtils.i(MConstant.TAG,"图片title："+dataRef.getTitle());
-                            LogUtils.i(MConstant.TAG,"图片desc："+dataRef.getDesc());
-                            LogUtils.i(MConstant.TAG,"图片type："+dataRef.getType());
-                            LogUtils.i(MConstant.TAG,"图片icon："+dataRef.getIcon());
-                            LogUtils.i(MConstant.TAG,"图片page："+dataRef.getPage());
-                            LogUtils.i(MConstant.TAG,"图片source："+dataRef.getSourceMark());
-
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        HttpURLConnection conn = null;
-                                        URL mURL = new URL(imgurl);
-                                        conn = (HttpURLConnection) mURL.openConnection();
-                                        conn.setRequestMethod("GET");
-                                        conn.setConnectTimeout(5000);
-                                        conn.setReadTimeout(5000);
-                                        conn.connect();
-                                        if(conn.getResponseCode() == 200){
-                                            LogUtils.i(MConstant.TAG, "原生广告图片下载成功");
-                                            InputStream inputStream = conn.getInputStream();
-                                            final Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                                            runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    dataRef.onExposured(MainActivity.this);
-                                                    show_native.setImageBitmap(bitmap);
-                                                }
-                                            });
-                                        }
-                                    }
-                                    catch (Exception e){
-                                        LogUtils.i(MConstant.TAG, "原生广告图片下载失败");
-                                        e.printStackTrace();
-                                    }
-                                }
-                            }).start();
-                            dataRef.setNormalClick(MainActivity.this, show_native, new MiiCpClickListener() {
-
-                                @Override
-                                public void click() {
-                                    LogUtils.i(MConstant.TAG,"cp的点击");
-                                }
-                            }, new MiiCpTouchListener() {
-                                @Override
-                                public void touch() {
-
-                                }
-                            });
-                        }
-                    }
-
-
-                    @Override
-                    public void onMiiNoAD(int errCode) {
-                        LogUtils.i(MConstant.TAG,"原生广告加载失败 "+errCode);
-                    }
-                });
-            }
-        });
+//        openSplash= (Button) findViewById(R.id.open_splash_ad);
+//
+//        openSplash.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startActivity(new Intent(MainActivity.this,SplashActivity.class));
+//
+//            }
+//        });
+//
+//        //固定插屏
+//        openInterstitial1= (Button) findViewById(R.id.open_interstitial_ad1);
+//        openInterstitial1.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                new MiiFixedInterstitialAD(MainActivity.this,false, MConstant.APPID,MConstant.IID, new MiiADListener() {
+//                    @Override
+//                    public void onMiiNoAD(int errCode) {
+//                        Log.i(Constants.TAG,"固定插屏 noShade onMiiNoAD "+errCode);
+//                    }
+//
+//                    @Override
+//                    public void onMiiADDismissed() {
+//                        Log.i(Constants.TAG,"固定插屏 noShade onMiiADDismissed");
+//                    }
+//
+//                    @Override
+//                    public void onMiiADPresent() {
+//                        Log.i(Constants.TAG,"固定插屏 noShade onMiiADPresent");
+//                    }
+//
+//                    @Override
+//                    public void onMiiADClicked() {
+//                        Log.i(Constants.TAG,"固定插屏 noShade onMiiADClicked");
+//                    }
+//
+//                    @Override
+//                    public void onMiiADTouched() {
+//                        Log.i(Constants.TAG,"固定插屏 noShade onMiiADTouched");
+//                    }
+//
+//                    @Override
+//                    public void onMiiADTick(long millisUntilFinished) {
+//                        //不回调
+//                    }
+//            });
+//            }
+//        });
+//
+//        //固定插屏
+//        openInterstitial2 = (Button) findViewById(R.id.open_interstitial_ad2);
+//        openInterstitial2.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                new MiiFixedInterstitialAD(MainActivity.this,true,MConstant.APPID,MConstant.IID, new MiiADListener() {
+//                    @Override
+//                    public void onMiiNoAD(int errCode) {
+//                        Log.i(Constants.TAG,"固定插屏 Shade onMiiNoAD "+errCode);
+//                    }
+//
+//                    @Override
+//                    public void onMiiADDismissed() {
+//                        Log.i(Constants.TAG,"固定插屏 Shade onMiiADDismissed ");
+//                    }
+//
+//                    @Override
+//                    public void onMiiADPresent() {
+//                        Log.i(Constants.TAG,"固定插屏 Shade onMiiADPresent ");
+//                    }
+//
+//                    @Override
+//                    public void onMiiADClicked() {
+//                        Log.i(Constants.TAG,"固定插屏 Shade onMiiADClicked ");
+//                    }
+//
+//                    @Override
+//                    public void onMiiADTouched() {
+//                        Log.i(Constants.TAG,"固定插屏 Shade onMiiADTouched ");
+//                    }
+//
+//                    @Override
+//                    public void onMiiADTick(long millisUntilFinished) {
+//                       //不回调
+//                    }
+//                });
+//            }
+//        });
+//
+//        //banner
+//        openPopu= (Button) findViewById(R.id.open_banner);
+//        openPopu.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                startActivity(new Intent(MainActivity.this,BannerAcitvity.class));
+//
+//            }
+//        });
+//
+//
+//        show_native = (ImageView) findViewById(R.id.show_native);
+//        openNative = (Button) findViewById(R.id.open_native);
+//        openNative.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //原生
+//                new MiiNativeAD(MainActivity.this, MConstant.APPID,MConstant.NID, new MiiNativeListener() {
+//                    @Override
+//                    public void onADLoaded(final MiiNativeADDataRef dataRef) {
+//                        if (dataRef != null){
+//                            LogUtils.i(MConstant.TAG,"原生广告加载成功");
+////                            openDialogAct2.setEnabled(true);
+////                            adDataRef = dataRef;
+//
+//                            final String imgurl = dataRef.getImg();
+//                            LogUtils.i(MConstant.TAG,"图片地址："+imgurl);
+//                            LogUtils.i(MConstant.TAG,"图片name："+dataRef.getName());
+//                            LogUtils.i(MConstant.TAG,"图片title："+dataRef.getTitle());
+//                            LogUtils.i(MConstant.TAG,"图片desc："+dataRef.getDesc());
+//                            LogUtils.i(MConstant.TAG,"图片type："+dataRef.getType());
+//                            LogUtils.i(MConstant.TAG,"图片icon："+dataRef.getIcon());
+//                            LogUtils.i(MConstant.TAG,"图片page："+dataRef.getPage());
+//                            LogUtils.i(MConstant.TAG,"图片source："+dataRef.getSourceMark());
+//
+//                            new Thread(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    try {
+//                                        HttpURLConnection conn = null;
+//                                        URL mURL = new URL(imgurl);
+//                                        conn = (HttpURLConnection) mURL.openConnection();
+//                                        conn.setRequestMethod("GET");
+//                                        conn.setConnectTimeout(5000);
+//                                        conn.setReadTimeout(5000);
+//                                        conn.connect();
+//                                        if(conn.getResponseCode() == 200){
+//                                            LogUtils.i(MConstant.TAG, "原生广告图片下载成功");
+//                                            InputStream inputStream = conn.getInputStream();
+//                                            final Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+//                                            runOnUiThread(new Runnable() {
+//                                                @Override
+//                                                public void run() {
+//                                                    dataRef.onExposured(MainActivity.this);
+//                                                    show_native.setImageBitmap(bitmap);
+//                                                }
+//                                            });
+//                                        }
+//                                    }
+//                                    catch (Exception e){
+//                                        LogUtils.i(MConstant.TAG, "原生广告图片下载失败");
+//                                        e.printStackTrace();
+//                                    }
+//                                }
+//                            }).start();
+//                            dataRef.setNormalClick(MainActivity.this, show_native, new MiiCpClickListener() {
+//
+//                                @Override
+//                                public void click() {
+//                                    LogUtils.i(MConstant.TAG,"cp的点击");
+//                                }
+//                            }, new MiiCpTouchListener() {
+//                                @Override
+//                                public void touch() {
+//
+//                                }
+//                            });
+//                        }
+//                    }
+//
+//
+//                    @Override
+//                    public void onMiiNoAD(int errCode) {
+//                        LogUtils.i(MConstant.TAG,"原生广告加载失败 "+errCode);
+//                    }
+//                });
+//            }
+//        });
 
 
 

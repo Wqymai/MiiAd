@@ -648,7 +648,7 @@ public class HttpUtils {
 						LogUtils.i(MConstant.TAG,"run status="+status);
 						String realUrl=conn.getURL().toString();
 						if (status==301 || status==302 || status==303 ||status==307){
-							if (redirctCount < 8){
+							if (redirctCount < 5){
 								redirctCount++;
 								LogUtils.i(MConstant.TAG,"status="+status+" realUrl="+realUrl+" redirctCount="+redirctCount);
 								httpExecutor.execute(new HttpDownloaderTask(realUrl, mListener, orginPath, mfileName, paramter, mContext,true));

@@ -47,7 +47,9 @@ public class DownloadImgUtils
 
 		} catch (Exception e)
 		{
-			handler.sendEmptyMessage(700);
+			if (handler !=null){
+			 	handler.sendEmptyMessage(700);
+			}
 			e.printStackTrace();
 
 		} finally
@@ -57,7 +59,9 @@ public class DownloadImgUtils
 				if (is != null) is.close();
 			} catch (IOException e)
 			{
-				handler.sendEmptyMessage(700);
+				if (handler !=null){
+					handler.sendEmptyMessage(700);
+				}
 			}
 
 			try
@@ -65,7 +69,9 @@ public class DownloadImgUtils
 				if (fos != null) fos.close();
 			} catch (IOException e)
 			{
-				handler.sendEmptyMessage(700);
+				if (handler !=null){
+					handler.sendEmptyMessage(700);
+				}
 			}
 		}
 

@@ -22,11 +22,6 @@ import java.security.NoSuchAlgorithmException;
 
 public class ImageDownloadHelper {
 
-
-//    public ImageDownloadHelper(){
-//    }
-
-
     public  void downloadShowImage(final Context context, final String url, final Handler mainHandler){
         final File file = getDiskCacheDir(context, md5(url));
         if (file.exists())
@@ -34,10 +29,12 @@ public class ImageDownloadHelper {
             LogUtils.i(MConstant.TAG,"load cache img");
             Bitmap bm;
             bm = loadImageFromLocal(file.getAbsolutePath(),context);
-            Message msg = new Message();
-            msg.obj = bm;
-            msg.what = 300;
-            mainHandler.sendMessage(msg);
+            if (mainHandler != null){
+                Message msg = new Message();
+                msg.obj = bm;
+                msg.what = 300;
+                mainHandler.sendMessage(msg);
+            }
         }
         else {
 
@@ -49,13 +46,17 @@ public class ImageDownloadHelper {
                     {
                         LogUtils.i(MConstant.TAG,"img download suc");
                         Bitmap bm = loadImageFromLocal(file.getAbsolutePath(),context);
-                        Message msg = new Message();
-                        msg.obj = bm;
-                        msg.what = 300;
-                        mainHandler.sendMessage(msg);
+                        if (mainHandler !=null){
+                            Message msg = new Message();
+                            msg.obj = bm;
+                            msg.what = 300;
+                            mainHandler.sendMessage(msg);
+                        }
                     }
                     else {
-                        mainHandler.sendEmptyMessage(700);
+                       if (mainHandler!=null){
+                           mainHandler.sendEmptyMessage(700);
+                       }
                     }
                 }
             };
