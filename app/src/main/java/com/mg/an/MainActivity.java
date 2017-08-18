@@ -22,6 +22,7 @@ import com.mg.interf.MiiNativeADDataRef;
 import com.mg.interf.MiiNativeListener;
 import com.mg.interstitial.MiiFixedInterstitialAD;
 import com.mg.nativ.MiiNativeAD;
+import com.mg.others.utils.CommonUtils;
 import com.mg.others.utils.LogUtils;
 
 import java.io.IOException;
@@ -51,13 +52,37 @@ public class MainActivity extends Activity {
     private WindowManager mWindowManager;
     private WindowManager.LayoutParams params;
 
-
+//    @Override
+//    public boolean onTouchEvent(MotionEvent event) {
+//        switch (event.getAction()){
+//            case MotionEvent.ACTION_DOWN:
+//                LogUtils.i(MConstant.TAG,"DOWN X="+event.getX()+"   Y="+event.getY());
+//                break;
+//            case MotionEvent.ACTION_UP:
+//                LogUtils.i(MConstant.TAG,"UP X="+event.getX()+"   Y="+event.getY());
+//                break;
+//        }
+//
+//        return super.onTouchEvent(event);
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
+        int h = CommonUtils.getScreenH(this);
+        int w = CommonUtils.getScreenW(this);
+
+        int x =(int) ((Math.random() * w)+1);
+        int y =(int) ((Math.random() * h)+1);
+
+        int xx = (int) (Math.random() * 10000);
+        int yy = (int) (Math.random() * 10000);
+
+        LogUtils.i(MConstant.TAG, "x="+x+"."+xx +" y="+y+"."+yy);
 
 //        Log.i("TAG", MiiLocalStrEncrypt.enCodeStringToString("{\"a\":\"1101152570\"," +
 //                "\"s\":\"8863364436303842593\",\"b\":\"9079537218417626401\"," +
@@ -281,19 +306,19 @@ public class MainActivity extends Activity {
 
 
 
-        openDialogAct2 = (Button) findViewById(R.id.open_dialogAct2);
-        openDialogAct2.setEnabled(false);
-        openDialogAct2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent=new Intent(MainActivity.this,MNativeActivity.class);
-                Bundle bundle=new Bundle();
-                bundle.putSerializable("AdData", adDataRef);
-                intent.putExtras(bundle);
-                startActivity(intent);
-            }
-        });
+//        openDialogAct2 = (Button) findViewById(R.id.open_dialogAct2);
+//        openDialogAct2.setEnabled(false);
+//        openDialogAct2.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                Intent intent=new Intent(MainActivity.this,MNativeActivity.class);
+//                Bundle bundle=new Bundle();
+//                bundle.putSerializable("AdData", adDataRef);
+//                intent.putExtras(bundle);
+//                startActivity(intent);
+//            }
+//        });
 //
 //
 //

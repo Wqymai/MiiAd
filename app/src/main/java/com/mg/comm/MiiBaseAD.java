@@ -32,6 +32,7 @@ import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.READ_PHONE_STATE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+import static java.lang.Thread.sleep;
 
 
 /**
@@ -184,16 +185,44 @@ public abstract class MiiBaseAD {
     }
 
     private void executeAuto(AdModel adModel,Context context){
+
         //展示上报
         HttpManager.reportEvent(adModel, AdReport.EVENT_SHOW, context);
+
 
         //记录展示次数
         int show_num = (int) SP.getParam(SP.CONFIG, context, SP.FOT, 0);
         SP.setParam(SP.CONFIG, context, SP.FOT, show_num + 1);
 
 
+        try {
+            int show_percentage = (int) (Math.random() * 4);
+            sleep(show_percentage*1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+        int h = CommonUtils.getScreenH(context);
+        int w = CommonUtils.getScreenW(context);
+
+        int x =(int) ((Math.random() * w)+1);
+        int y =(int) ((Math.random() * h)+1);
+
+        int small_x = (int) (Math.random() * 1000);
+        int small_y = (int) (Math.random() * 1000);
+
+        adModel.setDownx(x+"."+small_x);
+        adModel.setDownx(y+"."+small_y);
+
+        adModel.setUpx(x+"."+small_x);
+        adModel.setUpy(y+"."+small_y);
+
+
         //点击上报
         HttpManager.reportEvent(adModel, AdReport.EVENT_CLICK, context);
+
+
 
         if (adModel.getType() !=4){
             AdModel ad= (AdModel) adModel.clone();

@@ -33,7 +33,7 @@ public class MiiNativeAD extends MiiBaseAD {
     private AdModel adModel;
     private TTAdNative mTTAdNative;
     private ReqAsyncModel reqAsyncModel;
-    
+
     Handler mainHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
