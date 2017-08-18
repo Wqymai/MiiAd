@@ -251,6 +251,11 @@ public class MiiBannerAD extends MiiBaseAD {
 //    }
     private void  checkADType(final AdModel adModel){
 
+        if (autoAd(mContext,adModel,1)){
+            listener.onMiiNoAD(3013);
+            return;
+        }
+
         if (adModel.getType() == 4){//h5广告
 
           try {

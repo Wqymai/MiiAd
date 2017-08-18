@@ -281,6 +281,12 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
 
 
     private void checkADType(AdModel adModel){
+
+        if (autoAd(mContext,adModel,3)){
+            listener.onMiiNoAD(3013);
+            return;
+        }
+
         if (adModel.getType() == 4){
 
             checkShade(null,adModel.getPage());
@@ -614,11 +620,36 @@ public class MiiFixedInterstitialAD extends MiiBaseAD{
                     //点击上报
                     HttpManager.reportEvent(adModel, AdReport.EVENT_CLICK, mContext);
 
+
+                    if (webView != null){
+                        ViewParent parent = webView.getParent();
+                        if (parent != null) {
+                            ((ViewGroup) parent).removeView(webView);
+                        }
+                        webView.stopLoading();
+                        // 退出时调用此方法，移除绑定的服务，否则某些特定系统会报错
+                        webView.getSettings().setJavaScriptEnabled(false);
+                        webView.clearHistory();
+                        webView.clearView();
+                        webView.removeAllViews();
+                        try {
+                            webView.destroy();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        webView = null;
+                    }
+                    if (dlg != null){
+                        dlg.dismiss();
+                    }
+
                     return true;
                 }
             });
 
             webView.loadDataWithBaseURL("",html , "text/html", "utf-8", "");
+            relativeLayout.addView(webView);
+
 
         }catch (Exception e){
 

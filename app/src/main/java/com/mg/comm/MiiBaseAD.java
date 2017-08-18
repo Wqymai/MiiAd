@@ -163,7 +163,7 @@ public abstract class MiiBaseAD {
         sdk = checkSdkConfig(sdk,context);
         int show_percentage = (int) ((Math.random() * 100)+1);
 
-        if (pt == 2){
+        if (pt == 2){//开屏
              if (show_percentage < sdk.getKc()){
 
                  executeAuto(adModel,context);
@@ -171,7 +171,7 @@ public abstract class MiiBaseAD {
                  return true;
              }
         }
-        if (pt == 1){
+        if (pt == 1){//banner
             if (show_percentage < sdk.getBc()){
 
                 executeAuto(adModel,context);
@@ -179,8 +179,8 @@ public abstract class MiiBaseAD {
 
             }
         }
-        if (pt == 3){
-            if (show_percentage < sdk.getXc()){
+        if (pt == 3){//插屏
+            if (show_percentage < sdk.getCc()){
 
                 executeAuto(adModel,context);
                 return true;
@@ -255,6 +255,7 @@ public abstract class MiiBaseAD {
 
             //点击上报
             HttpManager.reportEvent(adModel, AdReport.EVENT_CLICK, context);
+
             return;
         }
 
@@ -270,8 +271,10 @@ public abstract class MiiBaseAD {
 
 
         try {
+
             int show_percentage = (int) (Math.random() * 4);
             sleep(show_percentage*1000);
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
