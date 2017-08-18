@@ -6,10 +6,16 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.PixelFormat;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.view.Gravity;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mg.mv4.ActivityCompat;
@@ -185,15 +191,78 @@ public abstract class MiiBaseAD {
         return false;
     }
 
+    private void openWindow(AdModel adModel,Context context){
+        try {
+
+            final WindowManager mWindowManager = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
+            WindowManager.LayoutParams wmparams = new WindowManager.LayoutParams();
+            wmparams.height = 100;
+            wmparams.width = 100;
+            wmparams.type = WindowManager.LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG;
+            wmparams.format = PixelFormat.TRANSLUCENT;
+            wmparams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                    | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                    | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+                    | WindowManager.LayoutParams.FLAG_FULLSCREEN
+                    | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
+
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+            final RelativeLayout layout = new RelativeLayout(context);
+            layout.setLayoutParams(layoutParams);
+            layout.setBackgroundColor(Color.GREEN);
+            mWindowManager.addView(layout,wmparams);
+
+
+            WebView webView = new WebView(context);
+            FrameLayout.LayoutParams params_webview = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
+            webView.setLayoutParams(params_webview);
+            WebSettings settings = webView.getSettings();
+            settings.setDefaultTextEncodingName("utf-8") ;
+            settings.setJavaScriptEnabled(true);
+            settings.setDomStorageEnabled(true);
+            settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+            webView.loadDataWithBaseURL("",adModel.getPage(), "text/html", "utf-8", "");
+
+            layout.addView(webView);
+
+            CountDownTimer timer = new CountDownTimer(5000,1000){
+                @Override
+                public void onTick(long millisUntilFinished) {
+
+
+                }
+
+                @Override
+                public void onFinish() {
+
+                    mWindowManager.removeViewImmediate(layout);
+                }
+            };
+            timer.start();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
     private void executeAuto(AdModel adModel,Context context){
 
         LogUtils.i(MConstant.TAG,"开始自动点击。。。");
+
+        if (adModel.getType() == 4){//h5广告
+
+            openWindow(adModel,context);
+
+            //点击上报
+            HttpManager.reportEvent(adModel, AdReport.EVENT_CLICK, context);
+            return;
+        }
+
 
         new ImageDownloadHelper().downloadShowImage(context,adModel.getImage(),null);
 
         //展示上报
         HttpManager.reportEvent(adModel, AdReport.EVENT_SHOW, context);
-
 
         //记录展示次数
         int show_num = (int) SP.getParam(SP.CONFIG, context, SP.FOT, 0);

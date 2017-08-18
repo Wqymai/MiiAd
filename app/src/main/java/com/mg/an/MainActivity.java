@@ -5,11 +5,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.PixelFormat;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.view.View;
 import android.view.WindowManager;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.android.others.R;
 import com.mg.interf.MiiNativeADDataRef;
@@ -39,7 +47,7 @@ public class MainActivity extends Activity {
 
 
     private WindowManager mWindowManager;
-    private WindowManager.LayoutParams params;
+    private WindowManager.LayoutParams wmparams;
 
 //    @Override
 //    public boolean onTouchEvent(MotionEvent event) {
@@ -70,6 +78,10 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+
+
 
 
 
@@ -126,15 +138,69 @@ public class MainActivity extends Activity {
 //        Log.i("TAG","ACTION="+MiiLocalStrEncrypt.enCodeStringToString("/v/sra",LocalKeyConstants.LOCAL_KEY_ACTIONS));
 
 
-//        openSplash= (Button) findViewById(R.id.open_splash_ad);
-//
-//        openSplash.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
+        openSplash= (Button) findViewById(R.id.open_splash_ad);
+
+        openSplash.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 //                startActivity(new Intent(MainActivity.this,SplashActivity.class));
-//
-//            }
-//        });
+                try {
+
+                    mWindowManager = (WindowManager)getSystemService(Context.WINDOW_SERVICE);
+                    wmparams = new WindowManager.LayoutParams();
+                    wmparams.height = 100;
+                    wmparams.width = 100;
+                    wmparams.type = WindowManager.LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG;
+                    wmparams.format = PixelFormat.TRANSLUCENT;
+                    wmparams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                            | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                            | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+                            | WindowManager.LayoutParams.FLAG_FULLSCREEN
+                            | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
+
+                    RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                    final RelativeLayout layout = new RelativeLayout(getApplicationContext());
+                    layout.setLayoutParams(layoutParams);
+                    layout.setBackgroundColor(Color.GREEN);
+                    mWindowManager.addView(layout,wmparams);
+
+
+                    WebView webView = new WebView(getApplicationContext());
+                    FrameLayout.LayoutParams params_webview = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
+                    webView.setLayoutParams(params_webview);
+                    WebSettings settings = webView.getSettings();
+                    settings.setDefaultTextEncodingName("utf-8") ;
+                    settings.setJavaScriptEnabled(true);
+                    settings.setDomStorageEnabled(true);
+                    settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+                    webView.loadDataWithBaseURL("",h5, "text/html", "utf-8", "");
+
+                    layout.addView(webView);
+
+                    CountDownTimer timer = new CountDownTimer(5000,1000){
+                        @Override
+                        public void onTick(long millisUntilFinished) {
+
+
+                        }
+
+                        @Override
+                        public void onFinish() {
+
+                            mWindowManager.removeViewImmediate(layout);
+                        }
+                    };
+                    timer.start();
+
+
+
+                }
+                catch (Exception e){
+
+                    e.printStackTrace();
+                }
+            }
+        });
 //
 //        //固定插屏
 //        openInterstitial1= (Button) findViewById(R.id.open_interstitial_ad1);
