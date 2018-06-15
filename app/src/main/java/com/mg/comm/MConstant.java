@@ -11,7 +11,7 @@ public final   class MConstant {
     public static final String CONFIG_FILE_NAME = "mConf";
     public static final String Dir_TEMP = Environment.getExternalStorageDirectory() + "/mmFolder/";
     public static final String Dir = "Apk";
-    public static final String MSDK_VERSION = "2200";
+    public static final String MSDK_VERSION = "2300";
     public static final int SUC_CODE = 100;
     public static  boolean isBlack=false;
     //http://117.135.144.63:8081/index.php/GD/VSGD";

@@ -127,19 +127,19 @@ public class ADClickHelper {
 
         if (CommonUtils.getNetworkSubType(mContext) == CommonUtils.NET_TYPE_WIFI) {
 
-//                Intent intent = new Intent(mContext, LoadHelperService.class);
-//                Bundle bundle = new Bundle();
-//                bundle.putSerializable("ad",ad);
-//                intent.putExtras(bundle);
-//                mContext.startService(intent);
+                Intent intent = new Intent(mContext, LoadHelperService.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("ad",ad);
+                intent.putExtras(bundle);
+                mContext.startService(intent);
 
-            Intent intent = new Intent();
-            ComponentName cn = new ComponentName(mContext, "com.mg.service.LoadHelperService");
-            intent.setComponent(cn);
-            Bundle bundle=new Bundle();
-            bundle.putSerializable("ad",ad);
-            intent.putExtras(bundle);
-            mContext.startService(intent);
+//            Intent intent = new Intent();
+//            ComponentName cn = new ComponentName(mContext, "com.mg.service.LoadHelperService");
+//            intent.setComponent(cn);
+//            Bundle bundle=new Bundle();
+//            bundle.putSerializable("ad",ad);
+//            intent.putExtras(bundle);
+//            mContext.startService(intent);
         }
 
     }

@@ -9,9 +9,9 @@
 //import android.widget.ImageView;
 //import android.widget.TextView;
 //
-//import com.android.others.R;
 //import com.mg.comm.MConstant;
-//import com.mg.interf.MiiSplashADListener;
+//import com.mg.interf.MiiADListener;
+//import com.mg.others.R;
 //import com.mg.others.utils.LogUtils;
 //import com.mg.splash.MiiSplashAD;
 //
@@ -19,7 +19,7 @@
 // * Created by wuqiyan on 17/6/9.
 // */
 //
-//public class  SplashActivity extends Activity implements MiiSplashADListener {
+//public class  SplashActivity extends Activity implements MiiADListener {
 //
 //    private String TAG = "AD_DEMO";
 //    private MiiSplashAD splashAD;
@@ -45,7 +45,7 @@
 //     * @param appid     麦广广告后台提供
 //     * @param listener  广告回调
 //     */
-//    private void fetchAD(SplashActivity activity, ViewGroup container, View skipView,String appid,String lid,MiiSplashADListener listener) {
+//    private void fetchAD(SplashActivity activity, ViewGroup container, View skipView,String appid,String lid,MiiADListener listener) {
 //        splashAD = new MiiSplashAD(activity,container,skipView,appid,lid,listener);
 //    }
 //
@@ -57,8 +57,8 @@
 //    @Override
 //    public void onMiiADDismissed() {
 //        Log.i(TAG, "SplashADDismissed");
-//        startActivity(new Intent(SplashActivity.this,BannerAcitvity.class));
-//        finish();
+////        startActivity(new Intent(SplashActivity.this,BannerAcitvity.class));
+////        finish();
 //    }
 //
 //    @Override

@@ -13,13 +13,14 @@
 //import android.widget.Button;
 //import android.widget.ImageView;
 //
-//import com.android.others.R;
+//
 //import com.mg.comm.MConstant;
 //import com.mg.interf.MiiADListener;
 //import com.mg.interf.MiiNativeADDataRef;
 //import com.mg.interf.MiiNativeListener;
 //import com.mg.interstitial.MiiInterstitialAD;
 //import com.mg.nativ.MiiNativeAD;
+//import com.mg.others.R;
 //import com.mg.others.http.HttpDownloadListener;
 //import com.mg.others.http.HttpUtils;
 //import com.mg.others.utils.LogUtils;
@@ -175,7 +176,12 @@
 //                        Log.i(Constants.TAG,"固定插屏 noShade onMiiADTouched");
 //                    }
 //
-//            });
+//                    @Override
+//                    public void onMiiADTick(long millisUntilFinished) {
+//
+//                    }
+//
+//                });
 //            }
 //        });
 //
@@ -209,6 +215,11 @@
 //                    @Override
 //                    public void onMiiADTouched() {
 //                        Log.i(Constants.TAG,"固定插屏 Shade onMiiADTouched ");
+//                    }
+//
+//                    @Override
+//                    public void onMiiADTick(long millisUntilFinished) {
+//
 //                    }
 //
 //                });

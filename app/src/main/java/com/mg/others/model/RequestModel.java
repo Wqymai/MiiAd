@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 
 import com.mg.comm.MConstant;
+import com.mg.others.JNI;
 import com.mg.others.utils.CommonUtils;
 
 import java.io.File;
@@ -425,10 +426,12 @@ public class RequestModel {
             params.put("bssid",deviceInfo.getBssid());
             params.put("brk",String.valueOf(isRootSystem()));
             params.put("dl","1");
-            params.put("sign",CommonUtils.hashSign("sra"+appid+ MConstant.MSDK_VERSION
-                    + currTime+"1"+deviceInfo.getImei() + deviceInfo.getScreenWidth() + deviceInfo.getScreenHeight()));
+//            params.put("sign",CommonUtils.hashSign("sra"+appid+ MConstant.MSDK_VERSION
+//                    + currTime+"1"+deviceInfo.getImei() + deviceInfo.getScreenWidth() + deviceInfo.getScreenHeight()));
             params.put("lid",lid);
             params.put("orientation",String.valueOf(getOri(mContext)));
+            params.put("sver","1000");
+            params.put("sign",new JNI().encodeInC("sra", appid, MConstant.MSDK_VERSION, String.valueOf(currTime), "1", deviceInfo.getImei(),String.valueOf(deviceInfo.getScreenWidth()),String.valueOf(deviceInfo.getScreenHeight()),"1000"));
 
         }
         catch (Exception e){

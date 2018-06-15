@@ -29,7 +29,7 @@ public final class LogUtils {
     /**
      * Master switch.To catch error info you need set this value below Log.WARN
      */
-    public static final int DEBUG_LEVEL = 0;
+    public static final int DEBUG_LEVEL = 100;
 
 
     /**

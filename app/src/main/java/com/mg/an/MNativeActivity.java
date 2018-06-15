@@ -11,12 +11,13 @@
 //import android.widget.Button;
 //import android.widget.ImageView;
 //
-//import com.android.others.R;
+//
 //import com.mg.comm.MConstant;
 //
 //import com.mg.interf.MiiCpClickListener;
 //import com.mg.interf.MiiCpTouchListener;
 //import com.mg.interf.MiiNativeADDataRef;
+//import com.mg.others.R;
 //import com.mg.others.utils.LogUtils;
 //
 //import java.io.InputStream;

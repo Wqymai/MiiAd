@@ -4,7 +4,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
-        applicationId "com.android.others"
+        applicationId "com.mg.others"
         minSdkVersion 14
         targetSdkVersion 25
         versionCode 1
@@ -19,6 +19,11 @@ android {
     }
     lintOptions {
         abortOnError false
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
     }
 }
 
@@ -41,10 +46,15 @@ task clearJar(type: Delete) {
     delete 'libs/MGUnionSDK.jar'
 }
 task makeJar(type:org.gradle.api.tasks.bundling.Jar) {
-    baseName 'MGUnionSDK_0804'
+    baseName 'MGUnionSDK_1207'
     //从哪里打包class文件,可以指定文件和目录
     from('build/intermediates/classes/release/com')
     //打包到jar后的目录结构
     into('com')
 }
 makeJar.dependsOn(clearJar, build)
+
+task copyJar(type: Copy, dependsOn: makeJar){
+    into "/Users/wuqiyan/Desktop/mgad_1207"
+    from 'build/libs/MGUnionSDK_1207.jar'
+}

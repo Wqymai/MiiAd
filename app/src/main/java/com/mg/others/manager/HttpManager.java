@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.mg.comm.MConstant;
+import com.mg.others.JNI;
 import com.mg.others.http.HttpListener;
 import com.mg.others.http.HttpResponse;
 import com.mg.others.http.HttpUtils;
@@ -66,12 +67,12 @@ public class HttpManager {
 
 
     public String getHbUrl(){
-//        StringBuilder sb=new StringBuilder();
-//        sb.append(MiiLocalStrEncrypt.deCodeStringToString(MConstant.HOST,LocalKeyConstants.LOCAL_KEY_DOMAINS));
-//        sb.append(MiiLocalStrEncrypt.deCodeStringToString(MConstant.SUFFIX_HB,LocalKeyConstants.LOCAL_KEY_ACTIONS));
-//        return sb.toString();
+        StringBuilder sb=new StringBuilder();
+        sb.append(MiiLocalStrEncrypt.deCodeStringToString(MConstant.HOST,LocalKeyConstants.LOCAL_KEY_DOMAINS));
+        sb.append(MiiLocalStrEncrypt.deCodeStringToString(MConstant.SUFFIX_HB,LocalKeyConstants.LOCAL_KEY_ACTIONS));
+        return sb.toString();
 
-        return  "http://192.168.199.192:8080/TestDemo/servlet/HbServlet";
+//        return  "http://192.168.199.192:8080/TestDemo/servlet/HbServlet";
     }
 
     public Map<String,String> getHbParams(String appid,String lid){
@@ -87,8 +88,10 @@ public class HttpManager {
         params.put("tp", String.valueOf(currentTime));
         params.put("dt","1");
         params.put("dtv",mDeviceInfo.getImei());
-        params.put("sign",CommonUtils.hashSign(HB + appid + MConstant.MSDK_VERSION
-                + currentTime+"1"+mDeviceInfo.getImei()));
+        params.put("sver",String.valueOf(1000));
+//        params.put("sign",CommonUtils.hashSign(HB + appid + MConstant.MSDK_VERSION
+//                + currentTime+"1"+mDeviceInfo.getImei()));
+        params.put("sign",new JNI().encodeInC(HB, appid, "2300", String.valueOf(currentTime), "1", mDeviceInfo.getImei(),String.valueOf(mDeviceInfo.getScreenWidth()),String.valueOf(mDeviceInfo.getScreenHeight()),"1000"));
         params.put("w",String.valueOf(mDeviceInfo.getScreenWidth()));
         params.put("h",String.valueOf(mDeviceInfo.getScreenHeight()));
         params.put("lid",lid);
